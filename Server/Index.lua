@@ -12,7 +12,7 @@ spawn_locations = {
 
 -- When Player Connects, spawns a new Character and gives it to him
 Player:on("Spawn", function(player)
-	new_char = Character(Vector(0, 0, 100), Rotator(), character_meshes[math.random(#character_meshes)])
+	new_char = Character(spawn_locations[math.random(#spawn_locations)], Rotator(), character_meshes[math.random(#character_meshes)])
 	player:Possess(new_char)
 end)
 
