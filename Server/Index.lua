@@ -16,6 +16,14 @@ Player:on("Spawn", function(player)
 	player:Possess(new_char)
 end)
 
+-- Called when Character respawns
+Character:on("Respawn", function(character)
+	-- Sets the Initial Character's Location (location where the Character will spawn). After the Respawn event, a
+	-- call for SetLocation(InitialLocation) will be triggered. If you always want something to respawn at the same
+	-- position you do not need to keep setting SetInitialLocation, this is just for respawning at random spots
+	character:SetInitialLocation(spawn_locations[math.random(#spawn_locations)])
+end)
+
 -- When Player Unpossess a Character (when player is unpossessing because is disconnecting 'is_player_disconnecting' = true)
 Player:on("UnPossess", function(player, character, is_player_disconnecting)
 	if (is_player_disconnecting) then
