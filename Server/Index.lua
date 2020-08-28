@@ -12,8 +12,19 @@ spawn_locations = {
 
 -- When Player Connects, spawns a new Character and gives it to him
 Player:on("Spawn", function(player)
-	new_char = Character(spawn_locations[math.random(#spawn_locations)], Rotator(), character_meshes[math.random(#character_meshes)])
+	local new_char = Character(spawn_locations[math.random(#spawn_locations)], Rotator(), character_meshes[math.random(#character_meshes)])
 	player:Possess(new_char)
+
+	-- Sets a callback to automatically respawn the character, 10 seconds after he dies
+	new_char:on("Death", function()
+		Timer:SetTimeout(10000, function(character)
+			if (character:IsValid()) then
+				character:Respawn()
+			end
+
+			return false
+		end, {new_char})
+	end)
 end)
 
 -- Called when Character respawns
