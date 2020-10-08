@@ -5,14 +5,69 @@ character_meshes = {
 	"NanosWorld::SK_Mannequin"
 }
 
+-- List of SK_Male hair Static Meshes
+sk_male_hair_meshes = {
+	"",
+	"NanosWorld::SM_Hair_Long",
+	"NanosWorld::SM_Hair_Short"
+}
+
+-- List of SK_Male beard Static Meshes
+sk_male_beard_meshes = {
+	"",
+	"NanosWorld::SM_Beard_Extra",
+	"NanosWorld::SM_Beard_Middle",
+	"NanosWorld::SM_Beard_Mustache_01",
+	"NanosWorld::SM_Beard_Mustache_02",
+	"NanosWorld::SM_Beard_Side"
+}
+
+-- List of SK_Female hair Static Meshes
+sk_female_hair_meshes = {
+	"",
+	"NanosWorld::SM_Hair_Kwang"
+}
+
 -- List of Spawn Locations
 spawn_locations = {
-	Vector(0, 0, 100)
+	Vector(0, 0, 100),
+	Vector(100, 0, 100),
+	Vector(-100, 0, 100),
+	Vector(0, 100, 100),
+	Vector(0, -100, 100)
 }
 
 -- When Player Connects, spawns a new Character and gives it to him
 Player:on("Spawn", function(player)
-	local new_char = Character(spawn_locations[math.random(#spawn_locations)], Rotator(), character_meshes[math.random(#character_meshes)])
+	local selected_mesh = character_meshes[math.random(#character_meshes)]
+	local new_char = Character(spawn_locations[math.random(#spawn_locations)], Rotator(), selected_mesh)
+
+	-- Adds eyes to humanoid meshes
+	if (selected_mesh == "NanosWorld::SK_Male" or selected_mesh == "NanosWorld::SK_Female") then
+		new_char:AddStaticMeshAttached("eye_left", "NanosWorld::SM_Eye", "eye_left")
+		new_char:AddStaticMeshAttached("eye_right", "NanosWorld::SM_Eye", "eye_right")
+	end
+
+	-- Customization
+	if (selected_mesh == "NanosWorld::SK_Male") then
+		local selected_hair = sk_male_hair_meshes[math.random(#sk_male_hair_meshes)]
+		if (selected_hair ~= "") then
+			new_char:AddStaticMeshAttached("hair", selected_hair, "hair_male")
+		end
+
+		local selected_beard = sk_male_beard_meshes[math.random(#sk_male_beard_meshes)]
+		if (selected_beard ~= "") then
+			new_char:AddStaticMeshAttached("beard", selected_beard, "beard")
+		end
+	end
+
+	if (selected_mesh == "NanosWorld::SK_Female") then
+		local selected_hair = sk_female_hair_meshes[math.random(#sk_female_hair_meshes)]
+		if (selected_hair ~= "") then
+			new_char:AddStaticMeshAttached("hair", selected_hair, "hair_female")
+		end
+	end
+
 	player:Possess(new_char)
 
 	-- Sets a callback to automatically respawn the character, 10 seconds after he dies
