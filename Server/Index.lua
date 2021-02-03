@@ -71,7 +71,13 @@ Player:on("Spawn", function(player)
 	player:Possess(new_char)
 
 	-- Sets a callback to automatically respawn the character, 10 seconds after he dies
-	new_char:on("Death", function()
+	new_char:on("Death", function(last_damage_taken, last_bone_damaged, damage_reason, hit_from, instigator)
+		if (instigator) then
+			Server:BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> killed <cyan>" .. player:GetName() .. "</>")
+		else
+			Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> died")
+		end
+
 		Timer:SetTimeout(10000, function(character)
 			if (character:IsValid()) then
 				character:Respawn()
@@ -80,6 +86,8 @@ Player:on("Spawn", function(player)
 			return false
 		end, {new_char})
 	end)
+
+	Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has joined the server")
 end)
 
 -- Called when Character respawns
@@ -97,7 +105,11 @@ Player:on("UnPossess", function(player, character, is_player_disconnecting)
 	end
 end)
 
--- Catchs a custom event "MapLoaded" to override this script spawn locations
+Player:on("Destroy", function(player)
+	Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has left the server")
+end)
+
+-- Catches a custom event "MapLoaded" to override this script spawn locations
 Events:on("MapLoaded", function(map_custom_spawn_locations)
 	spawn_locations = map_custom_spawn_locations
 end)
