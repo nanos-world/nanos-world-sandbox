@@ -100,7 +100,7 @@ spawn_locations = {
 }
 
 -- When Player Connects, spawns a new Character and gives it to him
-Player:on("Spawn", function(player)
+Player:Subscribe("Spawn", function(player)
 	local selected_mesh = character_meshes[math.random(#character_meshes)]
 	local new_char = Character(spawn_locations[math.random(#spawn_locations)], Rotator(), selected_mesh)
 
@@ -149,7 +149,7 @@ Player:on("Spawn", function(player)
 	player:Possess(new_char)
 
 	-- Sets a callback to automatically respawn the character, 10 seconds after he dies
-	new_char:on("Death", function(last_damage_taken, last_bone_damaged, damage_reason, hit_from, instigator)
+	new_char:Subscribe("Death", function(chara, last_damage_taken, last_bone_damaged, damage_reason, hit_from, instigator)
 		if (instigator) then
 			Server:BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> killed <cyan>" .. player:GetName() .. "</>")
 		else
@@ -169,7 +169,7 @@ Player:on("Spawn", function(player)
 end)
 
 -- Called when Character respawns
-Character:on("Respawn", function(character)
+Character:Subscribe("Respawn", function(character)
 	-- Sets the Initial Character's Location (location where the Character will spawn). After the Respawn event, a
 	-- call for SetLocation(InitialLocation) will be triggered. If you always want something to respawn at the same
 	-- position you do not need to keep setting SetInitialLocation, this is just for respawning at random spots
@@ -177,17 +177,17 @@ Character:on("Respawn", function(character)
 end)
 
 -- When Player Unpossess a Character (when player is unpossessing because is disconnecting 'is_player_disconnecting' = true)
-Player:on("UnPossess", function(player, character, is_player_disconnecting)
+Player:Subscribe("UnPossess", function(player, character, is_player_disconnecting)
 	if (is_player_disconnecting) then
 		character:Destroy()
 	end
 end)
 
-Player:on("Destroy", function(player)
+Player:Subscribe("Destroy", function(player)
 	Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has left the server")
 end)
 
 -- Catches a custom event "MapLoaded" to override this script spawn locations
-Events:on("MapLoaded", function(map_custom_spawn_locations)
+Events:Subscribe("MapLoaded", function(map_custom_spawn_locations)
 	spawn_locations = map_custom_spawn_locations
 end)
