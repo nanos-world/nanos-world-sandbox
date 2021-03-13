@@ -28,6 +28,46 @@ sk_female_hair_meshes = {
 	"NanosWorld::SM_Hair_Kwang"
 }
 
+male_death_sounds = {
+	"NanosWorld::A_Male_01_Death",
+	"NanosWorld::A_Male_02_Death",
+	"NanosWorld::A_Male_03_Death",
+	"NanosWorld::A_Male_04_Death",
+	"NanosWorld::A_Male_05_Death",
+	"NanosWorld::A_Male_06_Death"
+}
+
+male_pain_sounds = {
+	"NanosWorld::A_Male_01_Pain",
+	"NanosWorld::A_Male_02_Pain",
+	"NanosWorld::A_Male_03_Pain",
+	"NanosWorld::A_Male_04_Pain",
+	"NanosWorld::A_Male_05_Pain",
+	"NanosWorld::A_Male_06_Pain",
+	"NanosWorld::A_Male_07_Pain",
+	"NanosWorld::A_Male_06_Pain"
+}
+
+female_death_sounds = {
+	"NanosWorld::A_Female_01_Death",
+	"NanosWorld::A_Female_02_Death",
+	"NanosWorld::A_Female_03_Death",
+	"NanosWorld::A_Female_04_Death",
+	"NanosWorld::A_Female_05_Death",
+	"NanosWorld::A_Female_06_Death"
+}
+
+female_pain_sounds = {
+	"NanosWorld::A_Female_01_Pain",
+	"NanosWorld::A_Female_02_Pain",
+	"NanosWorld::A_Female_03_Pain",
+	"NanosWorld::A_Female_04_Pain",
+	"NanosWorld::A_Female_05_Pain",
+	"NanosWorld::A_Female_06_Pain",
+	"NanosWorld::A_Female_07_Pain",
+	"NanosWorld::A_Female_06_Pain"
+}
+
 human_morph_targets = {
 	"nose1",
 	"nose2",
@@ -117,6 +157,14 @@ Player:Subscribe("Spawn", function(player)
 		end
 	end
 
+	if (selected_mesh == "NanosWorld::SK_Male" or selected_mesh == "NanosWorld::SK_Mannequin") then
+		local selected_death_Sound = male_death_sounds[math.random(#male_death_sounds)]
+		new_char:SetDeathSound(selected_death_Sound)
+
+		local selected_pain_Sound = male_pain_sounds[math.random(#male_pain_sounds)]
+		new_char:SetPainSound(selected_pain_Sound)
+	end
+
 	if (selected_mesh == "NanosWorld::SK_Female") then
 		local selected_hair = sk_female_hair_meshes[math.random(#sk_female_hair_meshes)]
 		if (selected_hair ~= "") then
@@ -127,6 +175,12 @@ Player:Subscribe("Spawn", function(player)
 		new_char:SetMaterialColorParameter("Blush Tint", Color(0.52, 0.12, 0.15))
 		new_char:SetMaterialColorParameter("EyeShadow Tint", Color(0.24, 0.05, 0.07))
 		new_char:SetMaterialColorParameter("Lipstick Tint", Color(0.31, 0.03, 0.1))
+
+		local selected_death_Sound = female_death_sounds[math.random(#female_death_sounds)]
+		new_char:SetDeathSound(selected_death_Sound)
+
+		local selected_pain_Sound = female_pain_sounds[math.random(#female_pain_sounds)]
+		new_char:SetPainSound(selected_pain_Sound)
 	end
 
 	-- Adds eyes to humanoid meshes
