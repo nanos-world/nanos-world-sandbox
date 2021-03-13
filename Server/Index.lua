@@ -53,8 +53,7 @@ female_death_sounds = {
 	"NanosWorld::A_Female_02_Death",
 	"NanosWorld::A_Female_03_Death",
 	"NanosWorld::A_Female_04_Death",
-	"NanosWorld::A_Female_05_Death",
-	"NanosWorld::A_Female_06_Death"
+	"NanosWorld::A_Female_05_Death"
 }
 
 female_pain_sounds = {
