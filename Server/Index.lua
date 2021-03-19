@@ -2,7 +2,8 @@
 character_meshes = {
 	"NanosWorld::SK_Male",
 	"NanosWorld::SK_Female",
-	"NanosWorld::SK_Mannequin"
+	"NanosWorld::SK_Mannequin",
+	"NanosWorld::SK_Mannequin_Female",
 }
 
 -- List of SK_Male hair Static Meshes
@@ -164,7 +165,7 @@ Player:Subscribe("Spawn", function(player)
 		new_char:SetPainSound(selected_pain_Sound)
 	end
 
-	if (selected_mesh == "NanosWorld::SK_Female") then
+	if (selected_mesh == "NanosWorld::SK_Female" or selected_mesh == "NanosWorld::SK_Mannequin_Female") then
 		local selected_hair = sk_female_hair_meshes[math.random(#sk_female_hair_meshes)]
 		if (selected_hair ~= "") then
 			new_char:AddStaticMeshAttached("hair", selected_hair, "hair_female")
