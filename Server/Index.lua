@@ -166,6 +166,14 @@ Player:Subscribe("Spawn", function(player)
 	end
 
 	if (selected_mesh == "NanosWorld::SK_Female" or selected_mesh == "NanosWorld::SK_Mannequin_Female") then
+		local selected_death_Sound = female_death_sounds[math.random(#female_death_sounds)]
+		new_char:SetDeathSound(selected_death_Sound)
+
+		local selected_pain_Sound = female_pain_sounds[math.random(#female_pain_sounds)]
+		new_char:SetPainSound(selected_pain_Sound)
+	end
+
+	if (selected_mesh == "NanosWorld::SK_Female") then
 		local selected_hair = sk_female_hair_meshes[math.random(#sk_female_hair_meshes)]
 		if (selected_hair ~= "") then
 			new_char:AddStaticMeshAttached("hair", selected_hair, "hair_female")
@@ -175,12 +183,6 @@ Player:Subscribe("Spawn", function(player)
 		new_char:SetMaterialColorParameter("Blush Tint", Color(0.52, 0.12, 0.15))
 		new_char:SetMaterialColorParameter("EyeShadow Tint", Color(0.24, 0.05, 0.07))
 		new_char:SetMaterialColorParameter("Lipstick Tint", Color(0.31, 0.03, 0.1))
-
-		local selected_death_Sound = female_death_sounds[math.random(#female_death_sounds)]
-		new_char:SetDeathSound(selected_death_Sound)
-
-		local selected_pain_Sound = female_pain_sounds[math.random(#female_pain_sounds)]
-		new_char:SetPainSound(selected_pain_Sound)
 	end
 
 	-- Adds eyes to humanoid meshes
