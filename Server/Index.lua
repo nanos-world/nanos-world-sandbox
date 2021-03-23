@@ -180,9 +180,9 @@ Player:Subscribe("Spawn", function(player)
 		end
 
 		-- Those parameters are specific to female mesh
-		new_char:SetMaterialColorParameter("Blush Tint", Color(0.52, 0.12, 0.15))
-		new_char:SetMaterialColorParameter("EyeShadow Tint", Color(0.24, 0.05, 0.07))
-		new_char:SetMaterialColorParameter("Lipstick Tint", Color(0.31, 0.03, 0.1))
+		new_char:SetMaterialColorParameter("BlushTint", Color(0.52, 0.12, 0.15))
+		new_char:SetMaterialColorParameter("EyeShadowTint", Color(0.24, 0.05, 0.07))
+		new_char:SetMaterialColorParameter("LipstickTint", Color(0.31, 0.03, 0.1))
 	end
 
 	-- Adds eyes to humanoid meshes
@@ -191,11 +191,11 @@ Player:Subscribe("Spawn", function(player)
 		new_char:AddStaticMeshAttached("eye_right", "NanosWorld::SM_Eye", "eye_right")
 		
 		-- Those parameters are specific to humanoid meshes (were added in their materials)
-		new_char:SetMaterialColorParameter("Hair Tint", hair_tints[math.random(#hair_tints)])
+		new_char:SetMaterialColorParameter("HairTint", hair_tints[math.random(#hair_tints)])
 		new_char:SetMaterialColorParameter("Tint", human_skin_tones[math.random(#human_skin_tones)])
 
 		new_char:SetMaterialScalarParameter("Muscular", math.random(100) / 100)
-		new_char:SetMaterialScalarParameter("Base Color Power", math.random(2) + 0.5)
+		new_char:SetMaterialScalarParameter("BaseColorPower", math.random(2) + 0.5)
 
 		for i, morph_target in ipairs(human_morph_targets) do
 			new_char:SetMorphTarget(morph_target, math.random(200) / 100 - 1)
