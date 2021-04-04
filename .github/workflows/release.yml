@@ -1,12 +1,8 @@
 name: Push Release
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
-  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -14,9 +10,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Archive Release
-        uses: thedoctor0/zip-release@master
+      - uses: papeloto/action-zip@v1
         with:
-          filename: 'package.zip'
-          exclusions: '*.git*'
+          files: /
+          dest: package.zip
