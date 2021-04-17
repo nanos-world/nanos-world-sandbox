@@ -139,8 +139,7 @@ spawn_locations = {
 	Vector(0, -100, 100)
 }
 
--- When Player Connects, spawns a new Character and gives it to him
-Player:Subscribe("Spawn", function(player)
+function SpawnPlayer(player)
 	local selected_mesh = character_meshes[math.random(#character_meshes)]
 	local new_char = Character(spawn_locations[math.random(#spawn_locations)], Rotator(), selected_mesh)
 
@@ -222,7 +221,10 @@ Player:Subscribe("Spawn", function(player)
 	end)
 
 	Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has joined the server")
-end)
+end
+
+-- When Player Connects, spawns a new Character and gives it to him
+Player:Subscribe("Spawn", SpawnPlayer)
 
 -- Called when Character respawns
 Character:Subscribe("Respawn", function(character)
@@ -241,6 +243,12 @@ end)
 
 Player:Subscribe("Destroy", function(player)
 	Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has left the server")
+end)
+
+Package:Subscribe("Load", function()
+	for k, player in pairs(NanosWorld::GetPlayers()) do
+		SpawnPlayer(player)
+	end
 end)
 
 -- Catches a custom event "MapLoaded" to override this script spawn locations
