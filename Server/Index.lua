@@ -246,7 +246,7 @@ Player:Subscribe("Destroy", function(player)
 end)
 
 Package:Subscribe("Load", function()
-	for k, player in pairs(NanosWorld::GetPlayers()) do
+	for k, player in pairs(NanosWorld:GetPlayers()) do
 		SpawnPlayer(player)
 	end
 end)
