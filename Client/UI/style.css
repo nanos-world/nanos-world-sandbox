@@ -1,0 +1,113 @@
+body {
+	font-family: 'Gothic A1', sans-serif;
+	font-size: 14px;
+	margin: 0px;
+	padding: 0px;
+	margin-bottom: 20px;
+	color: #ffffffd5;
+	user-select: none;
+}
+
+#voice_chats {
+	position: absolute;
+	left: 30px;
+	bottom: 50%;
+	height: 200px;
+	overflow: clip;
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: start;
+	margin-bottom: 15px;
+}
+
+.voice_chat {
+	background-color: #0000003d;
+	position: relative;
+	margin-top: 5px;
+	padding: 10px 15px 10px 45px;
+	font-size: 18px;
+	font-weight: normal;
+	background-image: url('./images/sound.png');
+	background-repeat: no-repeat;
+	background-size: 20px;
+	background-position: 15px 50%;
+}
+
+#notifications {
+	position: absolute;
+	left: 30px;
+	width: 550px;
+	top: 50%;
+	height: 200px;
+	overflow: clip;
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: start;
+	margin-top: 15px;
+}
+
+.notification {
+	background-color: #0000003d;
+	position: relative;
+	margin-top: 5px;
+	padding: 10px 15px;
+	font-size: 18px;
+	font-weight: normal;
+}
+
+#weapon_ammo_container {
+	display: none;
+	position: absolute;
+	right: 30px;
+	bottom: 30px;
+	width: 120px;
+	height: 55px;
+	background-color: #0000003d;
+	text-align: right;
+	line-height: 60px;
+}
+
+#weapon_ammo_separator {
+	font-weight: bold;
+	font-size: 16px;
+	right: 57px;
+	top: 5px;
+	position: absolute;
+}
+
+#weapon_ammo_bag {
+	font-weight: bold;
+	font-size: 16px;
+	right: 15px;
+	top: 5px;
+	position: absolute;
+}
+
+#weapon_ammo_clip {
+	font-weight: bold;
+	font-size: 32px;
+	position: absolute;
+	right: 67px;
+}
+
+#health_container {
+	position: absolute;
+	bottom: 30px;
+	left: 30px;
+	width: 120px;
+	height: 55px;
+	background-color: #0000003d;
+	line-height: 60px;
+}
+
+#health_container img {
+	height: 50%;
+	margin: 13px;
+}
+
+#health_current {
+	font-size: 27px;
+	position: absolute;
+	text-align: center;
+	font-weight: bold;
+}
