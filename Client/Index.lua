@@ -26,6 +26,11 @@ Package:Subscribe("Load", function()
 
 	-- Gets all notifications already sent
 	persistent_data_notifications = Package:GetPersistentData().notifications or {}
+
+	-- Updates all existing Players
+	for k, player in pairs(NanosWorld:GetPlayers()) do
+		UpdatePlayerScoreboard(player)
+	end
 end)
 
 -- Function to set all needed events on local character (to update the UI when it takes damage or dies)
@@ -102,6 +107,7 @@ end)
 
 Player:Subscribe("Destroy", function(player)
 	main_hud:CallEvent("ToggleVoice", {player:GetName(), false})
+	main_hud:CallEvent("UpdatePlayer", {player:GetID(), false})
 end)
 
 -- Adds the Notification on the Screen
@@ -137,4 +143,33 @@ Events:Subscribe("SetNotification", SetNotification)
 
 SetNotification("PARACHUTE", 10000, "you can press space while falling to open your parachute", 5000)
 SetNotification("VIEW_MODE", 30000, "you can press V to change the View Mode", 5000)
-SetNotification("CAMERA_SIDE", 50000, "you can press Tab to change the Camera Side", 5000)
+SetNotification("CAMERA_SIDE", 50000, "you can press Middle Mouse Button to change the Camera Side", 5000)
+
+-- Toggles the Scoreboard
+Client:Subscribe("KeyUp", function(key_name)
+	if (key_name == "Tab") then
+		main_hud:CallEvent("ToggleScoreboard", {false})
+	end
+end)
+
+-- Toggles the Scoreboard
+Client:Subscribe("KeyDown", function(key_name)
+	if (key_name == "Tab") then
+		main_hud:CallEvent("ToggleScoreboard", {true})
+	end
+end)
+
+function UpdatePlayerScoreboard(player)
+	main_hud:CallEvent("UpdatePlayer", {player:GetID(), true, player:GetName(), player:GetPing()})
+end
+
+Player:Subscribe("Spawn", function(player)
+	UpdatePlayerScoreboard(player)
+end)
+
+-- Updates the ping every 5 seconds
+Timer:SetTimeout(5000, function()
+	for k, player in pairs(NanosWorld:GetPlayers()) do
+		UpdatePlayerScoreboard(player)
+	end
+end)

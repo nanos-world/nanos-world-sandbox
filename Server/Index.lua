@@ -234,9 +234,10 @@ Character:Subscribe("Respawn", function(character)
 	character:SetInitialLocation(spawn_locations[math.random(#spawn_locations)])
 end)
 
--- When Player Unpossess a Character (when player is unpossessing because is disconnecting 'is_player_disconnecting' = true)
-Player:Subscribe("UnPossess", function(player, character, is_player_disconnecting)
-	if (is_player_disconnecting) then
+-- When Player leaves the server, destroy it's Character
+Player:Subscribe("Destroy", function(player)
+	local character = player:GetControlledCharacter()
+	if (character) then
 		character:Destroy()
 	end
 end)
