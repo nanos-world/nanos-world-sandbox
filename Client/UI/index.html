@@ -1,10 +1,11 @@
 <html>
 	<head>
 		<!-- Includes all files we created (JS and CSS) -->
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 		<script src="index.js"></script>
 		<link rel="preconnect" href="https://fonts.gstatic.com">
-		<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;800&display=swap" rel="stylesheet"> 
-		<link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet"> 
+		<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;800&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="style.css">
 	</head>
 	<body>
@@ -45,6 +46,73 @@
 			<span id="weapon_ammo_separator">/</span>
 			<!-- Ammo Bag value -->
 			<span id="weapon_ammo_bag">1000</span>
+		</div>
+
+		<div id="spawn_menu">
+			<div id="label">hllo</div>
+			<div id="asset_packs">
+				<span class="asset_pack active" style="background-image: url('https://docs.nanos.world/_static/logo.png');">NanosWorld</span>
+				<span class="asset_pack" style="background-image: url('https://i.imgur.com/tqgyQcD.png');">LowPoly</span>
+				<span class="asset_pack" style="background-image: url('https://i.imgur.com/tqgyQcD.png');">LowPoly2</span>
+				<span class="asset_pack" style="background-image: url('https://i.imgur.com/tqgyQcD.png');">LowPoly3</span>
+				<span class="asset_pack" style="background-image: url('https://i.imgur.com/tqgyQcD.png');">LowPoly2</span>
+				<span class="asset_pack" style="background-image: url('https://i.imgur.com/tqgyQcD.png');">LowPoly3</span>
+				<span class="asset_pack" style="background-image: url('https://i.imgur.com/tqgyQcD.png');">LowPoly2</span>
+				<span class="asset_pack" style="background-image: url('https://i.imgur.com/tqgyQcD.png');">LowPoly3</span>
+			</div>
+			<div id="tabs">
+				<span id="props" class="tab active">
+					<img src="images/chair.png"/>
+					<span class="tab_name">props</span>
+				</span>
+				<span id="weapons" class="tab">
+					<img src="images/revolver.png"/>
+					<span class="tab_name">weapons</span>
+				</span>
+				<span id="vehicles" class="tab">
+					<img src="images/steering-wheel.png"/>
+					<span class="tab_name">vehicles</span>
+				</span>
+				<span id="tools" class="tab">
+					<img src="images/settings.png"/>
+					<span class="tab_name">tools</span>
+				</span>
+			</div>
+			<div id="spawn_list">
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+				<span class="spawn_item" onclick="SpawnItemClick(this)" onmouseenter="ItemHover(&quot;SM_Cone&quot;, true);" onmouseleave="ItemHover(&quot;SM_Cone&quot;, false);"><span class="spawn_item_image" style="background-image: url('https://i.imgur.com/sKjbueM.jpg');"></span><span class="spawn_item_name">SM_Cone</span></span>
+			</div>
 		</div>
 	</body>
 </html>

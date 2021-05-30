@@ -1,3 +1,5 @@
+Package:Require("SpawnMenu.lua")
+
 -- List of Character Meshes
 character_meshes = {
 	"NanosWorld::SK_Male",
@@ -132,16 +134,16 @@ hair_tints = {
 
 -- List of Spawn Locations
 spawn_locations = {
-	Vector(0, 0, 100),
-	Vector(100, 0, 100),
-	Vector(-100, 0, 100),
-	Vector(0, 100, 100),
-	Vector(0, -100, 100)
+	Vector(0, 0, 300),
+	Vector(100, 0, 300),
+	Vector(-100, 0, 300),
+	Vector(0, 100, 300),
+	Vector(0, -100, 300)
 }
 
-function SpawnPlayer(player)
+function SpawnPlayer(player, location, rotation)
 	local selected_mesh = character_meshes[math.random(#character_meshes)]
-	local new_char = Character(spawn_locations[math.random(#spawn_locations)], Rotator(), selected_mesh)
+	local new_char = Character(location or spawn_locations[math.random(#spawn_locations)], rotation or Rotator(), selected_mesh)
 
 	-- Customization
 	if (selected_mesh == "NanosWorld::SK_Male") then
@@ -188,7 +190,7 @@ function SpawnPlayer(player)
 	if (selected_mesh == "NanosWorld::SK_Male" or selected_mesh == "NanosWorld::SK_Female") then
 		new_char:AddStaticMeshAttached("eye_left", "NanosWorld::SM_Eye", "eye_left")
 		new_char:AddStaticMeshAttached("eye_right", "NanosWorld::SM_Eye", "eye_right")
-		
+
 		-- Those parameters are specific to humanoid meshes (were added in their materials)
 		new_char:SetMaterialColorParameter("HairTint", hair_tints[math.random(#hair_tints)])
 		new_char:SetMaterialColorParameter("Tint", human_skin_tones[math.random(#human_skin_tones)])
@@ -232,27 +234,55 @@ Character:Subscribe("Respawn", function(character)
 	-- call for SetLocation(InitialLocation) will be triggered. If you always want something to respawn at the same
 	-- position you do not need to keep setting SetInitialLocation, this is just for respawning at random spots
 	character:SetInitialLocation(spawn_locations[math.random(#spawn_locations)])
+
+	-- Detaches all entities attached to the character
+	for k, v in pairs(character:GetAttachedEntities()) do
+		v:Detach()
+	end
 end)
 
--- When Player leaves the server, destroy it's Character
+-- When Player leaves the server
 Player:Subscribe("Destroy", function(player)
+	-- Destroy it's Character
 	local character = player:GetControlledCharacter()
 	if (character) then
 		character:Destroy()
 	end
-end)
 
-Player:Subscribe("Destroy", function(player)
 	Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has left the server")
-end)
-
-Package:Subscribe("Load", function()
-	for k, player in pairs(NanosWorld:GetPlayers()) do
-		SpawnPlayer(player)
-	end
 end)
 
 -- Catches a custom event "MapLoaded" to override this script spawn locations
 Events:Subscribe("MapLoaded", function(map_custom_spawn_locations)
 	spawn_locations = map_custom_spawn_locations
+end)
+
+Package:Subscribe("Unload", function()
+	local character_locations = {}
+
+	-- When Package unloads, stores the characters locations to respawn them at the same position if the package is being reloaded
+	for k, p in pairs(NanosWorld:GetPlayers()) do
+		local cha = p:GetControlledCharacter()
+		if (cha) then
+			table.insert(character_locations, { player = p, location = cha:GetLocation(), rotation = cha:GetRotation() })
+		end
+	end
+
+	Server:SetValue("character_locations", character_locations)
+end)
+
+Package:Subscribe("Load", function()
+	local character_locations = Server:GetValue("character_locations") or {}
+
+	-- When Package loads, restores if existing, the latest player`s character positions
+	if (#character_locations == 0) then
+		-- If there is not stored locations, just spawn everyone randomly
+		for k, player in pairs(NanosWorld:GetPlayers()) do
+			SpawnPlayer(player)
+		end
+	else
+		for k, p in pairs(character_locations) do
+			SpawnPlayer(p.player, p.location, p.rotation)
+		end
+	end
 end)

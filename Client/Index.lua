@@ -11,6 +11,11 @@ persistent_data_notifications = {}
 -- Spawns Sandbox HUD
 main_hud = WebUI("Sandbox HUD", "file:///UI/index.html")
 
+-- Requires the SpawnMenu
+Package:Require("Notifications.lua")
+Package:Require("SpawnMenu.lua")
+Package:Require("Scoreboard.lua")
+
 -- When LocalPlayer spawns, sets an event on it to trigger when we possesses a new character, to store the local controlled character locally. This event is only called once, see Package:Subscribe("Load") to load it when reloading a package
 NanosWorld:Subscribe("SpawnLocalPlayer", function(local_player)
 	local_player:Subscribe("Possess", function(player, character)
@@ -55,38 +60,45 @@ function UpdateLocalCharacter(character)
 		UpdateHealth(0)
 	end)
 
+	-- Sets on character an event to update the health's UI after it respawns
+	character:Subscribe("Respawn", function(charac)
+		UpdateHealth(100)
+	end)
+
 	-- Try to get if the character is holding any weapon
 	local current_picked_item = character:GetPicked()
 
 	-- If so, update the UI
-	if (current_picked_item and current_picked_item:GetType() == "Weapon") then
+	if (current_picked_item and current_picked_item:GetType() == "Weapon" and not current_picked_item:GetValue("ToolGun")) then
 		UpdateAmmo(true, current_picked_item:GetAmmoClip(), current_picked_item:GetAmmoBag())
 	end
 
 	-- Sets on character an event to update his grabbing weapon (to show ammo on UI)
 	character:Subscribe("PickUp", function(charac, object)
-		if (object:GetType() == "Weapon") then
+		if (object:GetType() == "Weapon" and not object:GetValue("ToolGun")) then
 			UpdateAmmo(true, object:GetAmmoClip(), object:GetAmmoBag())
 
 			-- Trigger Weapon Hints
 			SetNotification("AIM_DOWN_SIGHT", 3000, "you can use mouse wheel to aim down sight with your Weapon when you are in First Person Mode", 5000)
 			SetNotification("HEADSHOTS", 15000, "headshots can cause more damage", 5000)
+
+			-- Sets on character an event to update the UI when he fires
+			character:Subscribe("Fire", function(charac, weapon)
+				UpdateAmmo(true, weapon:GetAmmoClip(), weapon:GetAmmoBag())
+			end)
+
+			-- Sets on character an event to update the UI when he reloads the weapon
+			character:Subscribe("Reload", function(charac, weapon, ammo_to_reload)
+				UpdateAmmo(true, weapon:GetAmmoClip(), weapon:GetAmmoBag())
+			end)
 		end
 	end)
 
 	-- Sets on character an event to remove the ammo ui when he drops it's weapon
 	character:Subscribe("Drop", function(charac, object)
 		UpdateAmmo(false)
-	end)
-
-	-- Sets on character an event to update the UI when he fires
-	character:Subscribe("Fire", function(charac, weapon)
-		UpdateAmmo(true, weapon:GetAmmoClip(), weapon:GetAmmoBag())
-	end)
-
-	-- Sets on character an event to update the UI when he reloads the weapon
-	character:Subscribe("Reload", function(charac, weapon, ammo_to_reload)
-		UpdateAmmo(true, weapon:GetAmmoClip(), weapon:GetAmmoBag())
+		character:Unsubscribe("Fire")
+		character:Unsubscribe("Reload")
 	end)
 end
 
@@ -110,66 +122,14 @@ Player:Subscribe("Destroy", function(player)
 	main_hud:CallEvent("UpdatePlayer", {player:GetID(), false})
 end)
 
--- Adds the Notification on the Screen
-function AddNotification(id, message, time)
-	if (persistent_data_notifications[id]) then
-		return
-	end
-
-	-- Sets to the settings that the Notification has been shown
-	persistent_data_notifications[id] = true
-	Package:SetPersistentData("notifications", persistent_data_notifications)
-
-	-- Plays a sound
-	Sound(Vector(), "NanosWorld::A_VR_Click_01", true, true, SoundType.SFX, 0.25, 1)
-
-	-- Trigger WebUI to display it
-	main_hud:CallEvent("AddNotification", {message, time})
-end
-
--- Subscribes so other Packages can add notification as well
-Events:Subscribe("AddNotification", AddNotification)
-
--- Configure the notification to trigger after delay
-function SetNotification(id, delay, message, time)
-	Timer:SetTimeout(delay, function(_id, _message, _time)
-		AddNotification(_id, _message, _time)
-		return false
-	end, {id, message, time})
-end
-
--- Subscribes so other Packages can set notification as well
-Events:Subscribe("SetNotification", SetNotification)
-
-SetNotification("PARACHUTE", 10000, "you can press space while falling to open your parachute", 5000)
-SetNotification("VIEW_MODE", 30000, "you can press V to change the View Mode", 5000)
-SetNotification("CAMERA_SIDE", 50000, "you can press Middle Mouse Button to change the Camera Side", 5000)
-
--- Toggles the Scoreboard
-Client:Subscribe("KeyUp", function(key_name)
-	if (key_name == "Tab") then
-		main_hud:CallEvent("ToggleScoreboard", {false})
-	end
+Events:Subscribe("SpawnSound", function(location, sound_asset, is_2D, volume, pitch)
+	Sound(location, sound_asset, is_2D, true, SoundType.SFX, volume, pitch)
 end)
 
--- Toggles the Scoreboard
-Client:Subscribe("KeyDown", function(key_name)
-	if (key_name == "Tab") then
-		main_hud:CallEvent("ToggleScoreboard", {true})
-	end
-end)
+Events:Subscribe("SpawnParticle", function(location, rotation, particle_asset, color)
+	local particle = Particle(location, rotation, particle_asset)
 
-function UpdatePlayerScoreboard(player)
-	main_hud:CallEvent("UpdatePlayer", {player:GetID(), true, player:GetName(), player:GetPing()})
-end
-
-Player:Subscribe("Spawn", function(player)
-	UpdatePlayerScoreboard(player)
-end)
-
--- Updates the ping every 5 seconds
-Timer:SetTimeout(5000, function()
-	for k, player in pairs(NanosWorld:GetPlayers()) do
-		UpdatePlayerScoreboard(player)
+	if (color) then
+		particle:SetParameterColor("Color", color)
 	end
 end)

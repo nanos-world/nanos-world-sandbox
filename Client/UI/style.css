@@ -151,3 +151,140 @@ body {
 	text-align: center;
 	font-weight: bold;
 }
+
+
+#spawn_list {
+	margin: 150px 175px;
+	padding: 5px 10px;
+	position: absolute;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	top: 20px;
+}
+
+.spawn_item {
+	cursor: pointer;
+	width: 73px;
+	padding: 5px;
+	text-align: center;
+	display: inline-block;
+	margin: 5px 0;
+	height: 105px;
+	vertical-align: top;
+}
+
+.spawn_item:hover {
+	background-color: #c1c1c147;
+}
+
+.spawn_item_image {
+	display: inline-block;
+	width: 100%;
+	height: 70px;
+	background-size: 100% auto;
+	background-position: 50%;
+	pointer-events: none;
+	background-repeat: no-repeat;
+}
+
+.spawn_item_name {
+	text-align: center;
+	display: inline-block;
+	word-break: break-all;
+	font-size: 12px;
+	margin-top: 5px;
+	overflow: hidden;
+	height: 30px;
+	pointer-events: none;
+}
+
+#tabs {
+	position: absolute;
+	left: 0;
+	margin: 110px 175px;
+	top: 0;
+	height: 60px;
+	background-color: rgba(0, 0, 0, 0.75);
+	right: 0;
+	text-align: center;
+	font-size: 20px;
+}
+
+.tab {
+	cursor: pointer;
+	display: inline-block;
+	height: 100%;
+	padding: 0px 20px;
+	line-height: 60px;
+}
+
+.tab.active {
+	color: #e8b656;
+	cursor: default;
+}
+
+.tab:hover {
+}
+
+.tab_name {
+	pointer-events: none;
+}
+
+.tab img {
+	width: 15px;
+	pointer-events: none;
+	vertical-align: middle;
+	margin: 0 5px 2px 0;
+}
+
+#label {
+	background-color: #0000007d;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	padding: 5px 10px;
+	opacity: 0;
+	font-size: 14px;
+	margin: 120px 175px;
+	height: 20px;
+}
+
+#asset_packs {
+	display: none;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: 240px;
+	margin: 150px 100px;
+	width: 50px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.asset_pack {
+	width: 50px;
+	height: 50px;
+	display: block;
+	background-color: #484848c2;
+	color: transparent;
+	background-position: 50%;
+	background-size: 75% auto;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+
+.asset_pack:hover {
+  background-color: #5b5b5bc2;
+}
+
+.asset_pack.active {
+	background-color: #222222c7 !important;
+	cursor: default;
+}
