@@ -16,6 +16,15 @@ Timer:SetTimeout(3000, function()
 	Package:Call("Sandbox", "AddSpawnMenuItem", {"AwesomeWeapons", "weapons", "BFG", "Big Fucking Gun", "../../../AwesomeWeapons/Client/SK_BFG.jpg"})
     return false
 end)
+
+-- If you are making a tool, you can subscribe when your character picks up or drops the Tool
+Events:Subscribe("PickUpToolGun_AwesomeTool", function(tool, character)
+	GrabbedAwesomeTool(tool)
+end)
+
+Events:Subscribe("DropToolGun_AwesomeTool", function(tool, character)
+	StopUsingAwesomeTool(false)
+end)
 ```
 
 Server:
