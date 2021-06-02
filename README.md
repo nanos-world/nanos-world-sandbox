@@ -14,7 +14,7 @@ Timer:SetTimeout(3000, function()
 
 	-- Calls the Sandbox method to add my weapon to the SpawnMenu
 	Package:Call("Sandbox", "AddSpawnMenuItem", {"AwesomeWeapons", "weapons", "BFG", "Big Fucking Gun", "../../../AwesomeWeapons/Client/SK_BFG.jpg"})
-    return false
+	return false
 end)
 
 -- If you are making a tool, you can subscribe when your character picks up or drops the Tool
@@ -48,6 +48,6 @@ Timer:SetTimeout(3000, function()
 
 	-- Calls the Sandbox method to add my weapon to the SpawnMenu
 	Package:Call("Sandbox", "AddSpawnMenuItem", {"AwesomeWeapons", "weapons", "BFG", "awesome-weapons", "SpawnBFG"})
-    return false
+	return false
 end)
 ```
