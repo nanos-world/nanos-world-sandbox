@@ -95,8 +95,8 @@ function TryPickUpObject()
 
 	-- If hit something and hit an Entity
 	if (trace_result.Success and trace_result.Entity) then
-		-- Cannot grab Characters (yet?)
-		if (NanosWorld:IsA(trace_result.Entity, Character) or trace_result.Entity:GetAttachedTo()) then
+		-- Cannot grab Characters (yet?), cannot grab attached entities or entities which are being grabbed
+		if (NanosWorld:IsA(trace_result.Entity, Character) or trace_result.Entity:GetAttachedTo() or trace_result.Entity:GetValue("IsBeingGrabbed")) then
 			return end_location
 		end
 
@@ -124,6 +124,8 @@ function TryPickUpObject()
 
 		-- Enable Highlighting on index 1 on this object
 		PhysicsGun.picking_object:SetHighlightEnabled(true, 1)
+	else
+		PhysicsGun.picking_object = nil
 	end
 end
 
@@ -255,7 +257,7 @@ Client:Subscribe("Tick", function(delta_time)
 	-- If I'm using the Gravity Gun
 	if (PhysicsGun.weapon and PhysicsGun.weapon:IsValid() and PhysicsGun.is_using) then
 		-- If I'm not grabbing anything, then try to grab something
-		if (PhysicsGun.picking_object == nil) then
+		if (PhysicsGun.picking_object == nil or not PhysicsGun.picking_object:IsValid()) then
 			TryPickUpObject()
 
 			-- If still not grabbed grabbed, then I'm done
@@ -306,4 +308,4 @@ Events:Subscribe("DropToolGun_PhysicsGun", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "PhysicsGun", "Physics Gun", "assets/NanosWorld/SK_Blaster.jpg")
+AddSpawnMenuItem("NanosWorld", "tools", "PhysicsGun", "Physics Gun", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

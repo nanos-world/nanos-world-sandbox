@@ -229,6 +229,7 @@ AddSpawnMenuItem("NanosWorld", "weapons", "DesertEagle", NanosWorldWeapons.Deser
 AddSpawnMenuItem("NanosWorld", "weapons", "Moss500", NanosWorldWeapons.Moss500)
 AddSpawnMenuItem("NanosWorld", "weapons", "SMG11", NanosWorldWeapons.SMG11)
 AddSpawnMenuItem("NanosWorld", "weapons", "ASVal", NanosWorldWeapons.ASVal)
+AddSpawnMenuItem("NanosWorld", "weapons", "Grenade", function(location, rotation) return Grenade(location, rotation, "NanosWorld::SM_Grenade_G67") end)
 
 -- Default Vehicles
 AddSpawnMenuItem("NanosWorld", "vehicles", "SUV", NanosWorldVehicles.SUV)
@@ -249,4 +250,5 @@ Package:Require("Tools/PhysicsGun.lua")
 Package:Require("Tools/Resizer.lua")
 Package:Require("Tools/Rope.lua")
 Package:Require("Tools/Thruster.lua")
+Package:Require("Tools/Torch.lua")
 Package:Require("Tools/Weld.lua")

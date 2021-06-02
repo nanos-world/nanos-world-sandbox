@@ -5,7 +5,7 @@ function HandleRemoverTool(weapon)
 		local trace_result = TraceFor(5000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle)
 
 		-- If hit an object, calls the server to destroy it
-		if (trace_result.Success and trace_result.Entity) then
+		if (trace_result.Success and trace_result.Entity and not NanosWorld:IsA(trace_result.Entity, Character)) then
 			Events:CallRemote("DestroyItem", {trace_result.Entity})
 		else
 			-- If didn't hit anything, plays a negative sound
@@ -23,4 +23,4 @@ Events:Subscribe("DropToolGun_RemoverTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "RemoverTool", "Remover", "assets/NanosWorld/SK_Blaster.jpg")
+AddSpawnMenuItem("NanosWorld", "tools", "RemoverTool", "Remover", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

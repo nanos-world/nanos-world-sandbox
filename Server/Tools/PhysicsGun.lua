@@ -1,11 +1,15 @@
 -- Subscribe for Client's custom event, for when the object is grabbed/dropped
 Events:Subscribe("PickUp", function(player, weapon, object, is_grabbing, picking_object_relative_location, freeze)
     -- Gets the Laser particle of this weapon, if existing
-    local particle = weapon:GetValue("BeamParticle")
+    local particle = weapon and weapon:GetValue("BeamParticle") or nil
 
     if (is_grabbing) then
-        -- Sets the Network Authority to this Player
-        object:SetNetworkAuthority(player, 3600000)
+        -- Only updates the Network Authority if this entity is network distributed
+        if (object:IsNetworkDistributed()) then
+            object:SetNetworkAuthority(player, 3600000)
+        end
+
+        object:SetValue("IsBeingGrabbed", true, true)
 
         -- Sets the particle values so all Clients can set the correct position of them
         if (particle) then
@@ -14,10 +18,16 @@ Events:Subscribe("PickUp", function(player, weapon, object, is_grabbing, picking
         end
 
         -- Spawns a sound for grabbing it
-	    Events:BroadcastRemote("SpawnSound", {weapon:GetLocation(), "NanosWorld::A_VR_Grab", false, 0.25, 0.9})
+        if (weapon) then
+	        Events:BroadcastRemote("SpawnSound", {weapon:GetLocation(), "NanosWorld::A_VR_Grab", false, 0.25, 0.9})
+        end
     else
         -- Resets the Network Authority, now anyone can authority this object
-        object:SetNetworkAuthority(player, 0)
+        if (object:IsNetworkDistributed()) then
+            object:SetNetworkAuthority(player, 0)
+        end
+
+        object:SetValue("IsBeingGrabbed", false, true)
 
         -- Resets TranslateTo and RotateTo movement
         object:TranslateTo(object:GetLocation(), 0)
@@ -30,7 +40,9 @@ Events:Subscribe("PickUp", function(player, weapon, object, is_grabbing, picking
         end
 
         -- Spawns a sound for ungrabbing it
-        Events:BroadcastRemote("SpawnSound", {weapon:GetLocation(), "NanosWorld::A_VR_Ungrab", false, 0.25, 0.9})
+        if (weapon) then
+            Events:BroadcastRemote("SpawnSound", {weapon:GetLocation(), "NanosWorld::A_VR_Ungrab", false, 0.25, 0.9})
+        end
     end
 
     -- Disables/Enables the gravity of the object so he can 'fly' freely
@@ -50,6 +62,11 @@ Events:Subscribe("UpdateObjectPosition", function(player, object, location, rota
     local interp_speed = 10
     object:TranslateTo(location, interp_speed)
     object:RotateTo(rotation, interp_speed)
+
+    -- Only updates the Network Authority if this entity is network distributed
+    if (object:IsNetworkDistributed()) then
+        object:SetNetworkAuthority(player, 3600000)
+    end
 end)
 
 -- Subscribes for Clients event for turning on/off the physics gun

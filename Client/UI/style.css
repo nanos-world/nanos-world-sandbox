@@ -60,6 +60,10 @@ body {
 	margin-bottom: 15px;
 }
 
+#spawn_menu {
+	display: none;
+}
+
 .voice_chat {
 	background-color: #0000003d;
 	position: relative;
@@ -228,6 +232,12 @@ body {
 .tab.active {
 	color: #e8b656;
 	cursor: default;
+}
+
+.tab.disabled {
+	color: #999999;
+	cursor: default;
+	pointer-events: none;
 }
 
 .tab:hover {

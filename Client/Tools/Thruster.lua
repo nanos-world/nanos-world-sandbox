@@ -39,4 +39,4 @@ Events:Subscribe("DropToolGun_ThrusterTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "ThrusterTool", "Thruster", "assets/NanosWorld/SK_Blaster.jpg")
+AddSpawnMenuItem("NanosWorld", "tools", "ThrusterTool", "Thruster", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

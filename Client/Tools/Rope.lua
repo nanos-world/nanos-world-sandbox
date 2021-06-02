@@ -63,4 +63,4 @@ Events:Subscribe("DropToolGun_RopeTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "RopeTool", "Rope", "assets/NanosWorld/SK_Blaster.jpg")
+AddSpawnMenuItem("NanosWorld", "tools", "RopeTool", "Rope", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

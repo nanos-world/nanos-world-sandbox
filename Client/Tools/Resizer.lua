@@ -84,7 +84,13 @@ end)
 Events:Subscribe("DropToolGun_ResizerTool", function(tool, character)
 	tool:Unsubscribe("Fire")
 	character:Unsubscribe("WeaponAimModeChanged")
+
+	if (ResizerTool.resizing_object) then
+		ResizerTool.resizing_object:SetHighlightEnabled(false)
+		ResizerTool.resizing_object = nil
+		Events:CallRemote("ToggleResizing", {false})
+	end
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "ResizerTool", "Resizer", "assets/NanosWorld/SK_Blaster.jpg")
+AddSpawnMenuItem("NanosWorld", "tools", "ResizerTool", "Resizer", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

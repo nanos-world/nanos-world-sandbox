@@ -25,4 +25,4 @@ Events:Subscribe("DropToolGun_ColorTool", function(tool)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "ColorTool", "Colors", "assets/NanosWorld/SK_Blaster.jpg")
+AddSpawnMenuItem("NanosWorld", "tools", "ColorTool", "Colors", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

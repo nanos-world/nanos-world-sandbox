@@ -235,6 +235,9 @@ Character:Subscribe("Respawn", function(character)
 	-- position you do not need to keep setting SetInitialLocation, this is just for respawning at random spots
 	character:SetInitialLocation(spawn_locations[math.random(#spawn_locations)])
 
+	-- Resets character's scale to default
+	character:SetScale(Vector(1, 1, 1))
+
 	-- Detaches all entities attached to the character
 	for k, v in pairs(character:GetAttachedEntities()) do
 		v:Detach()
