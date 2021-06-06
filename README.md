@@ -1,7 +1,9 @@
 # nanos-world-sandbox
 Default Sandbox nanos world package
 
-How to integrate your own Tools and Weapons into the Sandbox Spawn Menu:
+How to create a Package which integrates your own Tools and Weapons into the Sandbox Spawn Menu:
+
+Note: All Assets from Asset Packs are loaded automatically in the Spawn Menu!
 
 Client:
 
@@ -13,7 +15,7 @@ Timer:SetTimeout(100, function()
 	-- Example:
 
 	-- Calls the Sandbox method to add my weapon to the SpawnMenu
-	Package:Call("Sandbox", "AddSpawnMenuItem", {"AwesomeWeapons", "weapons", "BFG", "Big Fucking Gun", "../../../AwesomeWeapons/Client/SK_BFG.jpg"})
+	Package:Call("Sandbox", "AddSpawnMenuItem", {"AwesomeWeapons", "weapons", "BFG", "Big Fucking Gun", "package///AwesomeWeapons/Client/SK_BFG.jpg"})
 	return false
 end)
 
