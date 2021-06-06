@@ -1,5 +1,5 @@
 -- Subscribes for Client Event for spawning a Thruster
-Events:Subscribe("SpawnThruster", function(player, spawn_location, direction, entity, distance_trace_object)
+Events:Subscribe("SpawnThruster", function(player, spawn_location, direction, entity)
 	-- Calculates the Thruster Rotation to spawn it
 	local rotation = (direction * -1):Rotation()
 
@@ -20,6 +20,7 @@ Events:Subscribe("SpawnThruster", function(player, spawn_location, direction, en
 
 	-- Gets the relative location rotated to attach to the exact point the player aimed
 	thruster:AttachTo(entity, AttachmentRule.KeepWorld)
+	entity:SetValue("Thruster", thruster)
 
 	-- Updates the client's spawn history
 	Events:CallRemote("SpawnedItem", player, {thruster})
@@ -27,8 +28,7 @@ Events:Subscribe("SpawnThruster", function(player, spawn_location, direction, en
 	-- Calls the client to spawns a thruster sound and attach to the thruster (currently sounds are client-only)
 	Events:BroadcastRemote("SpawnThruster", {thruster})
 
-	-- Calls the Client to spawn ballons spawning sounds
-	Events:BroadcastRemote("SpawnParticle", {spawn_location, rotation, "NanosWorld::P_DirectionalBurst"})
+	Particle(spawn_location, rotation, "NanosWorld::P_DirectionalBurst")
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu

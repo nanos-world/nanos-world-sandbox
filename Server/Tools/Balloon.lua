@@ -43,7 +43,6 @@ Events:Subscribe("SpawnBalloon", function(player, spawn_location, rotation, forc
 
 	-- Sets some values to be used later on (such as Balloon color to be used on popping Particles and the Cable itself to be able to destroy it properly)
 	balloon:SetValue("Color", color, true)
-	balloon:SetValue("Cable", cable)
 	balloon:SetValue("Balloon", true)
 
 	-- Attaches the Cable to the Balloon
@@ -57,15 +56,14 @@ Events:Subscribe("SpawnBalloon", function(player, spawn_location, rotation, forc
 
 	-- Calls the Client to spawn ballons spawning sounds
 	Events:BroadcastRemote("SpawnSound", {spawn_location, "NanosWorld::A_Balloon_Inflate", false, 0.75, 1})
-	Events:BroadcastRemote("SpawnParticle", {spawn_location, rotation, "NanosWorld::P_DirectionalBurst", color})
+	Particle(spawn_location, rotation, "NanosWorld::P_DirectionalBurst"):SetParameterColor("Color", color)
 end)
 
 -- Helper to destroy and pop properly the balloon
 function DestroyBalloon(balloon)
 	Events:BroadcastRemote("SpawnSound", {balloon:GetLocation(), "NanosWorld::A_Balloon_Pop", false, 1, 1})
-	Events:BroadcastRemote("SpawnParticle", {balloon:GetLocation() + Vector(0, 0, 30), Rotator(), "NanosWorld::P_OmnidirectionalBurst", balloon:GetValue("Color")})
+	Particle(balloon:GetLocation() + Vector(0, 0, 30), Rotator(), "NanosWorld::P_OmnidirectionalBurst"):SetParameterColor("Color", balloon:GetValue("Color"))
 
-	balloon:GetValue("Cable"):Destroy()
 	balloon:Destroy()
 end
 

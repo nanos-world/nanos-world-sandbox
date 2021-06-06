@@ -208,7 +208,11 @@ function SpawnPlayer(player, location, rotation)
 	-- Sets a callback to automatically respawn the character, 10 seconds after he dies
 	new_char:Subscribe("Death", function(chara, last_damage_taken, last_bone_damaged, damage_reason, hit_from, instigator)
 		if (instigator) then
-			Server:BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> killed <cyan>" .. player:GetName() .. "</>")
+			if (instigator == player) then
+				Server:BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> committed suicide")
+			else
+				Server:BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> killed <cyan>" .. player:GetName() .. "</>")
+			end
 		else
 			Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> died")
 		end

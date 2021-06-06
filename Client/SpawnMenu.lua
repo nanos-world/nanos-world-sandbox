@@ -37,11 +37,11 @@ main_hud:Subscribe("Ready", function()
 		-- Loads all StaticMeshes as Props
 		local props = Assets:GetStaticMeshes(asset_pack.Path)
 		for i, prop in pairs(props) do
-			-- Adds to the list all Props, we use as pattern the images located at a Thumbnails/ folder inside the Asset Pack
-			SpawnMenuItems[asset_pack.Path].props[prop] = {
+			table.insert(SpawnMenuItems[asset_pack.Path].props, {
+				id = prop,
 				name = prop,
 				image = "assets///" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg"
-			}
+			})
 		end
 
 		main_hud:CallEvent("AddAssetPack", {asset_pack.Path, JSON.stringify(SpawnMenuItems[asset_pack.Path])})
@@ -157,10 +157,11 @@ function AddSpawnMenuItem(asset_pack, category, id, name, image)
 		SpawnMenuItems[asset_pack][category] = {}
 	end
 
-	SpawnMenuItems[asset_pack][category][id] = {
+	table.insert(SpawnMenuItems[asset_pack][category], {
+		id = id,
 		name = name,
 		image = image
-	}
+	})
 end
 
 -- Exposes this to other packages
@@ -169,12 +170,14 @@ Package:Export("AddSpawnMenuItem", AddSpawnMenuItem)
 -- Requires all Tools
 Package:Require("Tools/Balloon.lua")
 Package:Require("Tools/Color.lua")
+Package:Require("Tools/Lamp.lua")
 Package:Require("Tools/Light.lua")
 Package:Require("Tools/PhysicsGun.lua")
 Package:Require("Tools/Remover.lua")
 Package:Require("Tools/Resizer.lua")
 Package:Require("Tools/Rope.lua")
 Package:Require("Tools/Thruster.lua")
+Package:Require("Tools/Trail.lua")
 Package:Require("Tools/Weld.lua")
 
 -- Adds the default NanosWorld items
@@ -183,12 +186,12 @@ AddSpawnMenuItem("NanosWorld", "weapons", "AK47", "AK47", "assets///NanosWorld/T
 AddSpawnMenuItem("NanosWorld", "weapons", "AK74U", "AK74U", "assets///NanosWorld/Thumbnails/SK_AK74U.jpg")
 AddSpawnMenuItem("NanosWorld", "weapons", "AP5", "AP5", "assets///NanosWorld/Thumbnails/SK_AP5.jpg")
 AddSpawnMenuItem("NanosWorld", "weapons", "AR4", "AR4", "assets///NanosWorld/Thumbnails/SK_AR4.jpg")
+AddSpawnMenuItem("NanosWorld", "weapons", "ASVal", "ASVal", "assets///NanosWorld/Thumbnails/SK_ASVal.jpg")
+AddSpawnMenuItem("NanosWorld", "weapons", "DesertEagle", "DesertEagle", "assets///NanosWorld/Thumbnails/SK_DesertEagle.jpg")
 AddSpawnMenuItem("NanosWorld", "weapons", "GE36", "GE36", "assets///NanosWorld/Thumbnails/SK_GE36.jpg")
 AddSpawnMenuItem("NanosWorld", "weapons", "Glock", "Glock", "assets///NanosWorld/Thumbnails/SK_Glock.jpg")
-AddSpawnMenuItem("NanosWorld", "weapons", "DesertEagle", "DesertEagle", "assets///NanosWorld/Thumbnails/SK_DesertEagle.jpg")
 AddSpawnMenuItem("NanosWorld", "weapons", "Moss500", "Moss500", "assets///NanosWorld/Thumbnails/SK_Moss500.jpg")
 AddSpawnMenuItem("NanosWorld", "weapons", "SMG11", "SMG11", "assets///NanosWorld/Thumbnails/SK_SMG11.jpg")
-AddSpawnMenuItem("NanosWorld", "weapons", "ASVal", "ASVal", "assets///NanosWorld/Thumbnails/SK_ASVal.jpg")
 AddSpawnMenuItem("NanosWorld", "weapons", "Grenade", "Grenade", "assets///NanosWorld/Thumbnails/SK_G67.jpg")
 
 -- Default Vehicles

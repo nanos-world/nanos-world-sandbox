@@ -56,7 +56,7 @@ Client:Subscribe("MouseUp", function(key_name)
 	if (key_name == "MouseScrollUp") then
 		if (ResizerTool.resizing_object) then
 			ResizerTool.current_scale = ResizerTool.current_scale + 0.1
-			Events:CallRemote("ResizeObject", {ResizerTool.resizing_object, ResizerTool.current_scale})
+			Events:CallRemote("ResizeObject", {ResizerTool.resizing_object, ResizerTool.current_scale, true})
 		end
 		return
 	end
@@ -71,9 +71,18 @@ Client:Subscribe("MouseUp", function(key_name)
 				ResizerTool.current_scale = Vector(0.1)
 			end
 
-			Events:CallRemote("ResizeObject", {ResizerTool.resizing_object, ResizerTool.current_scale})
+			Events:CallRemote("ResizeObject", {ResizerTool.resizing_object, ResizerTool.current_scale, false})
 		end
 		return
+	end
+end)
+
+Client:Subscribe("KeyPress", function(key_name)
+	if (not ResizerTool.weapon or not ResizerTool.resizing_object) then return end
+
+	if (key_name == "R") then
+		ResizerTool.current_scale = Vector(1, 1, 1)
+		Events:CallRemote("ResizeObject", {ResizerTool.resizing_object, Vector(1, 1, 1), true})
 	end
 end)
 

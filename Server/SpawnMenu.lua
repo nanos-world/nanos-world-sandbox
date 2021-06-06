@@ -161,21 +161,23 @@ function DestroyItem(item)
 
 	-- If this item has a Particle, destroys it as well
 	local particle = item:GetValue("Particle")
-	if (particle) then
-		particle:Destroy()
-	end
-
-	-- If this item has a Cable, destroys it as well
-	local cable = item:GetValue("Cable")
-	if (cable) then
-		cable:Destroy()
-	end
+	if (particle) then particle:Destroy() end
 
 	-- If this item has a Light, destroys it as well
 	local light = item:GetValue("Light")
-	if (light) then
-		light:Destroy()
-	end
+	if (light) then light:Destroy() end
+
+	-- If this item has a Light, destroys it as well
+	local bulb = item:GetValue("Bulb")
+	if (bulb) then bulb:Destroy() end
+
+	-- If this item has a Thruster attached, destroys it as well
+	local thruster = item:GetValue("Thruster")
+	if (thruster) then thruster:Destroy() end
+
+	-- If this item has a Trail attached, destroys it as well
+	local trail = item:GetValue("Trail")
+	if (trail) then trail:Destroy() end
 
 	-- Destroys the item itself
 	item:Destroy()
@@ -185,7 +187,7 @@ end
 Events:Subscribe("DestroyItem", function(player, item)
 	-- Spawns some sounds and particles
 	Events:BroadcastRemote("SpawnSound", {item:GetLocation(), "NanosWorld::A_Player_Eject", false, 0.3, 1})
-	Events:BroadcastRemote("SpawnParticle", {item:GetLocation() + Vector(0, 0, 30), Rotator(), "NanosWorld::P_OmnidirectionalBurst"})
+	Particle(item:GetLocation() + Vector(0, 0, 30), Rotator(), "NanosWorld::P_OmnidirectionalBurst")
 
 	DestroyItem(item)
 end)
@@ -245,10 +247,12 @@ AddSpawnMenuItem("NanosWorld", "tools", "RemoverTool", function() return SpawnGe
 -- Requires all the Tools
 Package:Require("Tools/Balloon.lua")
 Package:Require("Tools/Color.lua")
+Package:Require("Tools/Lamp.lua")
 Package:Require("Tools/Light.lua")
 Package:Require("Tools/PhysicsGun.lua")
 Package:Require("Tools/Resizer.lua")
 Package:Require("Tools/Rope.lua")
 Package:Require("Tools/Thruster.lua")
 Package:Require("Tools/Torch.lua")
+Package:Require("Tools/Trail.lua")
 Package:Require("Tools/Weld.lua")

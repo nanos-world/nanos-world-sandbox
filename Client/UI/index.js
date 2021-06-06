@@ -13,6 +13,9 @@ Events.Subscribe("ToggleVoice", function(name, enable) {
 
 		document.querySelector("#voice_chats").prepend(span);
 	} else {
+		if (!existing_span)
+			return;
+
 		existing_span.remove();
 	}
 });
@@ -90,6 +93,9 @@ Events.Subscribe("UpdatePlayer", function(id, active, name, ping) {
 
 		document.querySelector("#scoreboard_tbody").prepend(scoreboard_entry_tr);
 	} else {
+		if (!existing_scoreboard_entry)
+			return;
+
 		existing_scoreboard_entry.remove();
 	}
 });
@@ -185,7 +191,7 @@ function RefreshAssets() {
 	for (let asset_pack in assets) {
 		for (let asset_pack_item in assets[asset_pack][current_tab]) {
 			let item = assets[asset_pack][current_tab][asset_pack_item];
-			DisplayAsset(asset_pack, asset_pack_item, item.name, item.image);
+			DisplayAsset(asset_pack, item.id, item.name, item.image);
 		}
 	}
 
