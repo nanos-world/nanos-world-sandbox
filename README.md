@@ -6,8 +6,8 @@ How to integrate your own Tools and Weapons into the Sandbox Spawn Menu:
 Client:
 
 ```lua
--- Waits 3 second so the Sandbox can be loaded first
-Timer:SetTimeout(3000, function()
+-- Waits 100 ms so the Sandbox can be loaded first (this gonna be improved soon™)
+Timer:SetTimeout(100, function()
 	-- Package:Call("Sandbox", "AddSpawnMenuItem", {"YOUR_CUSTOM_'PACK'_NAME", "CATEGORY", "TOOL_ID", "TOOL_LABEL", "IMAGE_PATH"})
 	-- The category must be: 'props', 'weapons', 'tools' or 'vehicles'
 	-- Example:
@@ -40,8 +40,8 @@ end
 -- Exports the function to be called by the Sandbox 
 Package:Export("SpawnBFG", SpawnBFG)
 
--- Waits 3 second so the Sandbox can be loaded first
-Timer:SetTimeout(3000, function()
+-- Waits 100 ms so the Sandbox can be loaded first (this gonna be improved soon™)
+Timer:SetTimeout(100, function()
 	-- Package:Call("Sandbox", "AddSpawnMenuItem", {"YOUR_CUSTOM_'PACK'_NAME", "CATEGORY", "TOOL_ID", "PACKAGE_PATH", "PACKAGE_FUNCTION_NAME"})
 	-- The category must be: 'props', 'weapons', 'tools' or 'vehicles'
 	-- Example:
