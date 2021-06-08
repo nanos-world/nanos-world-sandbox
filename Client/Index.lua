@@ -52,7 +52,7 @@ function UpdateLocalCharacter(character)
 		Sound(Vector(), "NanosWorld::A_HitTaken_Feedback", true)
 
 		-- Updates the Health UI
-		UpdateHealth(charac:GetHealth())
+		UpdateHealth(math.max(charac:GetHealth() - damage, 0))
 	end)
 
 	-- Sets on character an event to update the health's UI after it dies
