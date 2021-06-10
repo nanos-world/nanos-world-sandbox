@@ -20,8 +20,8 @@ Events:Subscribe("SpawnBalloon", function(player, spawn_location, rotation, forc
 	balloon:SetNetworkAuthority(player)
 
 	-- Subscribes for popping when balloon takes damage
-	balloon:Subscribe("TakeDamage", function(prop, Damage, BoneName, _NanosDamageType, HitFromDirection, Instigator)
-		DestroyBalloon(prop)
+	balloon:Subscribe("TakeDamage", function(self, Damage, BoneName, _NanosDamageType, HitFromDirection, Instigator)
+		self:Destroy()
 	end)
 
 	-- Spawns the Ballon cable
@@ -57,22 +57,19 @@ Events:Subscribe("SpawnBalloon", function(player, spawn_location, rotation, forc
 	-- Calls the Client to spawn ballons spawning sounds
 	Events:BroadcastRemote("SpawnSound", {spawn_location, "NanosWorld::A_Balloon_Inflate", false, 0.75, 1})
 	Particle(spawn_location, rotation, "NanosWorld::P_DirectionalBurst"):SetParameterColor("Color", color)
+
+	balloon:Subscribe("Destroy", function(item)
+		Events:BroadcastRemote("SpawnSound", {item:GetLocation(), "NanosWorld::A_Balloon_Pop", false, 1, 1})
+		Particle(item:GetLocation() + Vector(0, 0, 30), Rotator(), "NanosWorld::P_OmnidirectionalBurst"):SetParameterColor("Color", item:GetValue("Color"))
+	end)
 end)
-
--- Helper to destroy and pop properly the balloon
-function DestroyBalloon(balloon)
-	Events:BroadcastRemote("SpawnSound", {balloon:GetLocation(), "NanosWorld::A_Balloon_Pop", false, 1, 1})
-	Particle(balloon:GetLocation() + Vector(0, 0, 30), Rotator(), "NanosWorld::P_OmnidirectionalBurst"):SetParameterColor("Color", balloon:GetValue("Color"))
-
-	balloon:Destroy()
-end
 
 -- Timer for destroying balloons when they gets too high
 Timer:SetTimeout(500, function()
-	for k, b in pairs(Balloons) do
+	for k, balloon in pairs(Balloons) do
 		-- If this balloon is higher enough, pops it
-		if (b:IsValid() and b:GetLocation().Z > 3000 + math.random(10000)) then
-			DestroyBalloon(b)
+		if (balloon:IsValid() and balloon:GetLocation().Z > 3000 + math.random(10000)) then
+			balloon:Destroy()
 		end
 	end
 end)

@@ -217,8 +217,8 @@ function SpawnPlayer(player, location, rotation)
 			Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> died")
 		end
 
-		Timer:SetTimeout(10000, function(character)
-			if (character:IsValid()) then
+		Timer:SetTimeout(5000, function(character)
+			if (character:IsValid() and character:GetHealth() == 0) then
 				character:Respawn()
 			end
 
@@ -262,6 +262,23 @@ end)
 -- Catches a custom event "MapLoaded" to override this script spawn locations
 Events:Subscribe("MapLoaded", function(map_custom_spawn_locations)
 	spawn_locations = map_custom_spawn_locations
+end)
+
+Events:Subscribe("ToggleNoClip", function(player)
+	local character = player:GetControlledCharacter()
+	if (not character) then return end
+
+	local is_noclipping = character:GetValue("NoClip")
+
+	if (is_noclipping) then
+		character:SetFlyingMode(false)
+		character:SetCollision(CollisionType.Normal)
+	else
+		character:SetFlyingMode(true)
+		character:SetCollision(CollisionType.NoCollision)
+	end
+
+	character:SetValue("NoClip", not is_noclipping)
 end)
 
 Package:Subscribe("Unload", function()

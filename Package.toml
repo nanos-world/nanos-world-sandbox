@@ -5,7 +5,7 @@
 	# Contributors
 	author =				"nanos™"
 	# Version
-	version =				"2.0.0"
+	version =				"2.0.2"
 	# Image URL
 	image =					"https://i.imgur.com/aoEa4N4.jpg"
 	# Package Type: 'executable' (normal package) | 'library' (doesn't run - useful for code library)

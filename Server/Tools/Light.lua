@@ -47,6 +47,11 @@ Events:Subscribe("SpawnLight", function(player, spawn_location, direction, entit
 	Events:CallRemote("SpawnedItem", player, {prop_light})
 
 	Particle(spawn_location, direction:Rotation(), "NanosWorld::P_DirectionalBurst"):SetParameterColor("Color", color)
+
+	prop_light:Subscribe("Destroy", function(item)
+		local _light = item:GetValue("Light")
+		if (_light and _light:IsValid()) then _light:Destroy() end
+	end)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu

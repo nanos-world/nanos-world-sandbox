@@ -29,6 +29,17 @@ Events:Subscribe("SpawnThruster", function(player, spawn_location, direction, en
 	Events:BroadcastRemote("SpawnThruster", {thruster})
 
 	Particle(spawn_location, rotation, "NanosWorld::P_DirectionalBurst")
+
+	-- TODO change when we have event "On Detached"
+	entity:Subscribe("Destroy", function(item)
+		local _thruster = item:GetValue("Thruster")
+		if (_thruster and _thruster:IsValid()) then _thruster:Destroy() end
+	end)
+
+	thruster:Subscribe("Destroy", function(item)
+		local _particle = item:GetValue("Particle")
+		if (_particle and _particle:IsValid()) then _particle:Destroy() end
+	end)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu

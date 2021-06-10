@@ -29,9 +29,22 @@ Events:Subscribe("SpawnTrail", function(player, spawn_location, direction, entit
 	entity:SetValue("Trail", trail)
 
 	-- Updates the client's spawn history
-	Events:CallRemote("SpawnedItem", player, {trail})
+	Events:CallRemote("SpawnedItem", player, { trail })
 
 	Particle(spawn_location, rotation, "NanosWorld::P_DirectionalBurst")
+
+	-- TODO change when we have event "On Detached"
+	entity:Subscribe("Destroy", function(item)
+		local _trail = item:GetValue("Trail")
+		if (_trail and _trail:IsValid()) then
+			_trail:Destroy()
+		end
+	end)
+
+	trail:Subscribe("Destroy", function(item)
+		local _particle = item:GetValue("Particle")
+		if (_particle and _particle:IsValid()) then _particle:Destroy() end
+	end)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu

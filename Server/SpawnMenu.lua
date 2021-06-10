@@ -144,44 +144,11 @@ Events:Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 				character:EnterVehicle(item, 0)
 			end
 		end
-
 	end
 
 	-- Calls the client to update his history
 	Events:CallRemote("SpawnedItem", player, {item})
 end)
-
--- Helper to Destroy an Item
-function DestroyItem(item)
-	-- If this is a balloon, use the custom Balloon destroy function
-	if (item:GetValue("Balloon")) then
-		DestroyBalloon(item)
-		return
-	end
-
-	-- If this item has a Particle, destroys it as well
-	local particle = item:GetValue("Particle")
-	if (particle) then particle:Destroy() end
-
-	-- If this item has a Light, destroys it as well
-	local light = item:GetValue("Light")
-	if (light) then light:Destroy() end
-
-	-- If this item has a Light, destroys it as well
-	local bulb = item:GetValue("Bulb")
-	if (bulb) then bulb:Destroy() end
-
-	-- If this item has a Thruster attached, destroys it as well
-	local thruster = item:GetValue("Thruster")
-	if (thruster) then thruster:Destroy() end
-
-	-- If this item has a Trail attached, destroys it as well
-	local trail = item:GetValue("Trail")
-	if (trail) then trail:Destroy() end
-
-	-- Destroys the item itself
-	item:Destroy()
-end
 
 -- Called by Client to destroy an spawned item 
 Events:Subscribe("DestroyItem", function(player, item)
@@ -189,7 +156,8 @@ Events:Subscribe("DestroyItem", function(player, item)
 	Events:BroadcastRemote("SpawnSound", {item:GetLocation(), "NanosWorld::A_Player_Eject", false, 0.3, 1})
 	Particle(item:GetLocation() + Vector(0, 0, 30), Rotator(), "NanosWorld::P_OmnidirectionalBurst")
 
-	DestroyItem(item)
+	-- Destroy the item
+	item:Destroy()
 end)
 
 -- Function for Adding new Spawn Menu items
@@ -201,8 +169,6 @@ function AddSpawnMenuItem(asset_pack, category, id, spawn_function, package_name
 	if (not SpawnMenuItems[asset_pack][category]) then
 		SpawnMenuItems[asset_pack][category] = {}
 	end
-
-	Package:Log("Adding item '%s'. Category '%s'. Asset Pack '%s'. Package Function '%s'.", id, category, asset_pack, package_function)
 
 	SpawnMenuItems[asset_pack][category][id] = {
 		spawn_function = spawn_function,

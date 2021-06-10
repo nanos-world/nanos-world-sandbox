@@ -12,6 +12,14 @@ function SpawnTorch(location, rotation)
 	torch:SetValue("Light", light)
 	torch:SetValue("Particle", particle)
 
+	torch:Subscribe("Destroy", function(item)
+		local _particle = item:GetValue("Particle")
+		if (_particle and _particle:IsValid()) then _particle:Destroy() end
+
+		local _light = item:GetValue("Light")
+		if (_light and _light:IsValid()) then _light:Destroy() end
+	end)
+
 	return torch
 end
 

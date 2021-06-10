@@ -112,6 +112,13 @@ function UpdateHealth(health)
 	main_hud:CallEvent("UpdateHealth", {health})
 end
 
+Client:Subscribe("KeyPress", function(key_name)
+	if (key_name == "B") then
+		Events:CallRemote("ToggleNoClip", {})
+		return
+	end
+end)
+
 -- VOIP UI
 Player:Subscribe("VOIP", function(player, is_talking)
 	main_hud:CallEvent("ToggleVoice", {player:GetName(), is_talking})
