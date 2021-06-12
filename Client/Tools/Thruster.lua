@@ -6,7 +6,7 @@ function HandleThrusterTool(weapon)
 		local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
 
 		-- If hit some object, then spawns a thruster on attached it
-		if (trace_result.Success and trace_result.Entity) then
+		if (trace_result.Success and trace_result.Entity and not NanosWorld:IsA(trace_result.Entity, Character)) then
 			Events:CallRemote("SpawnThruster", {trace_result.Location, trace_result.Normal, trace_result.Entity})
 		else
 			-- If didn't hit anything, plays a negative sound

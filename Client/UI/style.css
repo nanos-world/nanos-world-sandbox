@@ -170,6 +170,7 @@ body {
 	flex-wrap: wrap;
 	align-content: flex-start;
 	top: 20px;
+	justify-content: space-between;
 }
 
 .spawn_item {

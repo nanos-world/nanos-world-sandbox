@@ -43,7 +43,9 @@ Events:Subscribe("SpawnTrail", function(player, spawn_location, direction, entit
 
 	trail:Subscribe("Destroy", function(item)
 		local _particle = item:GetValue("Particle")
-		if (_particle and _particle:IsValid()) then _particle:Destroy() end
+		if (_particle and _particle:IsValid()) then
+			_particle:Destroy()
+		end
 	end)
 end)
 
