@@ -1,6 +1,8 @@
 # nanos-world-sandbox
 Default Sandbox nanos world package
 
+![image](https://user-images.githubusercontent.com/6226807/121760112-7d254d80-caff-11eb-968e-20f77aa3c7d3.png)
+
 How to create a Package which integrates your own Tools and Weapons into the Sandbox Spawn Menu:
 
 Note: All Assets from Asset Packs are loaded automatically in the Spawn Menu!
@@ -53,3 +55,5 @@ Timer:SetTimeout(100, function()
 	return false
 end)
 ```
+
+![image](https://user-images.githubusercontent.com/6226807/121760136-9a5a1c00-caff-11eb-8478-9694135d1378.png)
