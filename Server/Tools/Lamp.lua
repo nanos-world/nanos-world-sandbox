@@ -3,7 +3,7 @@ Events:Subscribe("SpawnLamp", function(player, spawn_location, direction, entity
 	local rotation = direction:Rotation()
 
 	-- Spawns a Lamp Bulb prop
-	local prop_lamp = Prop(spawn_location, Rotator(), "NanosWorld::SM_Flashlight")
+	local prop_lamp = Prop(spawn_location, Rotator(), "NanosWorld::SM_Flashlight", CollisionType.StaticOnly)
 
 	-- Sets the player to be the network authority immediately of this Prop
 	prop_lamp:SetNetworkAuthority(player)
@@ -36,7 +36,9 @@ Events:Subscribe("SpawnLamp", function(player, spawn_location, direction, entity
 
 	prop_lamp:Subscribe("Destroy", function(item)
 		local _light = item:GetValue("Light")
-		if (_light and _light:IsValid()) then _light:Destroy() end
+		if (_light and _light:IsValid()) then
+			_light:Destroy()
+		end
 	end)
 end)
 
