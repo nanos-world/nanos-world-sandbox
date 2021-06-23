@@ -102,6 +102,9 @@ function UpdateLocalCharacter(character)
 	end)
 end
 
+-- Exposes this to other packages
+Package:Export("UpdateLocalCharacter", UpdateLocalCharacter)
+
 -- Function to update the Ammo's UI
 function UpdateAmmo(enable_ui, ammo, ammo_bag)
 	main_hud:CallEvent("UpdateWeaponAmmo", {enable_ui, ammo, ammo_bag})

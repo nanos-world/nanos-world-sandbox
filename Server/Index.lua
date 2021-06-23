@@ -141,7 +141,7 @@ spawn_locations = {
 	Vector(0, -100, 300)
 }
 
-function SpawnPlayer(player, location, rotation)
+function SpawnPlayer(player, location, rotation, is_respawn)
 	local selected_mesh = character_meshes[math.random(#character_meshes)]
 	local new_char = Character(location or spawn_locations[math.random(#spawn_locations)], rotation or Rotator(), selected_mesh)
 
@@ -226,8 +226,15 @@ function SpawnPlayer(player, location, rotation)
 		end, {new_char})
 	end)
 
-	Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has joined the server")
+	if not is_respawn then
+		Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has joined the server")
+	end
+
+	return new_char
 end
+
+-- Exposes this to other packages
+Package:Export("SpawnPlayer", SpawnPlayer)
 
 -- When Player Connects, spawns a new Character and gives it to him
 Player:Subscribe("Spawn", SpawnPlayer)
