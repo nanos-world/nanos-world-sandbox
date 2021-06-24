@@ -6,14 +6,8 @@ function HandleLampTool(weapon)
 		local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
 
 		if (trace_result.Success) then
-			local distance_trace_object = Vector()
-			if (trace_result.Entity) then
-				-- If hit an entity, then calculates the offset distance from the Hit and the Object
-				distance_trace_object = trace_result.Entity:GetLocation() - trace_result.Location
-			end
-
 			-- Calls remote to spawn the Lamp
-			Events:CallRemote("SpawnLamp", {trace_result.Location, trace_result.Normal, trace_result.Entity, distance_trace_object})
+			Events:CallRemote("SpawnLamp", {trace_result.Location, trace_result.Normal, trace_result.Entity})
 		else
 			-- If didn't hit anything, plays a negative sound
 			Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)

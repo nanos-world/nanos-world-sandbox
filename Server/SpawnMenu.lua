@@ -1,45 +1,22 @@
 -- Function to spawn the ToolGun weapon
 function SpawnGenericToolGun(location, rotation, color)
-	local tool_gun = Weapon(
-		location or Vector(),
-		rotation or Rotator(),
-		"NanosWorld::SK_Blaster",					-- Model
-		0,											-- Collision (Normal)
-		true,										-- Gravity Enabled
-		10000000,									-- Ammo in the Clip
-		0,											-- Ammo in the Bag
-		10000000,									-- Clip Capacity
-		0,											-- Base Damage
-		0,											-- Spread
-		1,											-- Bullet Count (1 for common weapons, > 1 for shotguns)
-		10000000,									-- Ammo to Reload (Ammo Clip for common weapons, 1 for shotguns)
-		20000,										-- Max Bullet Distance
-		20000,										-- Bullet Speed (visual only)
-		Color(),									-- Bullet Color
-		0.6,										-- Sight's FOV multiplier
-		Vector(0, 0, -13.75),						-- Sight Location
-		Rotator(-0.5, 0, 0),						-- Sight Rotation
-		Vector(2, -1.5, 0),							-- Left Hand Location
-		Rotator(0, 50, 130),						-- Left Hand Rotation
-		Vector(-35, -5, 5),							-- Right Hand Offset
-		HandlingMode.SingleHandedWeapon,
-		0.10,										-- Cadence
-		false,										-- Can Hold Use (keep pressing to keep firing, common to automatic weapons)
-		false,										-- Need to release to Fire (common to Bows)
-		"",											-- Bullet Trail Particle
-		"",											-- Barrel Particle
-		"",											-- Shells Particle
-		"NanosWorld::A_Pistol_Dry",					-- Weapon's Dry Sound
-		"NanosWorld::A_Pistol_Load",				-- Weapon's Load Sound
-		"NanosWorld::A_Pistol_Unload",				-- Weapon's Unload Sound
-		"NanosWorld::A_AimZoom",					-- Weapon's Zooming Sound
-		"NanosWorld::A_Rattle",						-- Weapon's Aiming Sound
-		"NanosWorld::A_Simulate_Start",				-- Weapon's Shot Sound
-		"NanosWorld::AM_Mannequin_Reload_Pistol",	-- Character's Reloading Animation
-		"NanosWorld::AM_Mannequin_Sight_Fire",		-- Character's Aiming Animation
-		"NanosWorld::SM_Glock_Mag_Empty",			-- Magazine Mesh
-		CrosshairType.Dot
-	)
+	local tool_gun = Weapon(location or Vector(), rotation or Rotator(), "NanosWorld::SK_Blaster")
+
+	tool_gun:SetAmmoSettings(10000000, 0)
+	tool_gun:SetDamage(0)
+	tool_gun:SetSpread(0)
+	tool_gun:SetSightTransform(Vector(0, 0, -13.75), Rotator(-0.5, 0, 0))
+	tool_gun:SetLeftHandTransform(Vector(2, -1.5, 0), Rotator(0, 50, 130))
+	tool_gun:SetRightHandOffset(Vector(-35, -5, 5))
+	tool_gun:SetHandlingMode(HandlingMode.SingleHandedWeapon)
+	tool_gun:SetCadence(0.1)
+	tool_gun:SetSoundDry("NanosWorld::A_Pistol_Dry")
+	tool_gun:SetSoundZooming("NanosWorld::A_AimZoom")
+	tool_gun:SetSoundAim("NanosWorld::A_Rattle")
+	tool_gun:SetSoundFire("NanosWorld::A_Simulate_Start")
+	tool_gun:SetAnimationCharacterFire("NanosWorld::AM_Mannequin_Sight_Fire")
+	tool_gun:SetCrosshairSetting(CrosshairType.Dot)
+	tool_gun:SetUsageSettings(false, false)
 
 	tool_gun:SetValue("Color", color, true)
 	tool_gun:SetMaterialColorParameter("Emissive", color * 500)
@@ -47,53 +24,7 @@ function SpawnGenericToolGun(location, rotation, color)
 	return tool_gun
 end
 
--- Function to spawn the PortalGun
-function SpawnPortalGun(location, rotation)
-	local tool_gun = Weapon(
-		location or Vector(),
-		rotation or Rotator(),
-		"NanosWorld::SK_PortalGun",	-- Model
-		0,						-- Collision (Normal)
-		true,					-- Gravity Enabled
-		10000000,				-- Ammo in the Clip
-		0,						-- Ammo in the Bag
-		10000000,				-- Clip Capacity
-		0,						-- Base Damage
-		0,						-- Spread
-		1,						-- Bullet Count (1 for common weapons, > 1 for shotguns)
-		10000000,				-- Ammo to Reload (Ammo Clip for common weapons, 1 for shotguns)
-		20000,					-- Max Bullet Distance
-		20000,					-- Bullet Speed (visual only)
-		Color(),				-- Bullet Color
-		0.6,					-- Sight's FOV multiplier
-		Vector(-10, 0, -20),	-- Sight Location
-		Rotator(0, 0, 0),		-- Sight Rotation
-		Vector(25, 0, 0),		-- Left Hand Location
-		Rotator(0, 60, 90),		-- Left Hand Rotation
-		Vector(-10, -5, -5),	-- Right Hand Offset
-		HandlingMode.DoubleHandedWeapon,
-		0.10,					-- Cadence
-		false,					-- Can Hold Use (keep pressing to keep firing, common to automatic weapons)
-		false,					-- Need to release to Fire (common to Bows)
-		"",						-- Bullet Trail Particle
-		"NanosWorld::P_DirectionalBurst",					-- Barrel Particle
-		"",													-- Shells Particle
-		"NanosWorld::A_Pistol_Dry",							-- Weapon's Dry Sound
-		"NanosWorld::A_Pistol_Load",						-- Weapon's Load Sound
-		"NanosWorld::A_Pistol_Unload",						-- Weapon's Unload Sound
-		"NanosWorld::A_AimZoom",							-- Weapon's Zooming Sound
-		"NanosWorld::A_Rattle",								-- Weapon's Aiming Sound
-		"NanosWorld::A_Simulate_Start",						-- Weapon's Shot Sound
-		"NanosWorld::AM_Mannequin_Reload_Pistol",			-- Character's Reloading Animation
-		"NanosWorld::AM_Mannequin_Sight_Fire_Heavy",		-- Character's Aiming Animation
-		"NanosWorld::SM_Glock_Mag_Empty",					-- Magazine Mesh
-		CrosshairType.Dot
-	)
 
-	return tool_gun
-end
-
--- todo fazer client igual, pra pegar ID
 SpawnMenuItems = {}
 
 -- Event for Spawning and Item from the SpawnMenu

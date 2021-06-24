@@ -136,6 +136,11 @@ Events:Subscribe("SpawnSound", function(location, sound_asset, is_2D, volume, pi
 	Sound(location, sound_asset, is_2D, true, SoundType.SFX, volume, pitch)
 end)
 
+Events:Subscribe("SpawnSoundAttached", function(object, sound_asset, is_2D, volume, pitch)
+	local sound = Sound(Vector(), sound_asset, is_2D, true, SoundType.SFX, volume, pitch)
+	sound:AttachTo(object)
+end)
+
 Events:Subscribe("SpawnParticle", function(location, rotation, particle_asset, color)
 	local particle = Particle(location, rotation, particle_asset)
 

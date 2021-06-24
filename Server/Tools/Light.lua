@@ -19,7 +19,7 @@ Events:Subscribe("SpawnLight", function(player, spawn_location, direction, entit
 	local light = Light(Vector(), Rotator(), color, LightType.Point, intensity, 250, 44, 0, 2000)
 
 	-- Attaches the light to the prop, offseting 25 downwards
-	light:AttachTo(prop_light)
+	light:AttachTo(prop_light, AttachmentRule.SnapToTarget, "", true)
 	light:SetRelativeLocation(Vector(0, 0, -25))
 
 	-- Spawns the Cable
@@ -39,7 +39,6 @@ Events:Subscribe("SpawnLight", function(player, spawn_location, direction, entit
 	end
 
 	cable:AttachEndTo(prop_light)
-	prop_light:SetValue("Light", light)
 	prop_light:SetRotation(rotation)
 	prop_light:SetLocation(spawn_location)
 
@@ -47,11 +46,6 @@ Events:Subscribe("SpawnLight", function(player, spawn_location, direction, entit
 	Events:CallRemote("SpawnedItem", player, {prop_light})
 
 	Particle(spawn_location, direction:Rotation(), "NanosWorld::P_DirectionalBurst"):SetParameterColor("Color", color)
-
-	prop_light:Subscribe("Destroy", function(item)
-		local _light = item:GetValue("Light")
-		if (_light and _light:IsValid()) then _light:Destroy() end
-	end)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu

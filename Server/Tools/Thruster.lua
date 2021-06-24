@@ -8,9 +8,8 @@ Events:Subscribe("SpawnThruster", function(player, spawn_location, direction, en
 
 	-- Spawns a Particle and attaches it to the thruster
 	local particle = Particle(spawn_location, Rotator(), "NanosWorld::P_Fire", false, true)
-	particle:AttachTo(thruster)
+	particle:AttachTo(thruster, AttachmentRule.SnapToTarget, "", true)
 	particle:SetRelativeLocation(rotation:RotateVector(direction * 40))
-	thruster:SetValue("Particle", particle)
 
 	-- Adds a constant force to the Thruster
 	thruster:SetForce(Vector(100000, 0, 0), true)
@@ -19,8 +18,7 @@ Events:Subscribe("SpawnThruster", function(player, spawn_location, direction, en
 	thruster:SetNetworkAuthority(player)
 
 	-- Gets the relative location rotated to attach to the exact point the player aimed
-	thruster:AttachTo(entity, AttachmentRule.KeepWorld)
-	entity:SetValue("Thruster", thruster)
+	thruster:AttachTo(entity, AttachmentRule.KeepWorld, "", true)
 
 	-- Updates the client's spawn history
 	Events:CallRemote("SpawnedItem", player, {thruster})
@@ -29,17 +27,6 @@ Events:Subscribe("SpawnThruster", function(player, spawn_location, direction, en
 	Events:BroadcastRemote("SpawnThruster", {thruster})
 
 	Particle(spawn_location, rotation, "NanosWorld::P_DirectionalBurst")
-
-	-- TODO change when we have event "On Detached"
-	entity:Subscribe("Destroy", function(item)
-		local _thruster = item:GetValue("Thruster")
-		if (_thruster and _thruster:IsValid()) then _thruster:Destroy() end
-	end)
-
-	thruster:Subscribe("Destroy", function(item)
-		local _particle = item:GetValue("Particle")
-		if (_particle and _particle:IsValid()) then _particle:Destroy() end
-	end)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu

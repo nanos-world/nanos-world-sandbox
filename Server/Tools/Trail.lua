@@ -16,37 +16,19 @@ Events:Subscribe("SpawnTrail", function(player, spawn_location, direction, entit
 	particle:SetParameterFloat("LifeTime", 2)
 	particle:SetParameterFloat("SpawnRate", 60)
 
-	particle:AttachTo(trail)
+	particle:AttachTo(trail, AttachmentRule.SnapToTarget, "", true)
 	particle:SetRelativeLocation(rotation:RotateVector(direction * 10))
-
-	trail:SetValue("Particle", particle)
 
 	-- Sets the player to be the network authority immediately of this Prop (so he can immediately start applying the force on it - on the client side)
 	trail:SetNetworkAuthority(player)
 
 	-- Gets the relative location rotated to attach to the exact point the player aimed
-	trail:AttachTo(entity, AttachmentRule.KeepWorld)
-	entity:SetValue("Trail", trail)
+	trail:AttachTo(entity, AttachmentRule.KeepWorld, "", true)
 
 	-- Updates the client's spawn history
 	Events:CallRemote("SpawnedItem", player, { trail })
 
 	Particle(spawn_location, rotation, "NanosWorld::P_DirectionalBurst")
-
-	-- TODO change when we have event "On Detached"
-	entity:Subscribe("Destroy", function(item)
-		local _trail = item:GetValue("Trail")
-		if (_trail and _trail:IsValid()) then
-			_trail:Destroy()
-		end
-	end)
-
-	trail:Subscribe("Destroy", function(item)
-		local _particle = item:GetValue("Particle")
-		if (_particle and _particle:IsValid()) then
-			_particle:Destroy()
-		end
-	end)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu

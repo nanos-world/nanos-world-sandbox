@@ -48,6 +48,10 @@ Events:Subscribe("PickUp", function(player, weapon, object, is_grabbing, picking
     -- Disables/Enables the gravity of the object so he can 'fly' freely
     object:SetGravityEnabled(not freeze and not is_grabbing)
 
+    if (freeze) then
+        Particle(object:GetLocation(), Rotator(), "NanosWorld::P_OmnidirectionalBurst")
+    end
+
     -- Disables/Enables the character to Aim, so he can use the Mouse Wheel properly
     player:GetControlledCharacter():SetCanAim(not is_grabbing)
 

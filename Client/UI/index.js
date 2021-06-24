@@ -107,63 +107,48 @@ var current_asset_pack = "NanosWorld";
 
 var assets = {
 	NanosWorld: {
-		props: [
-			{name: "SM_Cone", image: "https://i.imgur.com/sKjbueM.jpg"},
-			{name: "SM_Cube", image: "https://i.imgur.com/OcyUjXp.jpg"},
-			{name: "SM_Cylinder", image: "https://i.imgur.com/nkPvu96.jpg"},
-			{name: "SM_Plane", image: "https://i.imgur.com/ls0cD9b.jpg"},
-			{name: "SM_Sphere", image: "https://i.imgur.com/aClqtmd.jpg"},
-			{name: "Test", image: ""},
-		],
-		weapons: [
-			{name: "AK47", image: "https://i.imgur.com/FXVEclZ.png"}
-		],
-		vehicles: [
-			{name: "Pickup", image: "https://i.imgur.com/FXVEclZ.png"}
-		],
-		tools: [
-			{name: "PiToolckup", image: "https://i.imgur.com/FXVEclZ.png"}
-		]
+		props: [],
+		weapons: [],
+		vehicles: [],
+		tools: [],
+		npcs: [],
 	}
 };
 
 function SpawnItemClick(e) {
-	let asset_id = $(e).data("asset_id");
-	let asset_pack = $(e).data("asset_pack");
+	const asset_id = e.target.dataset.asset_id;
+	const asset_pack = e.target.dataset.asset_pack;
 	Events.Call("SpawnItem", asset_pack, current_tab, asset_id);
 }
 
 function ItemHover(label, enter) {
-	if (enter)
-	{
-		$("#label").css("opacity", '1');
-		$("#label").html(label);
+	const label_element = document.querySelector("#label");
+
+	if (enter) {
+		label_element.style.opacity = 1; 
+		label_element.innerHTML = label;
 		Events.Call("HoverSound");
-	}
-	else
-	{
-		$("#label").css("opacity", '0');
+	} else {
+		label_element.style.opacity = 0; 
 	}
 }
 
-function AssetPackClick(e) {
-	let new_asset_pack = $(e).html();
+// function AssetPackClick(e) {
+// 	let new_asset_pack = $(e).html();
 
-	if (new_asset_pack == current_asset_pack)
-		return;
+// 	if (new_asset_pack == current_asset_pack)
+// 		return;
 
-	current_asset_pack = new_asset_pack;
+// 	current_asset_pack = new_asset_pack;
 
-	console.log("eba")
-	console.log(current_asset_pack)
-	RefreshAssets();
+// 	RefreshAssets();
 
-	$(".asset_pack.active").removeClass("active");
-	$(e.target).addClass("active");
-}
+// 	$(".asset_pack.active").removeClass("active");
+// 	$(e.target).addClass("active");
+// }
 
 function TabClick(e) {
-	let new_tab = $(e.target).attr("id");
+	const new_tab = e.target.getAttribute("id");
 
 	if (new_tab == current_tab)
 		return;
@@ -172,12 +157,12 @@ function TabClick(e) {
 
 	RefreshAssets();
 
-	$(".tab.active").removeClass("active");
-	$(e.target).addClass("active");
+	document.querySelector(".tab.active").classList.remove("active");
+	e.target.classList.add("active");
 }
 
 function RefreshAssets() {
-	$("#spawn_list").html("");
+	document.querySelector("#spawn_list").innerHTML = "";
 
 	if (!assets[current_asset_pack]) {
 		console.error("Failed to get props from Asset Pack: '" + current_asset_pack + "'.");
@@ -200,106 +185,44 @@ function RefreshAssets() {
 	// }
 }
 
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", function(event) {
+	const tabs = document.querySelectorAll(".tab");
 
-	$(".tab").click(TabClick);
+	for (let i = 0; i < tabs.length; i++) {
+		const tab = tabs[i];
 
-	$(".tab").mouseenter(function(e) { ItemHover($(e.target).children(".tab_name").html(), true); });
-	$(".tab").mouseleave(function(e) { ItemHover(false, false); });
-
-	// AddAssetPack("NanosWorld", JSON.stringify(assets.NanosWorld));
-	// AddAssetPack("NanosWorld2", JSON.stringify(assets.NanosWorld));
-
-	// current_asset_pack = $(".asset_pack").first().html();
-	// current_tab = $(".tab").attr("id");
-
-	// RefreshAssets();
-
-	// $(".tab").first().click();
-	// InsertItem("SM_Cone", "https://i.imgur.com/sKjbueM.jpg");
-	// InsertItem("SM_Cube", "https://i.imgur.com/OcyUjXp.jpg");
-	// InsertItem("SM_Cylinder", "https://i.imgur.com/nkPvu96.jpg");
-	// InsertItem("SM_Plane", "https://i.imgur.com/ls0cD9b.jpg");
-	// InsertItem("SM_Sphere", "https://i.imgur.com/aClqtmd.jpg");
-
-	// InsertItem("SM_Cone", "https://i.imgur.com/sKjbueM.jpg");
-	// InsertItem("SM_Cube", "https://i.imgur.com/OcyUjXp.jpg");
-	// InsertItem("SM_Cylinder", "https://i.imgur.com/nkPvu96.jpg");
-	// InsertItem("SM_Plane", "https://i.imgur.com/ls0cD9b.jpg");
-	// InsertItem("SM_Sphere", "https://i.imgur.com/aClqtmd.jpg");
-
-	// InsertItem("SM_Cone", "https://i.imgur.com/sKjbueM.jpg");
-	// InsertItem("SM_Cube", "https://i.imgur.com/OcyUjXp.jpg");
-	// InsertItem("SM_Cylinder", "https://i.imgur.com/nkPvu96.jpg");
-	// InsertItem("SM_Plane", "https://i.imgur.com/ls0cD9b.jpg");
-	// InsertItem("SM_Sphere", "https://i.imgur.com/aClqtmd.jpg");
-
-	// InsertItem("SM_Cone", "https://i.imgur.com/sKjbueM.jpg");
-	// InsertItem("SM_Cube", "https://i.imgur.com/OcyUjXp.jpg");
-	// InsertItem("SM_Cylinder", "https://i.imgur.com/nkPvu96.jpg");
-	// InsertItem("SM_Plane", "https://i.imgur.com/ls0cD9b.jpg");
-	// InsertItem("SM_Sphere", "https://i.imgur.com/aClqtmd.jpg");
-
-	// InsertItem("SM_Cone", "https://i.imgur.com/sKjbueM.jpg");
-	// InsertItem("SM_Cube", "https://i.imgur.com/OcyUjXp.jpg");
-	// InsertItem("SM_Cylinder", "https://i.imgur.com/nkPvu96.jpg");
-	// InsertItem("SM_Plane", "https://i.imgur.com/ls0cD9b.jpg");
-	// InsertItem("SM_Sphere", "https://i.imgur.com/aClqtmd.jpg");
-
-	// InsertItem("SM_Cone", "https://i.imgur.com/sKjbueM.jpg");
-	// InsertItem("SM_Cube", "https://i.imgur.com/OcyUjXp.jpg");
-	// InsertItem("SM_Cylinder", "https://i.imgur.com/nkPvu96.jpg");
-	// InsertItem("SM_Plane", "https://i.imgur.com/ls0cD9b.jpg");
-	// InsertItem("SM_Sphere", "https://i.imgur.com/aClqtmd.jpg");
-	// InsertItem("SM_Cone", "https://i.imgur.com/sKjbueM.jpg");
-	// InsertItem("SM_Cube", "https://i.imgur.com/OcyUjXp.jpg");
-	// InsertItem("SM_Cylinder", "https://i.imgur.com/nkPvu96.jpg");
-	// InsertItem("SM_Plane", "https://i.imgur.com/ls0cD9b.jpg");
-	// InsertItem("SM_Sphere", "https://i.imgur.com/aClqtmd.jpg");
-
-	// InsertItem("SM_Cone", "https://i.imgur.com/sKjbueM.jpg");
-	// InsertItem("SM_Cube", "https://i.imgur.com/OcyUjXp.jpg");
-	// InsertItem("SM_Cylinder", "https://i.imgur.com/nkPvu96.jpg");
-	// InsertItem("SM_Plane", "https://i.imgur.com/ls0cD9b.jpg");
-	// InsertItem("SM_Sphere", "https://i.imgur.com/aClqtmd.jpg");
-
-	// InsertItem("SM_Cone", "https://i.imgur.com/sKjbueM.jpg");
-	// InsertItem("SM_Cube", "https://i.imgur.com/OcyUjXp.jpg");
-	// InsertItem("SM_Cylinder", "https://i.imgur.com/nkPvu96.jpg");
-	// InsertItem("SM_Plane", "https://i.imgur.com/ls0cD9b.jpg");
-	// InsertItem("SM_Sphere", "https://i.imgur.com/aClqtmd.jpg");
-
-	// InsertItem("SM_Cone", "https://i.imgur.com/sKjbueM.jpg");
-	// InsertItem("SM_Cube", "https://i.imgur.com/OcyUjXp.jpg");
-	// InsertItem("SM_Cylinder", "https://i.imgur.com/nkPvu96.jpg");
-	// InsertItem("SM_Plane", "https://i.imgur.com/ls0cD9b.jpg");
-	// InsertItem("SM_Sphere", "https://i.imgur.com/aClqtmd.jpg");
-
-	// InsertItem("SM_Cone", "https://i.imgur.com/sKjbueM.jpg");
-	// InsertItem("SM_Cube", "https://i.imgur.com/OcyUjXp.jpg");
-	// InsertItem("SM_Cylinder", "https://i.imgur.com/nkPvu96.jpg");
-	// InsertItem("SM_Plane", "https://i.imgur.com/ls0cD9b.jpg");
-	// InsertItem("SM_Sphere", "https://i.imgur.com/aClqtmd.jpg");
+		tab.addEventListener('click', TabClick);
+		tab.addEventListener('mouseenter', function(e) { ItemHover(tab.querySelector(".tab_name").innerHTML, true); });
+		tab.addEventListener('mouseleave', function(e) { ItemHover(false, false); });
+	} 
 });
 
 function DisplayAsset(asset_pack, asset_id, asset_name, image) {
 	if (!image) image = "images/nanosworld_empty.png";
-	
-	let spawn_item = $("<span class='spawn_item' onclick='SpawnItemClick(this)' onmouseenter='ItemHover(\"" + asset_name + "\", true);' onmouseleave='ItemHover(\"" + asset_name + "\", false);'>");
-	let spawn_item_image = $("<span class='spawn_item_image'>");
-	let spawn_item_name = $("<span class='spawn_item_name'>");
-	spawn_item.data("asset_pack", asset_pack);
-	spawn_item.data("asset_id", asset_id);
-	
-	spawn_item_image.css("background-image", "url('" + image + "')");
-	spawn_item_name.html(asset_name);
 
-	spawn_item.append(spawn_item_image);
-	spawn_item.append(spawn_item_name);
+	const spawn_item = document.createElement("span");
+	spawn_item.classList.add("spawn_item");
+	spawn_item.addEventListener('click', SpawnItemClick);
+	spawn_item.addEventListener('onmouseenter', e => ItemHover(asset_name, true));
+	spawn_item.addEventListener('onmouseleave', e => ItemHover(false, false));
 
-	$("#spawn_list").append(spawn_item);
+	const spawn_item_image = document.createElement("span");
+	spawn_item_image.classList.add("spawn_item_image");
+
+	const spawn_item_name = document.createElement("span");
+	spawn_item_name.classList.add("spawn_item_name");
+
+	spawn_item.dataset.asset_pack = asset_pack;
+	spawn_item.dataset.asset_id = asset_id;
+	
+	spawn_item_image.style["background-image"] = `url('${image}')`;
+	spawn_item_name.innerHTML = asset_name;
+
+	spawn_item.appendChild(spawn_item_image);
+	spawn_item.appendChild(spawn_item_name);
+
+	document.querySelector("#spawn_list").appendChild(spawn_item);
 }
-
 
 function AddAssetPack(asset_pack_name, data) {
 	assets[asset_pack_name] = JSON.parse(data);
@@ -318,8 +241,10 @@ function AddAssetPack(asset_pack_name, data) {
 Events.Subscribe("AddAssetPack", AddAssetPack);
 
 Events.Subscribe("ToggleSpawnMenuVisibility", function(is_visible) {
+	const spawn_menu = document.querySelector("#spawn_menu");
+
 	if (is_visible)
-		$("#spawn_menu").show();
+		spawn_menu.style.display = "block";
 	else
-		$("#spawn_menu").hide();
+		spawn_menu.style.display = "none";
 });
