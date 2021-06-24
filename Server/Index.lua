@@ -226,11 +226,18 @@ function SpawnPlayer(player, location, rotation)
 		end, {new_char})
 	end)
 
-	Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has joined the server")
+	return new_char
 end
 
+-- Exposes this to other packages
+Package:Export("SpawnPlayer", SpawnPlayer)
+
 -- When Player Connects, spawns a new Character and gives it to him
-Player:Subscribe("Spawn", SpawnPlayer)
+Player:Subscribe("Spawn", function(player)
+	SpawnPlayer(player)
+
+	Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has joined the server")
+end)
 
 -- Called when Character respawns
 Character:Subscribe("Respawn", function(character)
