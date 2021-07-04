@@ -65,7 +65,7 @@ Events.Subscribe("SpawnBalloon", function(player, spawn_location, rotation, forc
 end)
 
 -- Timer for destroying balloons when they gets too high
-Timer.SetTimeout(function()
+Timer.SetInterval(function()
 	for k, balloon in pairs(Balloons) do
 		-- If this balloon is higher enough, pops it
 		if (balloon:IsValid() and balloon:GetLocation().Z > 3000 + math.random(10000)) then

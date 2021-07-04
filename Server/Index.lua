@@ -221,8 +221,6 @@ function SpawnPlayer(player, location, rotation)
 			if (character:IsValid() and character:GetHealth() == 0) then
 				character:Respawn()
 			end
-
-			return false
 		end, 5000, new_char)
 	end)
 

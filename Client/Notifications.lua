@@ -24,7 +24,6 @@ Events.Subscribe("AddNotification", AddNotification)
 function SetNotification(id, delay, message, time)
 	Timer.SetTimeout(function(_id, _message, _time)
 		AddNotification(_id, _message, _time)
-		return false
 	end, delay, id, message, time)
 end
 

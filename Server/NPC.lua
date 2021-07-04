@@ -13,9 +13,7 @@ function SpawnNPC(asset, location, rotation)
 				NPCRandomMove(chara, 3000)
 				charac:SetValue("Scream", false)
 			end
-
-			return false
-		end, {charac})
+		end, charac)
 	end)
 
 	character:Subscribe("TakeDamage", function(self, damage, bone, type, from_direction, instigator)
@@ -33,8 +31,6 @@ function SpawnNPC(asset, location, rotation)
 			if (chara and chara:IsValid()) then
 				chara:Destroy()
 			end
-
-			return false
 		end, 10000, self)
 	end)
 

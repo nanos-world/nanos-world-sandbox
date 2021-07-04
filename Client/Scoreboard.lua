@@ -23,8 +23,8 @@ Player.Subscribe("Spawn", function(player)
 end)
 
 -- Updates the ping every 5 seconds
-Timer.SetTimeout(function()
-	for k, player in pairs(NanosWorld:GetPlayers()) do
+Timer.SetInterval(function()
+	for k, player in pairs(Player.GetAll()) do
 		UpdatePlayerScoreboard(player)
 	end
 end, 5000)

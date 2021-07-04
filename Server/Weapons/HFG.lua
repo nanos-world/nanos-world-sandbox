@@ -42,7 +42,6 @@ function SpawnHFG(location, rotation)
 		grenade:Subscribe("Destroy", function(self, intensity)
 			Timer.SetTimeout(function(particle)
 				particle:Destroy()
-				return false
 			end, 1000, self:GetValue("Particle"))
 		end)
 
