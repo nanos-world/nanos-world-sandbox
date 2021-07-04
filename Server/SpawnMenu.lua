@@ -52,7 +52,9 @@ Events:Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 			item = Package:Call(spawn_menu_item.package_name, spawn_menu_item.package_function, {spawn_location, spawn_rotation})
 		end
 
-		if (category == "tools") then
+		if (category == "npcs") then
+			item:SetNetworkAuthority(player)
+		elseif (category == "tools") then
 			item:SetValue("ToolGun", asset, true)
 
 			item:Subscribe("PickUp", function(weapon, char)
@@ -153,3 +155,7 @@ Package:Require("Tools/Thruster.lua")
 Package:Require("Tools/Torch.lua")
 Package:Require("Tools/Trail.lua")
 Package:Require("Tools/Weld.lua")
+
+-- Extra
+Package.Require("NPC.lua")
+Package.Require("Weapons/HFG.lua")

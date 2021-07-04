@@ -34,6 +34,10 @@ main_hud:Subscribe("Ready", function()
 			SpawnMenuItems[asset_pack.Path].tools = {}
 		end
 
+		if (not SpawnMenuItems[asset_pack.Path].tools) then
+			SpawnMenuItems[asset_pack.Path].npcs = {}
+		end
+
 		-- Loads all StaticMeshes as Props
 		local props = Assets:GetStaticMeshes(asset_pack.Path)
 		for i, prop in pairs(props) do
@@ -194,6 +198,8 @@ AddSpawnMenuItem("NanosWorld", "weapons", "Moss500", "Moss500", "assets///NanosW
 AddSpawnMenuItem("NanosWorld", "weapons", "SMG11", "SMG11", "assets///NanosWorld/Thumbnails/SK_SMG11.jpg")
 AddSpawnMenuItem("NanosWorld", "weapons", "Grenade", "Grenade", "assets///NanosWorld/Thumbnails/SK_G67.jpg")
 
+AddSpawnMenuItem("NanosWorld", "weapons", "HFG", "HFG", "assets///NanosWorld/Thumbnails/SK_PortalGun.jpg")
+
 -- Default Vehicles
 AddSpawnMenuItem("NanosWorld", "vehicles", "SUV", "SUV", "assets///NanosWorld/Thumbnails/SK_SUV.jpg")
 AddSpawnMenuItem("NanosWorld", "vehicles", "Hatchback", "Hatchback", "assets///NanosWorld/Thumbnails/SK_Hatchback.jpg")
@@ -201,6 +207,14 @@ AddSpawnMenuItem("NanosWorld", "vehicles", "SportsCar", "SportsCar", "assets///N
 AddSpawnMenuItem("NanosWorld", "vehicles", "TruckBox", "TruckBox", "assets///NanosWorld/Thumbnails/SK_Truck_Box.jpg")
 AddSpawnMenuItem("NanosWorld", "vehicles", "TruckChassis", "TruckChassis", "assets///NanosWorld/Thumbnails/SK_Truck_Chassis.jpg")
 AddSpawnMenuItem("NanosWorld", "vehicles", "Pickup", "Pickup", "assets///NanosWorld/Thumbnails/SK_Pickup.jpg")
+
+-- Default NPCs
+AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_Mannequin", "Mannequin", "assets///NanosWorld/Thumbnails/SK_Mannequin.jpg")
+AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_Mannequin_Female", "Mannequin Female", "assets///NanosWorld/Thumbnails/SK_Mannequin_Female.jpg")
+AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_Male", "Man", "assets///NanosWorld/Thumbnails/SK_Male.jpg")
+AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_Female", "Woman", "assets///NanosWorld/Thumbnails/SK_Female.jpg")
+AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_PostApocalyptic", "Post Apocalyptic", "assets///NanosWorld/Thumbnails/SK_PostApocalyptic.jpg")
+AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_ClassicMale", "Classic Male", "assets///NanosWorld/Thumbnails/SK_ClassicMale.jpg")
 
 -- Adds this tool to the Sandbox Spawn Menu
 AddSpawnMenuItem("NanosWorld", "tools", "Torch", "Torch", "assets///NanosWorld/Thumbnails/SM_Torch.jpg")
