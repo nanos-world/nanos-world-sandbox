@@ -21,7 +21,7 @@ function HandleWeldTool(tool)
 					welding_end_location = welding_end_to:GetLocation()
 				end
 
-				Events:CallRemote("Weld", {WeldTool.welding_start_to, welding_end_to, welding_end_location})
+				Events.CallRemote("Weld", WeldTool.welding_start_to, welding_end_to, welding_end_location)
 
 				-- Cleans up the highlights and variables
 				WeldTool.welding_start_to:SetHighlightEnabled(false)
@@ -51,11 +51,11 @@ function HandleWeldTool(tool)
 	end)
 end
 
-Events:Subscribe("PickUpToolGun_WeldTool", function(tool, character)
+Events.Subscribe("PickUpToolGun_WeldTool", function(tool, character)
 	HandleWeldTool(tool)
 end)
 
-Events:Subscribe("DropToolGun_WeldTool", function(tool, character)
+Events.Subscribe("DropToolGun_WeldTool", function(tool, character)
 	tool:Unsubscribe("Fire")
 
 	if (WeldTool.welding_start_to) then

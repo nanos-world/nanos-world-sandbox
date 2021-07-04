@@ -7,7 +7,7 @@ function HandleLampTool(weapon)
 
 		if (trace_result.Success) then
 			-- Calls remote to spawn the Lamp
-			Events:CallRemote("SpawnLamp", {trace_result.Location, trace_result.Normal, trace_result.Entity})
+			Events.CallRemote("SpawnLamp", trace_result.Location, trace_result.Normal, trace_result.Entity)
 		else
 			-- If didn't hit anything, plays a negative sound
 			Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
@@ -15,11 +15,11 @@ function HandleLampTool(weapon)
 	end)
 end
 
-Events:Subscribe("PickUpToolGun_LampTool", function(tool)
+Events.Subscribe("PickUpToolGun_LampTool", function(tool)
 	HandleLampTool(tool)
 end)
 
-Events:Subscribe("DropToolGun_LampTool", function(tool)
+Events.Subscribe("DropToolGun_LampTool", function(tool)
 	tool:Unsubscribe("Fire")
 end)
 

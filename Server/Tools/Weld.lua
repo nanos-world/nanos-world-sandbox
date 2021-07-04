@@ -1,5 +1,5 @@
 -- Subscribes for Client Event for welding an object into another
-Events:Subscribe("Weld", function(player, welding_start, welding_end, welding_end_location)
+Events.Subscribe("Weld", function(player, welding_start, welding_end, welding_end_location)
 	-- Spawns the cable
 	local cable = Cable(welding_end_location)
 
@@ -19,7 +19,7 @@ Events:Subscribe("Weld", function(player, welding_start, welding_end, welding_en
 	end
 
 	-- Calls the client to update it's action history
-	Events:CallRemote("SpawnedItem", player, {cable})
+	Events.CallRemote("SpawnedItem", player, cable)
 
 	Particle(welding_start:GetLocation(), Rotator(), "NanosWorld::P_OmnidirectionalBurst")
 	Particle(welding_end_location, Rotator(), "NanosWorld::P_OmnidirectionalBurst")

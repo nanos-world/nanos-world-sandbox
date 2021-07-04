@@ -18,7 +18,7 @@ function HandleRopeTool(tool)
 				local attaching_end_to = trace_result.Entity
 				local attaching_end_location = trace_result.Location
 
-				Events:CallRemote("RopeAttach", {RopeTool.attaching_start_to, RopeTool.attaching_start_location, attaching_end_to, attaching_end_location})
+				Events.CallRemote("RopeAttach", RopeTool.attaching_start_to, RopeTool.attaching_start_location, attaching_end_to, attaching_end_location)
 
 				-- Cleans up the variables and the object highlight
 				RopeTool.attaching_start_to:SetHighlightEnabled(false)
@@ -48,11 +48,11 @@ function HandleRopeTool(tool)
 	end)
 end
 
-Events:Subscribe("PickUpToolGun_RopeTool", function(tool, character)
+Events.Subscribe("PickUpToolGun_RopeTool", function(tool, character)
 	HandleRopeTool(tool)
 end)
 
-Events:Subscribe("DropToolGun_RopeTool", function(tool, character)
+Events.Subscribe("DropToolGun_RopeTool", function(tool, character)
 	tool:Unsubscribe("Fire")
 
 	if (RopeTool.attaching_start_to) then

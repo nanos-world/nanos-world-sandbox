@@ -1,5 +1,5 @@
 -- Subscribes for client event to spawn a Rope
-Events:Subscribe("RopeAttach", function(player, attaching_start_to, attaching_start_location, attaching_end_to, attaching_end_location)
+Events.Subscribe("RopeAttach", function(player, attaching_start_to, attaching_start_location, attaching_end_to, attaching_end_location)
 	-- Gets the distance from the start and end locations
 	local distance = attaching_start_location:Distance(attaching_end_location)
 
@@ -32,7 +32,7 @@ Events:Subscribe("RopeAttach", function(player, attaching_start_to, attaching_st
 	end
 
 	-- Calls the client to update his history
-	Events:CallRemote("SpawnedItem", player, {cable})
+	Events.CallRemote("SpawnedItem", player, cable)
 
 	Particle(attaching_start_location, Rotator(), "NanosWorld::P_OmnidirectionalBurst")
 	Particle(attaching_end_location, Rotator(), "NanosWorld::P_OmnidirectionalBurst")

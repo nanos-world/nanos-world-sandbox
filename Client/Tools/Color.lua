@@ -8,7 +8,7 @@ function HandleColorTool(tool)
 		-- If hit an object, then get a random Color and call server to update the color for everyone
 		if (trace_result.Success and trace_result.Entity) then
 			local color = Color.RandomPalette()
-			Events:CallRemote("ColorObject", {trace_result.Entity, trace_result.Location, trace_result.Normal, color})
+			Events.CallRemote("ColorObject", trace_result.Entity, trace_result.Location, trace_result.Normal, color)
 		else
 			-- If didn't hit anything, plays a negative sound
 			Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
@@ -16,11 +16,11 @@ function HandleColorTool(tool)
 	end)
 end
 
-Events:Subscribe("PickUpToolGun_ColorTool", function(tool)
+Events.Subscribe("PickUpToolGun_ColorTool", function(tool)
 	HandleColorTool(tool)
 end)
 
-Events:Subscribe("DropToolGun_ColorTool", function(tool)
+Events.Subscribe("DropToolGun_ColorTool", function(tool)
 	tool:Unsubscribe("Fire")
 end)
 

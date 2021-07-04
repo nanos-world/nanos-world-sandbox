@@ -1,5 +1,5 @@
 -- Subscribes for Client Event for spawning a Trail
-Events:Subscribe("SpawnTrail", function(player, spawn_location, direction, entity)
+Events.Subscribe("SpawnTrail", function(player, spawn_location, direction, entity)
 	-- Calculates the Trail Rotation to spawn it
 	local rotation = (direction * -1):Rotation() + Rotator(90, 0, 0)
 
@@ -26,7 +26,7 @@ Events:Subscribe("SpawnTrail", function(player, spawn_location, direction, entit
 	trail:AttachTo(entity, AttachmentRule.KeepWorld, "", true)
 
 	-- Updates the client's spawn history
-	Events:CallRemote("SpawnedItem", player, { trail })
+	Events.CallRemote("SpawnedItem", player,  trail)
 
 	Particle(spawn_location, rotation, "NanosWorld::P_DirectionalBurst")
 end)

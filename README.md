@@ -10,22 +10,22 @@ Note: All Assets from Asset Packs are loaded automatically in the Spawn Menu!
 Client:
 
 ```lua
-Package:Subscribe("Load", function()
-	-- Package:Call("Sandbox", "AddSpawnMenuItem", {"YOUR_CUSTOM_'PACK'_NAME", "CATEGORY", "TOOL_ID", "TOOL_LABEL", "IMAGE_PATH"})
+Package.Subscribe("Load", function()
+	-- Package.Call("Sandbox", "AddSpawnMenuItem", "YOUR_CUSTOM_'PACK'_NAME", "CATEGORY", "TOOL_ID", "TOOL_LABEL", "IMAGE_PATH")
 	-- The category must be: 'props', 'weapons', 'tools' or 'vehicles'
 	-- Example:
 
 	-- Calls the Sandbox method to add my weapon to the SpawnMenu
-	Package:Call("Sandbox", "AddSpawnMenuItem", {"AwesomeWeapons", "weapons", "BFG", "Big Fucking Gun", "package///AwesomeWeapons/Client/SK_BFG.jpg"})
+	Package.Call("Sandbox", "AddSpawnMenuItem", "AwesomeWeapons", "weapons", "BFG", "Big Fucking Gun", "package///AwesomeWeapons/Client/SK_BFG.jpg")
 	return false
 end)
 
 -- If you are making a tool, you can subscribe when your character picks up or drops the Tool
-Events:Subscribe("PickUpToolGun_AwesomeTool", function(tool, character)
+Events.Subscribe("PickUpToolGun_AwesomeTool", function(tool, character)
 	GrabbedAwesomeTool(tool)
 end)
 
-Events:Subscribe("DropToolGun_AwesomeTool", function(tool, character)
+Events.Subscribe("DropToolGun_AwesomeTool", function(tool, character)
 	StopUsingAwesomeTool(false)
 end)
 ```
@@ -41,15 +41,15 @@ function SpawnBFG(location, rotation)
 end
 
 -- Exports the function to be called by the Sandbox 
-Package:Export("SpawnBFG", SpawnBFG)
+Package.Export("SpawnBFG", SpawnBFG)
 
-Package:Subscribe("Load", function()
-	-- Package:Call("Sandbox", "AddSpawnMenuItem", {"YOUR_CUSTOM_'PACK'_NAME", "CATEGORY", "TOOL_ID", "PACKAGE_PATH", "PACKAGE_FUNCTION_NAME"})
+Package.Subscribe("Load", function()
+	-- Package.Call("Sandbox", "AddSpawnMenuItem", "YOUR_CUSTOM_'PACK'_NAME", "CATEGORY", "TOOL_ID", "PACKAGE_PATH", "PACKAGE_FUNCTION_NAME")
 	-- The category must be: 'props', 'weapons', 'tools' or 'vehicles'
 	-- Example:
 
 	-- Calls the Sandbox method to add my weapon to the SpawnMenu
-	Package:Call("Sandbox", "AddSpawnMenuItem", {"AwesomeWeapons", "weapons", "BFG", "awesome-weapons", "SpawnBFG"})
+	Package.Call("Sandbox", "AddSpawnMenuItem", "AwesomeWeapons", "weapons", "BFG", "awesome-weapons", "SpawnBFG")
 	return false
 end)
 ```

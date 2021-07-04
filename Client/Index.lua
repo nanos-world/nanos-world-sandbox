@@ -1,9 +1,9 @@
 -- Spawns/Overrides with default NanosWorld's Sun
-World:SpawnDefaultSun()
+World.SpawnDefaultSun()
 
 -- Sets the same time for everyone
 local gmt_time = os.date("!*t", os.time())
-World:SetTime((gmt_time.hour * 60 + gmt_time.min) % 24, gmt_time.sec)
+World.SetTime((gmt_time.hour * 60 + gmt_time.min) % 24, gmt_time.sec)
 
 -- All notifications already sent
 persistent_data_notifications = {}
@@ -12,28 +12,28 @@ persistent_data_notifications = {}
 main_hud = WebUI("Sandbox HUD", "file:///UI/index.html")
 
 -- Requires the SpawnMenu
-Package:Require("Notifications.lua")
-Package:Require("SpawnMenu.lua")
-Package:Require("Scoreboard.lua")
+Package.Require("Notifications.lua")
+Package.Require("SpawnMenu.lua")
+Package.Require("Scoreboard.lua")
 
--- When LocalPlayer spawns, sets an event on it to trigger when we possesses a new character, to store the local controlled character locally. This event is only called once, see Package:Subscribe("Load") to load it when reloading a package
-NanosWorld:Subscribe("SpawnLocalPlayer", function(local_player)
+-- When LocalPlayer spawns, sets an event on it to trigger when we possesses a new character, to store the local controlled character locally. This event is only called once, see Package.Subscribe("Load") to load it when reloading a package
+NanosWorld.Subscribe("SpawnLocalPlayer", function(local_player)
 	local_player:Subscribe("Possess", function(player, character)
 		UpdateLocalCharacter(character)
 	end)
 end)
 
 -- When package loads, verify if LocalPlayer already exists (eg. when reloading the package), then try to get and store it's controlled character
-Package:Subscribe("Load", function()
+Package.Subscribe("Load", function()
 	if (NanosWorld:GetLocalPlayer() ~= nil) then
 		UpdateLocalCharacter(NanosWorld:GetLocalPlayer():GetControlledCharacter())
 	end
 
 	-- Gets all notifications already sent
-	persistent_data_notifications = Package:GetPersistentData().notifications or {}
+	persistent_data_notifications = Package.GetPersistentData().notifications or {}
 
 	-- Updates all existing Players
-	for k, player in pairs(NanosWorld:GetPlayers()) do
+	for k, player in pairs(Player.GetAll()) do
 		UpdatePlayerScoreboard(player)
 	end
 end)
@@ -102,49 +102,49 @@ function UpdateLocalCharacter(character)
 	end)
 end
 
--- Exposes this to other packages
-Package:Export("UpdateLocalCharacter", UpdateLocalCharacter)
-
 -- Function to update the Ammo's UI
 function UpdateAmmo(enable_ui, ammo, ammo_bag)
-	main_hud:CallEvent("UpdateWeaponAmmo", {enable_ui, ammo, ammo_bag})
+	main_hud:CallEvent("UpdateWeaponAmmo", enable_ui, ammo, ammo_bag)
 end
 
 -- Function to update the Health's UI
 function UpdateHealth(health)
-	main_hud:CallEvent("UpdateHealth", {health})
+	main_hud:CallEvent("UpdateHealth", health)
 end
 
-Client:Subscribe("KeyPress", function(key_name)
+Client.Subscribe("KeyPress", function(key_name)
 	if (key_name == "B") then
-		Events:CallRemote("ToggleNoClip", {})
+		Events.CallRemote("ToggleNoClip")
 		return
 	end
 end)
 
 -- VOIP UI
-Player:Subscribe("VOIP", function(player, is_talking)
-	main_hud:CallEvent("ToggleVoice", {player:GetName(), is_talking})
+Player.Subscribe("VOIP", function(player, is_talking)
+	main_hud:CallEvent("ToggleVoice", player:GetName(), is_talking)
 end)
 
-Player:Subscribe("Destroy", function(player)
-	main_hud:CallEvent("ToggleVoice", {player:GetName(), false})
-	main_hud:CallEvent("UpdatePlayer", {player:GetID(), false})
+Player.Subscribe("Destroy", function(player)
+	main_hud:CallEvent("ToggleVoice", player:GetName(), false)
+	main_hud:CallEvent("UpdatePlayer", player:GetID(), false)
 end)
 
-Events:Subscribe("SpawnSound", function(location, sound_asset, is_2D, volume, pitch)
+Events.Subscribe("SpawnSound", function(location, sound_asset, is_2D, volume, pitch)
 	Sound(location, sound_asset, is_2D, true, SoundType.SFX, volume, pitch)
 end)
 
-Events:Subscribe("SpawnSoundAttached", function(object, sound_asset, is_2D, volume, pitch)
+Events.Subscribe("SpawnSoundAttached", function(object, sound_asset, is_2D, volume, pitch)
 	local sound = Sound(Vector(), sound_asset, is_2D, true, SoundType.SFX, volume, pitch)
 	sound:AttachTo(object)
 end)
 
-Events:Subscribe("SpawnParticle", function(location, rotation, particle_asset, color)
+Events.Subscribe("SpawnParticle", function(location, rotation, particle_asset, color)
 	local particle = Particle(location, rotation, particle_asset)
 
 	if (color) then
 		particle:SetParameterColor("Color", color)
 	end
 end)
+
+-- Exposes this to other packages
+Package.Export("UpdateLocalCharacter", UpdateLocalCharacter)

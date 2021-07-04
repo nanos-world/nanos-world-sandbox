@@ -19,7 +19,7 @@ function HandleResizerTool(weapon, character)
 			ResizerTool.resizing_object = trace_result.Entity
 			ResizerTool.current_scale = ResizerTool.resizing_object:GetScale()
 			ResizerTool.resizing_object:SetHighlightEnabled(true, 0)
-			Events:CallRemote("ToggleResizing", {true})
+			Events.CallRemote("ToggleResizing", true)
 		else
 			-- If didn't hit anything, plays a negative sound
 			Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
@@ -31,7 +31,7 @@ function HandleResizerTool(weapon, character)
 		if (new_state == AimMode.None and ResizerTool.resizing_object) then
 			ResizerTool.resizing_object:SetHighlightEnabled(false)
 			ResizerTool.resizing_object = nil
-			Events:CallRemote("ToggleResizing", {false})
+			Events.CallRemote("ToggleResizing", false)
 		end
 	end)
 
@@ -39,7 +39,7 @@ function HandleResizerTool(weapon, character)
 	SetNotification("RESIZER_GUIDE", 5000, "hold down Left Mouse to select an object, then use mouse wheel to size it up or down", 10000)
 end
 
-Client:Subscribe("MouseUp", function(key_name)
+Client.Subscribe("MouseUp", function(key_name)
 	if (not ResizerTool.weapon) then return end
 
 	-- If released the leftMouse, stops resizing
@@ -47,7 +47,7 @@ Client:Subscribe("MouseUp", function(key_name)
 		if (ResizerTool.resizing_object) then
 			ResizerTool.resizing_object:SetHighlightEnabled(false)
 			ResizerTool.resizing_object = nil
-			Events:CallRemote("ToggleResizing", {false})
+			Events.CallRemote("ToggleResizing", false)
 		end
 		return
 	end
@@ -56,7 +56,7 @@ Client:Subscribe("MouseUp", function(key_name)
 	if (key_name == "MouseScrollUp") then
 		if (ResizerTool.resizing_object) then
 			ResizerTool.current_scale = ResizerTool.current_scale + 0.1
-			Events:CallRemote("ResizeObject", {ResizerTool.resizing_object, ResizerTool.current_scale, true})
+			Events.CallRemote("ResizeObject", ResizerTool.resizing_object, ResizerTool.current_scale, true)
 		end
 		return
 	end
@@ -71,33 +71,33 @@ Client:Subscribe("MouseUp", function(key_name)
 				ResizerTool.current_scale = Vector(0.1)
 			end
 
-			Events:CallRemote("ResizeObject", {ResizerTool.resizing_object, ResizerTool.current_scale, false})
+			Events.CallRemote("ResizeObject", ResizerTool.resizing_object, ResizerTool.current_scale, false)
 		end
 		return
 	end
 end)
 
-Client:Subscribe("KeyPress", function(key_name)
+Client.Subscribe("KeyPress", function(key_name)
 	if (not ResizerTool.weapon or not ResizerTool.resizing_object) then return end
 
 	if (key_name == "R") then
 		ResizerTool.current_scale = Vector(1, 1, 1)
-		Events:CallRemote("ResizeObject", {ResizerTool.resizing_object, Vector(1, 1, 1), true})
+		Events.CallRemote("ResizeObject", ResizerTool.resizing_object, Vector(1, 1, 1), true)
 	end
 end)
 
-Events:Subscribe("PickUpToolGun_ResizerTool", function(tool, character)
+Events.Subscribe("PickUpToolGun_ResizerTool", function(tool, character)
 	HandleResizerTool(tool, character)
 end)
 
-Events:Subscribe("DropToolGun_ResizerTool", function(tool, character)
+Events.Subscribe("DropToolGun_ResizerTool", function(tool, character)
 	tool:Unsubscribe("Fire")
 	character:Unsubscribe("WeaponAimModeChanged")
 
 	if (ResizerTool.resizing_object) then
 		ResizerTool.resizing_object:SetHighlightEnabled(false)
 		ResizerTool.resizing_object = nil
-		Events:CallRemote("ToggleResizing", {false})
+		Events.CallRemote("ToggleResizing", false)
 	end
 end)
 

@@ -1,5 +1,5 @@
 -- Event when Client calls to spawn a Light
-Events:Subscribe("SpawnLight", function(player, spawn_location, direction, entity, distance_trace_object)
+Events.Subscribe("SpawnLight", function(player, spawn_location, direction, entity, distance_trace_object)
 	local rotation = direction:Rotation() + Rotator(90, 0, 0)
 
 	-- Spawns a Light Bulb prop
@@ -43,7 +43,7 @@ Events:Subscribe("SpawnLight", function(player, spawn_location, direction, entit
 	prop_light:SetLocation(spawn_location)
 
 	-- Calls the client to add it to his spawn history
-	Events:CallRemote("SpawnedItem", player, {prop_light})
+	Events.CallRemote("SpawnedItem", player, prop_light)
 
 	Particle(spawn_location, direction:Rotation(), "NanosWorld::P_DirectionalBurst"):SetParameterColor("Color", color)
 end)

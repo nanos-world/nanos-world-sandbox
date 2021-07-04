@@ -7,29 +7,29 @@ function AddNotification(id, message, time, force)
 
 		-- Sets to the settings that the Notification has been shown
 		persistent_data_notifications[id] = true
-		Package:SetPersistentData("notifications", persistent_data_notifications)
+		Package.SetPersistentData("notifications", persistent_data_notifications)
 	end
 
 	-- Plays a sound
 	Sound(Vector(), "NanosWorld::A_VR_Click_01", true, true, SoundType.SFX, 0.1, 1)
 
 	-- Trigger WebUI to display it
-	main_hud:CallEvent("AddNotification", {message, time})
+	main_hud:CallEvent("AddNotification", message, time)
 end
 
 -- Subscribes so other Packages can add notification as well
-Events:Subscribe("AddNotification", AddNotification)
+Events.Subscribe("AddNotification", AddNotification)
 
 -- Configure the notification to trigger after delay
 function SetNotification(id, delay, message, time)
-	Timer:SetTimeout(delay, function(_id, _message, _time)
+	Timer.SetTimeout(function(_id, _message, _time)
 		AddNotification(_id, _message, _time)
 		return false
-	end, {id, message, time})
+	end, delay, id, message, time)
 end
 
 -- Subscribes so other Packages can set notification as well
-Events:Subscribe("SetNotification", SetNotification)
+Events.Subscribe("SetNotification", SetNotification)
 
 -- Setup some default notifications
 SetNotification("PARACHUTE", 10000, "you can press space while falling to open your parachute", 5000)

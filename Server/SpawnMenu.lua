@@ -28,7 +28,7 @@ end
 SpawnMenuItems = {}
 
 -- Event for Spawning and Item from the SpawnMenu
-Events:Subscribe("SpawnItem", function(player, asset_pack, category, asset, spawn_location, spawn_rotation)
+Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spawn_location, spawn_rotation)
 	local character = player:GetControlledCharacter()
 
 	local item = nil
@@ -39,7 +39,7 @@ Events:Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 		item:SetNetworkAuthority(player)
 	else
 		if (not SpawnMenuItems[asset_pack] or not SpawnMenuItems[asset_pack][category] or not SpawnMenuItems[asset_pack][category][asset]) then
-			Package:Error("Failed to find item to spawn: Asset Pack '%s'. Category '%s'. Asset '%s'.", asset_pack, category, asset)
+			Package.Error("Failed to find item to spawn: Asset Pack '%s'. Category '%s'. Asset '%s'.", asset_pack, category, asset)
 			return
 		end
 
@@ -49,20 +49,18 @@ Events:Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 		if (spawn_menu_item.spawn_function) then
 			item = spawn_menu_item.spawn_function(spawn_location, spawn_rotation)
 		else
-			item = Package:Call(spawn_menu_item.package_name, spawn_menu_item.package_function, {spawn_location, spawn_rotation})
+			item = Package.Call(spawn_menu_item.package_name, spawn_menu_item.package_function, spawn_location, spawn_rotation)
 		end
 
-		if (category == "npcs") then
-			item:SetNetworkAuthority(player)
-		elseif (category == "tools") then
+		if (category == "tools") then
 			item:SetValue("ToolGun", asset, true)
 
 			item:Subscribe("PickUp", function(weapon, char)
-				Events:CallRemote("PickUpToolGun_" .. asset, char:GetPlayer(), {weapon, char})
+				Events.CallRemote("PickUpToolGun_" .. asset, char:GetPlayer(), weapon, char)
 			end)
 
 			item:Subscribe("Drop", function(weapon, char)
-				Events:CallRemote("DropToolGun_" .. asset, char:GetPlayer(), {weapon, char})
+				Events.CallRemote("DropToolGun_" .. asset, char:GetPlayer(), weapon, char)
 			end)
 		end
 
@@ -80,13 +78,13 @@ Events:Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 	end
 
 	-- Calls the client to update his history
-	Events:CallRemote("SpawnedItem", player, {item})
+	Events.CallRemote("SpawnedItem", player, item)
 end)
 
 -- Called by Client to destroy an spawned item 
-Events:Subscribe("DestroyItem", function(player, item)
+Events.Subscribe("DestroyItem", function(player, item)
 	-- Spawns some sounds and particles
-	Events:BroadcastRemote("SpawnSound", {item:GetLocation(), "NanosWorld::A_Player_Eject", false, 0.3, 1})
+	Events.BroadcastRemote("SpawnSound", item:GetLocation(), "NanosWorld::A_Player_Eject", false, 0.3, 1)
 	Particle(item:GetLocation() + Vector(0, 0, 30), Rotator(), "NanosWorld::P_OmnidirectionalBurst")
 
 	-- Destroy the item
@@ -111,13 +109,13 @@ function AddSpawnMenuItem(asset_pack, category, id, spawn_function, package_name
 end
 
 -- Exported functions cannot have functions as arguments, so we get the package name and package_function name and call it the proper way
-Package:Export("AddSpawnMenuItem", function(asset_pack, category, id, package_name, package_function)
+Package.Export("AddSpawnMenuItem", function(asset_pack, category, id, package_name, package_function)
 	AddSpawnMenuItem(asset_pack, category, id, nil, package_name, package_function)
 end)
 
 -- Adds the default NanosWorld items
-Package:RequirePackage("NanosWorldWeapons")
-Package:RequirePackage("NanosWorldVehicles")
+Package.RequirePackage("NanosWorldWeapons")
+Package.RequirePackage("NanosWorldVehicles")
 
 -- Default Weapons
 AddSpawnMenuItem("NanosWorld", "weapons", "AK47", NanosWorldWeapons.AK47)
@@ -144,17 +142,17 @@ AddSpawnMenuItem("NanosWorld", "vehicles", "Pickup", NanosWorldVehicles.Pickup)
 AddSpawnMenuItem("NanosWorld", "tools", "RemoverTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.RED) end)
 
 -- Requires all the Tools
-Package:Require("Tools/Balloon.lua")
-Package:Require("Tools/Color.lua")
-Package:Require("Tools/Lamp.lua")
-Package:Require("Tools/Light.lua")
-Package:Require("Tools/PhysicsGun.lua")
-Package:Require("Tools/Resizer.lua")
-Package:Require("Tools/Rope.lua")
-Package:Require("Tools/Thruster.lua")
-Package:Require("Tools/Torch.lua")
-Package:Require("Tools/Trail.lua")
-Package:Require("Tools/Weld.lua")
+Package.Require("Tools/Balloon.lua")
+Package.Require("Tools/Color.lua")
+Package.Require("Tools/Lamp.lua")
+Package.Require("Tools/Light.lua")
+Package.Require("Tools/PhysicsGun.lua")
+Package.Require("Tools/Resizer.lua")
+Package.Require("Tools/Rope.lua")
+Package.Require("Tools/Thruster.lua")
+Package.Require("Tools/Torch.lua")
+Package.Require("Tools/Trail.lua")
+Package.Require("Tools/Weld.lua")
 
 -- Extra
 Package.Require("NPC.lua")

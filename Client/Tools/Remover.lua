@@ -6,7 +6,7 @@ function HandleRemoverTool(weapon)
 
 		-- If hit an object, calls the server to destroy it
 		if (trace_result.Success and trace_result.Entity and not NanosWorld:IsA(trace_result.Entity, Character)) then
-			Events:CallRemote("DestroyItem", {trace_result.Entity})
+			Events.CallRemote("DestroyItem", trace_result.Entity)
 		else
 			-- If didn't hit anything, plays a negative sound
 			Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
@@ -14,11 +14,11 @@ function HandleRemoverTool(weapon)
 	end)
 end
 
-Events:Subscribe("PickUpToolGun_RemoverTool", function(tool, character)
+Events.Subscribe("PickUpToolGun_RemoverTool", function(tool, character)
 	HandleRemoverTool(tool)
 end)
 
-Events:Subscribe("DropToolGun_RemoverTool", function(tool, character)
+Events.Subscribe("DropToolGun_RemoverTool", function(tool, character)
 	tool:Unsubscribe("Fire")
 end)
 

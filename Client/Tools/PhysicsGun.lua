@@ -45,7 +45,7 @@ function HandlePhysicsGun(weapon, character)
 end
 
 -- Highlight objects being grabbed with index 1
-Events:Subscribe("PickUpObject", function(object, is_grabbing)
+Events.Subscribe("PickUpObject", function(object, is_grabbing)
 	object:SetHighlightEnabled(is_grabbing, 1)
 end)
 
@@ -57,7 +57,7 @@ function TogglePhysicsGunLocal(is_using, freeze)
 	if (not is_using) then
 		if (PhysicsGun.picking_object) then
 			-- Calls remote to "drop" the object
-			Events:CallRemote("PickUp", {PhysicsGun.weapon, PhysicsGun.picking_object, false, nil, freeze})
+			Events.CallRemote("PickUp", PhysicsGun.weapon, PhysicsGun.picking_object, false, nil, freeze)
 
 			-- Disables the highlight on this object
 			PhysicsGun.picking_object:SetHighlightEnabled(false)
@@ -73,14 +73,14 @@ function TogglePhysicsGunLocal(is_using, freeze)
 	PhysicsGun.is_using = is_using
 
 	-- Calls remote to toggle the Physics Gun off/on
-	Events:CallRemote("TogglePhysicsGun", {PhysicsGun.weapon, is_using})
+	Events.CallRemote("TogglePhysicsGun", PhysicsGun.weapon, is_using)
 end
 
 -- Function to try to pickup an object
 function TryPickUpObject()
 	-- Get the camera location in 3D World Space
-	local viewport_2D_center = Render:GetViewportSize() / 2
-	local viewport_3D = Render:Deproject(viewport_2D_center)
+	local viewport_2D_center = Render.GetViewportSize() / 2
+	local viewport_3D = Render.Deproject(viewport_2D_center)
 	local start_location = viewport_3D.Position + viewport_3D.Direction * 100
 
 	-- Gets the end location of the trace (5000 units ahead)
@@ -91,12 +91,12 @@ function TryPickUpObject()
 	local collision_trace = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle
 
 	-- Do the Trace
-	local trace_result = Client:Trace(start_location, end_location, collision_trace, false, true)
+	local trace_result = Client.Trace(start_location, end_location, collision_trace, false, true)
 
 	-- If hit something and hit an Entity
 	if (trace_result.Success and trace_result.Entity) then
 		-- Cannot grab Characters (yet?), cannot grab attached entities or entities which are being grabbed
-		if (NanosWorld:IsA(trace_result.Entity, Character) or trace_result.Entity:GetAttachedTo() or trace_result.Entity:GetValue("IsBeingGrabbed")) then
+		if (NanosWorld.IsA(trace_result.Entity, Character) or trace_result.Entity:GetAttachedTo() or trace_result.Entity:GetValue("IsBeingGrabbed")) then
 			return end_location
 		end
 
@@ -113,14 +113,14 @@ function TryPickUpObject()
 		-- Calculates the distance of the object and the camera
 		PhysicsGun.picking_object_distance = trace_result.Location:Distance(viewport_3D.Position)
 
-		PhysicsGun.picking_object_initial_rotation = PhysicsGun.picking_object:GetRotation() - NanosWorld:GetLocalPlayer():GetControlledCharacter():GetRotation()
+		PhysicsGun.picking_object_initial_rotation = PhysicsGun.picking_object:GetRotation() - NanosWorld.GetLocalPlayer():GetControlledCharacter():GetRotation()
 
 		-- Resets settings
 		PhysicsGun.is_rotating_object = false
 		PhysicsGun.is_holding_alt = false
 
 		-- Calls remote to disable gravity of this object (if has)
-		Events:CallRemote("PickUp", {PhysicsGun.weapon, PhysicsGun.picking_object, true, PhysicsGun.picking_object_relative_location})
+		Events.CallRemote("PickUp", PhysicsGun.weapon, PhysicsGun.picking_object, true, PhysicsGun.picking_object_relative_location)
 
 		-- Enable Highlighting on index 1 on this object
 		PhysicsGun.picking_object:SetHighlightEnabled(true, 1)
@@ -130,7 +130,7 @@ function TryPickUpObject()
 end
 
 -- Handles KeyBindings
-Client:Subscribe("KeyUp", function(key_name)
+Client.Subscribe("KeyUp", function(key_name)
 	if (not PhysicsGun.weapon or not PhysicsGun.picking_object) then return end
 
 	if (key_name == "LeftAlt") then
@@ -144,7 +144,7 @@ Client:Subscribe("KeyUp", function(key_name)
 	end
 end)
 
-Client:Subscribe("KeyPress", function(key_name)
+Client.Subscribe("KeyPress", function(key_name)
 	if (not PhysicsGun.weapon or not PhysicsGun.picking_object) then return end
 
 	if (key_name == "E") then
@@ -157,7 +157,7 @@ Client:Subscribe("KeyPress", function(key_name)
 	end
 end)
 
-Client:Subscribe("MouseDown", function(key_name)
+Client.Subscribe("MouseDown", function(key_name)
 	if (not PhysicsGun.weapon) then return end
 
 	-- Right Click will turn off the Gravity Gun and freeze the object
@@ -169,7 +169,7 @@ Client:Subscribe("MouseDown", function(key_name)
 	end
 end)
 
-Client:Subscribe("MouseUp", function(key_name)
+Client.Subscribe("MouseUp", function(key_name)
 	if (not PhysicsGun.weapon) then return end
 
 	-- If released Left Mouse, turns off the Physics Gun
@@ -217,7 +217,7 @@ Client:Subscribe("MouseUp", function(key_name)
 	end
 end)
 
-Client:Subscribe("Tick", function(delta_time)
+Client.Subscribe("Tick", function(delta_time)
 	-- Every Frame, updates all Beam Particels spawned
 	-- This particle has a special Vector parameter 'BeamEnd' which defines where the Beam will end
 	for k, beam_particle in pairs(BeamParticles) do
@@ -242,7 +242,7 @@ Client:Subscribe("Tick", function(delta_time)
 				-- Traces 20000 units in front
 				local end_location = start_location + direction * 20000
 				local collision_trace = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle
-				local trace_result = Client:Trace(start_location, end_location, collision_trace, false, true)
+				local trace_result = Client.Trace(start_location, end_location, collision_trace, false, true)
 
 				-- If hit something
 				if (trace_result.Success) then
@@ -267,8 +267,8 @@ Client:Subscribe("Tick", function(delta_time)
 		-- Otherwise, if I'm grabbing something, tells the server to update it's location
 
 		-- Get the camera location in 3D World Space
-		local viewport_2D_center = Render:GetViewportSize() / 2
-		local viewport_3D = Render:Deproject(viewport_2D_center)
+		local viewport_2D_center = Render.GetViewportSize() / 2
+		local viewport_3D = Render.Deproject(viewport_2D_center)
 		local start_location = viewport_3D.Position
 		local camera_direction = viewport_3D.Direction
 
@@ -277,17 +277,17 @@ Client:Subscribe("Tick", function(delta_time)
 		local end_location = (start_location + camera_direction * PhysicsGun.picking_object_distance) + PhysicsGun.picking_object:GetRotation():UnrotateVector(PhysicsGun.picking_object_relative_location)
 
 		-- The new object rotation will be the initial rotation + the camera rotation
-		local camera_rotation = NanosWorld:GetLocalPlayer():GetCameraRotation()
+		local camera_rotation = NanosWorld.GetLocalPlayer():GetCameraRotation()
 		camera_rotation.Pitch = 0
 		local rotation = camera_rotation + PhysicsGun.picking_object_initial_rotation
 
 		-- Calls remote to update it's location
-		Events:CallRemote("UpdateObjectPosition", {PhysicsGun.picking_object, end_location, rotation, PhysicsGun.is_holding_alt})
+		Events.CallRemote("UpdateObjectPosition", PhysicsGun.picking_object, end_location, rotation, PhysicsGun.is_holding_alt)
 	end
 end)
 
 -- If a weapon has been added the BeamParticle value, adds it to our BeamParticles table
-Weapon:Subscribe("ValueChange", function(weapon, key, value)
+Weapon.Subscribe("ValueChange", function(weapon, key, value)
 	if (key == "BeamParticle") then
 		if (value ~= nil) then
 			table.insert(BeamParticles, value)
@@ -295,11 +295,11 @@ Weapon:Subscribe("ValueChange", function(weapon, key, value)
 	end
 end)
 
-Events:Subscribe("PickUpToolGun_PhysicsGun", function(tool, character)
+Events.Subscribe("PickUpToolGun_PhysicsGun", function(tool, character)
 	HandlePhysicsGun(tool, character)
 end)
 
-Events:Subscribe("DropToolGun_PhysicsGun", function(tool, character)
+Events.Subscribe("DropToolGun_PhysicsGun", function(tool, character)
 	tool:Unsubscribe("Fire")
 	character:Unsubscribe("WeaponAimModeChanged")
 

@@ -1,20 +1,24 @@
-# Package Configurations
+# package configurations
 [package]
-	# Package Name
+	# package name
 	name =					"Sandbox"
-	# Contributors
+	# contributors
 	author =				"nanos™"
-	# Version
-	version =				"2.0.5"
-	# Image URL
+	# version
+	version =				"2.1.0"
+	# image URL
 	image =					"https://i.imgur.com/aoEa4N4.jpg"
-	# Package Type: 'executable' (normal package) | 'library' (doesn't run - useful for code library)
-	type =					"executable"
-	# Whether to force the Custom Map Script to do NOT load
+	# package type: 'script' (normal package), 'game-mode' (unique package - can only load one at a time) or 'loading-screen' (special package loaded in loading screen)
+	type =					"script"
+	# whether to force the custom map Script to do not load
 	force_no_map_script =	false
-	# Auto Destroy all entities spawned by this package when it unloads
+	# auto destroy all entities spawned by this package when it unloads
 	auto_cleanup =			true
-	# Asset Packs Requirements
+	# packages requirements
+	packages_requirements = [
+		
+	]
+	# asset packs requirements
 	assets_requirements = [
 		
 	]

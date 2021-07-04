@@ -21,7 +21,7 @@ function HandleBalloonTool(weapon)
 			local max_length = math.random() * 50 + 75
 
 			-- Calls remote to spawn the Balloon
-			Events:CallRemote("SpawnBalloon", {trace_result.Location, trace_result.Normal:Rotation(), force, max_length, trace_result.Entity, distance_trace_object})
+			Events.CallRemote("SpawnBalloon", trace_result.Location, trace_result.Normal:Rotation(), force, max_length, trace_result.Entity, distance_trace_object)
 		else
 			-- If didn't hit anything, plays a negative sound
 			Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
@@ -32,11 +32,11 @@ function HandleBalloonTool(weapon)
 	SetNotification("BALLOONS_POP", 5000, "balloons will start to pop if they reach a very high height", 5000)
 end
 
-Events:Subscribe("PickUpToolGun_BalloonTool", function(tool)
+Events.Subscribe("PickUpToolGun_BalloonTool", function(tool)
 	HandleBalloonTool(tool)
 end)
 
-Events:Subscribe("DropToolGun_BalloonTool", function(tool)
+Events.Subscribe("DropToolGun_BalloonTool", function(tool)
 	tool:Unsubscribe("Fire")
 end)
 

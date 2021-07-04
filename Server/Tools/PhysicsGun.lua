@@ -1,5 +1,5 @@
 -- Subscribe for Client's custom event, for when the object is grabbed/dropped
-Events:Subscribe("PickUp", function(player, weapon, object, is_grabbing, picking_object_relative_location, freeze)
+Events.Subscribe("PickUp", function(player, weapon, object, is_grabbing, picking_object_relative_location, freeze)
     -- Gets the Laser particle of this weapon, if existing
     local particle = weapon and weapon:GetValue("BeamParticle") or nil
 
@@ -19,7 +19,7 @@ Events:Subscribe("PickUp", function(player, weapon, object, is_grabbing, picking
 
         -- Spawns a sound for grabbing it
         if (weapon) then
-	        Events:BroadcastRemote("SpawnSound", {weapon:GetLocation(), "NanosWorld::A_VR_Grab", false, 0.25, 0.9})
+	        Events.BroadcastRemote("SpawnSound", weapon:GetLocation(), "NanosWorld::A_VR_Grab", false, 0.25, 0.9)
         end
     else
         -- Resets the Network Authority, now anyone can authority this object
@@ -41,7 +41,7 @@ Events:Subscribe("PickUp", function(player, weapon, object, is_grabbing, picking
 
         -- Spawns a sound for ungrabbing it
         if (weapon) then
-            Events:BroadcastRemote("SpawnSound", {weapon:GetLocation(), "NanosWorld::A_VR_Ungrab", false, 0.25, 0.9})
+            Events.BroadcastRemote("SpawnSound", weapon:GetLocation(), "NanosWorld::A_VR_Ungrab", false, 0.25, 0.9)
         end
     end
 
@@ -55,11 +55,11 @@ Events:Subscribe("PickUp", function(player, weapon, object, is_grabbing, picking
     -- Disables/Enables the character to Aim, so he can use the Mouse Wheel properly
     player:GetControlledCharacter():SetCanAim(not is_grabbing)
 
-    Events:BroadcastRemote("PickUpObject", {object, is_grabbing})
+    Events.BroadcastRemote("PickUpObject", object, is_grabbing)
 end)
 
 -- Subscribe for Client's custom event, to update the position of the object he is grabbing
-Events:Subscribe("UpdateObjectPosition", function(player, object, location, rotation, snap_to_grid)
+Events.Subscribe("UpdateObjectPosition", function(player, object, location, rotation, snap_to_grid)
     -- Maybe the server is closing?
     if (not object) then return end
 
@@ -74,7 +74,7 @@ Events:Subscribe("UpdateObjectPosition", function(player, object, location, rota
 end)
 
 -- Subscribes for Clients event for turning on/off the physics gun
-Events:Subscribe("TogglePhysicsGun", function(player, weapon, enable)
+Events.Subscribe("TogglePhysicsGun", function(player, weapon, enable)
     -- Maybe the server is closing?
     if (not weapon) then return end
 
@@ -101,7 +101,7 @@ Events:Subscribe("TogglePhysicsGun", function(player, weapon, enable)
         end)
     else
         weapon:Unsubscribe("Drop")
-	    Events:BroadcastRemote("SpawnSound", {weapon:GetLocation(), "NanosWorld::A_Simulate_End", false, 1, 1})
+	    Events.BroadcastRemote("SpawnSound", weapon:GetLocation(), "NanosWorld::A_Simulate_End", false, 1, 1)
     end
 end)
 

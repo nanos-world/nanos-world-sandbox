@@ -7,7 +7,7 @@ function HandleTrailTool(weapon)
 
 		-- If hit some object, then spawns a trail on attached it
 		if (trace_result.Success and trace_result.Entity) then
-			Events:CallRemote("SpawnTrail", {trace_result.Location, trace_result.Normal, trace_result.Entity})
+			Events.CallRemote("SpawnTrail", trace_result.Location, trace_result.Normal, trace_result.Entity)
 		else
 			-- If didn't hit anything, plays a negative sound
 			Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
@@ -15,11 +15,11 @@ function HandleTrailTool(weapon)
 	end)
 end
 
-Events:Subscribe("PickUpToolGun_TrailTool", function(tool, character)
+Events.Subscribe("PickUpToolGun_TrailTool", function(tool, character)
 	HandleTrailTool(tool)
 end)
 
-Events:Subscribe("DropToolGun_TrailTool", function(tool, character)
+Events.Subscribe("DropToolGun_TrailTool", function(tool, character)
 	tool:Unsubscribe("Fire")
 end)
 

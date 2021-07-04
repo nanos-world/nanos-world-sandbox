@@ -1,4 +1,4 @@
-Package:Require("SpawnMenu.lua")
+Package.Require("SpawnMenu.lua")
 
 -- List of Character Meshes
 character_meshes = {
@@ -209,38 +209,31 @@ function SpawnPlayer(player, location, rotation)
 	new_char:Subscribe("Death", function(chara, last_damage_taken, last_bone_damaged, damage_reason, hit_from, instigator)
 		if (instigator) then
 			if (instigator == player) then
-				Server:BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> committed suicide")
+				Server.BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> committed suicide")
 			else
-				Server:BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> killed <cyan>" .. player:GetName() .. "</>")
+				Server.BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> killed <cyan>" .. player:GetName() .. "</>")
 			end
 		else
-			Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> died")
+			Server.BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> died")
 		end
 
-		Timer:SetTimeout(5000, function(character)
+		Timer.SetTimeout(function(character)
 			if (character:IsValid() and character:GetHealth() == 0) then
 				character:Respawn()
 			end
 
 			return false
-		end, {new_char})
+		end, 5000, new_char)
 	end)
 
-	return new_char
+	Server.BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has joined the server")
 end
 
--- Exposes this to other packages
-Package:Export("SpawnPlayer", SpawnPlayer)
-
 -- When Player Connects, spawns a new Character and gives it to him
-Player:Subscribe("Spawn", function(player)
-	SpawnPlayer(player)
-
-	Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has joined the server")
-end)
+Player.Subscribe("Spawn", SpawnPlayer)
 
 -- Called when Character respawns
-Character:Subscribe("Respawn", function(character)
+Character.Subscribe("Respawn", function(character)
 	-- Sets the Initial Character's Location (location where the Character will spawn). After the Respawn event, a
 	-- call for SetLocation(InitialLocation) will be triggered. If you always want something to respawn at the same
 	-- position you do not need to keep setting SetInitialLocation, this is just for respawning at random spots
@@ -256,22 +249,22 @@ Character:Subscribe("Respawn", function(character)
 end)
 
 -- When Player leaves the server
-Player:Subscribe("Destroy", function(player)
+Player.Subscribe("Destroy", function(player)
 	-- Destroy it's Character
 	local character = player:GetControlledCharacter()
 	if (character) then
 		character:Destroy()
 	end
 
-	Server:BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has left the server")
+	Server.BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has left the server")
 end)
 
 -- Catches a custom event "MapLoaded" to override this script spawn locations
-Events:Subscribe("MapLoaded", function(map_custom_spawn_locations)
+Events.Subscribe("MapLoaded", function(map_custom_spawn_locations)
 	spawn_locations = map_custom_spawn_locations
 end)
 
-Events:Subscribe("ToggleNoClip", function(player)
+Events.Subscribe("ToggleNoClip", function(player)
 	local character = player:GetControlledCharacter()
 	if (not character) then return end
 
@@ -288,27 +281,27 @@ Events:Subscribe("ToggleNoClip", function(player)
 	character:SetValue("NoClip", not is_noclipping)
 end)
 
-Package:Subscribe("Unload", function()
+Package.Subscribe("Unload", function()
 	local character_locations = {}
 
 	-- When Package unloads, stores the characters locations to respawn them at the same position if the package is being reloaded
-	for k, p in pairs(NanosWorld:GetPlayers()) do
+	for k, p in pairs(Player.GetAll()) do
 		local cha = p:GetControlledCharacter()
 		if (cha) then
 			table.insert(character_locations, { player = p, location = cha:GetLocation(), rotation = cha:GetRotation() })
 		end
 	end
 
-	Server:SetValue("character_locations", character_locations)
+	Server.SetValue("character_locations", character_locations)
 end)
 
-Package:Subscribe("Load", function()
-	local character_locations = Server:GetValue("character_locations") or {}
+Package.Subscribe("Load", function()
+	local character_locations = Server.GetValue("character_locations") or {}
 
 	-- When Package loads, restores if existing, the latest player`s character positions
 	if (#character_locations == 0) then
 		-- If there is not stored locations, just spawn everyone randomly
-		for k, player in pairs(NanosWorld:GetPlayers()) do
+		for k, player in pairs(Player.GetAll()) do
 			SpawnPlayer(player)
 		end
 	else
@@ -317,3 +310,6 @@ Package:Subscribe("Load", function()
 		end
 	end
 end)
+
+-- Exposes this to other packages
+Package.Export("SpawnPlayer", SpawnPlayer)

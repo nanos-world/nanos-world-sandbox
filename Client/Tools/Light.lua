@@ -13,7 +13,7 @@ function HandleLightTool(weapon)
 			end
 
 			-- Calls remote to spawn the Light
-			Events:CallRemote("SpawnLight", {trace_result.Location, trace_result.Normal, trace_result.Entity, distance_trace_object})
+			Events.CallRemote("SpawnLight", trace_result.Location, trace_result.Normal, trace_result.Entity, distance_trace_object)
 		else
 			-- If didn't hit anything, plays a negative sound
 			Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
@@ -24,11 +24,11 @@ function HandleLightTool(weapon)
 	SetNotification("LIGHTS_PERFORMANCE", 5000, "too many lights can cause severe lag", 5000)
 end
 
-Events:Subscribe("PickUpToolGun_LightTool", function(tool)
+Events.Subscribe("PickUpToolGun_LightTool", function(tool)
 	HandleLightTool(tool)
 end)
 
-Events:Subscribe("DropToolGun_LightTool", function(tool)
+Events.Subscribe("DropToolGun_LightTool", function(tool)
 	tool:Unsubscribe("Fire")
 end)
 
