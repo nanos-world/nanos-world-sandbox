@@ -17,7 +17,7 @@ Package.Require("SpawnMenu.lua")
 Package.Require("Scoreboard.lua")
 
 -- When LocalPlayer spawns, sets an event on it to trigger when we possesses a new character, to store the local controlled character locally. This event is only called once, see Package.Subscribe("Load") to load it when reloading a package
-NanosWorld.Subscribe("SpawnLocalPlayer", function(local_player)
+Client.Subscribe("SpawnLocalPlayer", function(local_player)
 	local_player:Subscribe("Possess", function(player, character)
 		UpdateLocalCharacter(character)
 	end)
@@ -25,8 +25,8 @@ end)
 
 -- When package loads, verify if LocalPlayer already exists (eg. when reloading the package), then try to get and store it's controlled character
 Package.Subscribe("Load", function()
-	if (NanosWorld:GetLocalPlayer() ~= nil) then
-		UpdateLocalCharacter(NanosWorld:GetLocalPlayer():GetControlledCharacter())
+	if (Client.GetLocalPlayer() ~= nil) then
+		UpdateLocalCharacter(Client.GetLocalPlayer():GetControlledCharacter())
 	end
 
 	-- Gets all notifications already sent
