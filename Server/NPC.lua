@@ -7,13 +7,13 @@ function SpawnNPC(asset, location, rotation)
 	local character = Character(location or Vector(), rotation + Rotator(0, 180, 0) or Rotator(), asset)
 
 	character:Subscribe("MoveCompleted", function(charac, success)
-		Timer.SetTimeout(math.random(5000) + 5000, function(chara)
+		Timer.SetTimeout(function(chara)
 			if (chara and chara:IsValid()) then
 				chara:SetGaitMode(GaitMode.Walking)
 				NPCRandomMove(chara, 3000)
 				charac:SetValue("Scream", false)
 			end
-		end, charac)
+		end, math.random(5000) + 5000, charac)
 	end)
 
 	character:Subscribe("TakeDamage", function(self, damage, bone, type, from_direction, instigator)
