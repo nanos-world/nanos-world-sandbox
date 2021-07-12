@@ -9,7 +9,7 @@ Client.SetHighlightColor(Color(0, 0, 20, 0.25), 1) -- Index 1
 Client.SetHighlightColor(Color(0, 20, 0, 1.20), 0) -- Index 2
 
 -- When Sandbox UI is ready
-main_hud:Subscribe("Ready", function()
+Package.Subscribe("Load", function()
 	local asset_packs = Assets.GetAssetPacks()
 
 	-- Loads all AssetPacks

@@ -52,7 +52,7 @@ Events.Subscribe("SpawnBalloon", function(player, spawn_location, rotation, forc
 	table.insert(Balloons, balloon)
 
 	-- Calls the client to add it to his spawn history
-	Events.CallRemote("SpawnedItem", {player, balloon})
+	Events.CallRemote("SpawnedItem", player, balloon)
 
 	-- Calls the Client to spawn ballons spawning sounds
 	Events.BroadcastRemote("SpawnSound", spawn_location, "NanosWorld::A_Balloon_Inflate", false, 0.75, 1)
