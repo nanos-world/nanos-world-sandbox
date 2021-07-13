@@ -14,7 +14,7 @@ function HandleBalloonTool(weapon)
 
 			-- Balloon Upwards force
 			-- TODO: make a menu to client define the force manually
-			local force = 100000
+			local force = math.random() * 10000 + 95000
 
 			-- Balloon rope length
 			-- TODO: make a menu to client define the rope manually

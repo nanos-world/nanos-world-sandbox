@@ -8,48 +8,50 @@ SpawnMenuItems = {}
 Client.SetHighlightColor(Color(0, 0, 20, 0.25), 1) -- Index 1
 Client.SetHighlightColor(Color(0, 20, 0, 1.20), 0) -- Index 2
 
--- When Sandbox UI is ready
 Package.Subscribe("Load", function()
-	local asset_packs = Assets.GetAssetPacks()
+	-- Wait 1 second so all other packages can send their Tools
+	Timer.SetTimeout(function()
+		local asset_packs = Assets.GetAssetPacks()
 
-	-- Loads all AssetPacks
-	for i, asset_pack in pairs(asset_packs) do
-		if (not SpawnMenuItems[asset_pack.Path]) then
-			SpawnMenuItems[asset_pack.Path] = {}
+		-- Loads all AssetPacks
+		for i, asset_pack in pairs(asset_packs) do
+			if (not SpawnMenuItems[asset_pack.Path]) then
+				SpawnMenuItems[asset_pack.Path] = {}
+			end
+
+			if (not SpawnMenuItems[asset_pack.Path].props) then
+				SpawnMenuItems[asset_pack.Path].props = {}
+			end
+
+			if (not SpawnMenuItems[asset_pack.Path].weapons) then
+				SpawnMenuItems[asset_pack.Path].weapons = {}
+			end
+
+			if (not SpawnMenuItems[asset_pack.Path].vehicles) then
+				SpawnMenuItems[asset_pack.Path].vehicles = {}
+			end
+
+			if (not SpawnMenuItems[asset_pack.Path].tools) then
+				SpawnMenuItems[asset_pack.Path].tools = {}
+			end
+
+			if (not SpawnMenuItems[asset_pack.Path].tools) then
+				SpawnMenuItems[asset_pack.Path].npcs = {}
+			end
+
+			-- Loads all StaticMeshes as Props
+			local props = Assets.GetStaticMeshes(asset_pack.Path)
+			for i, prop in pairs(props) do
+				table.insert(SpawnMenuItems[asset_pack.Path].props, {
+					id = prop,
+					name = prop,
+					image = "assets///" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg"
+				})
+			end
+
+			main_hud:CallEvent("AddAssetPack", asset_pack.Path, JSON.stringify(SpawnMenuItems[asset_pack.Path]))
 		end
-
-		if (not SpawnMenuItems[asset_pack.Path].props) then
-			SpawnMenuItems[asset_pack.Path].props = {}
-		end
-
-		if (not SpawnMenuItems[asset_pack.Path].weapons) then
-			SpawnMenuItems[asset_pack.Path].weapons = {}
-		end
-
-		if (not SpawnMenuItems[asset_pack.Path].vehicles) then
-			SpawnMenuItems[asset_pack.Path].vehicles = {}
-		end
-
-		if (not SpawnMenuItems[asset_pack.Path].tools) then
-			SpawnMenuItems[asset_pack.Path].tools = {}
-		end
-
-		if (not SpawnMenuItems[asset_pack.Path].tools) then
-			SpawnMenuItems[asset_pack.Path].npcs = {}
-		end
-
-		-- Loads all StaticMeshes as Props
-		local props = Assets.GetStaticMeshes(asset_pack.Path)
-		for i, prop in pairs(props) do
-			table.insert(SpawnMenuItems[asset_pack.Path].props, {
-				id = prop,
-				name = prop,
-				image = "assets///" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg"
-			})
-		end
-
-		main_hud:CallEvent("AddAssetPack", asset_pack.Path, JSON.stringify(SpawnMenuItems[asset_pack.Path]))
-	end
+	end, 1000)
 end)
 
 -- Toggle the Spawn Menu on
