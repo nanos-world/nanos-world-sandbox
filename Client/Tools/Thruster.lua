@@ -10,7 +10,7 @@ function HandleThrusterTool(weapon)
 			Events.CallRemote("SpawnThruster", trace_result.Location, trace_result.Normal, trace_result.Entity)
 		else
 			-- If didn't hit anything, plays a negative sound
-			Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
+			Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
 		end
 	end)
 end
@@ -18,7 +18,7 @@ end
 -- Event from server when a Thruster is spawned
 Events.Subscribe("SpawnThruster", function(thruster_prop)
 	-- Spawns a 'Thruster Sound' and attaches it to the prop
-	local sound = Sound(Vector(), "NanosWorld::A_VR_WorldMove_Loop_01", false, false, SoundType.SFX, 0.25, math.random(10) / 100 + 1)
+	local sound = Sound(Vector(), "nanos-world::A_VR_WorldMove_Loop_01", false, false, SoundType.SFX, 0.25, math.random(10) / 100 + 1)
 	sound:AttachTo(thruster_prop, AttachmentRule.SnapToTarget, "", true)
 end)
 
@@ -31,4 +31,4 @@ Events.Subscribe("DropToolGun_ThrusterTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "ThrusterTool", "Thruster", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")
+AddSpawnMenuItem("nanos-world", "tools", "ThrusterTool", "Thruster", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

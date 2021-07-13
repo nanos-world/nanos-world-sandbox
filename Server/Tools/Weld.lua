@@ -21,9 +21,9 @@ Events.Subscribe("Weld", function(player, welding_start, welding_end, welding_en
 	-- Calls the client to update it's action history
 	Events.CallRemote("SpawnedItem", player, cable)
 
-	Particle(welding_start:GetLocation(), Rotator(), "NanosWorld::P_OmnidirectionalBurst")
-	Particle(welding_end_location, Rotator(), "NanosWorld::P_OmnidirectionalBurst")
+	Particle(welding_start:GetLocation(), Rotator(), "nanos-world::P_OmnidirectionalBurst")
+	Particle(welding_end_location, Rotator(), "nanos-world::P_OmnidirectionalBurst")
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "WeldTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.CHARTREUSE) end)
+AddSpawnMenuItem("nanos-world", "tools", "WeldTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.CHARTREUSE) end)

@@ -24,7 +24,7 @@ function HandleBalloonTool(weapon)
 			Events.CallRemote("SpawnBalloon", trace_result.Location, trace_result.Normal:Rotation(), force, max_length, trace_result.Entity, distance_trace_object)
 		else
 			-- If didn't hit anything, plays a negative sound
-			Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
+			Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
 		end
 	end)
 
@@ -41,4 +41,4 @@ Events.Subscribe("DropToolGun_BalloonTool", function(tool)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "BalloonTool", "Balloons", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")
+AddSpawnMenuItem("nanos-world", "tools", "BalloonTool", "Balloons", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

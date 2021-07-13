@@ -95,7 +95,7 @@ function DeleteItemFromHistory()
 	-- If there is a item to destroy, otherwise tries the next from the list, recursively
 	if (data.item and data.item:IsValid()) then
 		Events.CallRemote("DestroyItem", data.item)
-		Sound(Vector(), "NanosWorld::A_Player_Eject", true, true, SoundType.SFX, 0.1)
+		Sound(Vector(), "nanos-world::A_Player_Eject", true, true, SoundType.SFX, 0.1)
 	else
 		DeleteItemFromHistory()
 	end
@@ -103,7 +103,7 @@ end
 
 -- Sound when hovering an Item in the SpawnMenu
 main_hud:Subscribe("HoverSound", function()
-	Sound(Vector(), "NanosWorld::A_VR_Click_01", true, true, SoundType.SFX, 0.04)
+	Sound(Vector(), "nanos-world::A_VR_Click_01", true, true, SoundType.SFX, 0.04)
 end)
 
 -- Handle for selecting an Item from the SpawnMenu
@@ -132,7 +132,7 @@ main_hud:Subscribe("SpawnItem", function(asset_pack, category, asset_id)
 	Events.CallRemote("SpawnItem", asset_pack, category, asset_id, spawn_location, spawn_rotation)
 
 	-- Spawns a sound for 'spawning an item'
-	Sound(Vector(), "NanosWorld::A_VR_Teleport", true, true, SoundType.SFX, 0.15)
+	Sound(Vector(), "nanos-world::A_VR_Teleport", true, true, SoundType.SFX, 0.15)
 end)
 
 -- Subscribes for when I spawn an Item, do add it to my history
@@ -186,38 +186,38 @@ Package.Require("Tools/Weld.lua")
 
 -- Adds the default NanosWorld items
 -- Default Weapons
-AddSpawnMenuItem("NanosWorld", "weapons", "AK47", "AK47", "assets///NanosWorld/Thumbnails/SK_AK47.jpg")
-AddSpawnMenuItem("NanosWorld", "weapons", "AK74U", "AK74U", "assets///NanosWorld/Thumbnails/SK_AK74U.jpg")
-AddSpawnMenuItem("NanosWorld", "weapons", "AP5", "AP5", "assets///NanosWorld/Thumbnails/SK_AP5.jpg")
-AddSpawnMenuItem("NanosWorld", "weapons", "AR4", "AR4", "assets///NanosWorld/Thumbnails/SK_AR4.jpg")
-AddSpawnMenuItem("NanosWorld", "weapons", "ASVal", "ASVal", "assets///NanosWorld/Thumbnails/SK_ASVal.jpg")
-AddSpawnMenuItem("NanosWorld", "weapons", "DesertEagle", "DesertEagle", "assets///NanosWorld/Thumbnails/SK_DesertEagle.jpg")
-AddSpawnMenuItem("NanosWorld", "weapons", "GE36", "GE36", "assets///NanosWorld/Thumbnails/SK_GE36.jpg")
-AddSpawnMenuItem("NanosWorld", "weapons", "Glock", "Glock", "assets///NanosWorld/Thumbnails/SK_Glock.jpg")
-AddSpawnMenuItem("NanosWorld", "weapons", "Moss500", "Moss500", "assets///NanosWorld/Thumbnails/SK_Moss500.jpg")
-AddSpawnMenuItem("NanosWorld", "weapons", "SMG11", "SMG11", "assets///NanosWorld/Thumbnails/SK_SMG11.jpg")
-AddSpawnMenuItem("NanosWorld", "weapons", "Grenade", "Grenade", "assets///NanosWorld/Thumbnails/SK_G67.jpg")
+AddSpawnMenuItem("nanos-world", "weapons", "AK47", "AK47", "assets///NanosWorld/Thumbnails/SK_AK47.jpg")
+AddSpawnMenuItem("nanos-world", "weapons", "AK74U", "AK74U", "assets///NanosWorld/Thumbnails/SK_AK74U.jpg")
+AddSpawnMenuItem("nanos-world", "weapons", "AP5", "AP5", "assets///NanosWorld/Thumbnails/SK_AP5.jpg")
+AddSpawnMenuItem("nanos-world", "weapons", "AR4", "AR4", "assets///NanosWorld/Thumbnails/SK_AR4.jpg")
+AddSpawnMenuItem("nanos-world", "weapons", "ASVal", "ASVal", "assets///NanosWorld/Thumbnails/SK_ASVal.jpg")
+AddSpawnMenuItem("nanos-world", "weapons", "DesertEagle", "DesertEagle", "assets///NanosWorld/Thumbnails/SK_DesertEagle.jpg")
+AddSpawnMenuItem("nanos-world", "weapons", "GE36", "GE36", "assets///NanosWorld/Thumbnails/SK_GE36.jpg")
+AddSpawnMenuItem("nanos-world", "weapons", "Glock", "Glock", "assets///NanosWorld/Thumbnails/SK_Glock.jpg")
+AddSpawnMenuItem("nanos-world", "weapons", "Moss500", "Moss500", "assets///NanosWorld/Thumbnails/SK_Moss500.jpg")
+AddSpawnMenuItem("nanos-world", "weapons", "SMG11", "SMG11", "assets///NanosWorld/Thumbnails/SK_SMG11.jpg")
+AddSpawnMenuItem("nanos-world", "weapons", "Grenade", "Grenade", "assets///NanosWorld/Thumbnails/SK_G67.jpg")
 
-AddSpawnMenuItem("NanosWorld", "weapons", "HFG", "HFG", "assets///NanosWorld/Thumbnails/SK_PortalGun.jpg")
+AddSpawnMenuItem("nanos-world", "weapons", "HFG", "HFG", "assets///NanosWorld/Thumbnails/SK_PortalGun.jpg")
 
 -- Default Vehicles
-AddSpawnMenuItem("NanosWorld", "vehicles", "SUV", "SUV", "assets///NanosWorld/Thumbnails/SK_SUV.jpg")
-AddSpawnMenuItem("NanosWorld", "vehicles", "Hatchback", "Hatchback", "assets///NanosWorld/Thumbnails/SK_Hatchback.jpg")
-AddSpawnMenuItem("NanosWorld", "vehicles", "SportsCar", "SportsCar", "assets///NanosWorld/Thumbnails/SK_SportsCar.jpg")
-AddSpawnMenuItem("NanosWorld", "vehicles", "TruckBox", "TruckBox", "assets///NanosWorld/Thumbnails/SK_Truck_Box.jpg")
-AddSpawnMenuItem("NanosWorld", "vehicles", "TruckChassis", "TruckChassis", "assets///NanosWorld/Thumbnails/SK_Truck_Chassis.jpg")
-AddSpawnMenuItem("NanosWorld", "vehicles", "Pickup", "Pickup", "assets///NanosWorld/Thumbnails/SK_Pickup.jpg")
+AddSpawnMenuItem("nanos-world", "vehicles", "SUV", "SUV", "assets///NanosWorld/Thumbnails/SK_SUV.jpg")
+AddSpawnMenuItem("nanos-world", "vehicles", "Hatchback", "Hatchback", "assets///NanosWorld/Thumbnails/SK_Hatchback.jpg")
+AddSpawnMenuItem("nanos-world", "vehicles", "SportsCar", "SportsCar", "assets///NanosWorld/Thumbnails/SK_SportsCar.jpg")
+AddSpawnMenuItem("nanos-world", "vehicles", "TruckBox", "TruckBox", "assets///NanosWorld/Thumbnails/SK_Truck_Box.jpg")
+AddSpawnMenuItem("nanos-world", "vehicles", "TruckChassis", "TruckChassis", "assets///NanosWorld/Thumbnails/SK_Truck_Chassis.jpg")
+AddSpawnMenuItem("nanos-world", "vehicles", "Pickup", "Pickup", "assets///NanosWorld/Thumbnails/SK_Pickup.jpg")
 
 -- Default NPCs
-AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_Mannequin", "Mannequin", "assets///NanosWorld/Thumbnails/SK_Mannequin.jpg")
-AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_Mannequin_Female", "Mannequin Female", "assets///NanosWorld/Thumbnails/SK_Mannequin_Female.jpg")
-AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_Male", "Man", "assets///NanosWorld/Thumbnails/SK_Male.jpg")
-AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_Female", "Woman", "assets///NanosWorld/Thumbnails/SK_Female.jpg")
-AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_PostApocalyptic", "Post Apocalyptic", "assets///NanosWorld/Thumbnails/SK_PostApocalyptic.jpg")
-AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_ClassicMale", "Classic Male", "assets///NanosWorld/Thumbnails/SK_ClassicMale.jpg")
+AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_Mannequin", "Mannequin", "assets///NanosWorld/Thumbnails/SK_Mannequin.jpg")
+AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_Mannequin_Female", "Mannequin Female", "assets///NanosWorld/Thumbnails/SK_Mannequin_Female.jpg")
+AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_Male", "Man", "assets///NanosWorld/Thumbnails/SK_Male.jpg")
+AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_Female", "Woman", "assets///NanosWorld/Thumbnails/SK_Female.jpg")
+AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_PostApocalyptic", "Post Apocalyptic", "assets///NanosWorld/Thumbnails/SK_PostApocalyptic.jpg")
+AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_ClassicMale", "Classic Male", "assets///NanosWorld/Thumbnails/SK_ClassicMale.jpg")
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "Torch", "Torch", "assets///NanosWorld/Thumbnails/SM_Torch.jpg")
+AddSpawnMenuItem("nanos-world", "tools", "Torch", "Torch", "assets///NanosWorld/Thumbnails/SM_Torch.jpg")
 
 -- Defines some Spawn Menu Hints
 SetNotification("SPAWN_MENU", 30000, "you can press Q to open the Spawn Menu", 7000)

@@ -34,9 +34,9 @@ Events.Subscribe("RopeAttach", function(player, attaching_start_to, attaching_st
 	-- Calls the client to update his history
 	Events.CallRemote("SpawnedItem", player, cable)
 
-	Particle(attaching_start_location, Rotator(), "NanosWorld::P_OmnidirectionalBurst")
-	Particle(attaching_end_location, Rotator(), "NanosWorld::P_OmnidirectionalBurst")
+	Particle(attaching_start_location, Rotator(), "nanos-world::P_OmnidirectionalBurst")
+	Particle(attaching_end_location, Rotator(), "nanos-world::P_OmnidirectionalBurst")
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "RopeTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.ORANGE) end)
+AddSpawnMenuItem("nanos-world", "tools", "RopeTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.ORANGE) end)

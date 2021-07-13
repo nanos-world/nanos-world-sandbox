@@ -104,7 +104,7 @@ function TryPickUpObject()
 		PhysicsGun.picking_object = trace_result.Entity
 
 		-- Spawns a 'graviting' sound attached to the gravited object
-		PhysicsGun.grabbed_sound = Sound(Vector(), "NanosWorld::A_VR_Object_Grabbed_Loop", false, false, SoundType.SFX, 0.25)
+		PhysicsGun.grabbed_sound = Sound(Vector(), "nanos-world::A_VR_Object_Grabbed_Loop", false, false, SoundType.SFX, 0.25)
 		PhysicsGun.grabbed_sound:AttachTo(PhysicsGun.picking_object)
 
 		-- Calculates the offset of the hit and the center of the object
@@ -308,4 +308,4 @@ Events.Subscribe("DropToolGun_PhysicsGun", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "PhysicsGun", "Physics Gun", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")
+AddSpawnMenuItem("nanos-world", "tools", "PhysicsGun", "Physics Gun", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

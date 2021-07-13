@@ -49,7 +49,7 @@ function UpdateLocalCharacter(character)
 	-- Sets on character an event to update the health's UI after it takes damage
 	character:Subscribe("TakeDamage", function(charac, damage, type, bone, from_direction, instigator)
 		-- Plays a Hit Taken sound effect
-		Sound(Vector(), "NanosWorld::A_HitTaken_Feedback", true)
+		Sound(Vector(), "nanos-world::A_HitTaken_Feedback", true)
 
 		-- Updates the Health UI
 		UpdateHealth(math.max(charac:GetHealth() - damage, 0))

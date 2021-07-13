@@ -21,7 +21,7 @@ function SpawnNPC(asset, location, rotation)
 		NPCRandomMove(character, 3000)
 
 		if (not self:GetValue("Scream")) then
-			Events.BroadcastRemote("SpawnSoundAttached", self, "NanosWorld::A_Female_02_Scream", false, 1, 1)
+			Events.BroadcastRemote("SpawnSoundAttached", self, "nanos-world::A_Female_02_Scream", false, 1, 1)
 			self:SetValue("Scream", true)
 		end
 	end)
@@ -40,9 +40,9 @@ function SpawnNPC(asset, location, rotation)
 end
 
 -- Default NPCs
-AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_Mannequin", function(l, r) return SpawnNPC("NanosWorld::SK_Mannequin", l, r) end)
-AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_Mannequin_Female", function(l, r) return SpawnNPC("NanosWorld::SK_Mannequin_Female", l, r) end)
-AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_Male", function(l, r) return SpawnNPC("NanosWorld::SK_Male", l, r) end)
-AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_Female", function(l, r) return SpawnNPC("NanosWorld::SK_Female", l, r) end)
-AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_PostApocalyptic", function(l, r) return SpawnNPC("NanosWorld::SK_PostApocalyptic", l, r) end)
-AddSpawnMenuItem("NanosWorld", "npcs", "NanosWorld::SK_ClassicMale", function(l, r) return SpawnNPC("NanosWorld::SK_ClassicMale", l, r) end)
+AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_Mannequin", function(l, r) return SpawnNPC("nanos-world::SK_Mannequin", l, r) end)
+AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_Mannequin_Female", function(l, r) return SpawnNPC("nanos-world::SK_Mannequin_Female", l, r) end)
+AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_Male", function(l, r) return SpawnNPC("nanos-world::SK_Male", l, r) end)
+AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_Female", function(l, r) return SpawnNPC("nanos-world::SK_Female", l, r) end)
+AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_PostApocalyptic", function(l, r) return SpawnNPC("nanos-world::SK_PostApocalyptic", l, r) end)
+AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_ClassicMale", function(l, r) return SpawnNPC("nanos-world::SK_ClassicMale", l, r) end)

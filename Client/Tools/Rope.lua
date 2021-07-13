@@ -26,7 +26,7 @@ function HandleRopeTool(tool)
 				RopeTool.attaching_start_location = Vector()
 
 				-- Spawns a "positive" sound for attaching
-				Sound(attaching_end_location, "NanosWorld::A_VR_Confirm", false, true, SoundType.SFX, 0.15, 0.85)
+				Sound(attaching_end_location, "nanos-world::A_VR_Confirm", false, true, SoundType.SFX, 0.15, 0.85)
 				return
 
 			-- If is not yet attached to start
@@ -38,13 +38,13 @@ function HandleRopeTool(tool)
 				RopeTool.attaching_start_to:SetHighlightEnabled(true, 0)
 
 				-- Spawns a "positive" sound for attaching
-				Sound(RopeTool.attaching_start_to:GetLocation(), "NanosWorld::A_VR_Click_03", false, true, SoundType.SFX, 0.15, 0.85)
+				Sound(RopeTool.attaching_start_to:GetLocation(), "nanos-world::A_VR_Click_03", false, true, SoundType.SFX, 0.15, 0.85)
 				return
 			end
 		end
 
 		-- If didn't hit anything, plays a negative sound
-		Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
+		Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
 	end)
 end
 
@@ -63,4 +63,4 @@ Events.Subscribe("DropToolGun_RopeTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "RopeTool", "Rope", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")
+AddSpawnMenuItem("nanos-world", "tools", "RopeTool", "Rope", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

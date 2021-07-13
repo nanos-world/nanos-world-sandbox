@@ -103,7 +103,7 @@ Events.Subscribe("UpdatePlayer", function(id, active, name, ping) {
 
 
 var current_tab = "props";
-var current_asset_pack = "NanosWorld";
+var current_asset_pack =  "nanos-world";
 
 var assets = {
 	NanosWorld: {

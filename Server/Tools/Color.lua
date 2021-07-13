@@ -3,8 +3,8 @@
 Events.Subscribe("ColorObject", function(player, entity, hit_location, direction, color)
 	entity:SetMaterialColorParameter("Tint", color)
 
-	Particle(hit_location, direction:Rotation(), "NanosWorld::P_DirectionalBurst"):SetParameterColor("Color", color)
+	Particle(hit_location, direction:Rotation(), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", color)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "ColorTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.GREEN) end)
+AddSpawnMenuItem("nanos-world", "tools", "ColorTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.GREEN) end)

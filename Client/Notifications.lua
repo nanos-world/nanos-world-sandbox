@@ -11,7 +11,7 @@ function AddNotification(id, message, time, force)
 	end
 
 	-- Plays a sound
-	Sound(Vector(), "NanosWorld::A_VR_Click_01", true, true, SoundType.SFX, 0.1, 1)
+	Sound(Vector(), "nanos-world::A_VR_Click_01", true, true, SoundType.SFX, 0.1, 1)
 
 	-- Trigger WebUI to display it
 	main_hud:CallEvent("AddNotification", message, time)

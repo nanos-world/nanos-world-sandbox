@@ -11,7 +11,7 @@ function HandleColorTool(tool)
 			Events.CallRemote("ColorObject", trace_result.Entity, trace_result.Location, trace_result.Normal, color)
 		else
 			-- If didn't hit anything, plays a negative sound
-			Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
+			Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
 		end
 	end)
 end
@@ -25,4 +25,4 @@ Events.Subscribe("DropToolGun_ColorTool", function(tool)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "ColorTool", "Colors", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")
+AddSpawnMenuItem("nanos-world", "tools", "ColorTool", "Colors", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

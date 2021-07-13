@@ -1,6 +1,6 @@
 -- Function to spawn the ToolGun weapon
 function SpawnGenericToolGun(location, rotation, color)
-	local tool_gun = Weapon(location or Vector(), rotation or Rotator(), "NanosWorld::SK_Blaster")
+	local tool_gun = Weapon(location or Vector(), rotation or Rotator(), "nanos-world::SK_Blaster")
 
 	tool_gun:SetAmmoSettings(10000000, 0)
 	tool_gun:SetDamage(0)
@@ -10,11 +10,11 @@ function SpawnGenericToolGun(location, rotation, color)
 	tool_gun:SetRightHandOffset(Vector(-35, -5, 5))
 	tool_gun:SetHandlingMode(HandlingMode.SingleHandedWeapon)
 	tool_gun:SetCadence(0.1)
-	tool_gun:SetSoundDry("NanosWorld::A_Pistol_Dry")
-	tool_gun:SetSoundZooming("NanosWorld::A_AimZoom")
-	tool_gun:SetSoundAim("NanosWorld::A_Rattle")
-	tool_gun:SetSoundFire("NanosWorld::A_Simulate_Start")
-	tool_gun:SetAnimationCharacterFire("NanosWorld::AM_Mannequin_Sight_Fire")
+	tool_gun:SetSoundDry("nanos-world::A_Pistol_Dry")
+	tool_gun:SetSoundZooming("nanos-world::A_AimZoom")
+	tool_gun:SetSoundAim("nanos-world::A_Rattle")
+	tool_gun:SetSoundFire("nanos-world::A_Simulate_Start")
+	tool_gun:SetAnimationCharacterFire("nanos-world::AM_Mannequin_Sight_Fire")
 	tool_gun:SetCrosshairSetting(CrosshairType.Dot)
 	tool_gun:SetUsageSettings(false, false)
 
@@ -84,8 +84,8 @@ end)
 -- Called by Client to destroy an spawned item 
 Events.Subscribe("DestroyItem", function(player, item)
 	-- Spawns some sounds and particles
-	Events.BroadcastRemote("SpawnSound", item:GetLocation(), "NanosWorld::A_Player_Eject", false, 0.3, 1)
-	Particle(item:GetLocation() + Vector(0, 0, 30), Rotator(), "NanosWorld::P_OmnidirectionalBurst")
+	Events.BroadcastRemote("SpawnSound", item:GetLocation(), "nanos-world::A_Player_Eject", false, 0.3, 1)
+	Particle(item:GetLocation() + Vector(0, 0, 30), Rotator(), "nanos-world::P_OmnidirectionalBurst")
 
 	-- Destroy the item
 	item:Destroy()
@@ -118,28 +118,28 @@ Package.RequirePackage("NanosWorldWeapons")
 Package.RequirePackage("NanosWorldVehicles")
 
 -- Default Weapons
-AddSpawnMenuItem("NanosWorld", "weapons", "AK47", NanosWorldWeapons.AK47)
-AddSpawnMenuItem("NanosWorld", "weapons", "AK74U", NanosWorldWeapons.AK74U)
-AddSpawnMenuItem("NanosWorld", "weapons", "AP5", NanosWorldWeapons.AP5)
-AddSpawnMenuItem("NanosWorld", "weapons", "AR4", NanosWorldWeapons.AR4)
-AddSpawnMenuItem("NanosWorld", "weapons", "GE36", NanosWorldWeapons.GE36)
-AddSpawnMenuItem("NanosWorld", "weapons", "Glock", NanosWorldWeapons.Glock)
-AddSpawnMenuItem("NanosWorld", "weapons", "DesertEagle", NanosWorldWeapons.DesertEagle)
-AddSpawnMenuItem("NanosWorld", "weapons", "Moss500", NanosWorldWeapons.Moss500)
-AddSpawnMenuItem("NanosWorld", "weapons", "SMG11", NanosWorldWeapons.SMG11)
-AddSpawnMenuItem("NanosWorld", "weapons", "ASVal", NanosWorldWeapons.ASVal)
-AddSpawnMenuItem("NanosWorld", "weapons", "Grenade", function(location, rotation) return Grenade(location, rotation, "NanosWorld::SM_Grenade_G67") end)
+AddSpawnMenuItem("nanos-world", "weapons", "AK47", NanosWorldWeapons.AK47)
+AddSpawnMenuItem("nanos-world", "weapons", "AK74U", NanosWorldWeapons.AK74U)
+AddSpawnMenuItem("nanos-world", "weapons", "AP5", NanosWorldWeapons.AP5)
+AddSpawnMenuItem("nanos-world", "weapons", "AR4", NanosWorldWeapons.AR4)
+AddSpawnMenuItem("nanos-world", "weapons", "GE36", NanosWorldWeapons.GE36)
+AddSpawnMenuItem("nanos-world", "weapons", "Glock", NanosWorldWeapons.Glock)
+AddSpawnMenuItem("nanos-world", "weapons", "DesertEagle", NanosWorldWeapons.DesertEagle)
+AddSpawnMenuItem("nanos-world", "weapons", "Moss500", NanosWorldWeapons.Moss500)
+AddSpawnMenuItem("nanos-world", "weapons", "SMG11", NanosWorldWeapons.SMG11)
+AddSpawnMenuItem("nanos-world", "weapons", "ASVal", NanosWorldWeapons.ASVal)
+AddSpawnMenuItem("nanos-world", "weapons", "Grenade", function(location, rotation) return Grenade(location, rotation, "nanos-world::SM_Grenade_G67") end)
 
 -- Default Vehicles
-AddSpawnMenuItem("NanosWorld", "vehicles", "SUV", NanosWorldVehicles.SUV)
-AddSpawnMenuItem("NanosWorld", "vehicles", "Hatchback", NanosWorldVehicles.Hatchback)
-AddSpawnMenuItem("NanosWorld", "vehicles", "SportsCar", NanosWorldVehicles.SportsCar)
-AddSpawnMenuItem("NanosWorld", "vehicles", "TruckBox", NanosWorldVehicles.TruckBox)
-AddSpawnMenuItem("NanosWorld", "vehicles", "TruckChassis", NanosWorldVehicles.TruckChassis)
-AddSpawnMenuItem("NanosWorld", "vehicles", "Pickup", NanosWorldVehicles.Pickup)
+AddSpawnMenuItem("nanos-world", "vehicles", "SUV", NanosWorldVehicles.SUV)
+AddSpawnMenuItem("nanos-world", "vehicles", "Hatchback", NanosWorldVehicles.Hatchback)
+AddSpawnMenuItem("nanos-world", "vehicles", "SportsCar", NanosWorldVehicles.SportsCar)
+AddSpawnMenuItem("nanos-world", "vehicles", "TruckBox", NanosWorldVehicles.TruckBox)
+AddSpawnMenuItem("nanos-world", "vehicles", "TruckChassis", NanosWorldVehicles.TruckChassis)
+AddSpawnMenuItem("nanos-world", "vehicles", "Pickup", NanosWorldVehicles.Pickup)
 
 -- Default Tools
-AddSpawnMenuItem("NanosWorld", "tools", "RemoverTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.RED) end)
+AddSpawnMenuItem("nanos-world", "tools", "RemoverTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.RED) end)
 
 -- Requires all the Tools
 Package.Require("Tools/Balloon.lua")

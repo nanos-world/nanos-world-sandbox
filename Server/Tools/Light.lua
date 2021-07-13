@@ -3,7 +3,7 @@ Events.Subscribe("SpawnLight", function(player, spawn_location, direction, entit
 	local rotation = direction:Rotation() + Rotator(90, 0, 0)
 
 	-- Spawns a Light Bulb prop
-	local prop_light = Prop(spawn_location, Rotator(), "NanosWorld::SM_Lamp", CollisionType.Normal, true, false)
+	local prop_light = Prop(spawn_location, Rotator(), "nanos-world::SM_Lamp", CollisionType.Normal, true, false)
 	prop_light:SetCollision(CollisionType.StaticOnly)
 
 	-- Sets the player to be the network authority immediately of this Prop
@@ -45,8 +45,8 @@ Events.Subscribe("SpawnLight", function(player, spawn_location, direction, entit
 	-- Calls the client to add it to his spawn history
 	Events.CallRemote("SpawnedItem", player, prop_light)
 
-	Particle(spawn_location, direction:Rotation(), "NanosWorld::P_DirectionalBurst"):SetParameterColor("Color", color)
+	Particle(spawn_location, direction:Rotation(), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", color)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "LightTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.YELLOW) end)
+AddSpawnMenuItem("nanos-world", "tools", "LightTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.YELLOW) end)

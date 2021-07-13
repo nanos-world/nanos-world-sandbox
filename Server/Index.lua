@@ -2,72 +2,72 @@ Package.Require("SpawnMenu.lua")
 
 -- List of Character Meshes
 character_meshes = {
-	"NanosWorld::SK_Male",
-	"NanosWorld::SK_Female",
-	"NanosWorld::SK_Mannequin",
-	"NanosWorld::SK_Mannequin_Female",
+	"nanos-world::SK_Male",
+	"nanos-world::SK_Female",
+	"nanos-world::SK_Mannequin",
+	"nanos-world::SK_Mannequin_Female",
 }
 
 -- List of SK_Male hair Static Meshes
 sk_male_hair_meshes = {
 	"",
-	"NanosWorld::SM_Hair_Long",
-	"NanosWorld::SM_Hair_Short"
+	"nanos-world::SM_Hair_Long",
+	"nanos-world::SM_Hair_Short"
 }
 
 -- List of SK_Male beard Static Meshes
 sk_male_beard_meshes = {
 	"",
-	"NanosWorld::SM_Beard_Extra",
-	"NanosWorld::SM_Beard_Middle",
-	"NanosWorld::SM_Beard_Mustache_01",
-	"NanosWorld::SM_Beard_Mustache_02",
-	"NanosWorld::SM_Beard_Side"
+	"nanos-world::SM_Beard_Extra",
+	"nanos-world::SM_Beard_Middle",
+	"nanos-world::SM_Beard_Mustache_01",
+	"nanos-world::SM_Beard_Mustache_02",
+	"nanos-world::SM_Beard_Side"
 }
 
 -- List of SK_Female hair Static Meshes
 sk_female_hair_meshes = {
 	"",
-	"NanosWorld::SM_Hair_Kwang"
+	"nanos-world::SM_Hair_Kwang"
 }
 
 male_death_sounds = {
-	"NanosWorld::A_Male_01_Death",
-	"NanosWorld::A_Male_02_Death",
-	"NanosWorld::A_Male_03_Death",
-	"NanosWorld::A_Male_04_Death",
-	"NanosWorld::A_Male_05_Death",
-	"NanosWorld::A_Male_06_Death"
+	"nanos-world::A_Male_01_Death",
+	"nanos-world::A_Male_02_Death",
+	"nanos-world::A_Male_03_Death",
+	"nanos-world::A_Male_04_Death",
+	"nanos-world::A_Male_05_Death",
+	"nanos-world::A_Male_06_Death"
 }
 
 male_pain_sounds = {
-	"NanosWorld::A_Male_01_Pain",
-	"NanosWorld::A_Male_02_Pain",
-	"NanosWorld::A_Male_03_Pain",
-	"NanosWorld::A_Male_04_Pain",
-	"NanosWorld::A_Male_05_Pain",
-	"NanosWorld::A_Male_06_Pain",
-	"NanosWorld::A_Male_07_Pain",
-	"NanosWorld::A_Male_06_Pain"
+	"nanos-world::A_Male_01_Pain",
+	"nanos-world::A_Male_02_Pain",
+	"nanos-world::A_Male_03_Pain",
+	"nanos-world::A_Male_04_Pain",
+	"nanos-world::A_Male_05_Pain",
+	"nanos-world::A_Male_06_Pain",
+	"nanos-world::A_Male_07_Pain",
+	"nanos-world::A_Male_06_Pain"
 }
 
 female_death_sounds = {
-	"NanosWorld::A_Female_01_Death",
-	"NanosWorld::A_Female_02_Death",
-	"NanosWorld::A_Female_03_Death",
-	"NanosWorld::A_Female_04_Death",
-	"NanosWorld::A_Female_05_Death"
+	"nanos-world::A_Female_01_Death",
+	"nanos-world::A_Female_02_Death",
+	"nanos-world::A_Female_03_Death",
+	"nanos-world::A_Female_04_Death",
+	"nanos-world::A_Female_05_Death"
 }
 
 female_pain_sounds = {
-	"NanosWorld::A_Female_01_Pain",
-	"NanosWorld::A_Female_02_Pain",
-	"NanosWorld::A_Female_03_Pain",
-	"NanosWorld::A_Female_04_Pain",
-	"NanosWorld::A_Female_05_Pain",
-	"NanosWorld::A_Female_06_Pain",
-	"NanosWorld::A_Female_07_Pain",
-	"NanosWorld::A_Female_06_Pain"
+	"nanos-world::A_Female_01_Pain",
+	"nanos-world::A_Female_02_Pain",
+	"nanos-world::A_Female_03_Pain",
+	"nanos-world::A_Female_04_Pain",
+	"nanos-world::A_Female_05_Pain",
+	"nanos-world::A_Female_06_Pain",
+	"nanos-world::A_Female_07_Pain",
+	"nanos-world::A_Female_06_Pain"
 }
 
 human_morph_targets = {
@@ -146,7 +146,7 @@ function SpawnPlayer(player, location, rotation)
 	local new_char = Character(location or spawn_locations[math.random(#spawn_locations)], rotation or Rotator(), selected_mesh)
 
 	-- Customization
-	if (selected_mesh == "NanosWorld::SK_Male") then
+	if (selected_mesh == "nanos-world::SK_Male") then
 		local selected_hair = sk_male_hair_meshes[math.random(#sk_male_hair_meshes)]
 		if (selected_hair ~= "") then
 			new_char:AddStaticMeshAttached("hair", selected_hair, "hair_male")
@@ -158,7 +158,7 @@ function SpawnPlayer(player, location, rotation)
 		end
 	end
 
-	if (selected_mesh == "NanosWorld::SK_Male" or selected_mesh == "NanosWorld::SK_Mannequin") then
+	if (selected_mesh == "nanos-world::SK_Male" or selected_mesh == "nanos-world::SK_Mannequin") then
 		local selected_death_Sound = male_death_sounds[math.random(#male_death_sounds)]
 		new_char:SetDeathSound(selected_death_Sound)
 
@@ -166,7 +166,7 @@ function SpawnPlayer(player, location, rotation)
 		new_char:SetPainSound(selected_pain_Sound)
 	end
 
-	if (selected_mesh == "NanosWorld::SK_Female" or selected_mesh == "NanosWorld::SK_Mannequin_Female") then
+	if (selected_mesh == "nanos-world::SK_Female" or selected_mesh == "nanos-world::SK_Mannequin_Female") then
 		local selected_death_Sound = female_death_sounds[math.random(#female_death_sounds)]
 		new_char:SetDeathSound(selected_death_Sound)
 
@@ -174,7 +174,7 @@ function SpawnPlayer(player, location, rotation)
 		new_char:SetPainSound(selected_pain_Sound)
 	end
 
-	if (selected_mesh == "NanosWorld::SK_Female") then
+	if (selected_mesh == "nanos-world::SK_Female") then
 		local selected_hair = sk_female_hair_meshes[math.random(#sk_female_hair_meshes)]
 		if (selected_hair ~= "") then
 			new_char:AddStaticMeshAttached("hair", selected_hair, "hair_female")
@@ -187,9 +187,9 @@ function SpawnPlayer(player, location, rotation)
 	end
 
 	-- Adds eyes to humanoid meshes
-	if (selected_mesh == "NanosWorld::SK_Male" or selected_mesh == "NanosWorld::SK_Female") then
-		new_char:AddStaticMeshAttached("eye_left", "NanosWorld::SM_Eye", "eye_left")
-		new_char:AddStaticMeshAttached("eye_right", "NanosWorld::SM_Eye", "eye_right")
+	if (selected_mesh == "nanos-world::SK_Male" or selected_mesh == "nanos-world::SK_Female") then
+		new_char:AddStaticMeshAttached("eye_left", "nanos-world::SM_Eye", "eye_left")
+		new_char:AddStaticMeshAttached("eye_right", "nanos-world::SM_Eye", "eye_right")
 
 		-- Those parameters are specific to humanoid meshes (were added in their materials)
 		new_char:SetMaterialColorParameter("HairTint", hair_tints[math.random(#hair_tints)])

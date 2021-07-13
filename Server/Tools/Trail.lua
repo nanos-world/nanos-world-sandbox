@@ -4,10 +4,10 @@ Events.Subscribe("SpawnTrail", function(player, spawn_location, direction, entit
 	local rotation = (direction * -1):Rotation() + Rotator(90, 0, 0)
 
 	-- Spawns a Trail Prop
-	local trail = Prop(spawn_location, rotation, "NanosWorld::SM_CupC", CollisionType.NoCollision, true, false)
+	local trail = Prop(spawn_location, rotation, "nanos-world::SM_CupC", CollisionType.NoCollision, true, false)
 
 	-- Spawns a Particle and attaches it to the trail
-	local particle = Particle(spawn_location, Rotator(), "NanosWorld::P_Ribbon", false, true)
+	local particle = Particle(spawn_location, Rotator(), "nanos-world::P_Ribbon", false, true)
 
 	local color = Color.RandomPalette()
 	trail:SetMaterialColorParameter("Tint", color)
@@ -28,8 +28,8 @@ Events.Subscribe("SpawnTrail", function(player, spawn_location, direction, entit
 	-- Updates the client's spawn history
 	Events.CallRemote("SpawnedItem", player,  trail)
 
-	Particle(spawn_location, rotation, "NanosWorld::P_DirectionalBurst")
+	Particle(spawn_location, rotation, "nanos-world::P_DirectionalBurst")
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "TrailTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.VIOLET) end)
+AddSpawnMenuItem("nanos-world", "tools", "TrailTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.VIOLET) end)

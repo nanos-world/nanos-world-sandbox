@@ -9,7 +9,7 @@ function HandleRemoverTool(weapon)
 			Events.CallRemote("DestroyItem", trace_result.Entity)
 		else
 			-- If didn't hit anything, plays a negative sound
-			Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
+			Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
 		end
 	end)
 end
@@ -23,4 +23,4 @@ Events.Subscribe("DropToolGun_RemoverTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "RemoverTool", "Remover", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")
+AddSpawnMenuItem("nanos-world", "tools", "RemoverTool", "Remover", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

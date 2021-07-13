@@ -28,8 +28,8 @@ function HandleWeldTool(tool)
 				WeldTool.welding_start_to = nil
 
 				-- Spawns positive sounds and particles
-				Particle(trace_result.Location, trace_result.Normal:Rotation(), "NanosWorld::P_DirectionalBurst", true, true)
-				Sound(trace_result.Location, "NanosWorld::A_VR_Confirm", false, true, SoundType.SFX, 0.15, 0.85)
+				Particle(trace_result.Location, trace_result.Normal:Rotation(), "nanos-world::P_DirectionalBurst", true, true)
+				Sound(trace_result.Location, "nanos-world::A_VR_Confirm", false, true, SoundType.SFX, 0.15, 0.85)
 
 				return
 
@@ -41,13 +41,13 @@ function HandleWeldTool(tool)
 				WeldTool.welding_start_to:SetHighlightEnabled(true, 0)
 
 				-- Spawns a "positive" sound for attaching
-				Sound(WeldTool.welding_start_to:GetLocation(), "NanosWorld::A_VR_Click_03", false, true, SoundType.SFX, 0.15, 0.85)
+				Sound(WeldTool.welding_start_to:GetLocation(), "nanos-world::A_VR_Click_03", false, true, SoundType.SFX, 0.15, 0.85)
 				return
 			end
 		end
 
 		-- If didn't hit anything, plays a negative sound
-		Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
+		Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
 	end)
 end
 
@@ -65,4 +65,4 @@ Events.Subscribe("DropToolGun_WeldTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "WeldTool", "Weld", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")
+AddSpawnMenuItem("nanos-world", "tools", "WeldTool", "Weld", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

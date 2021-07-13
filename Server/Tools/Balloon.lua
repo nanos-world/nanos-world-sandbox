@@ -4,7 +4,7 @@ Balloons = setmetatable({}, { __mode = 'k' })
 -- Spawns a Balloon
 Events.Subscribe("SpawnBalloon", function(player, spawn_location, rotation, force, max_length, entity, distance_trace_object)
 	-- Spawns a Balloon Prop (not allowing characters to pickup it)
-	local balloon = Prop(spawn_location + Vector(0, 0, 10), Rotator(0, 0, 0), "NanosWorld::SM_Balloon", CollisionType.Normal, true, false)
+	local balloon = Prop(spawn_location + Vector(0, 0, 10), Rotator(0, 0, 0), "nanos-world::SM_Balloon", CollisionType.Normal, true, false)
 
 	-- Adds a constant force upwards
 	balloon:SetForce(Vector(0, 0, force), false)
@@ -55,12 +55,12 @@ Events.Subscribe("SpawnBalloon", function(player, spawn_location, rotation, forc
 	Events.CallRemote("SpawnedItem", player, balloon)
 
 	-- Calls the Client to spawn ballons spawning sounds
-	Events.BroadcastRemote("SpawnSound", spawn_location, "NanosWorld::A_Balloon_Inflate", false, 0.75, 1)
-	Particle(spawn_location, rotation, "NanosWorld::P_DirectionalBurst"):SetParameterColor("Color", color)
+	Events.BroadcastRemote("SpawnSound", spawn_location, "nanos-world::A_Balloon_Inflate", false, 0.75, 1)
+	Particle(spawn_location, rotation, "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", color)
 
 	balloon:Subscribe("Destroy", function(item)
-		Events.BroadcastRemote("SpawnSound", item:GetLocation(), "NanosWorld::A_Balloon_Pop", false, 1, 1)
-		Particle(item:GetLocation() + Vector(0, 0, 30), Rotator(), "NanosWorld::P_OmnidirectionalBurst"):SetParameterColor("Color", item:GetValue("Color"))
+		Events.BroadcastRemote("SpawnSound", item:GetLocation(), "nanos-world::A_Balloon_Pop", false, 1, 1)
+		Particle(item:GetLocation() + Vector(0, 0, 30), Rotator(), "nanos-world::P_OmnidirectionalBurst"):SetParameterColor("Color", item:GetValue("Color"))
 	end)
 end)
 
@@ -75,4 +75,4 @@ Timer.SetInterval(function()
 end, 500)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "BalloonTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.MAGENTA) end)
+AddSpawnMenuItem("nanos-world", "tools", "BalloonTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.MAGENTA) end)

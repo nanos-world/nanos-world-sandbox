@@ -16,7 +16,7 @@ function HandleLightTool(weapon)
 			Events.CallRemote("SpawnLight", trace_result.Location, trace_result.Normal, trace_result.Entity, distance_trace_object)
 		else
 			-- If didn't hit anything, plays a negative sound
-			Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
+			Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
 		end
 	end)
 
@@ -33,4 +33,4 @@ Events.Subscribe("DropToolGun_LightTool", function(tool)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "LightTool", "Lights", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")
+AddSpawnMenuItem("nanos-world", "tools", "LightTool", "Lights", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

@@ -22,7 +22,7 @@ function HandleResizerTool(weapon, character)
 			Events.CallRemote("ToggleResizing", true)
 		else
 			-- If didn't hit anything, plays a negative sound
-			Sound(Vector(), "NanosWorld::A_Invalid_Action", true, true, SoundType.SFX, 1)
+			Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
 		end
 	end)
 
@@ -102,4 +102,4 @@ Events.Subscribe("DropToolGun_ResizerTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "ResizerTool", "Resizer", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")
+AddSpawnMenuItem("nanos-world", "tools", "ResizerTool", "Resizer", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")

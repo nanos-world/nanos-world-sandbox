@@ -4,10 +4,10 @@ Events.Subscribe("SpawnThruster", function(player, spawn_location, direction, en
 	local rotation = (direction * -1):Rotation()
 
 	-- Spawns a Thruster Prop
-	local thruster = Prop(spawn_location, rotation, "NanosWorld::SM_Jet_Thruster", CollisionType.NoCollision, true, false)
+	local thruster = Prop(spawn_location, rotation, "nanos-world::SM_Jet_Thruster", CollisionType.NoCollision, true, false)
 
 	-- Spawns a Particle and attaches it to the thruster
-	local particle = Particle(spawn_location, Rotator(), "NanosWorld::P_Fire", false, true)
+	local particle = Particle(spawn_location, Rotator(), "nanos-world::P_Fire", false, true)
 	particle:AttachTo(thruster, AttachmentRule.SnapToTarget, "", true)
 	particle:SetRelativeLocation(rotation:RotateVector(direction * 40))
 
@@ -26,8 +26,8 @@ Events.Subscribe("SpawnThruster", function(player, spawn_location, direction, en
 	-- Calls the client to spawns a thruster sound and attach to the thruster (currently sounds are client-only)
 	Events.BroadcastRemote("SpawnThruster", thruster)
 
-	Particle(spawn_location, rotation, "NanosWorld::P_DirectionalBurst")
+	Particle(spawn_location, rotation, "nanos-world::P_DirectionalBurst")
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("NanosWorld", "tools", "ThrusterTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.WHITE) end)
+AddSpawnMenuItem("nanos-world", "tools", "ThrusterTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.WHITE) end)
