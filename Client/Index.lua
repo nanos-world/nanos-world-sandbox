@@ -6,7 +6,7 @@ local gmt_time = os.date("!*t", os.time())
 World.SetTime((gmt_time.hour * 60 + gmt_time.min) % 24, gmt_time.sec)
 
 -- All notifications already sent
-persistent_data_notifications = {}
+PERSISTENT_DATA_NOTIFICATIONS = {}
 
 -- Spawns Sandbox HUD
 main_hud = WebUI("Sandbox HUD", "file:///UI/index.html")
@@ -25,12 +25,18 @@ end)
 
 -- When package loads, verify if LocalPlayer already exists (eg. when reloading the package), then try to get and store it's controlled character
 Package.Subscribe("Load", function()
-	if (Client.GetLocalPlayer() ~= nil) then
-		UpdateLocalCharacter(Client.GetLocalPlayer():GetControlledCharacter())
+	local local_player = Client.GetLocalPlayer()
+
+	if (local_player ~= nil) then
+		UpdateLocalCharacter(local_player:GetControlledCharacter())
+
+		local_player:Subscribe("Possess", function(player, character)
+			UpdateLocalCharacter(character)
+		end)
 	end
 
 	-- Gets all notifications already sent
-	persistent_data_notifications = Package.GetPersistentData().notifications or {}
+	PERSISTENT_DATA_NOTIFICATIONS = Package.GetPersistentData().notifications or {}
 
 	-- Updates all existing Players
 	for k, player in pairs(Player.GetAll()) do
@@ -47,7 +53,7 @@ function UpdateLocalCharacter(character)
 	UpdateHealth(character:GetHealth())
 
 	-- Sets on character an event to update the health's UI after it takes damage
-	character:Subscribe("TakeDamage", function(charac, damage, type, bone, from_direction, instigator)
+	character:Subscribe("TakeDamage", function(charac, damage, type, bone, from_direction, instigator, causer)
 		-- Plays a Hit Taken sound effect
 		Sound(Vector(), "nanos-world::A_HitTaken_Feedback", true)
 
@@ -130,20 +136,12 @@ Player.Subscribe("Destroy", function(player)
 end)
 
 Events.Subscribe("SpawnSound", function(location, sound_asset, is_2D, volume, pitch)
-	Sound(location, sound_asset, is_2D, true, SoundType.SFX, volume, pitch)
+	Sound(location, sound_asset, is_2D, true, SoundType.SFX, volume or 1, pitch or 1)
 end)
 
-Events.Subscribe("SpawnSoundAttached", function(object, sound_asset, is_2D, volume, pitch)
-	local sound = Sound(Vector(), sound_asset, is_2D, true, SoundType.SFX, volume, pitch)
-	sound:AttachTo(object)
-end)
-
-Events.Subscribe("SpawnParticle", function(location, rotation, particle_asset, color)
-	local particle = Particle(location, rotation, particle_asset)
-
-	if (color) then
-		particle:SetParameterColor("Color", color)
-	end
+Events.Subscribe("SpawnSoundAttached", function(object, sound_asset, is_2D, auto_destroy, volume, pitch)
+	local sound = Sound(object:GetLocation(), sound_asset, is_2D, auto_destroy ~= false, SoundType.SFX, volume or 1, pitch or 1)
+	sound:AttachTo(object, AttachmentRule.SnapToTarget, "", 0)
 end)
 
 -- Exposes this to other packages

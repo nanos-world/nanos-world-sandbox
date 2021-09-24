@@ -96,7 +96,7 @@ function TryPickUpObject()
 	-- If hit something and hit an Entity
 	if (trace_result.Success and trace_result.Entity) then
 		-- Cannot grab Characters (yet?), cannot grab attached entities or entities which are being grabbed
-		if (NanosWorld.IsA(trace_result.Entity, Character) or trace_result.Entity:GetAttachedTo() or trace_result.Entity:GetValue("IsBeingGrabbed")) then
+		if (NanosUtils.IsA(trace_result.Entity, Character) or trace_result.Entity:GetAttachedTo() or trace_result.Entity:GetValue("IsBeingGrabbed")) then
 			return end_location
 		end
 
@@ -113,7 +113,7 @@ function TryPickUpObject()
 		-- Calculates the distance of the object and the camera
 		PhysicsGun.picking_object_distance = trace_result.Location:Distance(viewport_3D.Position)
 
-		PhysicsGun.picking_object_initial_rotation = PhysicsGun.picking_object:GetRotation() - NanosWorld.GetLocalPlayer():GetControlledCharacter():GetRotation()
+		PhysicsGun.picking_object_initial_rotation = PhysicsGun.picking_object:GetRotation() - Client.GetLocalPlayer():GetControlledCharacter():GetRotation()
 
 		-- Resets settings
 		PhysicsGun.is_rotating_object = false
@@ -277,7 +277,7 @@ Client.Subscribe("Tick", function(delta_time)
 		local end_location = (start_location + camera_direction * PhysicsGun.picking_object_distance) + PhysicsGun.picking_object:GetRotation():UnrotateVector(PhysicsGun.picking_object_relative_location)
 
 		-- The new object rotation will be the initial rotation + the camera rotation
-		local camera_rotation = NanosWorld.GetLocalPlayer():GetCameraRotation()
+		local camera_rotation = Client.GetLocalPlayer():GetCameraRotation()
 		camera_rotation.Pitch = 0
 		local rotation = camera_rotation + PhysicsGun.picking_object_initial_rotation
 

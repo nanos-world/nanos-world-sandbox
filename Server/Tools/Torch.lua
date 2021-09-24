@@ -2,11 +2,11 @@ function SpawnTorch(location, rotation)
 	local torch = Item(location or Vector(), rotation or Rotator(), "nanos-world::SM_Torch")
 
 	local light = Light(Vector(), Rotator(), Color(1, 0.7, 0.4), LightType.Point, 100, 1000)
-	light:AttachTo(torch, AttachmentRule.SnapToTarget, "", true)
+	light:AttachTo(torch, AttachmentRule.SnapToTarget, "", 0)
 	light:SetRelativeLocation(Vector(0, 0, 75))
 
 	local particle = Particle(Vector(), Rotator(), "nanos-world::P_Fire", false)
-	particle:AttachTo(torch, AttachmentRule.SnapToTarget, "", true)
+	particle:AttachTo(torch, AttachmentRule.SnapToTarget, "", 0)
 	particle:SetRelativeLocation(Vector(0, 0, 50))
 
 	return torch

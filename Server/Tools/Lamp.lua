@@ -17,7 +17,7 @@ Events.Subscribe("SpawnLamp", function(player, spawn_location, direction, entity
 	local light = Light(Vector(), Rotator(), color, LightType.Spot, intensity, 1000, 25, 0.975, 2000, false)
 
 	-- Attaches the lamp to the prop, offseting 25 downwards
-	light:AttachTo(prop_lamp, AttachmentRule.SnapToTarget, "", true)
+	light:AttachTo(prop_lamp, AttachmentRule.SnapToTarget, "", 0)
 	light:SetRelativeLocation(Vector(35, 0, 0))
 
 	-- If to attach to an entity, otherwise creates and attaches to a fixed invisible mesh

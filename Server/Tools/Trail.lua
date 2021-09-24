@@ -16,14 +16,14 @@ Events.Subscribe("SpawnTrail", function(player, spawn_location, direction, entit
 	particle:SetParameterFloat("LifeTime", 2)
 	particle:SetParameterFloat("SpawnRate", 60)
 
-	particle:AttachTo(trail, AttachmentRule.SnapToTarget, "", true)
+	particle:AttachTo(trail, AttachmentRule.SnapToTarget, "", 0)
 	particle:SetRelativeLocation(rotation:RotateVector(direction * 10))
 
 	-- Sets the player to be the network authority immediately of this Prop (so he can immediately start applying the force on it - on the client side)
 	trail:SetNetworkAuthority(player)
 
 	-- Gets the relative location rotated to attach to the exact point the player aimed
-	trail:AttachTo(entity, AttachmentRule.KeepWorld, "", true)
+	trail:AttachTo(entity, AttachmentRule.KeepWorld, "", 0)
 
 	-- Updates the client's spawn history
 	Events.CallRemote("SpawnedItem", player,  trail)

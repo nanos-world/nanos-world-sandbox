@@ -19,7 +19,7 @@ Events.Subscribe("SpawnLight", function(player, spawn_location, direction, entit
 	local light = Light(Vector(), Rotator(), color, LightType.Point, intensity, 250, 44, 0, 2000)
 
 	-- Attaches the light to the prop, offseting 25 downwards
-	light:AttachTo(prop_light, AttachmentRule.SnapToTarget, "", true)
+	light:AttachTo(prop_light, AttachmentRule.SnapToTarget, "", 0)
 	light:SetRelativeLocation(Vector(0, 0, -25))
 
 	-- Spawns the Cable

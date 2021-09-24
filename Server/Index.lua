@@ -1,22 +1,24 @@
 Package.Require("SpawnMenu.lua")
 
 -- List of Character Meshes
-character_meshes = {
+CHARACTER_MESHES = {
 	"nanos-world::SK_Male",
 	"nanos-world::SK_Female",
 	"nanos-world::SK_Mannequin",
 	"nanos-world::SK_Mannequin_Female",
+	"nanos-world::SK_ClassicMale",
+	"nanos-world::SK_PostApocalyptic",
 }
 
 -- List of SK_Male hair Static Meshes
-sk_male_hair_meshes = {
+SK_MALE_HAIR_MESHES = {
 	"",
 	"nanos-world::SM_Hair_Long",
 	"nanos-world::SM_Hair_Short"
 }
 
 -- List of SK_Male beard Static Meshes
-sk_male_beard_meshes = {
+SK_MALE_BEARD_MESHES = {
 	"",
 	"nanos-world::SM_Beard_Extra",
 	"nanos-world::SM_Beard_Middle",
@@ -26,12 +28,13 @@ sk_male_beard_meshes = {
 }
 
 -- List of SK_Female hair Static Meshes
-sk_female_hair_meshes = {
+SK_FEMALE_HAIR_MESHES = {
 	"",
 	"nanos-world::SM_Hair_Kwang"
 }
 
-male_death_sounds = {
+-- List of Death Male voices
+MALE_DEATH_SOUNDS = {
 	"nanos-world::A_Male_01_Death",
 	"nanos-world::A_Male_02_Death",
 	"nanos-world::A_Male_03_Death",
@@ -40,7 +43,8 @@ male_death_sounds = {
 	"nanos-world::A_Male_06_Death"
 }
 
-male_pain_sounds = {
+-- List of Pain Male voices
+MALE_PAIN_SOUNDS = {
 	"nanos-world::A_Male_01_Pain",
 	"nanos-world::A_Male_02_Pain",
 	"nanos-world::A_Male_03_Pain",
@@ -51,7 +55,8 @@ male_pain_sounds = {
 	"nanos-world::A_Male_06_Pain"
 }
 
-female_death_sounds = {
+-- List of Death Female voices
+FEMALE_DEATH_SOUNDS = {
 	"nanos-world::A_Female_01_Death",
 	"nanos-world::A_Female_02_Death",
 	"nanos-world::A_Female_03_Death",
@@ -59,7 +64,8 @@ female_death_sounds = {
 	"nanos-world::A_Female_05_Death"
 }
 
-female_pain_sounds = {
+-- List of Pain Female voices
+FEMALE_PAIN_SOUNDS = {
 	"nanos-world::A_Female_01_Pain",
 	"nanos-world::A_Female_02_Pain",
 	"nanos-world::A_Female_03_Pain",
@@ -70,7 +76,8 @@ female_pain_sounds = {
 	"nanos-world::A_Female_06_Pain"
 }
 
-human_morph_targets = {
+-- List of Male/Female Meshes Morph Targets
+HUMAN_MORPH_TARGETS = {
 	"nose1",
 	"nose2",
 	"brows",
@@ -105,7 +112,7 @@ human_morph_targets = {
 	"bodyfat",
 }
 
-human_skin_tones = {
+HUMAN_SKIN_TONES = {
 	Color(1.000000, 1.000000, 1.000000),
 	Color(1.000000, 0.926933, 0.820785),
 	Color(0.984375, 0.854302, 0.661377),
@@ -122,10 +129,10 @@ human_skin_tones = {
 	Color(0.932292, 0.825388, 0.670085),
 	Color(0.817708, 0.710384, 0.549398),
 	Color(0.765625, 0.620475, 0.454590),
-	Color(0.050000, 0.050000, 0.080000),	
+	Color(0.050000, 0.050000, 0.080000),
 }
 
-hair_tints = {
+HAIR_TINTS = {
 	Color(0.067708, 0.030797, 0.001471),
 	Color(0.983483, 1.000000, 0.166667),
 	Color(0.010000, 0.010000, 0.010000),
@@ -133,7 +140,7 @@ hair_tints = {
 }
 
 -- List of Spawn Locations
-spawn_locations = {
+SPAWN_LOCATIONS = {
 	Vector(0, 0, 300),
 	Vector(100, 0, 300),
 	Vector(-100, 0, 300),
@@ -141,41 +148,124 @@ spawn_locations = {
 	Vector(0, -100, 300)
 }
 
-function SpawnPlayer(player, location, rotation)
-	local selected_mesh = character_meshes[math.random(#character_meshes)]
-	local new_char = Character(location or spawn_locations[math.random(#spawn_locations)], rotation or Rotator(), selected_mesh)
+function SpawnCharacterAlpha(location, rotation)
+	local new_char = Character(location or SPAWN_LOCATIONS[math.random(#SPAWN_LOCATIONS)], rotation or Rotator(), "nanos-world::SK_Male")
+
+	-- Spawns two kind of Characters
+	if (math.random() >= 0.5) then
+		-- Eye Guy
+
+		-- Valve
+		new_char:AddStaticMeshAttached("eye_valve", "nanos-world::SM_Valve", "eye_left", Vector(0, 1, 0), Rotator(-79.1, -58.7, 63.8))
+
+		-- Eye
+		new_char:AddStaticMeshAttached("eye_right", "nanos-world::SM_Eye", "eye_right")
+
+		-- Color
+		new_char:SetMaterialColorParameter("Tint", Color(0.59, 0.73, 0.47))
+		new_char:SetMaterialScalarParameter("BaseColorPower", 1)
+
+		-- Hair
+		new_char:AddStaticMeshAttached("hair", "nanos-world::SM_Hair_Short", "hair_male")
+
+		-- Morph Targets
+		new_char:SetMorphTarget("nose1", 1)
+		new_char:SetMorphTarget("nose2", -1)
+		new_char:SetMorphTarget("brows", -0.3)
+		new_char:SetMorphTarget("mouth", 0.44)
+		new_char:SetMorphTarget("fat", -0.28)
+		new_char:SetMorphTarget("nose3", -0.63)
+		new_char:SetMorphTarget("chin", -0.15)
+		new_char:SetMorphTarget("face", -0.88)
+		new_char:SetMorphTarget("nose4", -1)
+		new_char:SetMorphTarget("skinny", 0.1)
+		new_char:SetMorphTarget("brows2", -0.12)
+		new_char:SetMorphTarget("smirk", 1)
+		new_char:SetMorphTarget("smirk2", 1)
+		new_char:SetMorphTarget("smirk3", 0)
+		new_char:SetMorphTarget("nose6", 0.3)
+		new_char:SetMorphTarget("jaw_forward", -0.6)
+		new_char:SetMorphTarget("lips", -0.16)
+		new_char:SetMorphTarget("lips2", -0.78)
+		new_char:SetMorphTarget("mouth_wide", 0.18)
+		new_char:SetMorphTarget("eyes1", -1)
+		new_char:SetMorphTarget("eyes2", 1)
+		new_char:SetMorphTarget("eyes3", 1)
+		new_char:SetMorphTarget("eyes4", -1)
+		new_char:SetMorphTarget("eyes_retraction", -1)
+		new_char:SetMorphTarget("eyes5", 1)
+		new_char:SetMorphTarget("bodyfat", -1)
+	else
+		-- Nut Guy
+
+		-- Valve
+		new_char:AddStaticMeshAttached("nut_valve", "nanos-world::SM_Valve", "head", Vector(17.82, -7.7, 1.25), Rotator(80, 88, -110))
+
+		-- Eyes
+		new_char:AddStaticMeshAttached("eye_left", "nanos-world::SM_Eye", "eye_left")
+		new_char:AddStaticMeshAttached("eye_right", "nanos-world::SM_Eye", "eye_right")
+
+		-- Color
+		new_char:SetMaterialColorParameter("Tint", Color(0.16, 0.16, 0.05))
+		new_char:SetMaterialScalarParameter("BaseColorPower", 1.25)
+
+		-- Morph Targets
+		new_char:SetMorphTarget("nose1", 1)
+		new_char:SetMorphTarget("nose2", 1)
+		new_char:SetMorphTarget("mouth", 1)
+		new_char:SetMorphTarget("fat", 1)
+		new_char:SetMorphTarget("nose3", -1)
+		new_char:SetMorphTarget("nose4", 1)
+		new_char:SetMorphTarget("jaw", -0.3)
+		new_char:SetMorphTarget("brows2", -1)
+		new_char:SetMorphTarget("angry", 0.15)
+		new_char:SetMorphTarget("nose6", 1)
+		new_char:SetMorphTarget("jaw_forward", 0.42)
+		new_char:SetMorphTarget("lips", 0.5)
+		new_char:SetMorphTarget("lips2", 0.25)
+		new_char:SetMorphTarget("mouth_wide", 0.5)
+		new_char:SetMorphTarget("forehead", -0.5)
+		new_char:SetMorphTarget("bodyfat", 1)
+	end
+
+	return new_char
+end
+
+function SpawnCharacterRandomized(location, rotation, asset)
+	local selected_mesh = asset or CHARACTER_MESHES[math.random(#CHARACTER_MESHES)]
+	local new_char = Character(location or SPAWN_LOCATIONS[math.random(#SPAWN_LOCATIONS)], rotation or Rotator(), selected_mesh)
 
 	-- Customization
 	if (selected_mesh == "nanos-world::SK_Male") then
-		local selected_hair = sk_male_hair_meshes[math.random(#sk_male_hair_meshes)]
+		local selected_hair = SK_MALE_HAIR_MESHES[math.random(#SK_MALE_HAIR_MESHES)]
 		if (selected_hair ~= "") then
 			new_char:AddStaticMeshAttached("hair", selected_hair, "hair_male")
 		end
 
-		local selected_beard = sk_male_beard_meshes[math.random(#sk_male_beard_meshes)]
+		local selected_beard = SK_MALE_BEARD_MESHES[math.random(#SK_MALE_BEARD_MESHES)]
 		if (selected_beard ~= "") then
 			new_char:AddStaticMeshAttached("beard", selected_beard, "beard")
 		end
 	end
 
 	if (selected_mesh == "nanos-world::SK_Male" or selected_mesh == "nanos-world::SK_Mannequin") then
-		local selected_death_Sound = male_death_sounds[math.random(#male_death_sounds)]
+		local selected_death_Sound = MALE_DEATH_SOUNDS[math.random(#MALE_DEATH_SOUNDS)]
 		new_char:SetDeathSound(selected_death_Sound)
 
-		local selected_pain_Sound = male_pain_sounds[math.random(#male_pain_sounds)]
+		local selected_pain_Sound = MALE_PAIN_SOUNDS[math.random(#MALE_PAIN_SOUNDS)]
 		new_char:SetPainSound(selected_pain_Sound)
 	end
 
 	if (selected_mesh == "nanos-world::SK_Female" or selected_mesh == "nanos-world::SK_Mannequin_Female") then
-		local selected_death_Sound = female_death_sounds[math.random(#female_death_sounds)]
+		local selected_death_Sound = FEMALE_DEATH_SOUNDS[math.random(#FEMALE_DEATH_SOUNDS)]
 		new_char:SetDeathSound(selected_death_Sound)
 
-		local selected_pain_Sound = female_pain_sounds[math.random(#female_pain_sounds)]
+		local selected_pain_Sound = FEMALE_PAIN_SOUNDS[math.random(#FEMALE_PAIN_SOUNDS)]
 		new_char:SetPainSound(selected_pain_Sound)
 	end
 
 	if (selected_mesh == "nanos-world::SK_Female") then
-		local selected_hair = sk_female_hair_meshes[math.random(#sk_female_hair_meshes)]
+		local selected_hair = SK_FEMALE_HAIR_MESHES[math.random(#SK_FEMALE_HAIR_MESHES)]
 		if (selected_hair ~= "") then
 			new_char:AddStaticMeshAttached("hair", selected_hair, "hair_female")
 		end
@@ -192,16 +282,25 @@ function SpawnPlayer(player, location, rotation)
 		new_char:AddStaticMeshAttached("eye_right", "nanos-world::SM_Eye", "eye_right")
 
 		-- Those parameters are specific to humanoid meshes (were added in their materials)
-		new_char:SetMaterialColorParameter("HairTint", hair_tints[math.random(#hair_tints)])
-		new_char:SetMaterialColorParameter("Tint", human_skin_tones[math.random(#human_skin_tones)])
+		new_char:SetMaterialColorParameter("HairTint", HAIR_TINTS[math.random(#HAIR_TINTS)])
+		new_char:SetMaterialColorParameter("Tint", HUMAN_SKIN_TONES[math.random(#HUMAN_SKIN_TONES)])
 
 		new_char:SetMaterialScalarParameter("Muscular", math.random(100) / 100)
 		new_char:SetMaterialScalarParameter("BaseColorPower", math.random(2) + 0.5)
 
-		for i, morph_target in ipairs(human_morph_targets) do
+		for i, morph_target in ipairs(HUMAN_MORPH_TARGETS) do
 			new_char:SetMorphTarget(morph_target, math.random(200) / 100 - 1)
 		end
 	end
+
+	return new_char
+end
+
+function SpawnPlayer(player, location, rotation)
+	-- local new_char = SpawnCharacterRandomized(location, rotation)
+
+	-- Temp during event
+	local new_char = SpawnCharacterAlpha(location, rotation)
 
 	player:Possess(new_char)
 
@@ -235,7 +334,7 @@ Character.Subscribe("Respawn", function(character)
 	-- Sets the Initial Character's Location (location where the Character will spawn). After the Respawn event, a
 	-- call for SetLocation(InitialLocation) will be triggered. If you always want something to respawn at the same
 	-- position you do not need to keep setting SetInitialLocation, this is just for respawning at random spots
-	character:SetInitialLocation(spawn_locations[math.random(#spawn_locations)])
+	character:SetInitialLocation(SPAWN_LOCATIONS[math.random(#SPAWN_LOCATIONS)])
 
 	-- Resets character's scale to default
 	character:SetScale(Vector(1, 1, 1))
@@ -259,7 +358,7 @@ end)
 
 -- Catches a custom event "MapLoaded" to override this script spawn locations
 Events.Subscribe("MapLoaded", function(map_custom_spawn_locations)
-	spawn_locations = map_custom_spawn_locations
+	SPAWN_LOCATIONS = map_custom_spawn_locations
 end)
 
 Events.Subscribe("ToggleNoClip", function(player)
@@ -304,7 +403,9 @@ Package.Subscribe("Load", function()
 		end
 	else
 		for k, p in pairs(character_locations) do
-			SpawnPlayer(p.player, p.location, p.rotation)
+			if (p.player and p.player:IsValid()) then
+				SpawnPlayer(p.player, p.location, p.rotation)
+			end
 		end
 	end
 end)

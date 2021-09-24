@@ -20,7 +20,7 @@ Events.Subscribe("SpawnBalloon", function(player, spawn_location, rotation, forc
 	balloon:SetNetworkAuthority(player)
 
 	-- Subscribes for popping when balloon takes damage
-	balloon:Subscribe("TakeDamage", function(self, Damage, BoneName, _NanosDamageType, HitFromDirection, Instigator)
+	balloon:Subscribe("TakeDamage", function(self, damage, bone_name, damage_type, hit_from_direction, instigator, causer)
 		self:Destroy()
 	end)
 
@@ -68,7 +68,7 @@ end)
 Timer.SetInterval(function()
 	for k, balloon in pairs(Balloons) do
 		-- If this balloon is higher enough, pops it
-		if (balloon:IsValid() and balloon:GetLocation().Z > 3000 + math.random(10000)) then
+		if (balloon:IsValid() and balloon:GetLocation().Z > 6000 + math.random(10000)) then
 			balloon:Destroy()
 		end
 	end

@@ -1,12 +1,17 @@
+-- Loads the Default Asset Pack list (categorized)
+Package.Require("DefaultAssets.lua")
+
 -- Stores all spawned Items by this client
 SpawnsHistory = setmetatable({}, { __mode = 'k' })
 
 -- List of all Assets
 SpawnMenuItems = {}
 
+-- WORKAROUND used for weapons Patterns
+SelectedOption = ""
+
 -- Configures the Highlight colors to be used
-Client.SetHighlightColor(Color(0, 0, 20, 0.25), 1) -- Index 1
-Client.SetHighlightColor(Color(0, 20, 0, 1.20), 0) -- Index 2
+Client.SetHighlightColor(Color(0, 20, 0, 1.20), 0, HighlightMode.Always) -- Index 0
 
 Package.Subscribe("Load", function()
 	-- Wait 1 second so all other packages can send their Tools
@@ -14,13 +19,17 @@ Package.Subscribe("Load", function()
 		local asset_packs = Assets.GetAssetPacks()
 
 		-- Loads all AssetPacks
-		for i, asset_pack in pairs(asset_packs) do
+		for _, asset_pack in pairs(asset_packs) do
 			if (not SpawnMenuItems[asset_pack.Path]) then
 				SpawnMenuItems[asset_pack.Path] = {}
 			end
 
 			if (not SpawnMenuItems[asset_pack.Path].props) then
 				SpawnMenuItems[asset_pack.Path].props = {}
+			end
+
+			if (not SpawnMenuItems[asset_pack.Path].entities) then
+				SpawnMenuItems[asset_pack.Path].entities = {}
 			end
 
 			if (not SpawnMenuItems[asset_pack.Path].weapons) then
@@ -35,17 +44,20 @@ Package.Subscribe("Load", function()
 				SpawnMenuItems[asset_pack.Path].tools = {}
 			end
 
-			if (not SpawnMenuItems[asset_pack.Path].tools) then
+			if (not SpawnMenuItems[asset_pack.Path].npcs) then
 				SpawnMenuItems[asset_pack.Path].npcs = {}
 			end
 
 			-- Loads all StaticMeshes as Props
 			local props = Assets.GetStaticMeshes(asset_pack.Path)
-			for i, prop in pairs(props) do
+			for _, prop in pairs(props) do
+				-- TODO make global way to access categories for other Asset Packs
+				local asset_category = DEFAULT_ASSET_PACK[prop]
 				table.insert(SpawnMenuItems[asset_pack.Path].props, {
 					id = prop,
-					name = prop,
-					image = "assets///" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg"
+					name = prop:gsub("SM_", " "):gsub("_", " "),
+					image = "assets///" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg",
+					sub_category = asset_category or "uncategorized"
 				})
 			end
 
@@ -54,8 +66,8 @@ Package.Subscribe("Load", function()
 	end, 1000)
 end)
 
--- Toggle the Spawn Menu on
 Client.Subscribe("KeyUp", function(key)
+	-- Toggle the Spawn Menu off
 	if (key == "Q") then
 		main_hud:CallEvent("ToggleSpawnMenuVisibility", false)
 		Client.SetMouseEnabled(false)
@@ -64,15 +76,12 @@ Client.Subscribe("KeyUp", function(key)
 	end
 end)
 
--- Toggle the Spawn Menu off
 Client.Subscribe("KeyPress", function(key)
-	-- Opens SpawnMenu
+	-- Toggle the Spawn Menu on
 	if (key == "Q") then
 		main_hud:CallEvent("ToggleSpawnMenuVisibility", true)
 		Client.SetMouseEnabled(true)
 		Client.SetChatVisibility(false)
-		main_hud:BringToFront()
-		main_hud:SetFocus()
 		return
 	end
 end)
@@ -88,7 +97,7 @@ end)
 -- Function to delete the last item spawned
 function DeleteItemFromHistory()
 	if (#SpawnsHistory == 0) then
-		AddNotification("NO_ITEM_TO_DELETE", "there is no items in your History to delete!", 3000, true)
+		AddNotification("NO_ITEM_TO_DELETE", "there are no items in your History to destroy!", 3000, true)
 		return
 	end
 
@@ -104,8 +113,12 @@ function DeleteItemFromHistory()
 end
 
 -- Sound when hovering an Item in the SpawnMenu
-main_hud:Subscribe("HoverSound", function()
-	Sound(Vector(), "nanos-world::A_VR_Click_01", true, true, SoundType.SFX, 0.04)
+main_hud:Subscribe("HoverSound", function(pitch)
+	Sound(Vector(), "nanos-world::A_VR_Click_01", true, true, SoundType.SFX, 0.02, pitch or 1)
+end)
+
+main_hud:Subscribe("ClickSound", function(pitch)
+	Sound(Vector(), "nanos-world::A_VR_Click_02", true, true, SoundType.SFX, 0.01, pitch or 0.7)
 end)
 
 -- Handle for selecting an Item from the SpawnMenu
@@ -130,16 +143,35 @@ main_hud:Subscribe("SpawnItem", function(asset_pack, category, asset_id)
 		spawn_location = trace_result.Location - viewport_3D.Direction * 100
 	end
 
+	-- Triggers client side
+	if (not Events.Call("SpawnItem_" .. asset_id, asset_pack, category, asset_id, spawn_location, spawn_rotation)) then
+		return
+	end
+
 	-- Calls server to spawn it
-	Events.CallRemote("SpawnItem", asset_pack, category, asset_id, spawn_location, spawn_rotation)
+	Events.CallRemote("SpawnItem", asset_pack, category, asset_id, spawn_location, spawn_rotation, SelectedOption)
 
 	-- Spawns a sound for 'spawning an item'
 	Sound(Vector(), "nanos-world::A_VR_Teleport", true, true, SoundType.SFX, 0.15)
 end)
 
+-- Subscribes for when I select an Option
+main_hud:Subscribe("SelectOption", function(texture_path)
+	SelectedOption = texture_path
+
+	local local_character = Client.GetLocalPlayer():GetControlledCharacter()
+
+	if (local_character) then
+		local current_picked_item = local_character:GetPicked()
+		if (current_picked_item) then
+			Events.CallRemote("ApplyWeaponPattern", current_picked_item, texture_path)
+		end
+	end
+end)
+
 -- Subscribes for when I spawn an Item, do add it to my history
 Events.Subscribe("SpawnedItem", function(item, weld)
-	table.insert(SpawnsHistory, { ["item"] = item, ["weld"] = weld} )
+	table.insert(SpawnsHistory, { ["item"] = item, ["weld"] = weld })
 end)
 
 -- Auxiliar for Tracing for world object
@@ -154,7 +186,7 @@ function TraceFor(trace_max_distance, collision_channel)
 end
 
 -- Function for Adding new Spawn Menu items
-function AddSpawnMenuItem(asset_pack, category, id, name, image)
+function AddSpawnMenuItem(asset_pack, category, id, name, image, sub_category)
 	if (not SpawnMenuItems[asset_pack]) then
 		SpawnMenuItems[asset_pack] = {}
 	end
@@ -166,7 +198,8 @@ function AddSpawnMenuItem(asset_pack, category, id, name, image)
 	table.insert(SpawnMenuItems[asset_pack][category], {
 		id = id,
 		name = name,
-		image = image
+		image = image,
+		sub_category = sub_category
 	})
 end
 
@@ -188,19 +221,36 @@ Package.Require("Tools/Weld.lua")
 
 -- Adds the default NanosWorld items
 -- Default Weapons
-AddSpawnMenuItem("nanos-world", "weapons", "AK47", "AK47", "assets///NanosWorld/Thumbnails/SK_AK47.jpg")
-AddSpawnMenuItem("nanos-world", "weapons", "AK74U", "AK74U", "assets///NanosWorld/Thumbnails/SK_AK74U.jpg")
-AddSpawnMenuItem("nanos-world", "weapons", "AP5", "AP5", "assets///NanosWorld/Thumbnails/SK_AP5.jpg")
-AddSpawnMenuItem("nanos-world", "weapons", "AR4", "AR4", "assets///NanosWorld/Thumbnails/SK_AR4.jpg")
-AddSpawnMenuItem("nanos-world", "weapons", "ASVal", "ASVal", "assets///NanosWorld/Thumbnails/SK_ASVal.jpg")
-AddSpawnMenuItem("nanos-world", "weapons", "DesertEagle", "DesertEagle", "assets///NanosWorld/Thumbnails/SK_DesertEagle.jpg")
-AddSpawnMenuItem("nanos-world", "weapons", "GE36", "GE36", "assets///NanosWorld/Thumbnails/SK_GE36.jpg")
-AddSpawnMenuItem("nanos-world", "weapons", "Glock", "Glock", "assets///NanosWorld/Thumbnails/SK_Glock.jpg")
-AddSpawnMenuItem("nanos-world", "weapons", "Moss500", "Moss500", "assets///NanosWorld/Thumbnails/SK_Moss500.jpg")
-AddSpawnMenuItem("nanos-world", "weapons", "SMG11", "SMG11", "assets///NanosWorld/Thumbnails/SK_SMG11.jpg")
-AddSpawnMenuItem("nanos-world", "weapons", "Grenade", "Grenade", "assets///NanosWorld/Thumbnails/SK_G67.jpg")
+AddSpawnMenuItem("nanos-world", "weapons", "AK47", "AK47", "assets///NanosWorld/Thumbnails/SK_AK47.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "AK5C", "AK5C", "assets///NanosWorld/Thumbnails/SK_AK5C.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "AK74U", "AK74U", "assets///NanosWorld/Thumbnails/SK_AK74U.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "AR4", "AR4", "assets///NanosWorld/Thumbnails/SK_AR4.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "ASVal", "ASVal", "assets///NanosWorld/Thumbnails/SK_ASVal.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "GE3", "GE3", "assets///NanosWorld/Thumbnails/SK_GE3.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "GE36", "GE36", "assets///NanosWorld/Thumbnails/SK_GE36.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "SA80", "SA80", "assets///NanosWorld/Thumbnails/SK_SA80.jpg", "rifles")
 
-AddSpawnMenuItem("nanos-world", "weapons", "HFG", "HFG", "assets///NanosWorld/Thumbnails/SK_PortalGun.jpg")
+AddSpawnMenuItem("nanos-world", "weapons", "AP5", "AP5", "assets///NanosWorld/Thumbnails/SK_AP5.jpg", "smgs")
+AddSpawnMenuItem("nanos-world", "weapons", "P90", "P90", "assets///NanosWorld/Thumbnails/SK_P90.jpg", "smgs")
+AddSpawnMenuItem("nanos-world", "weapons", "SMG11", "SMG11", "assets///NanosWorld/Thumbnails/SK_SMG11.jpg", "smgs")
+AddSpawnMenuItem("nanos-world", "weapons", "UMP45", "UMP45", "assets///NanosWorld/Thumbnails/SK_UMP45.jpg", "smgs")
+
+AddSpawnMenuItem("nanos-world", "weapons", "DesertEagle", "DesertEagle", "assets///NanosWorld/Thumbnails/SK_DesertEagle.jpg", "pistols")
+AddSpawnMenuItem("nanos-world", "weapons", "Glock", "Glock", "assets///NanosWorld/Thumbnails/SK_Glock.jpg", "pistols")
+AddSpawnMenuItem("nanos-world", "weapons", "Makarov", "Makarov", "assets///NanosWorld/Thumbnails/SK_Makarov.jpg", "pistols")
+AddSpawnMenuItem("nanos-world", "weapons", "M1911", "M1911", "assets///NanosWorld/Thumbnails/SK_M1911.jpg", "pistols")
+
+AddSpawnMenuItem("nanos-world", "weapons", "Ithaca37", "Ithaca37", "assets///NanosWorld/Thumbnails/SK_Ithaca37.jpg", "shotguns")
+AddSpawnMenuItem("nanos-world", "weapons", "Moss500", "Moss500", "assets///NanosWorld/Thumbnails/SK_Moss500.jpg", "shotguns")
+AddSpawnMenuItem("nanos-world", "weapons", "Rem870", "Rem870", "assets///NanosWorld/Thumbnails/SK_Rem870.jpg", "shotguns")
+AddSpawnMenuItem("nanos-world", "weapons", "SPAS12", "SPAS12", "assets///NanosWorld/Thumbnails/SK_SPAS12.jpg", "shotguns")
+
+AddSpawnMenuItem("nanos-world", "weapons", "Grenade", "Grenade", "assets///NanosWorld/Thumbnails/SM_Grenade_G67.jpg", "grenades")
+
+AddSpawnMenuItem("nanos-world", "weapons", "AWP", "AWP", "assets///NanosWorld/Thumbnails/SK_AWP.jpg", "sniper-rifles")
+
+AddSpawnMenuItem("nanos-world", "weapons", "HFG", "HFG", "assets///NanosWorld/Thumbnails/SK_PortalGun.jpg", "special")
+AddSpawnMenuItem("nanos-world", "weapons", "VeggieGun", "Veggie Gun", "assets///NanosWorld/Thumbnails/SK_PortalGun.jpg", "special")
 
 -- Default Vehicles
 AddSpawnMenuItem("nanos-world", "vehicles", "SUV", "SUV", "assets///NanosWorld/Thumbnails/SK_SUV.jpg")

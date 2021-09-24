@@ -1,13 +1,13 @@
 -- Adds the Notification on the Screen
 function AddNotification(id, message, time, force)
 	if (not force) then
-		if (persistent_data_notifications[id]) then
+		if (PERSISTENT_DATA_NOTIFICATIONS[id]) then
 			return
 		end
 
 		-- Sets to the settings that the Notification has been shown
-		persistent_data_notifications[id] = true
-		Package.SetPersistentData("notifications", persistent_data_notifications)
+		PERSISTENT_DATA_NOTIFICATIONS[id] = true
+		Package.SetPersistentData("notifications", PERSISTENT_DATA_NOTIFICATIONS)
 	end
 
 	-- Plays a sound

@@ -18,13 +18,12 @@ Events.Subscribe("SpawnThruster", function(player, spawn_location, direction, en
 	thruster:SetNetworkAuthority(player)
 
 	-- Gets the relative location rotated to attach to the exact point the player aimed
-	thruster:AttachTo(entity, AttachmentRule.KeepWorld, "", true)
+	thruster:AttachTo(entity, AttachmentRule.KeepWorld, "", 1)
 
 	-- Updates the client's spawn history
 	Events.CallRemote("SpawnedItem", player, thruster)
 
-	-- Calls the client to spawns a thruster sound and attach to the thruster (currently sounds are client-only)
-	Events.BroadcastRemote("SpawnThruster", thruster)
+	Events.BroadcastRemote("SpawnSoundAttached", thruster, "nanos-world::A_VR_WorldMove_Loop_01", false, false, 0.25, math.random(10) / 100 + 1)
 
 	Particle(spawn_location, rotation, "nanos-world::P_DirectionalBurst")
 end)

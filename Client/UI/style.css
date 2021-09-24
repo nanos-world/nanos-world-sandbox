@@ -61,6 +61,12 @@ body {
 
 #spawn_menu {
 	display: none;
+	position: absolute;
+	top: 150px;
+	left: 200px;
+	right: 200px;
+	bottom: 150px;
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .voice_chat {
@@ -103,34 +109,26 @@ body {
 	position: absolute;
 	right: 30px;
 	bottom: 30px;
-	width: 120px;
 	height: 55px;
 	background-color: #0000003d;
 	text-align: right;
-	line-height: 60px;
+	padding: 0px 10px;
 }
 
 #weapon_ammo_separator {
 	font-weight: bold;
 	font-size: 16px;
-	right: 57px;
-	top: 5px;
-	position: absolute;
 }
 
 #weapon_ammo_bag {
 	font-weight: bold;
 	font-size: 16px;
-	right: 15px;
-	top: 5px;
-	position: absolute;
 }
 
 #weapon_ammo_clip {
 	font-weight: bold;
 	font-size: 32px;
-	position: absolute;
-	right: 67px;
+	line-height: 55px;
 }
 
 #health_container {
@@ -157,30 +155,26 @@ body {
 
 
 #spawn_list {
-	margin: 150px 175px;
-	padding: 5px 10px;
-	position: absolute;
-	right: 0;
-	left: 0;
-	bottom: 0;
+	padding: 5px 20px 5px 10px;
 	overflow-y: scroll;
 	overflow-x: hidden;
-	background-color: rgba(0, 0, 0, 0.5);
-	display: flex;
-	flex-wrap: wrap;
-	align-content: flex-start;
-	top: 20px;
+	position: absolute;
+	bottom: 0;
+	top: 60px;
+	left: 60px;
+	right: 0;
+	grid-template-columns: repeat(auto-fill, 100px);
+	justify-content: space-between;
+	display: grid;
+	grid-gap: 5px;
 }
 
 .spawn_item {
 	cursor: pointer;
-	width: 73px;
+	width: 100px;
 	padding: 5px;
 	text-align: center;
 	display: inline-block;
-	margin: 5px 0;
-	height: 105px;
-	vertical-align: top;
 }
 
 .spawn_item:hover {
@@ -190,34 +184,104 @@ body {
 .spawn_item_image {
 	display: inline-block;
 	width: 100%;
-	height: 70px;
+	height: 100px;
 	background-size: 100% auto;
 	background-position: 50%;
 	pointer-events: none;
 	background-repeat: no-repeat;
+	border-radius: 1px;
 }
 
 .spawn_item_name {
 	text-align: center;
 	display: inline-block;
-	word-break: break-all;
 	font-size: 12px;
 	margin-top: 5px;
 	overflow: hidden;
 	height: 30px;
 	pointer-events: none;
+	word-wrap: break-word;
+}
+
+#spawn_categories {
+	background-color: rgba(0, 0, 0, 0.1);
+	width: 60px;
+	position: absolute;
+	bottom: 0;
+	top: 60px;
+	left: 0;
+	overflow-y: scroll;
+}
+
+.spawn_category {
+	display: block;
+	margin: 14px;
+	cursor: pointer;
+	text-align: center;
+	background-image: url('images/chair.png');
+	height: 40px;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: 50%;
+}
+
+.spawn_category.active {
+	cursor: default;
+	pointer-events: none;
+}
+
+#spawn_options {
+	background-color: rgba(0, 0, 0, 0.1);
+	width: 200px;
+	position: absolute;
+	bottom: 0;
+	top: 60px;
+	right: 0;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	display: none;
+}
+
+.spawn_option {
+	padding: 15px;
+	display: block;
+	background-color: rgba(0, 0, 0, 0.25);
+}
+
+.spawn_option_label {
+	margin-bottom: 10px;
+	display: block;
+}
+
+.spawn_option_checkbox {
+	display: block;
+	grid-template-columns: repeat(auto-fill, 40px);
+	justify-content: space-between;
+	display: grid;
+	grid-gap: 10px;
+	max-height: 300px;
+	overflow-y: scroll;
+	padding: 3px;
+}
+
+.spawn_option_checkbox_item {
+	width: 40px;
+	height: 40px;
+	display: inline-block;
+	cursor: pointer;
+	background-size: 100%;
+}
+
+.spawn_option_checkbox_item.selected {
+	outline: 3px solid #fff;
 }
 
 #tabs {
-	position: absolute;
-	left: 0;
-	margin: 110px 175px;
-	top: 0;
 	height: 60px;
-	background-color: rgba(0, 0, 0, 0.75);
-	right: 0;
+	background-color: rgba(0, 0, 0, 0.4);
 	text-align: center;
 	font-size: 20px;
+	overflow-y: scroll;
 }
 
 .tab {
@@ -231,6 +295,7 @@ body {
 .tab.active {
 	color: #e8b656;
 	cursor: default;
+	pointer-events: none;
 }
 
 .tab.disabled {
@@ -239,61 +304,68 @@ body {
 	pointer-events: none;
 }
 
-.tab:hover {
-}
-
 .tab_name {
 	pointer-events: none;
 }
 
 .tab img {
-	width: 15px;
+	width: 25px;
 	pointer-events: none;
 	vertical-align: middle;
-	margin: 0 5px 2px 0;
+	margin: 0 10px 2px 0;
 }
 
 #label {
 	background-color: #0000007d;
 	position: absolute;
-	bottom: 0;
+	bottom: -30px;
 	right: 0;
 	padding: 5px 10px;
 	opacity: 0;
 	font-size: 14px;
-	margin: 120px 175px;
 	height: 20px;
 }
 
-#asset_packs {
-	display: none;
+#popup_prompt {
+	background-color: #000000c2;
+	width: 800px;
 	position: absolute;
-	left: 0;
-	bottom: 0;
-	height: 240px;
-	margin: 150px 100px;
-	width: 50px;
-	overflow-y: scroll;
-	overflow-x: hidden;
+	left: 50%;
+	top: 50%;
+	margin-left: -400px;
+	text-align: center;
+	height: 110px;
+	display: none;
 }
 
-.asset_pack {
-	width: 50px;
+#popup_prompt #popup_text {
+	background-color: #00000077;
+	font-size: 20px;
+	font-family: 'Poiret One', cursive;
 	height: 50px;
-	display: block;
-	background-color: #484848c2;
-	color: transparent;
-	background-position: 50%;
-	background-size: 75% auto;
-	background-repeat: no-repeat;
+	line-height: 50px;
+	pointer-events: none;
+}
+
+#popup_prompt #popup_input {
+	width: 750px;
+	height: 30px;
+	margin-top: 15px;
+	background: #000;
+	border: none;
+	color: white;
+	padding: 5px;
+}
+
+#popup_prompt #popup_close {
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	border: 1px solid red;
+	line-height: 15px;
+	color: red;
+	background: transparent;
 	cursor: pointer;
-}
-
-.asset_pack:hover {
-  background-color: #5b5b5bc2;
-}
-
-.asset_pack.active {
-	background-color: #222222c7 !important;
-	cursor: default;
 }

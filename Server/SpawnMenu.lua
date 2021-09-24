@@ -5,7 +5,8 @@ function SpawnGenericToolGun(location, rotation, color)
 	tool_gun:SetAmmoSettings(10000000, 0)
 	tool_gun:SetDamage(0)
 	tool_gun:SetSpread(0)
-	tool_gun:SetSightTransform(Vector(0, 0, -13.75), Rotator(-0.5, 0, 0))
+	tool_gun:SetRecoil(0)
+	tool_gun:SetSightTransform(Vector(0, 0, -12.5), Rotator(0, 0, 0))
 	tool_gun:SetLeftHandTransform(Vector(2, -1.5, 0), Rotator(0, 50, 130))
 	tool_gun:SetRightHandOffset(Vector(-35, -5, 5))
 	tool_gun:SetHandlingMode(HandlingMode.SingleHandedWeapon)
@@ -15,7 +16,7 @@ function SpawnGenericToolGun(location, rotation, color)
 	tool_gun:SetSoundAim("nanos-world::A_Rattle")
 	tool_gun:SetSoundFire("nanos-world::A_Simulate_Start")
 	tool_gun:SetAnimationCharacterFire("nanos-world::AM_Mannequin_Sight_Fire")
-	tool_gun:SetCrosshairSetting(CrosshairType.Dot)
+	tool_gun:SetCrosshairMaterial("nanos-world::MI_Crosshair_Dot")
 	tool_gun:SetUsageSettings(false, false)
 
 	tool_gun:SetValue("Color", color, true)
@@ -24,19 +25,24 @@ function SpawnGenericToolGun(location, rotation, color)
 	return tool_gun
 end
 
-
 SpawnMenuItems = {}
 
 -- Event for Spawning and Item from the SpawnMenu
-Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spawn_location, spawn_rotation)
+Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spawn_location, spawn_rotation, selected_option)
 	local character = player:GetControlledCharacter()
 
 	local item = nil
 
 	-- If spawning a Prop
 	if (category == "props") then
-		item = Prop(spawn_location + Vector(0, 0, 100), Rotator(0, spawn_rotation.Yaw + 180, 0), asset_pack .. "::" .. asset)
-		item:SetNetworkAuthority(player)
+		local asset_path = asset_pack .. "::" .. asset
+
+		item = Prop(spawn_location + Vector(0, 0, 50), Rotator(0, spawn_rotation.Yaw + 180, 0), asset_path)
+
+		-- If this Prop is a Breakable Prop, setup it (we only configure Props from Spawn Menu to break*)
+		if (BreakableProps[asset_path]) then
+			SetupBreakableProp(item)
+		end
 	else
 		if (not SpawnMenuItems[asset_pack] or not SpawnMenuItems[asset_pack][category] or not SpawnMenuItems[asset_pack][category][asset]) then
 			Package.Error("Failed to find item to spawn: Asset Pack '%s'. Category '%s'. Asset '%s'.", asset_pack, category, asset)
@@ -71,6 +77,11 @@ Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 				if (current_picking_weapon) then current_picking_weapon:Destroy() end
 
 				character:PickUp(item)
+
+				-- workaround
+				if (selected_option ~= "") then
+					ApplyWeaponPattern(item, selected_option)
+				end
 			elseif (category == "vehicles") then
 				character:EnterVehicle(item, 0)
 			end
@@ -108,14 +119,26 @@ function AddSpawnMenuItem(asset_pack, category, id, spawn_function, package_name
 	}
 end
 
+-- Function to apply a Texture Pattern in a Weapon (currently only work on default nanos world Weapons as their materials are prepared beforehand)
+function ApplyWeaponPattern(weapon, pattern_texture)
+	weapon:SetMaterialTextureParameter("PatternTexture", pattern_texture)
+	weapon:SetMaterialScalarParameter("PatternBlend", pattern_texture ~= "" and 1 or 0)
+	weapon:SetMaterialScalarParameter("PatternTiling", 2)
+	weapon:SetMaterialScalarParameter("PatternRoughness", 0.3)
+end
+
+Events.Subscribe("ApplyWeaponPattern", function(player, weapon, pattern_texture)
+	ApplyWeaponPattern(weapon, pattern_texture)
+end)
+
 -- Exported functions cannot have functions as arguments, so we get the package name and package_function name and call it the proper way
 Package.Export("AddSpawnMenuItem", function(asset_pack, category, id, package_name, package_function)
 	AddSpawnMenuItem(asset_pack, category, id, nil, package_name, package_function)
 end)
 
 -- Adds the default NanosWorld items
-Package.RequirePackage("NanosWorldWeapons")
-Package.RequirePackage("NanosWorldVehicles")
+Package.RequirePackage("nanos-world-weapons")
+Package.RequirePackage("nanos-world-vehicles")
 
 -- Default Weapons
 AddSpawnMenuItem("nanos-world", "weapons", "AK47", NanosWorldWeapons.AK47)
@@ -124,10 +147,21 @@ AddSpawnMenuItem("nanos-world", "weapons", "AP5", NanosWorldWeapons.AP5)
 AddSpawnMenuItem("nanos-world", "weapons", "AR4", NanosWorldWeapons.AR4)
 AddSpawnMenuItem("nanos-world", "weapons", "GE36", NanosWorldWeapons.GE36)
 AddSpawnMenuItem("nanos-world", "weapons", "Glock", NanosWorldWeapons.Glock)
+AddSpawnMenuItem("nanos-world", "weapons", "Makarov", NanosWorldWeapons.Makarov)
+AddSpawnMenuItem("nanos-world", "weapons", "UMP45", NanosWorldWeapons.UMP45)
+AddSpawnMenuItem("nanos-world", "weapons", "M1911", NanosWorldWeapons.M1911)
+AddSpawnMenuItem("nanos-world", "weapons", "GE3", NanosWorldWeapons.GE3)
+AddSpawnMenuItem("nanos-world", "weapons", "AK5C", NanosWorldWeapons.AK5C)
 AddSpawnMenuItem("nanos-world", "weapons", "DesertEagle", NanosWorldWeapons.DesertEagle)
 AddSpawnMenuItem("nanos-world", "weapons", "Moss500", NanosWorldWeapons.Moss500)
 AddSpawnMenuItem("nanos-world", "weapons", "SMG11", NanosWorldWeapons.SMG11)
 AddSpawnMenuItem("nanos-world", "weapons", "ASVal", NanosWorldWeapons.ASVal)
+AddSpawnMenuItem("nanos-world", "weapons", "Ithaca37", NanosWorldWeapons.Ithaca37)
+AddSpawnMenuItem("nanos-world", "weapons", "Rem870", NanosWorldWeapons.Rem870)
+AddSpawnMenuItem("nanos-world", "weapons", "P90", NanosWorldWeapons.P90)
+AddSpawnMenuItem("nanos-world", "weapons", "SPAS12", NanosWorldWeapons.SPAS12)
+AddSpawnMenuItem("nanos-world", "weapons", "SA80", NanosWorldWeapons.SA80)
+AddSpawnMenuItem("nanos-world", "weapons", "AWP", NanosWorldWeapons.AWP)
 AddSpawnMenuItem("nanos-world", "weapons", "Grenade", function(location, rotation) return Grenade(location, rotation, "nanos-world::SM_Grenade_G67") end)
 
 -- Default Vehicles
@@ -157,3 +191,5 @@ Package.Require("Tools/Weld.lua")
 -- Extra
 Package.Require("NPC.lua")
 Package.Require("Weapons/HFG.lua")
+Package.Require("Weapons/VeggieGun.lua")
+Package.Require("Entities/Breakable.lua")

@@ -63,9 +63,8 @@ Events.Subscribe("UpdateObjectPosition", function(player, object, location, rota
     -- Maybe the server is closing?
     if (not object) then return end
 
-    local interp_speed = 10
-    object:TranslateTo(location, interp_speed)
-    object:RotateTo(rotation, interp_speed)
+    object:TranslateTo(location, 15)
+    object:RotateTo(rotation, 10)
 
     -- Only updates the Network Authority if this entity is network distributed
     if (object:IsNetworkDistributed()) then
