@@ -60,8 +60,11 @@ Package.Subscribe("Load", function()
 					sub_category = asset_category or "uncategorized"
 				})
 			end
+		end
 
-			main_hud:CallEvent("AddAssetPack", asset_pack.Path, JSON.stringify(SpawnMenuItems[asset_pack.Path]))
+		-- Iterate each Asset Pack to add to Spawn Menu
+		for asset_pack, asset_pack_data in pairs(SpawnMenuItems) do
+			main_hud:CallEvent("AddAssetPack", asset_pack, JSON.stringify(asset_pack_data))
 		end
 	end, 1000)
 end)
@@ -82,6 +85,7 @@ Client.Subscribe("KeyPress", function(key)
 		main_hud:CallEvent("ToggleSpawnMenuVisibility", true)
 		Client.SetMouseEnabled(true)
 		Client.SetChatVisibility(false)
+		main_hud:BringToFront()
 		return
 	end
 end)

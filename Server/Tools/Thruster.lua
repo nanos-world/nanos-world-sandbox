@@ -8,7 +8,7 @@ Events.Subscribe("SpawnThruster", function(player, spawn_location, direction, en
 
 	-- Spawns a Particle and attaches it to the thruster
 	local particle = Particle(spawn_location, Rotator(), "nanos-world::P_Fire", false, true)
-	particle:AttachTo(thruster, AttachmentRule.SnapToTarget, "", true)
+	particle:AttachTo(thruster, AttachmentRule.SnapToTarget, "", 0)
 	particle:SetRelativeLocation(rotation:RotateVector(direction * 40))
 
 	-- Adds a constant force to the Thruster
