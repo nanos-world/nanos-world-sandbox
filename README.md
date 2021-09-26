@@ -18,13 +18,13 @@ Package.Subscribe("Load", function()
 	-- Package.Call("sandbox", "AddSpawnMenuItem", "YOUR_CUSTOM_PACK_NAME", "TAB", "TOOL_ID", "TOOL_LABEL", "IMAGE_PATH", "CATEGORY")
 
 	-- YOUR_CUSTOM_PACK_NAME: Name of your "Pack", just to identify to which "Pack" it belongs - not currently displayed
-	-- TAB: The tab which the item will be displayed, it must be: 'props', 'vehicles', 'weapons', 'tools' or 'vehicles'
+	-- TAB: The tab which the item will be displayed, it must be: 'props', 'weapons', 'tools' or 'vehicles'
 	-- TOOL_ID: An unique identifier for your Item
 	-- TOOL_LABEL: The Text which will be displayed in the Spawn Menu
 	-- IMAGE_PATH: The Icon which will be displayed in the Spawn Menu
 	-- CATEGORY: The category to display your item in the sidebar, currently valid categories are:
-	--		Prop: 'basic', 'appliances', 'construction', 'furniture', 'funny', 'tools', 'food', 'street', 'nature' or 'uncategorized'
-	--		Weapon: 'rifles', 'smgs', 'pistols', 'shotguns', 'sniper-rifles', 'special' or 'grenades'
+	--	Prop: 'basic', 'appliances', 'construction', 'furniture', 'funny', 'tools', 'food', 'street', 'nature' or 'uncategorized'
+	--	Weapon: 'rifles', 'smgs', 'pistols', 'shotguns', 'sniper-rifles', 'special' or 'grenades'
 
 	-- Example:
 	-- Calls the sandbox method to add my weapon to the SpawnMenu
@@ -61,7 +61,7 @@ Package.Subscribe("Load", function()
 	-- Package.Call("sandbox", "AddSpawnMenuItem", "YOUR_CUSTOM_PACK_NAME", "TAB", "TOOL_ID", "PACKAGE_PATH", "PACKAGE_FUNCTION_NAME")
 
 	-- YOUR_CUSTOM_PACK_NAME: Name of your "Pack", just to identify to which "Pack" it belongs - not currently displayed
-	-- TAB: The tab which the item will be displayed, it must be: 'props', 'vehicles', 'weapons', 'tools' or 'vehicles'
+	-- TAB: The tab which the item will be displayed, it must be: 'props', 'weapons', 'tools' or 'vehicles'
 	-- TOOL_ID: An unique identifier for your Item
 	-- PACKAGE_PATH: The Package Path which this Item belongs
 	-- PACKAGE_FUNCTION_NAME: The Exported Function to spawn the Item
@@ -72,5 +72,14 @@ Package.Subscribe("Load", function()
 	return false
 end)
 ```
+
+
+## Example of packages which exports Items to Spawn Menu
+
+Those Packages can be loaded together Sandbox as well!
+
+- https://github.com/nanos-world/nanos-world-quaternius
+- https://github.com/gtnardy/nanos-world-ts-fireworks
+
 
 ![image](https://user-images.githubusercontent.com/6226807/121760136-9a5a1c00-caff-11eb-8478-9694135d1378.png)
