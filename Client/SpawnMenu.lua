@@ -190,20 +190,20 @@ function TraceFor(trace_max_distance, collision_channel)
 end
 
 -- Function for Adding new Spawn Menu items
-function AddSpawnMenuItem(asset_pack, category, id, name, image, sub_category)
+function AddSpawnMenuItem(asset_pack, tab, id, name, image, category)
 	if (not SpawnMenuItems[asset_pack]) then
 		SpawnMenuItems[asset_pack] = {}
 	end
 
-	if (not SpawnMenuItems[asset_pack][category]) then
-		SpawnMenuItems[asset_pack][category] = {}
+	if (not SpawnMenuItems[asset_pack][tab]) then
+		SpawnMenuItems[asset_pack][tab] = {}
 	end
 
-	table.insert(SpawnMenuItems[asset_pack][category], {
+	table.insert(SpawnMenuItems[asset_pack][tab], {
 		id = id,
 		name = name,
 		image = image,
-		sub_category = sub_category
+		sub_category = category
 	})
 end
 
