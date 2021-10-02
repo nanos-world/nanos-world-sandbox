@@ -322,12 +322,14 @@ function SpawnPlayer(player, location, rotation)
 			end
 		end, 5000, new_char)
 	end)
-
-	Server.BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has joined the server")
 end
 
 -- When Player Connects, spawns a new Character and gives it to him
-Player.Subscribe("Spawn", SpawnPlayer)
+Player.Subscribe("Spawn", function(player)
+	Server.BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has joined the server")
+
+	SpawnPlayer(player)
+end)
 
 -- Called when Character respawns
 Character.Subscribe("Respawn", function(character)
@@ -408,6 +410,8 @@ Package.Subscribe("Load", function()
 			end
 		end
 	end
+
+	Server.BroadcastChatMessage("The package <cyan>Sandbox</> has been reloaded!")
 end)
 
 -- Exposes this to other packages

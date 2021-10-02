@@ -33,6 +33,11 @@ Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 
 	local item = nil
 
+	if (category == "vehicles") then
+		spawn_location = character:GetLocation() + Vector(0, 0, 100)
+		spawn_rotation = character:GetRotation()
+	end
+
 	-- If spawning a Prop
 	if (category == "props") then
 		local asset_path = asset_pack .. "::" .. asset
@@ -53,9 +58,9 @@ Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 
 		-- If this has a spawn function, uses it, otherwise uses the Package Call method because it may have been created by another package
 		if (spawn_menu_item.spawn_function) then
-			item = spawn_menu_item.spawn_function(spawn_location, spawn_rotation)
+			item = spawn_menu_item.spawn_function(spawn_location, spawn_rotation, asset_pack, category, asset)
 		else
-			item = Package.Call(spawn_menu_item.package_name, spawn_menu_item.package_function, spawn_location, spawn_rotation)
+			item = Package.Call(spawn_menu_item.package_name, spawn_menu_item.package_function, spawn_location, spawn_rotation, asset_pack, category, asset)
 		end
 
 		if (category == "tools") then
@@ -72,11 +77,21 @@ Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 
 		if (character) then
 			if (category == "weapons" or category == "tools") then
-				-- Destroys the current picked up item
+				-- Stores the old Aim Mode
+				local current_aiming_mode = character:GetWeaponAimMode()
 				local current_picking_weapon = character:GetPicked()
+
+				-- Destroys the current picked up item
 				if (current_picking_weapon) then current_picking_weapon:Destroy() end
 
 				character:PickUp(item)
+
+				-- If has previous Aim Mode, sets it again after some small delay
+				if (current_aiming_mode ~= AimMode.None) then
+					Timer.SetTimeout(function(c, am)
+						c:SetWeaponAimMode(am)
+					end, 150, character, current_aiming_mode)
+				end
 
 				-- workaround
 				if (selected_option ~= "") then

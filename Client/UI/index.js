@@ -300,7 +300,7 @@ function ToggleOptions(enable) {
 	}
 }
 
-function SelectOption(element) {
+function SelectOption(element, force_no_event) {
 	const texture_path = element.dataset.texture;
 
 	const old_option_selected = document.querySelector(".spawn_option_checkbox_item.selected");
@@ -309,7 +309,8 @@ function SelectOption(element) {
 
 	element.classList.add("selected");
 
-	Events.Call("SelectOption", texture_path);
+	if (!force_no_event)
+		Events.Call("SelectOption", texture_path);
 }
 
 function AddOption(name, texture, texture_thumbnail) {
@@ -347,7 +348,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		AddOption(`Pattern #${i}`, `assets///nanos-world/Textures/Pattern/${PatternList[i]}`, `assets///nanos-world/Textures/Pattern/Thumbnails/${PatternList[i]}`);
 	}
 
-	SelectOption(document.querySelectorAll(".spawn_option_checkbox_item")[0]);
+	SelectOption(document.querySelectorAll(".spawn_option_checkbox_item")[0], true);
 
 	// const tabs = document.querySelectorAll(".tab");
 

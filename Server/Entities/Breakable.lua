@@ -1,3 +1,12 @@
+-- Checks for existing Props (maybe loaded by map-script) and apply Breakable on them, if applicable
+Package.Subscribe("Load", function()
+	for k, prop in pairs(Prop.GetAll()) do
+		if (BreakableProps[prop:GetAssetName()]) then
+			SetupBreakableProp(prop)
+		end
+	end
+end)
+
 -- Function to setup the Prop to be able to Break (usually called by SpawnMenu)
 function SetupBreakableProp(prop)
 	-- Checks if this Prop can be breakable (a.k.a. was configured previously with SetBreakableProp)
@@ -7,24 +16,18 @@ function SetupBreakableProp(prop)
 		return
 	end
 
-	if (breakable_data.explosive and breakable_data.explosive.inflamable) then
-		-- Subscribes when it hits
-		prop:Subscribe("Hit", function(breakable, intensity, normal_impulse, impact_location, velocity)
-			BreakProp(breakable, intensity, velocity)
-		end)
+	-- Subscribes when it hits
+	prop:Subscribe("Hit", function(breakable, intensity, normal_impulse, impact_location, velocity)
+		BreakProp(breakable, intensity, velocity)
+	end)
 
-		-- Subscribes when it takes damage
+	-- Subscribes when it takes damage
+	if (breakable_data.explosive and breakable_data.explosive.inflamable) then
+		-- If it's explosive, then first ignites, then explodes
 		prop:Subscribe("TakeDamage", function(self, damage, bone_name, damage_type, hit_from_direction, instigator, causer)
-			-- First ignites, then explodes
 			InflameProp(self)
 		end)
 	else
-		-- Subscribes when it hits
-		prop:Subscribe("Hit", function(breakable, intensity, normal_impulse, impact_location, velocity)
-			BreakProp(breakable, intensity, velocity)
-		end)
-
-		-- Subscribes when it takes damage
 		prop:Subscribe("TakeDamage", function(breakable, damage, bone_name, damage_type, hit_from_direction, instigator, causer)
 			BreakProp(breakable, damage * 50, Vector())
 		end)
@@ -42,9 +45,10 @@ function InflameProp(prop)
 
 	if (prop:GetValue("IsLeaking")) then
 		local location = prop:GetLocation()
+		local scale = prop:GetScale()
 		prop:Destroy()
 
-		ExplodeProp(location, breakable_data.explosive)
+		ExplodeProp(location, breakable_data.explosive, scale.X)
 		return
 	end
 
@@ -61,9 +65,10 @@ function InflameProp(prop)
 
 	Timer.Bind(Timer.SetTimeout(function(explosible)
 		local location = explosible:GetLocation()
+		local scale = explosible:GetScale()
 		explosible:Destroy()
 
-		ExplodeProp(location, breakable_data.explosive)
+		ExplodeProp(location, breakable_data.explosive, scale.X)
 	end, (breakable_data.explosive.inflamable.duration or 5000) * math.random(75, 125) / 100, prop), prop)
 end
 
@@ -120,21 +125,21 @@ function BreakProp(prop, intensity, velocity)
 	end
 
 	if (breakable_data.explosive) then
-		ExplodeProp(parent_location, breakable_data.explosive)
+		ExplodeProp(parent_location, breakable_data.explosive, parent_scale.X)
 	end
 end
 
 -- This will "explode" a Explodable Prop
-function ExplodeProp(location, explosive_data)
+function ExplodeProp(location, explosive_data, scale)
 	-- Spawns a Grenade to explode it immediately
 	local grenade = Grenade(location, Rotator(), "nanos-world::SM_None", "nanos-world::P_Grenade_Special", "nanos-world::A_Explosion_Large", CollisionType.StaticOnly, false)
 
 	-- Configures the Damge
 	grenade:SetDamage(
-		explosive_data.base_damage or 50,
+		(explosive_data.base_damage or 50) * (scale or 1),
 		explosive_data.minimum_damage or 0,
-		explosive_data.damage_inner_radius or 200,
-		explosive_data.damage_outer_radius or 1000,
+		(explosive_data.damage_inner_radius or 200) * (scale or 1),
+		(explosive_data.damage_outer_radius or 1000) * (scale or 1),
 		explosive_data.damage_falloff or 1
 	)
 
@@ -346,7 +351,7 @@ SetBreakableProp("nanos-world::SM_PropaneTank_02", 700, {}, {
 })
 
 SetBreakableProp("nanos-world::SM_TallGasCanister_01", 700, {}, {
-	damage_outer_radius = 1500,
+	damage_outer_radius = 1250,
 	inflamable = {
 		duration = 5000,
 		force = -115000,

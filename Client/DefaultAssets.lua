@@ -459,6 +459,18 @@ DEFAULT_ASSET_PACK = {
 	["SM_KidsBox_07"] = "funny",
 	["SM_KidsBox_08"] = "funny",
 
+	["SM_DigitalPiano"] = "funny",
+	["SM_ElectricGuitar"] = "funny",
+	["SM_Flute"] = "funny",
+	["SM_Gramophone"] = "funny",
+	["SM_Guitar"] = "funny",
+	["SM_HalfStack_Marshall"] = "funny",
+	["SM_Piano"] = "funny",
+	["SM_Saxophone"] = "funny",
+	["SM_Trumpet"] = "funny",
+	["SM_Violin"] = "funny",
+	["SM_Violin_Bow"] = "funny",
+
 	["SM_Shuriken_01"] = "tools",
 	["SM_PipeWrench_01"] = "tools",
 	["SM_Kunai_01"] = "tools",
