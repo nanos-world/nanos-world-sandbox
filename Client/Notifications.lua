@@ -31,6 +31,7 @@ end
 Events.Subscribe("SetNotification", SetNotification)
 
 -- Setup some default notifications
-SetNotification("PARACHUTE", 10000, "you can press space while falling to open your parachute", 5000)
-SetNotification("VIEW_MODE", 50000, "you can press V to change the View Mode", 5000)
-SetNotification("CAMERA_SIDE", 70000, "you can press Middle Mouse Button to change the Camera Side", 5000)
+SetNotification("PARACHUTE", 10000, "you can press space while falling to open your parachute", 10000)
+SetNotification("VIEW_MODE", 50000, "you can press V to change the View Mode", 10000)
+SetNotification("CAMERA_SIDE", 70000, "you can press Middle Mouse Button to change the Camera Side", 10000)
+SetNotification("PARACHUTE", 100000, "you can press C to open the Context Menu", 10000)

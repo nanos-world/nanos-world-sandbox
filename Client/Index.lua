@@ -7,6 +7,12 @@ World.SetTime((gmt_time.hour * 60 + gmt_time.min) % 24, gmt_time.sec)
 
 -- All notifications already sent
 PERSISTENT_DATA_NOTIFICATIONS = {}
+PERSISTENT_DATA_SETTINGS = {
+	KeyBindings = {
+		SpawnMenu = "Q",
+		ContextMenu = "C"
+	}
+}
 
 -- Spawns Sandbox HUD
 main_hud = WebUI("Sandbox HUD", "file:///UI/index.html")
@@ -25,6 +31,9 @@ end)
 
 -- When package loads, verify if LocalPlayer already exists (eg. when reloading the package), then try to get and store it's controlled character
 Package.Subscribe("Load", function()
+	Client.SetMouseEnabled(false)
+	Client.SetInputEnabled(true)
+
 	local local_player = Client.GetLocalPlayer()
 
 	if (local_player ~= nil) then
@@ -37,6 +46,7 @@ Package.Subscribe("Load", function()
 
 	-- Gets all notifications already sent
 	PERSISTENT_DATA_NOTIFICATIONS = Package.GetPersistentData().notifications or {}
+	PERSISTENT_DATA_SETTINGS = Package.GetPersistentData().settings or PERSISTENT_DATA_SETTINGS
 
 	-- Updates all existing Players
 	for k, player in pairs(Player.GetAll()) do
@@ -85,8 +95,8 @@ function UpdateLocalCharacter(character)
 			UpdateAmmo(true, object:GetAmmoClip(), object:GetAmmoBag())
 
 			-- Trigger Weapon Hints
-			SetNotification("AIM_DOWN_SIGHT", 3000, "you can use mouse wheel to aim down sight with your Weapon when you are in First Person Mode", 5000)
-			SetNotification("HEADSHOTS", 15000, "headshots can cause more damage", 5000)
+			SetNotification("AIM_DOWN_SIGHT", 3000, "you can use mouse wheel to aim down sight with your Weapon when you are in First Person Mode", 10000)
+			SetNotification("HEADSHOTS", 15000, "headshots can cause more damage", 10000)
 
 			-- Sets on character an event to update the UI when he fires
 			character:Subscribe("Fire", function(charac, weapon)
@@ -133,6 +143,18 @@ end)
 Player.Subscribe("Destroy", function(player)
 	main_hud:CallEvent("ToggleVoice", player:GetName(), false)
 	main_hud:CallEvent("UpdatePlayer", player:GetID(), false)
+end)
+
+-- Called from Context Menu
+main_hud:Subscribe("SetKeyBindings", function(keybindings_spawnmenu, keybindings_contextmenu)
+	PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu = string.upper(keybindings_spawnmenu)
+	PERSISTENT_DATA_SETTINGS.KeyBindings.ContextMenu = string.upper(keybindings_contextmenu)
+	Package.SetPersistentData("settings", PERSISTENT_DATA_SETTINGS)
+end)
+
+-- Called from Context Menu
+main_hud:Subscribe("ChangeTimeOfDay", function(hours, minutes)
+	World.SetTime(hours, minutes)
 end)
 
 Events.Subscribe("SpawnSound", function(location, sound_asset, is_2D, volume, pitch)

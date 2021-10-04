@@ -135,21 +135,20 @@ body {
 	position: absolute;
 	bottom: 30px;
 	left: 30px;
-	width: 120px;
 	height: 55px;
 	background-color: #0000003d;
 	line-height: 60px;
+	padding: 0px 10px;
+	min-width: 90px;
 }
 
 #health_container img {
-	height: 50%;
-	margin: 13px;
+	height: 25px;
+	margin-right: 5px;
 }
 
 #health_current {
-	font-size: 27px;
-	position: absolute;
-	text-align: center;
+	font-size: 30px;
 	font-weight: bold;
 }
 
@@ -368,4 +367,64 @@ body {
 	color: red;
 	background: transparent;
 	cursor: pointer;
+}
+
+#context_menu {
+	background-color: #0000005e;
+	position: absolute;
+	right: 30px;
+	bottom: 50%;
+	width: 500px;
+	display: none;
+}
+
+#context_menu_header {
+	background-color: #00000086;
+	font-family: 'Poiret One', cursive;
+	height: 50px;
+	text-align: center;
+	line-height: 45px;
+	font-size: 25px;
+	cursor: default;
+}
+
+#context_menu_close {
+	position: absolute;
+	right: 15px;
+	color: #ff2626;
+	font-family: Gothic A1;
+	border: 1px solid;
+	padding: 0;
+	height: 30px;
+	width: 30px;
+	top: 10px;
+	line-height: 32px;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+#context_menu_close:hover {
+	color: #b31c1c;
+}
+
+.context_menu_item {
+	padding: 10px;
+}
+
+.context_menu_label {
+	display: block;
+	font-weight: bold;
+	cursor: default;
+}
+
+#time_of_day_slide {
+	width: 100%;
+}
+
+#context_menu_keybindings input {
+	height: 30px;
+	width: 30px;
+	text-transform: uppercase;
+	margin: 5px;
+	text-align: center;
 }

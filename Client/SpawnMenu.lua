@@ -10,6 +10,8 @@ SpawnMenuItems = {}
 -- WORKAROUND used for weapons Patterns
 SelectedOption = ""
 
+ContextMenuOpened = false
+
 -- Configures the Highlight colors to be used
 Client.SetHighlightColor(Color(0, 20, 0, 1.20), 0, HighlightMode.Always) -- Index 0
 
@@ -71,7 +73,7 @@ end)
 
 Client.Subscribe("KeyUp", function(key)
 	-- Toggle the Spawn Menu off
-	if (key == "Q") then
+	if (key == PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu) then
 		main_hud:CallEvent("ToggleSpawnMenuVisibility", false)
 		Client.SetMouseEnabled(false)
 		Client.SetChatVisibility(true)
@@ -81,13 +83,45 @@ end)
 
 Client.Subscribe("KeyPress", function(key)
 	-- Toggle the Spawn Menu on
-	if (key == "Q") then
+	if (key == PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu) then
 		main_hud:CallEvent("ToggleSpawnMenuVisibility", true)
 		Client.SetMouseEnabled(true)
 		Client.SetChatVisibility(false)
 		main_hud:BringToFront()
 		return
+	elseif (key == PERSISTENT_DATA_SETTINGS.KeyBindings.ContextMenu) then
+		if (ContextMenuOpened) then
+			main_hud:CallEvent("ToggleContextMenuVisibility", false)
+
+			Client.SetInputEnabled(true)
+			Client.SetMouseEnabled(false)
+			Client.SetChatVisibility(true)
+
+			ContextMenuOpened = false
+		else
+			-- Opens context menu with updated data
+			local time = World.GetTime()
+			main_hud:CallEvent("ToggleContextMenuVisibility", true, time.hours, time.minutes, PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu, PERSISTENT_DATA_SETTINGS.KeyBindings.ContextMenu)
+
+			Client.SetInputEnabled(false)
+			Client.SetMouseEnabled(true)
+			Client.SetChatVisibility(false)
+
+			main_hud:BringToFront()
+			main_hud:SetFocus()
+
+			ContextMenuOpened = true
+		end
+		return
 	end
+end)
+
+-- Called from Context Menu when pressing X
+main_hud:Subscribe("CloseContextMenu", function()
+	Client.SetInputEnabled(true)
+	Client.SetMouseEnabled(false)
+	Client.SetChatVisibility(true)
+	ContextMenuOpened = false
 end)
 
 Client.Subscribe("KeyDown", function(key)
@@ -276,5 +310,5 @@ AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_ClassicMale", "Classic 
 AddSpawnMenuItem("nanos-world", "tools", "Torch", "Torch", "assets///NanosWorld/Thumbnails/SM_Torch.jpg")
 
 -- Defines some Spawn Menu Hints
-SetNotification("SPAWN_MENU", 30000, "you can press Q to open the Spawn Menu", 7000)
-SetNotification("SPAWN_MENU_DESTROY_ITEM", 90000, "you can press X to delete your last spawned item", 5000)
+SetNotification("SPAWN_MENU", 30000, "you can press Q to open the Spawn Menu", 10000)
+SetNotification("SPAWN_MENU_DESTROY_ITEM", 90000, "you can press X to delete your last spawned item", 10000)

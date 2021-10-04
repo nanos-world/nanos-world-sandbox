@@ -55,6 +55,19 @@
 			</form>
 		</div>
 
+		<div id="context_menu">
+			<div id="context_menu_header">context menu <span id="context_menu_close">X</span></div>
+			<div class="context_menu_item" id="context_menu_time_of_day">
+				<span class="context_menu_label">Time of Day (<span id="context_menu_time_of_day_value">9:45</span>)</span>
+				<input type="range" min="0" max="1440" value="720" id="time_of_day_slide">
+			</div>
+			<div class="context_menu_item" id="context_menu_keybindings">
+				<span class="context_menu_label">Sandbox KeyBindings</span>
+				<input type="text" maxlength="1" id="keybindings_spawnmenu"> Spawn Menu<br>
+				<input type="text" maxlength="1" id="keybindings_contextmenu"> Context Menu
+			</div>
+		</div>
+
 		<div id="spawn_menu">
 			<div id="label">Label Description</div>
 			<div id="tabs">

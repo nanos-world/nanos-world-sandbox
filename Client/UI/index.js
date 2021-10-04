@@ -450,6 +450,71 @@ function AddAssetPack(asset_pack_name, data) {
 	RefreshAssets();
 }
 
+function SetTimeOfDayLabel(hours, minutes) {
+	document.querySelector("#context_menu_time_of_day_value").innerHTML = `${('0' + hours).slice(-2)}:${('0' + minutes).slice(-2)}`;
+}
+
+// Aux for debouncing
+var EnabledChangeTimeOfDay = true;
+
+document.addEventListener("DOMContentLoaded", function() {
+	document.querySelector("#time_of_day_slide").addEventListener("input", function(e) {
+		// Debounce
+		if (!EnabledChangeTimeOfDay)
+			return;
+
+		EnabledChangeTimeOfDay = false;
+
+		// After some time, apply the setting
+		setTimeout(function() {
+			const value = e.target.value;
+			const hours = Math.trunc(value / 60);
+			const minutes = value % 60;
+
+			SetTimeOfDayLabel(hours, minutes);
+			Events.Call("ChangeTimeOfDay", hours, minutes);
+			
+			// Enables it again
+			EnabledChangeTimeOfDay = true;
+		}, 33);
+	});
+
+	// Context Menu close button
+	document.querySelector("#context_menu_close").addEventListener("click", function(e) {
+		ToggleContextMenuVisibility(false);
+		Events.Call("CloseContextMenu");
+	});
+
+	// Context Menu Keybinding input, on click select all text
+	document.querySelectorAll("#context_menu_keybindings input").forEach(input => input.addEventListener("click", function(e) {
+		this.select();
+	}));
+});
+
+function ToggleContextMenuVisibility(is_visible, hours, minutes, keybindings_spawnmenu, keybindings_contextmenu) {
+	const context_menu = document.querySelector("#context_menu");
+
+	if (is_visible)
+	{
+		// Sets current time
+		document.querySelector("#time_of_day_slide").value = hours * 60 + minutes;
+		document.querySelector("#keybindings_spawnmenu").value = keybindings_spawnmenu;
+		document.querySelector("#keybindings_contextmenu").value = keybindings_contextmenu;
+		SetTimeOfDayLabel(hours, minutes);
+
+		context_menu.style.display = "block";
+	}
+	else
+	{
+		context_menu.style.display = "none";
+
+		// On close, sends the set keys
+		Events.Call("SetKeyBindings", document.querySelector("#keybindings_spawnmenu").value, document.querySelector("#keybindings_contextmenu").value);
+	}
+}
+
+Events.Subscribe("ToggleContextMenuVisibility", ToggleContextMenuVisibility);
+
 Events.Subscribe("ToggleSpawnMenuVisibility", function(is_visible) {
 	const spawn_menu = document.querySelector("#spawn_menu");
 
