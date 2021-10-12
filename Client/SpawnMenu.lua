@@ -101,7 +101,7 @@ Client.Subscribe("KeyPress", function(key)
 		else
 			-- Opens context menu with updated data
 			local time = World.GetTime()
-			main_hud:CallEvent("ToggleContextMenuVisibility", true, time.hours, time.minutes, PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu, PERSISTENT_DATA_SETTINGS.KeyBindings.ContextMenu)
+			main_hud:CallEvent("ToggleContextMenuVisibility", true, time.hours, time.minutes, PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu, PERSISTENT_DATA_SETTINGS.KeyBindings.ContextMenu, PERSISTENT_DATA_SETTINGS.KeyBindings.Ragdoll, PERSISTENT_DATA_SETTINGS.KeyBindings.NoClip)
 
 			Client.SetInputEnabled(false)
 			Client.SetMouseEnabled(true)
@@ -259,28 +259,28 @@ Package.Require("Tools/Weld.lua")
 
 -- Adds the default NanosWorld items
 -- Default Weapons
-AddSpawnMenuItem("nanos-world", "weapons", "AK47", "AK47", "assets///NanosWorld/Thumbnails/SK_AK47.jpg", "rifles")
-AddSpawnMenuItem("nanos-world", "weapons", "AK5C", "AK5C", "assets///NanosWorld/Thumbnails/SK_AK5C.jpg", "rifles")
-AddSpawnMenuItem("nanos-world", "weapons", "AK74U", "AK74U", "assets///NanosWorld/Thumbnails/SK_AK74U.jpg", "rifles")
-AddSpawnMenuItem("nanos-world", "weapons", "AR4", "AR4", "assets///NanosWorld/Thumbnails/SK_AR4.jpg", "rifles")
-AddSpawnMenuItem("nanos-world", "weapons", "ASVal", "ASVal", "assets///NanosWorld/Thumbnails/SK_ASVal.jpg", "rifles")
-AddSpawnMenuItem("nanos-world", "weapons", "GE3", "GE3", "assets///NanosWorld/Thumbnails/SK_GE3.jpg", "rifles")
-AddSpawnMenuItem("nanos-world", "weapons", "GE36", "GE36", "assets///NanosWorld/Thumbnails/SK_GE36.jpg", "rifles")
-AddSpawnMenuItem("nanos-world", "weapons", "SA80", "SA80", "assets///NanosWorld/Thumbnails/SK_SA80.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "AK47", "AK-47", "assets///NanosWorld/Thumbnails/SK_AK47.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "AK74U", "AK-74U", "assets///NanosWorld/Thumbnails/SK_AK74U.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "AK5C", "Automatkarbin 5C", "assets///NanosWorld/Thumbnails/SK_AK5C.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "AR4", "AR-15", "assets///NanosWorld/Thumbnails/SK_AR4.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "ASVal", "AS-Val", "assets///NanosWorld/Thumbnails/SK_ASVal.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "GE3", "Gewehr 3", "assets///NanosWorld/Thumbnails/SK_GE3.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "GE36", "Gewehr 36", "assets///NanosWorld/Thumbnails/SK_GE36.jpg", "rifles")
+AddSpawnMenuItem("nanos-world", "weapons", "SA80", "SA-80", "assets///NanosWorld/Thumbnails/SK_SA80.jpg", "rifles")
 
-AddSpawnMenuItem("nanos-world", "weapons", "AP5", "AP5", "assets///NanosWorld/Thumbnails/SK_AP5.jpg", "smgs")
+AddSpawnMenuItem("nanos-world", "weapons", "AP5", "MP5", "assets///NanosWorld/Thumbnails/SK_AP5.jpg", "smgs")
 AddSpawnMenuItem("nanos-world", "weapons", "P90", "P90", "assets///NanosWorld/Thumbnails/SK_P90.jpg", "smgs")
-AddSpawnMenuItem("nanos-world", "weapons", "SMG11", "SMG11", "assets///NanosWorld/Thumbnails/SK_SMG11.jpg", "smgs")
-AddSpawnMenuItem("nanos-world", "weapons", "UMP45", "UMP45", "assets///NanosWorld/Thumbnails/SK_UMP45.jpg", "smgs")
+AddSpawnMenuItem("nanos-world", "weapons", "SMG11", "MAC-10", "assets///NanosWorld/Thumbnails/SK_SMG11.jpg", "smgs")
+AddSpawnMenuItem("nanos-world", "weapons", "UMP45", "UMP-45", "assets///NanosWorld/Thumbnails/SK_UMP45.jpg", "smgs")
 
-AddSpawnMenuItem("nanos-world", "weapons", "DesertEagle", "DesertEagle", "assets///NanosWorld/Thumbnails/SK_DesertEagle.jpg", "pistols")
+AddSpawnMenuItem("nanos-world", "weapons", "DesertEagle", "Desert Eagle", "assets///NanosWorld/Thumbnails/SK_DesertEagle.jpg", "pistols")
 AddSpawnMenuItem("nanos-world", "weapons", "Glock", "Glock", "assets///NanosWorld/Thumbnails/SK_Glock.jpg", "pistols")
 AddSpawnMenuItem("nanos-world", "weapons", "Makarov", "Makarov", "assets///NanosWorld/Thumbnails/SK_Makarov.jpg", "pistols")
 AddSpawnMenuItem("nanos-world", "weapons", "M1911", "M1911", "assets///NanosWorld/Thumbnails/SK_M1911.jpg", "pistols")
 
-AddSpawnMenuItem("nanos-world", "weapons", "Ithaca37", "Ithaca37", "assets///NanosWorld/Thumbnails/SK_Ithaca37.jpg", "shotguns")
-AddSpawnMenuItem("nanos-world", "weapons", "Moss500", "Moss500", "assets///NanosWorld/Thumbnails/SK_Moss500.jpg", "shotguns")
-AddSpawnMenuItem("nanos-world", "weapons", "Rem870", "Rem870", "assets///NanosWorld/Thumbnails/SK_Rem870.jpg", "shotguns")
+AddSpawnMenuItem("nanos-world", "weapons", "Ithaca37", "Ithaca 37", "assets///NanosWorld/Thumbnails/SK_Ithaca37.jpg", "shotguns")
+AddSpawnMenuItem("nanos-world", "weapons", "Moss500", "Moss 500", "assets///NanosWorld/Thumbnails/SK_Moss500.jpg", "shotguns")
+AddSpawnMenuItem("nanos-world", "weapons", "Rem870", "Rem 870", "assets///NanosWorld/Thumbnails/SK_Rem870.jpg", "shotguns")
 AddSpawnMenuItem("nanos-world", "weapons", "SPAS12", "SPAS12", "assets///NanosWorld/Thumbnails/SK_SPAS12.jpg", "shotguns")
 
 AddSpawnMenuItem("nanos-world", "weapons", "Grenade", "Grenade", "assets///NanosWorld/Thumbnails/SM_Grenade_G67.jpg", "grenades")

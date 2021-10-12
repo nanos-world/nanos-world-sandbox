@@ -37,6 +37,8 @@ Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 	if (category == "vehicles") then
 		spawn_location = character:GetLocation() + Vector(0, 0, 100)
 		spawn_rotation = character:GetRotation()
+	elseif (category == "tools" or category == "weapons") then
+		spawn_location = character:GetLocation()
 	end
 
 	-- If spawning a Prop
@@ -88,10 +90,8 @@ Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 				character:PickUp(item)
 
 				-- If has previous Aim Mode, sets it again after some small delay
-				if (current_aiming_mode ~= AimMode.None) then
-					Timer.SetTimeout(function(c, am)
-						c:SetWeaponAimMode(am)
-					end, 150, character, current_aiming_mode)
+				if (current_aiming_mode == AimMode.ADS or current_aiming_mode == AimMode.Zoomed or current_aiming_mode == AimMode.ZoomedZoom) then
+					character:SetWeaponAimMode(current_aiming_mode)
 				end
 
 				-- workaround

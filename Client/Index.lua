@@ -10,7 +10,9 @@ PERSISTENT_DATA_NOTIFICATIONS = {}
 PERSISTENT_DATA_SETTINGS = {
 	KeyBindings = {
 		SpawnMenu = "Q",
-		ContextMenu = "C"
+		ContextMenu = "C",
+		Ragdoll = "J",
+		NoClip = "B"
 	}
 }
 
@@ -46,7 +48,12 @@ Package.Subscribe("Load", function()
 
 	-- Gets all notifications already sent
 	PERSISTENT_DATA_NOTIFICATIONS = Package.GetPersistentData().notifications or {}
-	PERSISTENT_DATA_SETTINGS = Package.GetPersistentData().settings or PERSISTENT_DATA_SETTINGS
+
+	local disk_data_settings = Package.GetPersistentData().settings or PERSISTENT_DATA_SETTINGS
+	PERSISTENT_DATA_SETTINGS.KeyBindings.ContextMenu = disk_data_settings.KeyBindings.ContextMenu or PERSISTENT_DATA_SETTINGS.KeyBindings.ContextMenu
+	PERSISTENT_DATA_SETTINGS.KeyBindings.NoClip = disk_data_settings.KeyBindings.NoClip or PERSISTENT_DATA_SETTINGS.KeyBindings.NoClip
+	PERSISTENT_DATA_SETTINGS.KeyBindings.Ragdoll = disk_data_settings.KeyBindings.Ragdoll or PERSISTENT_DATA_SETTINGS.KeyBindings.Ragdoll
+	PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu = disk_data_settings.KeyBindings.SpawnMenu or PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu
 
 	-- Updates all existing Players
 	for k, player in pairs(Player.GetAll()) do
@@ -129,8 +136,11 @@ function UpdateHealth(health)
 end
 
 Client.Subscribe("KeyPress", function(key_name)
-	if (key_name == "B") then
+	if (key_name == PERSISTENT_DATA_SETTINGS.KeyBindings.NoClip) then
 		Events.CallRemote("ToggleNoClip")
+		return
+	elseif (key_name == PERSISTENT_DATA_SETTINGS.KeyBindings.Ragdoll) then
+		Events.CallRemote("EnterRagdoll")
 		return
 	end
 end)
@@ -146,9 +156,11 @@ Player.Subscribe("Destroy", function(player)
 end)
 
 -- Called from Context Menu
-main_hud:Subscribe("SetKeyBindings", function(keybindings_spawnmenu, keybindings_contextmenu)
+main_hud:Subscribe("SetKeyBindings", function(keybindings_spawnmenu, keybindings_contextmenu, keybindings_noclip, keybindings_ragdoll)
 	PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu = string.upper(keybindings_spawnmenu)
 	PERSISTENT_DATA_SETTINGS.KeyBindings.ContextMenu = string.upper(keybindings_contextmenu)
+	PERSISTENT_DATA_SETTINGS.KeyBindings.NoClip = string.upper(keybindings_noclip)
+	PERSISTENT_DATA_SETTINGS.KeyBindings.Ragdoll = string.upper(keybindings_ragdoll)
 	Package.SetPersistentData("settings", PERSISTENT_DATA_SETTINGS)
 end)
 

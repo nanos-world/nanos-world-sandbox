@@ -316,11 +316,17 @@ function SpawnPlayer(player, location, rotation)
 			Server.BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> died")
 		end
 
-		Timer.SetTimeout(function(character)
-			if (character:IsValid() and character:GetHealth() == 0) then
-				character:Respawn()
-			end
-		end, 5000, new_char)
+		-- Respawns the Character after 5 seconds, we Bind the Timer to the Character, this way if the Character gets destroyed in the meanwhile, this Timer never gets destroyed
+		Timer.Bind(
+			Timer.SetTimeout(function(character)
+				-- If he is not dead anymore after 5 seconds, ignores it
+				if (character:GetHealth() ~= 0) then return end
+
+				-- Respawns the Character at a random location
+				character:Respawn(SPAWN_LOCATIONS[math.random(#SPAWN_LOCATIONS)])
+			end, 5000, chara),
+			chara
+		)
 	end)
 end
 
@@ -333,11 +339,6 @@ end)
 
 -- Called when Character respawns
 Character.Subscribe("Respawn", function(character)
-	-- Sets the Initial Character's Location (location where the Character will spawn). After the Respawn event, a
-	-- call for SetLocation(InitialLocation) will be triggered. If you always want something to respawn at the same
-	-- position you do not need to keep setting SetInitialLocation, this is just for respawning at random spots
-	character:SetInitialLocation(SPAWN_LOCATIONS[math.random(#SPAWN_LOCATIONS)])
-
 	-- Resets character's scale to default
 	character:SetScale(Vector(1, 1, 1))
 
@@ -378,6 +379,16 @@ Events.Subscribe("ToggleNoClip", function(player)
 	end
 
 	character:SetValue("NoClip", not is_noclipping)
+end)
+
+Events.Subscribe("EnterRagdoll", function(player)
+	local character = player:GetControlledCharacter()
+	if (not character) then return end
+
+	if (not character:IsMovementEnabled()) then return end
+	if (character:GetVehicle()) then return end
+
+	character:SetRagdollMode(true)
 end)
 
 Package.Subscribe("Unload", function()

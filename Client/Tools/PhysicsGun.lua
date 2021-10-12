@@ -26,8 +26,13 @@ function HandlePhysicsGun(weapon, character)
 	PhysicsGun.weapon = weapon
 
 	-- Subscribes when the player fires with this weapon (turn on the Physics Gun)
-	weapon:Subscribe("Fire", function(weapon, shooter)
+	weapon:Subscribe("PullUse", function(weapon, shooter)
 		TogglePhysicsGunLocal(true)
+	end)
+
+	-- Subscribes when the player stops using this weapon (turn off the Physics Gun)
+	weapon:Subscribe("ReleaseUse", function(weapon, shooter)
+		TogglePhysicsGunLocal(false)
 	end)
 
 	-- Subscribes when I change my AimMode (turn off the Physics Gun)
@@ -172,12 +177,8 @@ end)
 Client.Subscribe("MouseUp", function(key_name)
 	if (not PhysicsGun.weapon) then return end
 
-	-- If released Left Mouse, turns off the Physics Gun
-    if (key_name == "LeftMouseButton") then
-		TogglePhysicsGunLocal(false)
-
 	-- Scrolling will or move the object to far, or rotate it depending on the auxiliar keys pressed
-	elseif (key_name == "MouseScrollUp") then
+	if (key_name == "MouseScrollUp") then
 		if (PhysicsGun.is_rotating_object) then
 			local new_rot = nil
 
@@ -300,7 +301,8 @@ Events.Subscribe("PickUpToolGun_PhysicsGun", function(tool, character)
 end)
 
 Events.Subscribe("DropToolGun_PhysicsGun", function(tool, character)
-	tool:Unsubscribe("Fire")
+	tool:Unsubscribe("PullUse")
+	tool:Unsubscribe("ReleaseUse")
 	character:Unsubscribe("WeaponAimModeChanged")
 
 	TogglePhysicsGunLocal(false)

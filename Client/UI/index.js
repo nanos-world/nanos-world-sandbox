@@ -491,7 +491,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	}));
 });
 
-function ToggleContextMenuVisibility(is_visible, hours, minutes, keybindings_spawnmenu, keybindings_contextmenu) {
+function ToggleContextMenuVisibility(is_visible, hours, minutes, keybindings_spawnmenu, keybindings_contextmenu, keybindings_ragdoll, keybindings_noclip) {
 	const context_menu = document.querySelector("#context_menu");
 
 	if (is_visible)
@@ -500,6 +500,8 @@ function ToggleContextMenuVisibility(is_visible, hours, minutes, keybindings_spa
 		document.querySelector("#time_of_day_slide").value = hours * 60 + minutes;
 		document.querySelector("#keybindings_spawnmenu").value = keybindings_spawnmenu;
 		document.querySelector("#keybindings_contextmenu").value = keybindings_contextmenu;
+		document.querySelector("#keybindings_ragdoll").value = keybindings_ragdoll;
+		document.querySelector("#keybindings_noclip").value = keybindings_noclip;
 		SetTimeOfDayLabel(hours, minutes);
 
 		context_menu.style.display = "block";
@@ -509,7 +511,12 @@ function ToggleContextMenuVisibility(is_visible, hours, minutes, keybindings_spa
 		context_menu.style.display = "none";
 
 		// On close, sends the set keys
-		Events.Call("SetKeyBindings", document.querySelector("#keybindings_spawnmenu").value, document.querySelector("#keybindings_contextmenu").value);
+		Events.Call("SetKeyBindings",
+			document.querySelector("#keybindings_spawnmenu").value,
+			document.querySelector("#keybindings_contextmenu").value,
+			document.querySelector("#keybindings_noclip").value,
+			document.querySelector("#keybindings_ragdoll").value
+		);
 	}
 }
 

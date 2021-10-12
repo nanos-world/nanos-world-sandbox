@@ -10,7 +10,7 @@ function HandleResizerTool(weapon, character)
 	ResizerTool.weapon = weapon
 
 	-- Subscribe when the player fires with this weapon
-	weapon:Subscribe("Fire", function(weapon, shooter)
+	weapon:Subscribe("PullUse", function(weapon, shooter)
 		-- Makes a trace 10000 units ahead
 		local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
 
@@ -24,6 +24,13 @@ function HandleResizerTool(weapon, character)
 			-- If didn't hit anything, plays a negative sound
 			Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
 		end
+	end)
+
+	-- Subscribes when the player stops using this weapon (turn off the Physics Gun)
+	weapon:Subscribe("ReleaseUse", function(weapon, shooter)
+		ResizerTool.resizing_object:SetHighlightEnabled(false)
+		ResizerTool.resizing_object = nil
+		Events.CallRemote("ToggleResizing", false)
 	end)
 
 	-- If changed the AimMode, stops resizing
@@ -41,16 +48,6 @@ end
 
 Client.Subscribe("MouseUp", function(key_name)
 	if (not ResizerTool.weapon) then return end
-
-	-- If released the leftMouse, stops resizing
-    if (key_name == "LeftMouseButton") then
-		if (ResizerTool.resizing_object) then
-			ResizerTool.resizing_object:SetHighlightEnabled(false)
-			ResizerTool.resizing_object = nil
-			Events.CallRemote("ToggleResizing", false)
-		end
-		return
-	end
 
 	-- Scrolls up to increase the scale
 	if (key_name == "MouseScrollUp") then
@@ -91,7 +88,8 @@ Events.Subscribe("PickUpToolGun_ResizerTool", function(tool, character)
 end)
 
 Events.Subscribe("DropToolGun_ResizerTool", function(tool, character)
-	tool:Unsubscribe("Fire")
+	tool:Unsubscribe("PullUse")
+	tool:Unsubscribe("ReleaseUse")
 	character:Unsubscribe("WeaponAimModeChanged")
 
 	if (ResizerTool.resizing_object) then
