@@ -79,7 +79,7 @@ Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 		end
 
 		if (character) then
-			if (category == "weapons" or category == "tools") then
+			if (item:GetType() == "Weapon") then
 				-- Stores the old Aim Mode
 				local current_aiming_mode = character:GetWeaponAimMode()
 				local current_picking_weapon = character:GetPicked()

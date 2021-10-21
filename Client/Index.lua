@@ -21,8 +21,16 @@ main_hud = WebUI("Sandbox HUD", "file:///UI/index.html")
 
 -- Requires the SpawnMenu
 Package.Require("Notifications.lua")
+Package.Require("ContextMenu.lua")
 Package.Require("SpawnMenu.lua")
 Package.Require("Scoreboard.lua")
+
+-- Configures Keybindings Inputs
+Input.Register("NoClip", "B")
+Input.Register("Scoreboard", "Tab")
+Input.Register("Ragdoll", "J")
+Input.Register("SpawnMenu", "Q")
+Input.Register("ContextMenu", "C")
 
 -- When LocalPlayer spawns, sets an event on it to trigger when we possesses a new character, to store the local controlled character locally. This event is only called once, see Package.Subscribe("Load") to load it when reloading a package
 Client.Subscribe("SpawnLocalPlayer", function(local_player)
@@ -135,14 +143,12 @@ function UpdateHealth(health)
 	main_hud:CallEvent("UpdateHealth", health)
 end
 
-Client.Subscribe("KeyPress", function(key_name)
-	if (key_name == PERSISTENT_DATA_SETTINGS.KeyBindings.NoClip) then
-		Events.CallRemote("ToggleNoClip")
-		return
-	elseif (key_name == PERSISTENT_DATA_SETTINGS.KeyBindings.Ragdoll) then
-		Events.CallRemote("EnterRagdoll")
-		return
-	end
+Input.Bind("NoClip", InputEvent.Pressed, function()
+	Events.CallRemote("ToggleNoClip")
+end)
+
+Input.Bind("Ragdoll", InputEvent.Pressed, function()
+	Events.CallRemote("EnterRagdoll")
 end)
 
 -- VOIP UI
@@ -153,20 +159,6 @@ end)
 Player.Subscribe("Destroy", function(player)
 	main_hud:CallEvent("ToggleVoice", player:GetName(), false)
 	main_hud:CallEvent("UpdatePlayer", player:GetID(), false)
-end)
-
--- Called from Context Menu
-main_hud:Subscribe("SetKeyBindings", function(keybindings_spawnmenu, keybindings_contextmenu, keybindings_noclip, keybindings_ragdoll)
-	PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu = string.upper(keybindings_spawnmenu)
-	PERSISTENT_DATA_SETTINGS.KeyBindings.ContextMenu = string.upper(keybindings_contextmenu)
-	PERSISTENT_DATA_SETTINGS.KeyBindings.NoClip = string.upper(keybindings_noclip)
-	PERSISTENT_DATA_SETTINGS.KeyBindings.Ragdoll = string.upper(keybindings_ragdoll)
-	Package.SetPersistentData("settings", PERSISTENT_DATA_SETTINGS)
-end)
-
--- Called from Context Menu
-main_hud:Subscribe("ChangeTimeOfDay", function(hours, minutes)
-	World.SetTime(hours, minutes)
 end)
 
 Events.Subscribe("SpawnSound", function(location, sound_asset, is_2D, volume, pitch)

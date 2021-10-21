@@ -10,8 +10,6 @@ SpawnMenuItems = {}
 -- WORKAROUND used for weapons Patterns
 SelectedOption = ""
 
-ContextMenuOpened = false
-
 -- Configures the Highlight colors to be used
 Client.SetHighlightColor(Color(0, 20, 0, 1.20), 0, HighlightMode.Always) -- Index 0
 
@@ -71,57 +69,17 @@ Package.Subscribe("Load", function()
 	end, 1000)
 end)
 
-Client.Subscribe("KeyUp", function(key)
-	-- Toggle the Spawn Menu off
-	if (key == PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu) then
-		main_hud:CallEvent("ToggleSpawnMenuVisibility", false)
-		Client.SetMouseEnabled(false)
-		Client.SetChatVisibility(true)
-		return
-	end
-end)
-
-Client.Subscribe("KeyPress", function(key)
-	-- Toggle the Spawn Menu on
-	if (key == PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu) then
-		main_hud:CallEvent("ToggleSpawnMenuVisibility", true)
-		Client.SetMouseEnabled(true)
-		Client.SetChatVisibility(false)
-		main_hud:BringToFront()
-		return
-	elseif (key == PERSISTENT_DATA_SETTINGS.KeyBindings.ContextMenu) then
-		if (ContextMenuOpened) then
-			main_hud:CallEvent("ToggleContextMenuVisibility", false)
-
-			Client.SetInputEnabled(true)
-			Client.SetMouseEnabled(false)
-			Client.SetChatVisibility(true)
-
-			ContextMenuOpened = false
-		else
-			-- Opens context menu with updated data
-			local time = World.GetTime()
-			main_hud:CallEvent("ToggleContextMenuVisibility", true, time.hours, time.minutes, PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu, PERSISTENT_DATA_SETTINGS.KeyBindings.ContextMenu, PERSISTENT_DATA_SETTINGS.KeyBindings.Ragdoll, PERSISTENT_DATA_SETTINGS.KeyBindings.NoClip)
-
-			Client.SetInputEnabled(false)
-			Client.SetMouseEnabled(true)
-			Client.SetChatVisibility(false)
-
-			main_hud:BringToFront()
-			main_hud:SetFocus()
-
-			ContextMenuOpened = true
-		end
-		return
-	end
-end)
-
--- Called from Context Menu when pressing X
-main_hud:Subscribe("CloseContextMenu", function()
-	Client.SetInputEnabled(true)
+Input.Bind("SpawnMenu", InputEvent.Released, function()
+	main_hud:CallEvent("ToggleSpawnMenuVisibility", false)
 	Client.SetMouseEnabled(false)
 	Client.SetChatVisibility(true)
-	ContextMenuOpened = false
+end)
+
+Input.Bind("SpawnMenu", InputEvent.Pressed, function()
+	main_hud:CallEvent("ToggleSpawnMenuVisibility", true)
+	Client.SetMouseEnabled(true)
+	Client.SetChatVisibility(false)
+	main_hud:BringToFront()
 end)
 
 Client.Subscribe("KeyDown", function(key)

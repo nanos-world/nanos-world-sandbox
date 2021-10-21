@@ -1,15 +1,10 @@
 -- Toggles the Scoreboard
-Client.Subscribe("KeyUp", function(key_name)
-	if (key_name == "Tab") then
-		main_hud:CallEvent("ToggleScoreboard", false)
-	end
+Input.Bind("Scoreboard", InputEvent.Released, function()
+	main_hud:CallEvent("ToggleScoreboard", false)
 end)
 
--- Toggles the Scoreboard
-Client.Subscribe("KeyDown", function(key_name)
-	if (key_name == "Tab") then
-		main_hud:CallEvent("ToggleScoreboard", true)
-	end
+Input.Bind("Scoreboard", InputEvent.Pressed, function()
+	main_hud:CallEvent("ToggleScoreboard", true)
 end)
 
 -- Updates someone scoreboard data

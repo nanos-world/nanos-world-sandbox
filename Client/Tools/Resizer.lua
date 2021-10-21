@@ -28,9 +28,11 @@ function HandleResizerTool(weapon, character)
 
 	-- Subscribes when the player stops using this weapon (turn off the Physics Gun)
 	weapon:Subscribe("ReleaseUse", function(weapon, shooter)
-		ResizerTool.resizing_object:SetHighlightEnabled(false)
-		ResizerTool.resizing_object = nil
-		Events.CallRemote("ToggleResizing", false)
+		if (ResizerTool.resizing_object) then
+			ResizerTool.resizing_object:SetHighlightEnabled(false)
+			ResizerTool.resizing_object = nil
+			Events.CallRemote("ToggleResizing", false)
+		end
 	end)
 
 	-- If changed the AimMode, stops resizing
