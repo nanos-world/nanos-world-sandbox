@@ -99,7 +99,28 @@ function DeleteItemFromHistory()
 		DeleteItemFromHistory()
 	end
 end
-Input.Bind("Undo", InputEvent.Pressed, DeleteItemFromHistory)
+
+local undoDelay = 0
+local function UndoTick(deltaTime)
+	if (#SpawnsHistory == 0) then -- Don't spam the user with empty history messages
+		Client.Unsubscribe("Tick", UndoTick)
+	end
+
+	undoDelay = undoDelay - deltaTime
+	if undoDelay <= 0 then
+		DeleteItemFromHistory()
+		undoDelay = 0.2
+	end
+end
+
+Input.Bind("Undo", InputEvent.Pressed, function()
+	DeleteItemFromHistory()
+	undoDelay = 3
+	Client.Subscribe("Tick", UndoTick)
+end)
+Input.Bind("Undo", InputEvent.Released, function()
+	Client.Unsubscribe("Tick", UndoTick)
+end)
 
 -- Sound when hovering an Item in the SpawnMenu
 main_hud:Subscribe("HoverSound", function(pitch)
