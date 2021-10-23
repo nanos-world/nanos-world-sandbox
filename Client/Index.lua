@@ -31,6 +31,7 @@ Input.Register("Scoreboard", "Tab")
 Input.Register("Ragdoll", "J")
 Input.Register("SpawnMenu", "Q")
 Input.Register("ContextMenu", "C")
+Input.Register("Undo", "X")
 
 -- When LocalPlayer spawns, sets an event on it to trigger when we possesses a new character, to store the local controlled character locally. This event is only called once, see Package.Subscribe("Load") to load it when reloading a package
 Client.Subscribe("SpawnLocalPlayer", function(local_player)
