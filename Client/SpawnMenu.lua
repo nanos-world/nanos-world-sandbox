@@ -82,14 +82,6 @@ Input.Bind("SpawnMenu", InputEvent.Pressed, function()
 	main_hud:BringToFront()
 end)
 
-Client.Subscribe("KeyDown", function(key)
-	-- Destroy the last spawned item from history
-	if (key == "X") then
-		DeleteItemFromHistory()
-		return
-	end
-end)
-
 -- Function to delete the last item spawned
 function DeleteItemFromHistory()
 	if (#SpawnsHistory == 0) then
@@ -107,6 +99,7 @@ function DeleteItemFromHistory()
 		DeleteItemFromHistory()
 	end
 end
+Input.Bind("Undo", InputEvent.Pressed, DeleteItemFromHistory)
 
 -- Sound when hovering an Item in the SpawnMenu
 main_hud:Subscribe("HoverSound", function(pitch)
