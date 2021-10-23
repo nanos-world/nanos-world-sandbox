@@ -100,24 +100,31 @@ function DeleteItemFromHistory()
 	end
 end
 
-local undoDelay = 0
-local function UndoTick(deltaTime)
-	if (#SpawnsHistory == 0) then -- Don't spam the user with empty history messages
+UndoDelay = 0
+
+function UndoTick(delta_time)
+	-- Don't spam the user with empty history messages
+	if (#SpawnsHistory == 0) then
 		Client.Unsubscribe("Tick", UndoTick)
 	end
 
-	undoDelay = undoDelay - deltaTime
-	if undoDelay <= 0 then
+	UndoDelay = UndoDelay - delta_time
+
+	if UndoDelay <= 0 then
 		DeleteItemFromHistory()
-		undoDelay = 0.2
+		UndoDelay = 0.2
 	end
 end
 
 Input.Bind("Undo", InputEvent.Pressed, function()
+	-- Destroys the first Item
 	DeleteItemFromHistory()
-	undoDelay = 3
+
+	-- Waits 3 seconds then keeps destroying
+	UndoDelay = 3
 	Client.Subscribe("Tick", UndoTick)
 end)
+
 Input.Bind("Undo", InputEvent.Released, function()
 	Client.Unsubscribe("Tick", UndoTick)
 end)

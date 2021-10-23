@@ -100,6 +100,13 @@ Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 				end
 			elseif (category == "vehicles") then
 				character:EnterVehicle(item, 0)
+			elseif (item:GetType() == "Melee" or item:GetType() == "Grenade") then
+				local current_picking_weapon = character:GetPicked()
+
+				-- Destroys the current picked up item
+				if (current_picking_weapon) then current_picking_weapon:Destroy() end
+
+				character:PickUp(item)
 			end
 		end
 	end
