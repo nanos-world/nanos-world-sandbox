@@ -120,8 +120,8 @@ Input.Bind("Undo", InputEvent.Pressed, function()
 	-- Destroys the first Item
 	DeleteItemFromHistory()
 
-	-- Waits 3 seconds then keeps destroying
-	UndoDelay = 3
+	-- Waits 1 seconds then keeps destroying
+	UndoDelay = 1
 	Client.Subscribe("Tick", UndoTick)
 end)
 

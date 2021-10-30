@@ -19,7 +19,13 @@ end)
 
 -- Updates the ping every 5 seconds
 Timer.SetInterval(function()
-	for k, player in pairs(Player.GetAll()) do
+	for k, player in pairs(Player.GetPairs()) do
 		UpdatePlayerScoreboard(player)
 	end
 end, 5000)
+
+Package.Subscribe("Load", function()
+	for k, player in pairs(Player.GetPairs()) do
+		UpdatePlayerScoreboard(player)
+	end
+end)

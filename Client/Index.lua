@@ -63,11 +63,6 @@ Package.Subscribe("Load", function()
 	PERSISTENT_DATA_SETTINGS.KeyBindings.NoClip = disk_data_settings.KeyBindings.NoClip or PERSISTENT_DATA_SETTINGS.KeyBindings.NoClip
 	PERSISTENT_DATA_SETTINGS.KeyBindings.Ragdoll = disk_data_settings.KeyBindings.Ragdoll or PERSISTENT_DATA_SETTINGS.KeyBindings.Ragdoll
 	PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu = disk_data_settings.KeyBindings.SpawnMenu or PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu
-
-	-- Updates all existing Players
-	for k, player in pairs(Player.GetAll()) do
-		UpdatePlayerScoreboard(player)
-	end
 end)
 
 -- Function to set all needed events on local character (to update the UI when it takes damage or dies)
