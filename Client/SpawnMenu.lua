@@ -266,8 +266,8 @@ AddSpawnMenuItem("nanos-world", "weapons", "Grenade", "Grenade", "assets///Nanos
 
 AddSpawnMenuItem("nanos-world", "weapons", "AWP", "AWP", "assets///NanosWorld/Thumbnails/SK_AWP.jpg", "sniper-rifles")
 
-AddSpawnMenuItem("nanos-world", "weapons", "HFG", "HFG", "assets///NanosWorld/Thumbnails/SK_PortalGun.jpg", "special")
-AddSpawnMenuItem("nanos-world", "weapons", "VeggieGun", "Veggie Gun", "assets///NanosWorld/Thumbnails/SK_PortalGun.jpg", "special")
+AddSpawnMenuItem("nanos-world", "weapons", "HFG", "HFG", "assets///NanosWorld/Thumbnails/SK_FlareGun.jpg", "special")
+AddSpawnMenuItem("nanos-world", "weapons", "VeggieGun", "Veggie Gun", "assets///NanosWorld/Thumbnails/SK_FlareGun.jpg", "special")
 
 -- Default Vehicles
 AddSpawnMenuItem("nanos-world", "vehicles", "SUV", "SUV", "assets///NanosWorld/Thumbnails/SK_SUV.jpg")

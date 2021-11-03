@@ -15,8 +15,6 @@ DEFAULT_ASSET_PACK = {
 	["SM_Lamp"] = "furniture",
 	["SM_Flashlight"] = "funny",
 	["SM_Balloon"] = "funny",
-	["SM_Portal_CompanionCube"] = "funny",
-	["SM_Portal_Turret"] = "funny",
 
 	["SM_RockingChair"] = "furniture",
 	["SM_RoundStand"] = "furniture",

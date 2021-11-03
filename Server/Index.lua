@@ -141,95 +141,12 @@ HAIR_TINTS = {
 
 -- List of Spawn Locations
 SPAWN_LOCATIONS = {
-	Vector(0, 0, 300),
-	Vector(100, 0, 300),
-	Vector(-100, 0, 300),
-	Vector(0, 100, 300),
-	Vector(0, -100, 300)
+	Vector(0, 0, 150),
+	Vector(100, 0, 150),
+	Vector(-100, 0, 150),
+	Vector(0, 100, 150),
+	Vector(0, -100, 150)
 }
-
-function SpawnCharacterAlpha(location, rotation)
-	local new_char = Character(location or SPAWN_LOCATIONS[math.random(#SPAWN_LOCATIONS)], rotation or Rotator(), "nanos-world::SK_Male")
-
-	-- Spawns two kind of Characters
-	if (math.random() >= 0.5) then
-		-- Eye Guy
-
-		-- Valve
-		new_char:AddStaticMeshAttached("eye_valve", "nanos-world::SM_Valve", "eye_left", Vector(0, 1, 0), Rotator(-79.1, -58.7, 63.8))
-
-		-- Eye
-		new_char:AddStaticMeshAttached("eye_right", "nanos-world::SM_Eye", "eye_right")
-
-		-- Color
-		new_char:SetMaterialColorParameter("Tint", Color(0.59, 0.73, 0.47))
-		new_char:SetMaterialScalarParameter("BaseColorPower", 1)
-
-		-- Hair
-		new_char:AddStaticMeshAttached("hair", "nanos-world::SM_Hair_Short", "hair_male")
-
-		-- Morph Targets
-		new_char:SetMorphTarget("nose1", 1)
-		new_char:SetMorphTarget("nose2", -1)
-		new_char:SetMorphTarget("brows", -0.3)
-		new_char:SetMorphTarget("mouth", 0.44)
-		new_char:SetMorphTarget("fat", -0.28)
-		new_char:SetMorphTarget("nose3", -0.63)
-		new_char:SetMorphTarget("chin", -0.15)
-		new_char:SetMorphTarget("face", -0.88)
-		new_char:SetMorphTarget("nose4", -1)
-		new_char:SetMorphTarget("skinny", 0.1)
-		new_char:SetMorphTarget("brows2", -0.12)
-		new_char:SetMorphTarget("smirk", 1)
-		new_char:SetMorphTarget("smirk2", 1)
-		new_char:SetMorphTarget("smirk3", 0)
-		new_char:SetMorphTarget("nose6", 0.3)
-		new_char:SetMorphTarget("jaw_forward", -0.6)
-		new_char:SetMorphTarget("lips", -0.16)
-		new_char:SetMorphTarget("lips2", -0.78)
-		new_char:SetMorphTarget("mouth_wide", 0.18)
-		new_char:SetMorphTarget("eyes1", -1)
-		new_char:SetMorphTarget("eyes2", 1)
-		new_char:SetMorphTarget("eyes3", 1)
-		new_char:SetMorphTarget("eyes4", -1)
-		new_char:SetMorphTarget("eyes_retraction", -1)
-		new_char:SetMorphTarget("eyes5", 1)
-		new_char:SetMorphTarget("bodyfat", -1)
-	else
-		-- Nut Guy
-
-		-- Valve
-		new_char:AddStaticMeshAttached("nut_valve", "nanos-world::SM_Valve", "head", Vector(17.82, -7.7, 1.25), Rotator(80, 88, -110))
-
-		-- Eyes
-		new_char:AddStaticMeshAttached("eye_left", "nanos-world::SM_Eye", "eye_left")
-		new_char:AddStaticMeshAttached("eye_right", "nanos-world::SM_Eye", "eye_right")
-
-		-- Color
-		new_char:SetMaterialColorParameter("Tint", Color(0.16, 0.16, 0.05))
-		new_char:SetMaterialScalarParameter("BaseColorPower", 1.25)
-
-		-- Morph Targets
-		new_char:SetMorphTarget("nose1", 1)
-		new_char:SetMorphTarget("nose2", 1)
-		new_char:SetMorphTarget("mouth", 1)
-		new_char:SetMorphTarget("fat", 1)
-		new_char:SetMorphTarget("nose3", -1)
-		new_char:SetMorphTarget("nose4", 1)
-		new_char:SetMorphTarget("jaw", -0.3)
-		new_char:SetMorphTarget("brows2", -1)
-		new_char:SetMorphTarget("angry", 0.15)
-		new_char:SetMorphTarget("nose6", 1)
-		new_char:SetMorphTarget("jaw_forward", 0.42)
-		new_char:SetMorphTarget("lips", 0.5)
-		new_char:SetMorphTarget("lips2", 0.25)
-		new_char:SetMorphTarget("mouth_wide", 0.5)
-		new_char:SetMorphTarget("forehead", -0.5)
-		new_char:SetMorphTarget("bodyfat", 1)
-	end
-
-	return new_char
-end
 
 function SpawnCharacterRandomized(location, rotation, asset)
 	local selected_mesh = asset or CHARACTER_MESHES[math.random(#CHARACTER_MESHES)]
@@ -297,10 +214,7 @@ function SpawnCharacterRandomized(location, rotation, asset)
 end
 
 function SpawnPlayer(player, location, rotation)
-	-- local new_char = SpawnCharacterRandomized(location, rotation)
-
-	-- Temp during event
-	local new_char = SpawnCharacterAlpha(location, rotation)
+	local new_char = SpawnCharacterRandomized(location, rotation)
 
 	player:Possess(new_char)
 

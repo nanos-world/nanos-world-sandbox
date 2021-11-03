@@ -16,7 +16,7 @@ function SpawnGenericToolGun(location, rotation, color)
 	tool_gun:SetSoundAim("nanos-world::A_Rattle")
 	tool_gun:SetSoundFire("nanos-world::A_Simulate_Start")
 	tool_gun:SetParticlesBarrel("nanos-world::P_Weapon_BarrelSmoke")
-	tool_gun:SetAnimationCharacterFire("nanos-world::A_Mannequin_Sight_Fire_Pistol")
+	-- tool_gun:SetAnimationCharacterFire("nanos-world::A_Mannequin_Sight_Fire_Pistol")
 	tool_gun:SetCrosshairMaterial("nanos-world::MI_Crosshair_Dot")
 	tool_gun:SetUsageSettings(false, false)
 
@@ -99,7 +99,14 @@ Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 					ApplyWeaponPattern(item, selected_option)
 				end
 			elseif (category == "vehicles") then
+				-- Removes collision when spawning vehicle
+				item:SetCollision(CollisionType.StaticOnly)
+
+				-- Enters the Character
 				character:EnterVehicle(item, 0)
+
+				-- Restores collision
+				item:SetCollision(CollisionType.Normal)
 			elseif (item:GetType() == "Melee" or item:GetType() == "Grenade") then
 				local current_picking_weapon = character:GetPicked()
 
