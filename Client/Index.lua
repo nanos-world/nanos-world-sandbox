@@ -6,8 +6,8 @@ local gmt_time = os.date("!*t", os.time())
 World.SetTime((gmt_time.hour * 60 + gmt_time.min) % 24, gmt_time.sec)
 
 -- All notifications already sent
-PERSISTENT_DATA_NOTIFICATIONS = {}
-PERSISTENT_DATA_SETTINGS = {
+PERSISTENT_DATA_NOTIFICATIONS = PERSISTENT_DATA_NOTIFICATIONS or {}
+PERSISTENT_DATA_SETTINGS = PERSISTENT_DATA_SETTINGS or {
 	KeyBindings = {
 		SpawnMenu = "Q",
 		ContextMenu = "C",
@@ -17,7 +17,7 @@ PERSISTENT_DATA_SETTINGS = {
 }
 
 -- Spawns Sandbox HUD
-main_hud = WebUI("Sandbox HUD", "file:///UI/index.html")
+MainHUD = MainHUD or WebUI("Sandbox HUD", "file:///UI/index.html")
 
 -- Requires the SpawnMenu
 Package.Require("Notifications.lua")
@@ -126,17 +126,35 @@ function UpdateLocalCharacter(character)
 		UpdateAmmo(false)
 		character:Unsubscribe("Fire")
 		character:Unsubscribe("Reload")
+		ToggleToolGunAiming(object, "", false)
 	end)
+
+	character:Subscribe("WeaponAimModeChanged", function(char, old_state, new_state)
+		print(new_state)
+		local weapon = char:GetPicked()
+		if (not weapon or weapon:GetType() ~= "Weapon") then return end
+
+		local tool_gun = weapon:GetValue("ToolGun")
+		if (not tool_gun) then return end
+
+		print(tool_gun)
+		if (new_state == AimMode.None) then
+			ToggleToolGunAiming(weapon, tool_gun, false)
+		else
+			ToggleToolGunAiming(weapon, tool_gun, true)
+		end
+	end)
+
 end
 
 -- Function to update the Ammo's UI
 function UpdateAmmo(enable_ui, ammo, ammo_bag)
-	main_hud:CallEvent("UpdateWeaponAmmo", enable_ui, ammo, ammo_bag)
+	MainHUD:CallEvent("UpdateWeaponAmmo", enable_ui, ammo, ammo_bag)
 end
 
 -- Function to update the Health's UI
 function UpdateHealth(health)
-	main_hud:CallEvent("UpdateHealth", health)
+	MainHUD:CallEvent("UpdateHealth", health)
 end
 
 Input.Bind("NoClip", InputEvent.Pressed, function()
@@ -149,12 +167,12 @@ end)
 
 -- VOIP UI
 Player.Subscribe("VOIP", function(player, is_talking)
-	main_hud:CallEvent("ToggleVoice", player:GetName(), is_talking)
+	MainHUD:CallEvent("ToggleVoice", player:GetName(), is_talking)
 end)
 
 Player.Subscribe("Destroy", function(player)
-	main_hud:CallEvent("ToggleVoice", player:GetName(), false)
-	main_hud:CallEvent("UpdatePlayer", player:GetID(), false)
+	MainHUD:CallEvent("ToggleVoice", player:GetName(), false)
+	MainHUD:CallEvent("UpdatePlayer", player:GetID(), false)
 end)
 
 Events.Subscribe("SpawnSound", function(location, sound_asset, is_2D, volume, pitch)

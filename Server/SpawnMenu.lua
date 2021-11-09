@@ -99,14 +99,8 @@ Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 					ApplyWeaponPattern(item, selected_option)
 				end
 			elseif (category == "vehicles") then
-				-- Removes collision when spawning vehicle
-				item:SetCollision(CollisionType.StaticOnly)
-
 				-- Enters the Character
 				character:EnterVehicle(item, 0)
-
-				-- Restores collision
-				item:SetCollision(CollisionType.Normal)
 			elseif (item:GetType() == "Melee" or item:GetType() == "Grenade") then
 				local current_picking_weapon = character:GetPicked()
 

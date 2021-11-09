@@ -21,26 +21,35 @@ PhysicsGun = {
 -- We set metamethod with __mode 'k' to make it's values be weak and auto destroyed from the table automatically
 BeamParticles = setmetatable({}, { __mode = 'k' })
 
+-- Handle for pulling Physics Gun trigger
+function PhysicsGunPullUse(weapon, shooter)
+	TogglePhysicsGunLocal(true)
+end
+
+-- Handle for releasing Physics Gun trigger
+function PhysicsGunReleaseUse(weapon, shooter)
+	TogglePhysicsGunLocal(false)
+end
+
+-- Handle for switching aim mode on Physics Gun
+function PhysicsGunWeaponAimModeChanged(self, old_state, new_state)
+	if (new_state == AimMode.None) then
+		TogglePhysicsGunLocal(false)
+	end
+end
+
 -- Method to handle when Player picks up the Tool
 function HandlePhysicsGun(weapon, character)
 	PhysicsGun.weapon = weapon
 
 	-- Subscribes when the player fires with this weapon (turn on the Physics Gun)
-	weapon:Subscribe("PullUse", function(weapon, shooter)
-		TogglePhysicsGunLocal(true)
-	end)
+	weapon:Subscribe("PullUse", PhysicsGunPullUse)
 
 	-- Subscribes when the player stops using this weapon (turn off the Physics Gun)
-	weapon:Subscribe("ReleaseUse", function(weapon, shooter)
-		TogglePhysicsGunLocal(false)
-	end)
+	weapon:Subscribe("ReleaseUse", PhysicsGunReleaseUse)
 
 	-- Subscribes when I change my AimMode (turn off the Physics Gun)
-	character:Subscribe("WeaponAimModeChanged", function(self, old_state, new_state)
-		if (new_state == AimMode.None) then
-			TogglePhysicsGunLocal(false)
-		end
-	end)
+	character:Subscribe("WeaponAimModeChanged", PhysicsGunWeaponAimModeChanged)
 
 	-- Sets some notification when grabbing the Light Tool
 	SetNotification("PHYSICS_GUN_FREEZE", 10000, "while using a Physics Gun, press with the Right Click to freeze the object", 8000)
@@ -301,9 +310,9 @@ Events.Subscribe("PickUpToolGun_PhysicsGun", function(tool, character)
 end)
 
 Events.Subscribe("DropToolGun_PhysicsGun", function(tool, character)
-	tool:Unsubscribe("PullUse")
-	tool:Unsubscribe("ReleaseUse")
-	character:Unsubscribe("WeaponAimModeChanged")
+	tool:Unsubscribe("PullUse", PhysicsGunPullUse)
+	tool:Unsubscribe("ReleaseUse", PhysicsGunReleaseUse)
+	character:Unsubscribe("WeaponAimModeChanged", PhysicsGunWeaponAimModeChanged)
 
 	TogglePhysicsGunLocal(false)
 	PhysicsGun.weapon = nil

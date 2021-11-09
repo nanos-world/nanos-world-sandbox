@@ -3,7 +3,7 @@ function HandleThrusterTool(weapon)
 	-- Subscribe when the player fires with this weapon
 	weapon:Subscribe("Fire", function(weapon, shooter)
 		-- Makes a trace 10000 units ahead to spawn the balloon
-		local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
+		local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle)
 
 		-- If hit some object, then spawns a thruster on attached it
 		if (trace_result.Success and trace_result.Entity and not NanosUtils.IsA(trace_result.Entity, Character)) then

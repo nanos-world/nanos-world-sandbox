@@ -5,44 +5,50 @@ ResizerTool = {
 	current_scale = Vector(1)
 }
 
+function ResizerReleaseUse(weapon, shooter)
+	if (ResizerTool.resizing_object) then
+		ResizerTool.resizing_object:SetHighlightEnabled(false)
+		ResizerTool.resizing_object = nil
+		Events.CallRemote("ToggleResizing", false)
+	end
+end
+
+function ResizerWeaponAimModeChanged(self, old_state, new_state)
+	if (new_state == AimMode.None and ResizerTool.resizing_object) then
+		ResizerTool.resizing_object:SetHighlightEnabled(false)
+		ResizerTool.resizing_object = nil
+		Events.CallRemote("ToggleResizing", false)
+	end
+end
+
+function ResizerPullUse(weapon, shooter)
+	-- Makes a trace 10000 units ahead
+	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
+
+	-- If hit an object, then sets this object to be the "resized" one
+	if (trace_result.Success and trace_result.Entity) then
+		ResizerTool.resizing_object = trace_result.Entity
+		ResizerTool.current_scale = ResizerTool.resizing_object:GetScale()
+		ResizerTool.resizing_object:SetHighlightEnabled(true, 0)
+		Events.CallRemote("ToggleResizing", true)
+	else
+		-- If didn't hit anything, plays a negative sound
+		Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
+	end
+end
+
 -- Method to handle when Player picks up the Tool
 function HandleResizerTool(weapon, character)
 	ResizerTool.weapon = weapon
 
 	-- Subscribe when the player fires with this weapon
-	weapon:Subscribe("PullUse", function(weapon, shooter)
-		-- Makes a trace 10000 units ahead
-		local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
-
-		-- If hit an object, then sets this object to be the "resized" one
-		if (trace_result.Success and trace_result.Entity) then
-			ResizerTool.resizing_object = trace_result.Entity
-			ResizerTool.current_scale = ResizerTool.resizing_object:GetScale()
-			ResizerTool.resizing_object:SetHighlightEnabled(true, 0)
-			Events.CallRemote("ToggleResizing", true)
-		else
-			-- If didn't hit anything, plays a negative sound
-			Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
-		end
-	end)
+	weapon:Subscribe("PullUse", ResizerPullUse)
 
 	-- Subscribes when the player stops using this weapon (turn off the Physics Gun)
-	weapon:Subscribe("ReleaseUse", function(weapon, shooter)
-		if (ResizerTool.resizing_object) then
-			ResizerTool.resizing_object:SetHighlightEnabled(false)
-			ResizerTool.resizing_object = nil
-			Events.CallRemote("ToggleResizing", false)
-		end
-	end)
+	weapon:Subscribe("ReleaseUse", ResizerReleaseUse)
 
 	-- If changed the AimMode, stops resizing
-	character:Subscribe("WeaponAimModeChanged", function(self, old_state, new_state)
-		if (new_state == AimMode.None and ResizerTool.resizing_object) then
-			ResizerTool.resizing_object:SetHighlightEnabled(false)
-			ResizerTool.resizing_object = nil
-			Events.CallRemote("ToggleResizing", false)
-		end
-	end)
+	character:Subscribe("WeaponAimModeChanged", ResizerWeaponAimModeChanged)
 
 	-- Sets some notification when grabbing the Tool
 	SetNotification("RESIZER_GUIDE", 5000, "hold down Left Mouse to select an object, then use mouse wheel to size it up or down", 10000)
@@ -90,9 +96,9 @@ Events.Subscribe("PickUpToolGun_ResizerTool", function(tool, character)
 end)
 
 Events.Subscribe("DropToolGun_ResizerTool", function(tool, character)
-	tool:Unsubscribe("PullUse")
-	tool:Unsubscribe("ReleaseUse")
-	character:Unsubscribe("WeaponAimModeChanged")
+	tool:Unsubscribe("PullUse", ResizerPullUse)
+	tool:Unsubscribe("ReleaseUse", ResizerReleaseUse)
+	character:Unsubscribe("WeaponAimModeChanged", ResizerWeaponAimModeChanged)
 
 	if (ResizerTool.resizing_object) then
 		ResizerTool.resizing_object:SetHighlightEnabled(false)

@@ -2,13 +2,13 @@
 Package.Require("DefaultAssets.lua")
 
 -- Stores all spawned Items by this client
-SpawnsHistory = setmetatable({}, { __mode = 'k' })
+SpawnsHistory = SpawnsHistory or setmetatable({}, { __mode = 'k' })
 
 -- List of all Assets
-SpawnMenuItems = {}
+SpawnMenuItems = SpawnMenuItems or {}
 
 -- WORKAROUND used for weapons Patterns
-SelectedOption = ""
+SelectedOption = SelectedOption or ""
 
 -- Configures the Highlight colors to be used
 Client.SetHighlightColor(Color(0, 20, 0, 1.20), 0, HighlightMode.Always) -- Index 0
@@ -20,43 +20,25 @@ Package.Subscribe("Load", function()
 
 		-- Loads all AssetPacks
 		for _, asset_pack in pairs(asset_packs) do
-			if (not SpawnMenuItems[asset_pack.Path]) then
-				SpawnMenuItems[asset_pack.Path] = {}
-			end
-
-			if (not SpawnMenuItems[asset_pack.Path].props) then
-				SpawnMenuItems[asset_pack.Path].props = {}
-			end
-
-			if (not SpawnMenuItems[asset_pack.Path].entities) then
-				SpawnMenuItems[asset_pack.Path].entities = {}
-			end
-
-			if (not SpawnMenuItems[asset_pack.Path].weapons) then
-				SpawnMenuItems[asset_pack.Path].weapons = {}
-			end
-
-			if (not SpawnMenuItems[asset_pack.Path].vehicles) then
-				SpawnMenuItems[asset_pack.Path].vehicles = {}
-			end
-
-			if (not SpawnMenuItems[asset_pack.Path].tools) then
-				SpawnMenuItems[asset_pack.Path].tools = {}
-			end
-
-			if (not SpawnMenuItems[asset_pack.Path].npcs) then
-				SpawnMenuItems[asset_pack.Path].npcs = {}
-			end
+			if (not SpawnMenuItems[asset_pack.Path]) then SpawnMenuItems[asset_pack.Path] = {} end
+			if (not SpawnMenuItems[asset_pack.Path].props) then SpawnMenuItems[asset_pack.Path].props = {} end
+			if (not SpawnMenuItems[asset_pack.Path].entities) then SpawnMenuItems[asset_pack.Path].entities = {} end
+			if (not SpawnMenuItems[asset_pack.Path].weapons) then SpawnMenuItems[asset_pack.Path].weapons = {} end
+			if (not SpawnMenuItems[asset_pack.Path].vehicles) then SpawnMenuItems[asset_pack.Path].vehicles = {} end
+			if (not SpawnMenuItems[asset_pack.Path].tools) then SpawnMenuItems[asset_pack.Path].tools = {} end
+			if (not SpawnMenuItems[asset_pack.Path].npcs) then SpawnMenuItems[asset_pack.Path].npcs = {} end
 
 			-- Loads all StaticMeshes as Props
 			local props = Assets.GetStaticMeshes(asset_pack.Path)
+
 			for _, prop in pairs(props) do
 				-- TODO make global way to access categories for other Asset Packs
 				local asset_category = DEFAULT_ASSET_PACK[prop]
+
 				table.insert(SpawnMenuItems[asset_pack.Path].props, {
 					id = prop,
-					name = prop:gsub("SM_", " "):gsub("_", " "),
-					image = "assets///" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg",
+					name = prop:gsub("SM_", " "):gsub("_", " "), -- Parses it to remove dirty names
+					image = "assets///" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg", -- Gets the Thumbnail path from conventional path "my_asset_pack/Thumbnails/"
 					sub_category = asset_category or "uncategorized"
 				})
 			end
@@ -64,22 +46,22 @@ Package.Subscribe("Load", function()
 
 		-- Iterate each Asset Pack to add to Spawn Menu
 		for asset_pack, asset_pack_data in pairs(SpawnMenuItems) do
-			main_hud:CallEvent("AddAssetPack", asset_pack, JSON.stringify(asset_pack_data))
+			MainHUD:CallEvent("AddAssetPack", asset_pack, JSON.stringify(asset_pack_data))
 		end
 	end, 1000)
 end)
 
 Input.Bind("SpawnMenu", InputEvent.Released, function()
-	main_hud:CallEvent("ToggleSpawnMenuVisibility", false)
+	MainHUD:CallEvent("ToggleSpawnMenuVisibility", false)
 	Client.SetMouseEnabled(false)
 	Client.SetChatVisibility(true)
 end)
 
 Input.Bind("SpawnMenu", InputEvent.Pressed, function()
-	main_hud:CallEvent("ToggleSpawnMenuVisibility", true)
+	MainHUD:CallEvent("ToggleSpawnMenuVisibility", true)
 	Client.SetMouseEnabled(true)
 	Client.SetChatVisibility(false)
-	main_hud:BringToFront()
+	MainHUD:BringToFront()
 end)
 
 -- Function to delete the last item spawned
@@ -130,16 +112,16 @@ Input.Bind("Undo", InputEvent.Released, function()
 end)
 
 -- Sound when hovering an Item in the SpawnMenu
-main_hud:Subscribe("HoverSound", function(pitch)
+MainHUD:Subscribe("HoverSound", function(pitch)
 	Sound(Vector(), "nanos-world::A_VR_Click_01", true, true, SoundType.SFX, 0.02, pitch or 1)
 end)
 
-main_hud:Subscribe("ClickSound", function(pitch)
+MainHUD:Subscribe("ClickSound", function(pitch)
 	Sound(Vector(), "nanos-world::A_VR_Click_02", true, true, SoundType.SFX, 0.01, pitch or 0.7)
 end)
 
 -- Handle for selecting an Item from the SpawnMenu
-main_hud:Subscribe("SpawnItem", function(asset_pack, category, asset_id)
+MainHUD:Subscribe("SpawnItem", function(asset_pack, category, asset_id)
 	-- Gets the world spawn location to spawn the Item
 	local viewport_2D_center = Render.GetViewportSize() / 2
 	local viewport_3D = Render.Deproject(viewport_2D_center)
@@ -173,7 +155,7 @@ main_hud:Subscribe("SpawnItem", function(asset_pack, category, asset_id)
 end)
 
 -- Subscribes for when I select an Option
-main_hud:Subscribe("SelectOption", function(texture_path)
+MainHUD:Subscribe("SelectOption", function(texture_path)
 	SelectedOption = texture_path
 
 	local local_character = Client.GetLocalPlayer():GetControlledCharacter()
@@ -191,6 +173,68 @@ Events.Subscribe("SpawnedItem", function(item, weld)
 	table.insert(SpawnsHistory, { ["item"] = item, ["weld"] = weld })
 end)
 
+function ToggleToolGunAiming(weapon, tool, enable)
+	if (enable) then
+		if (
+			tool == "RopeTool" or
+			tool == "RemoverTool" or
+			tool == "ThrusterTool"
+		) then
+			DrawDebugToolGun.TraceCollisionChannel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle
+		else
+			DrawDebugToolGun.TraceCollisionChannel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn
+		end
+
+		if (
+			tool == "BalloonTool" or
+			tool == "LightTool" or
+			tool == "LampTool"
+		) then
+			DrawDebugToolGun.Weapon = weapon
+
+			DrawDebugToolGun.ColorEntity = Color.GREEN
+			DrawDebugToolGun.ColorNoEntity = Color.RED
+			return
+		elseif (
+			tool == "ColorTool" or
+			tool == "ThrusterTool" or
+			tool == "UselessTool" or
+			tool == "WeldTool" or
+			tool == "TrailTool" or
+			tool == "ResizerTool" or
+			tool == "RopeTool" or
+			tool == "RemoverTool"
+		) then
+			DrawDebugToolGun.Weapon = weapon
+
+			DrawDebugToolGun.ColorEntity = Color.GREEN
+			DrawDebugToolGun.ColorNoEntity = Color.RED
+			return
+		end
+	end
+
+	DrawDebugToolGun.Weapon = nil
+end
+
+DrawDebugToolGun = {
+	Weapon = nil,
+	ColorEntity = nil,
+	ColorNoEntity = nil,
+	TraceCollisionChannel = nil
+}
+
+Client.Subscribe("Tick", function(delta_time)
+	if (DrawDebugToolGun.Weapon) then
+		local trace_result = TraceFor(2000, DrawDebugToolGun.TraceCollisionChannel)
+
+		if (not trace_result.Success) then return end
+
+		local color = trace_result.Entity and DrawDebugToolGun.ColorEntity or DrawDebugToolGun.ColorNoEntity
+
+		Client.DrawDebugCrosshairs(trace_result.Location, Rotator(), 25, color, 0, 2)
+	end
+end)
+
 -- Auxiliar for Tracing for world object
 function TraceFor(trace_max_distance, collision_channel)
 	local viewport_2D_center = Render.GetViewportSize() / 2
@@ -204,13 +248,8 @@ end
 
 -- Function for Adding new Spawn Menu items
 function AddSpawnMenuItem(asset_pack, tab, id, name, image, category)
-	if (not SpawnMenuItems[asset_pack]) then
-		SpawnMenuItems[asset_pack] = {}
-	end
-
-	if (not SpawnMenuItems[asset_pack][tab]) then
-		SpawnMenuItems[asset_pack][tab] = {}
-	end
+	if (not SpawnMenuItems[asset_pack]) then SpawnMenuItems[asset_pack] = {} end
+	if (not SpawnMenuItems[asset_pack][tab]) then SpawnMenuItems[asset_pack][tab] = {} end
 
 	table.insert(SpawnMenuItems[asset_pack][tab], {
 		id = id,

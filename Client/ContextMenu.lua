@@ -1,8 +1,8 @@
-ContextMenuOpened = false
+ContextMenuOpened = ContextMenuOpened or false
 
 Input.Bind("ContextMenu", InputEvent.Pressed, function()
 	if (ContextMenuOpened) then
-		main_hud:CallEvent("ToggleContextMenuVisibility", false)
+		MainHUD:CallEvent("ToggleContextMenuVisibility", false)
 
 		Client.SetInputEnabled(true)
 		Client.SetMouseEnabled(false)
@@ -12,21 +12,21 @@ Input.Bind("ContextMenu", InputEvent.Pressed, function()
 	else
 		-- Opens context menu with updated data
 		local time = World.GetTime()
-		main_hud:CallEvent("ToggleContextMenuVisibility", true, time.hours, time.minutes)
+		MainHUD:CallEvent("ToggleContextMenuVisibility", true, time.hours, time.minutes)
 
 		Client.SetInputEnabled(false)
 		Client.SetMouseEnabled(true)
 		Client.SetChatVisibility(false)
 
-		main_hud:BringToFront()
-		main_hud:SetFocus()
+		MainHUD:BringToFront()
+		MainHUD:SetFocus()
 
 		ContextMenuOpened = true
 	end
 end)
 
 -- Called from Context Menu when pressing X
-main_hud:Subscribe("CloseContextMenu", function()
+MainHUD:Subscribe("CloseContextMenu", function()
 	Client.SetInputEnabled(true)
 	Client.SetMouseEnabled(false)
 	Client.SetChatVisibility(true)
@@ -34,6 +34,6 @@ main_hud:Subscribe("CloseContextMenu", function()
 end)
 
 -- Called from Context Menu
-main_hud:Subscribe("ChangeTimeOfDay", function(hours, minutes)
+MainHUD:Subscribe("ChangeTimeOfDay", function(hours, minutes)
 	World.SetTime(hours, minutes)
 end)

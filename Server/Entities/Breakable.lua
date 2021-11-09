@@ -1,6 +1,6 @@
 -- Checks for existing Props (maybe loaded by map-script) and apply Breakable on them, if applicable
 Package.Subscribe("Load", function()
-	for k, prop in pairs(Prop.GetAll()) do
+	for k, prop in pairs(Prop.GetPairs()) do
 		if (BreakableProps[prop:GetAssetName()]) then
 			SetupBreakableProp(prop)
 		end

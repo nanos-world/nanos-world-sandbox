@@ -140,7 +140,7 @@ HAIR_TINTS = {
 }
 
 -- List of Spawn Locations
-SPAWN_LOCATIONS = {
+SPAWN_LOCATIONS = SPAWN_LOCATIONS or {
 	Vector(0, 0, 150),
 	Vector(100, 0, 150),
 	Vector(-100, 0, 150),
