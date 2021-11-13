@@ -63,7 +63,7 @@ var assets = {
 	NanosWorld: {
 		props: [],
 		weapons: [],
-		// entities: [],
+		entities: [],
 		vehicles: [],
 		tools: [],
 		npcs: [],
@@ -93,7 +93,9 @@ var categories = {
 		{ id: "special", label: "Special", image_active: "images/categories/laser-gun.png", image_inactive: "images/categories/laser-gun-disabled.png" },
 		{ id: "grenades", label: "Grenade", image_active: "images/categories/grenade.png", image_inactive: "images/categories/grenade-disabled.png" },
 	],
-	// entities: [],
+	entities: [
+		{ id: "uncategorized", label: "Uncategorized", image_active: "images/categories/menu.png", image_inactive: "images/categories/menu-disabled.png" },
+	],
 	vehicles: [],
 	tools: [],
 	npcs: [],
@@ -286,7 +288,7 @@ function AddOption(name, texture, texture_thumbnail) {
 document.addEventListener("DOMContentLoaded", function(event) {
 	// Configure Tabs
 	AddTab("props", "props", "images/tabs/chair.png", "images/tabs/chair-disabled.png");
-	// AddTab("entities", "entities", "images/tabs/rocket.png", "images/tabs/rocket-disabled.png");
+	AddTab("entities", "entities", "images/tabs/rocket.png", "images/tabs/rocket-disabled.png");
 	AddTab("weapons", "weapons", "images/tabs/gun.png", "images/tabs/gun-disabled.png");
 	AddTab("vehicles", "vehicles", "images/tabs/car.png", "images/tabs/car-disabled.png");
 	AddTab("tools", "tools", "images/tabs/paint-spray.png", "images/tabs/paint-spray-disabled.png");

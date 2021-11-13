@@ -275,6 +275,7 @@ Package.Require("Tools/Thruster.lua")
 Package.Require("Tools/Trail.lua")
 Package.Require("Tools/Weld.lua")
 
+Package.Require("Entities/CCTV.lua")
 -- Adds the default NanosWorld items
 -- Default Weapons
 AddSpawnMenuItem("nanos-world", "weapons", "AK47", "AK-47", "assets///NanosWorld/Thumbnails/SK_AK47.jpg", "rifles")
@@ -307,6 +308,7 @@ AddSpawnMenuItem("nanos-world", "weapons", "AWP", "AWP", "assets///NanosWorld/Th
 
 AddSpawnMenuItem("nanos-world", "weapons", "HFG", "HFG", "assets///NanosWorld/Thumbnails/SK_FlareGun.jpg", "special")
 AddSpawnMenuItem("nanos-world", "weapons", "VeggieGun", "Veggie Gun", "assets///NanosWorld/Thumbnails/SK_FlareGun.jpg", "special")
+AddSpawnMenuItem("nanos-world", "weapons", "BouncyGun", "Bouncy Gun", "assets///NanosWorld/Thumbnails/SK_FlareGun.jpg", "special")
 
 -- Default Vehicles
 AddSpawnMenuItem("nanos-world", "vehicles", "SUV", "SUV", "assets///NanosWorld/Thumbnails/SK_SUV.jpg")
@@ -325,7 +327,7 @@ AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_PostApocalyptic", "Post
 AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_ClassicMale", "Classic Male", "assets///NanosWorld/Thumbnails/SK_ClassicMale.jpg")
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "Torch", "Torch", "assets///NanosWorld/Thumbnails/SM_Torch.jpg")
+AddSpawnMenuItem("nanos-world", "entities", "BouncyBall", "BouncyBall", "assets///NanosWorld/Thumbnails/SM_Sphere.jpg", "uncategorized")
 
 -- Defines some Spawn Menu Hints
 SetNotification("SPAWN_MENU", 30000, "you can press Q to open the Spawn Menu", 10000)

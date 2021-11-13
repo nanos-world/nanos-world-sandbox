@@ -130,14 +130,12 @@ function UpdateLocalCharacter(character)
 	end)
 
 	character:Subscribe("WeaponAimModeChanged", function(char, old_state, new_state)
-		print(new_state)
 		local weapon = char:GetPicked()
 		if (not weapon or weapon:GetType() ~= "Weapon") then return end
 
 		local tool_gun = weapon:GetValue("ToolGun")
 		if (not tool_gun) then return end
 
-		print(tool_gun)
 		if (new_state == AimMode.None) then
 			ToggleToolGunAiming(weapon, tool_gun, false)
 		else

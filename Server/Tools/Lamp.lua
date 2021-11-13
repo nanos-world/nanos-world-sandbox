@@ -8,13 +8,15 @@ Events.Subscribe("SpawnLamp", function(player, spawn_location, direction, entity
 	-- Sets the player to be the network authority immediately of this Prop
 	prop_lamp:SetNetworkAuthority(player)
 
-	-- Sets the prop mesh emissive color to a random color
-	local color = Color(1, 0.6, 0.4)
-	prop_lamp:SetMaterialColorParameter("Emissive", color * 50)
-
 	-- Spawns a Point Light, with the color
 	local intensity = 75
+
+	-- Sets the prop mesh emissive color to a random color
+	local color = Color(1, 0.6, 0.4)
+	prop_lamp:SetMaterialColorParameter("Emissive", color * intensity)
+
 	local light = Light(Vector(), Rotator(), color, LightType.Spot, intensity, 1000, 25, 0.975, 2000, false)
+	light:SetTextureLightProfile(LightProfile.Shattered_02)
 
 	-- Attaches the lamp to the prop, offseting 25 downwards
 	light:AttachTo(prop_lamp, AttachmentRule.SnapToTarget, "", 0)
