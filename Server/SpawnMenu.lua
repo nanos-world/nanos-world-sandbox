@@ -35,7 +35,7 @@ Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 	local item = nil
 
 	if (category == "vehicles") then
-		spawn_location = character:GetLocation() + Vector(0, 0, 100)
+		spawn_location = character:GetLocation() + Vector(0, 0, 50)
 		spawn_rotation = character:GetRotation()
 	elseif (category == "tools" or category == "weapons") then
 		spawn_location = character:GetLocation()

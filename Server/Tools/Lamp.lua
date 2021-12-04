@@ -18,13 +18,13 @@ Events.Subscribe("SpawnLamp", function(player, spawn_location, direction, entity
 	local light = Light(Vector(), Rotator(), color, LightType.Spot, intensity, 1000, 25, 0.975, 2000, false)
 	light:SetTextureLightProfile(LightProfile.Shattered_02)
 
-	-- Attaches the lamp to the prop, offseting 25 downwards
+	-- Attaches the lamp to the prop, offseting 35 forwards
 	light:AttachTo(prop_lamp, AttachmentRule.SnapToTarget, "", 0)
 	light:SetRelativeLocation(Vector(35, 0, 0))
 
 	-- If to attach to an entity, otherwise creates and attaches to a fixed invisible mesh
 	if (entity) then
-		prop_lamp:AttachTo(entity, AttachmentRule.KeepWorld)
+		prop_lamp:AttachTo(entity, AttachmentRule.KeepWorld, "", 0)
 		prop_lamp:SetGrabbable(false)
 	end
 

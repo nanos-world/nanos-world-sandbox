@@ -1,5 +1,9 @@
 function SpawnTorch(location, rotation)
-	local torch = Item(location or Vector(), rotation or Rotator(), "nanos-world::SM_Torch")
+	local torch = Melee(location or Vector(), rotation or Rotator(), "nanos-world::SM_Torch")
+	torch:SetAnimationCharacterUse("nanos-world::AM_Mannequin_Torch_Attack")
+	torch:SetDamageSettings(0.5, 0.25)
+	torch:SetCooldown(1.5)
+	torch:SetBaseDamage(25)
 
 	local light = Light(Vector(), Rotator(), Color(1, 0.7, 0.4), LightType.Point, 100, 1000)
 	light:AttachTo(torch, AttachmentRule.SnapToTarget, "", 0)
@@ -13,4 +17,4 @@ function SpawnTorch(location, rotation)
 end
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "Torch", SpawnTorch)
+AddSpawnMenuItem("nanos-world", "weapons", "Torch", SpawnTorch)

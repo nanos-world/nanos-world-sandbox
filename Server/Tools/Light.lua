@@ -31,6 +31,15 @@ Events.Subscribe("SpawnLight", function(player, spawn_location, direction, entit
 	cable:SetRenderingSettings(3, 4, 1)
 	cable:SetCableSettings(cable_length / 4, 10, 1)
 
+	-- Destroy PropLight when cable is destroyed
+	cable:SetValue("PropLight", prop_light)
+	cable:Subscribe("Destroy", function(c)
+		local light_attached = c:GetValue("PropLight")
+		if (light_attached and light_attached:IsValid()) then
+			light_attached:Destroy()
+		end
+	end)
+
 	-- If to attach to an entity, otherwise creates and attaches to a fixed invisible mesh
 	if (entity) then
 		-- Gets the relative location rotated to attach to the exact point the player aimed

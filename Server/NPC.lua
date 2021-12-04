@@ -1,7 +1,7 @@
 -- Aux function to Randomly walk a NPC to somwehere around within distance
-function NPCRandomMove(character, distance)
-	local random_location = character:GetLocation() + Vector(math.random(distance) - distance / 2, math.random(distance) - distance / 2, 0)
-	character:MoveTo(random_location, 250)
+function Character:MoveRandom(distance)
+	local random_location = self:GetLocation() + Vector(math.random(distance) - distance / 2, math.random(distance) - distance / 2, 0)
+	self:MoveTo(random_location, 250)
 end
 
 function SpawnNPC(location, rotation, asset_pack, category, asset)
@@ -11,11 +11,11 @@ function SpawnNPC(location, rotation, asset_pack, category, asset)
 	Timer.Bind(
 		-- After 5-10 seconds, move again
 		Timer.SetInterval(function(chara)
-			-- Make him wwalk
+			-- Make him walk
 			chara:SetGaitMode(GaitMode.Walking)
 
 			-- Walk 30 meters away max
-			NPCRandomMove(chara, 3000)
+			chara:MoveRandom(3000)
 		end, math.random(5000) + 5000, character),
 		character
 	)
@@ -37,8 +37,20 @@ function SpawnNPC(location, rotation, asset_pack, category, asset)
 		self:SetLifeSpan(10)
 	end)
 
+	-- After entering ragdoll, after some time, get up
+	character:Subscribe("RagdollModeChanged", function(self, was_in_ragdoll, is_in_ragdoll)
+		if (not is_in_ragdoll) then return end
+
+		Timer.Bind(
+			Timer.SetTimeout(function(chara)
+				chara:Jump()
+			end, 3000, self),
+			self
+		)
+	end)
+
 	-- Immediately walks after spawning
-	NPCRandomMove(character, 2000)
+	character:MoveRandom(2000)
 
 	return character
 end

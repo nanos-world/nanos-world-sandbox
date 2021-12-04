@@ -193,7 +193,7 @@ function ToggleToolGunAiming(weapon, tool, enable)
 			DrawDebugToolGun.Weapon = weapon
 
 			DrawDebugToolGun.ColorEntity = Color.GREEN
-			DrawDebugToolGun.ColorNoEntity = Color.RED
+			DrawDebugToolGun.ColorNoEntity = Color.BLUE
 			return
 		elseif (
 			tool == "ColorTool" or

@@ -92,6 +92,7 @@ var categories = {
 		{ id: "sniper-rifles", label: "Sniper Rifles", image_active: "images/categories/sniper-rifle.png", image_inactive: "images/categories/sniper-rifle-disabled.png" },
 		{ id: "special", label: "Special", image_active: "images/categories/laser-gun.png", image_inactive: "images/categories/laser-gun-disabled.png" },
 		{ id: "grenades", label: "Grenade", image_active: "images/categories/grenade.png", image_inactive: "images/categories/grenade-disabled.png" },
+		{ id: "melee", label: "Melee", image_active: "images/categories/knife.png", image_inactive: "images/categories/knife-disabled.png" },
 	],
 	entities: [
 		{ id: "uncategorized", label: "Uncategorized", image_active: "images/categories/menu.png", image_inactive: "images/categories/menu-disabled.png" },
