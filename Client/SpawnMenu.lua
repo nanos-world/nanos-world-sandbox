@@ -327,6 +327,10 @@ AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_PostApocalyptic", "Post
 AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_ClassicMale", "Classic Male", "assets///NanosWorld/Thumbnails/SK_ClassicMale.jpg")
 
 -- Adds this tool to the Sandbox Spawn Menu
+AddSpawnMenuItem("nanos-world", "weapons", "Torch", "Torch", "assets///NanosWorld/Thumbnails/SM_Torch.jpg", "melee")
+AddSpawnMenuItem("nanos-world", "weapons", "Knife", "Knife", "assets///NanosWorld/Thumbnails/SM_M9.jpg", "melee")
+AddSpawnMenuItem("nanos-world", "weapons", "Crowbar", "Crowbar", "assets///NanosWorld/Thumbnails/SM_Crowbar_01.jpg", "melee")
+
 AddSpawnMenuItem("nanos-world", "entities", "BouncyBall", "BouncyBall", "assets///NanosWorld/Thumbnails/SM_Sphere.jpg", "uncategorized")
 
 -- Defines some Spawn Menu Hints
