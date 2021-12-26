@@ -140,17 +140,16 @@ HAIR_TINTS = {
 }
 
 -- List of Spawn Locations
-SPAWN_LOCATIONS = SPAWN_LOCATIONS or {
-	Vector(0, 0, 150),
-	Vector(100, 0, 150),
-	Vector(-100, 0, 150),
-	Vector(0, 100, 150),
-	Vector(0, -100, 150)
-}
+SPAWN_POINTS = Server.GetMapSpawnPoints()
+
+function GetRandomSpawnPoint()
+	return #SPAWN_POINTS > 0 and SPAWN_POINTS[math.random(#SPAWN_POINTS)] or { location = Vector(), rotation = Rotator() }
+end
 
 function SpawnCharacterRandomized(location, rotation, asset)
 	local selected_mesh = asset or CHARACTER_MESHES[math.random(#CHARACTER_MESHES)]
-	local new_char = Character(location or SPAWN_LOCATIONS[math.random(#SPAWN_LOCATIONS)], rotation or Rotator(), selected_mesh)
+	local spawn_point = GetRandomSpawnPoint()
+	local new_char = Character(location or spawn_point.location, rotation or spawn_point.rotation, selected_mesh)
 
 	-- Customization
 	if (selected_mesh == "nanos-world::SK_Male") then
@@ -236,8 +235,9 @@ function SpawnPlayer(player, location, rotation)
 				-- If he is not dead anymore after 5 seconds, ignores it
 				if (character:GetHealth() ~= 0) then return end
 
-				-- Respawns the Character at a random location
-				character:Respawn(SPAWN_LOCATIONS[math.random(#SPAWN_LOCATIONS)])
+				-- Respawns the Character at a random point
+				local spawn_point = GetRandomSpawnPoint()
+				character:Respawn(spawn_point.location, spawn_point.rotation)
 			end, 5000, chara),
 			chara
 		)
@@ -271,11 +271,6 @@ Player.Subscribe("Destroy", function(player)
 	end
 
 	Server.BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has left the server")
-end)
-
--- Catches a custom event "MapLoaded" to override this script spawn locations
-Events.Subscribe("MapLoaded", function(map_custom_spawn_locations)
-	SPAWN_LOCATIONS = map_custom_spawn_locations
 end)
 
 Events.Subscribe("ToggleNoClip", function(player)
