@@ -263,7 +263,9 @@ Client.Subscribe("Tick", function(delta_time)
 			end
 		end
 	end
+end)
 
+Timer.SetInterval(function()
 	-- If I'm using the Gravity Gun
 	if (PhysicsGun.weapon and PhysicsGun.weapon:IsValid() and PhysicsGun.is_using) then
 		-- If I'm not grabbing anything, then try to grab something
@@ -294,7 +296,7 @@ Client.Subscribe("Tick", function(delta_time)
 		-- Calls remote to update it's location
 		Events.CallRemote("UpdateObjectPosition", PhysicsGun.picking_object, end_location, rotation, PhysicsGun.is_holding_alt)
 	end
-end)
+end, 0.033)
 
 -- If a weapon has been added the BeamParticle value, adds it to our BeamParticles table
 Weapon.Subscribe("ValueChange", function(weapon, key, value)
