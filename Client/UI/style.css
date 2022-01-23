@@ -393,3 +393,33 @@ body {
 	margin: 5px;
 	text-align: center;
 }
+
+#tutorials {
+	background-color: #0000003d;
+	position: absolute;
+	top: 30px;
+	left: 30px;
+	padding: 10px 15px;
+	display: none;
+}
+
+#tutorial-title {
+	font-size: 70px;
+	font-family: 'Poiret One', cursive;
+	margin-bottom: 10px;
+}
+
+#tutorial-body {
+	
+}
+
+.tutorial {
+	display: flex;
+	line-height: 30px;
+	margin: 5px 0;
+}
+
+.tutorial-key {
+	height: 30px;
+	margin-right: 5px;
+}

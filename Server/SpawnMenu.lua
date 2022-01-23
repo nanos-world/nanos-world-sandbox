@@ -70,11 +70,11 @@ Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 			item:SetValue("ToolGun", asset, true)
 
 			item:Subscribe("PickUp", function(weapon, char)
-				Events.CallRemote("PickUpToolGun_" .. asset, char:GetPlayer(), weapon, char)
+				Events.CallRemote("PickUpToolGun", char:GetPlayer(), asset, weapon, char)
 			end)
 
 			item:Subscribe("Drop", function(weapon, char)
-				Events.CallRemote("DropToolGun_" .. asset, char:GetPlayer(), weapon, char)
+				Events.CallRemote("DropToolGun", char:GetPlayer(), asset, weapon, char)
 			end)
 		end
 

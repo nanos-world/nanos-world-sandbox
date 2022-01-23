@@ -24,4 +24,7 @@ Events.Subscribe("DropToolGun_LampTool", function(tool)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "LampTool", "Lamps", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg")
+AddSpawnMenuItem("nanos-world", "tools", "LampTool", "Lamps", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg", nil, {
+	{ key = "LeftClick", text = "spawn lamp" },
+	{ key = "Undo", text = "undo spawn" },
+})

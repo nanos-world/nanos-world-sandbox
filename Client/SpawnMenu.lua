@@ -7,6 +7,9 @@ SpawnsHistory = SpawnsHistory or setmetatable({}, { __mode = 'k' })
 -- List of all Assets
 SpawnMenuItems = SpawnMenuItems or {}
 
+-- List of all Tool Guns Data
+ToolGunsTutorials = ToolGunsTutorials or {}
+
 -- WORKAROUND used for weapons Patterns
 SelectedOption = SelectedOption or ""
 
@@ -173,6 +176,21 @@ Events.Subscribe("SpawnedItem", function(item, weld)
 	table.insert(SpawnsHistory, { ["item"] = item, ["weld"] = weld })
 end)
 
+Events.Subscribe("PickUpToolGun", function(asset, weapon, char)
+	Events.Call("PickUpToolGun_" .. asset, weapon, char)
+
+	local tool_gun_data = ToolGunsTutorials[asset]
+	if (tool_gun_data) then
+		MainHUD:CallEvent("ToggleTutorial", true, tool_gun_data.name, tool_gun_data.tutorials)
+	end
+end)
+
+Events.Subscribe("DropToolGun", function(asset, weapon, char)
+	Events.Call("DropToolGun_" .. asset, weapon, char)
+
+	MainHUD:CallEvent("ToggleTutorial", false)
+end)
+
 function ToggleToolGunAiming(weapon, tool, enable)
 	if (enable) then
 		if (
@@ -247,7 +265,7 @@ function TraceFor(trace_max_distance, collision_channel)
 end
 
 -- Function for Adding new Spawn Menu items
-function AddSpawnMenuItem(asset_pack, tab, id, name, image, category)
+function AddSpawnMenuItem(asset_pack, tab, id, name, image, category, tutorials)
 	if (not SpawnMenuItems[asset_pack]) then SpawnMenuItems[asset_pack] = {} end
 	if (not SpawnMenuItems[asset_pack][tab]) then SpawnMenuItems[asset_pack][tab] = {} end
 
@@ -257,6 +275,24 @@ function AddSpawnMenuItem(asset_pack, tab, id, name, image, category)
 		image = image,
 		sub_category = category
 	})
+
+	if (tutorials) then
+		local tutorials_parsed = {}
+
+		for _, tutorial_data in pairs(tutorials) do
+			local mapped_key = Input.GetMappedKey(tutorial_data.key)
+
+			-- If didn't find mapped key, then use it as Raw
+			if (mapped_key == "") then mapped_key = tutorial_data.key end
+
+			-- Gets the image path
+			local key_icon = Input.GetKeyIcon(mapped_key)
+
+			table.insert(tutorials_parsed, { image = key_icon, text = tutorial_data.text })
+		end
+
+		ToolGunsTutorials[id] = { tutorials = JSON.stringify(tutorials_parsed), name = name }
+	end
 end
 
 -- Exposes this to other packages
