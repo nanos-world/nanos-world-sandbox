@@ -93,8 +93,8 @@ end
 -- Function to try to pickup an object
 function TryPickUpObject()
 	-- Get the camera location in 3D World Space
-	local viewport_2D_center = Render.GetViewportSize() / 2
-	local viewport_3D = Render.Deproject(viewport_2D_center)
+	local viewport_2D_center = Client.GetViewportSize() / 2
+	local viewport_3D = Client.DeprojectScreenToWorld(viewport_2D_center)
 	local start_location = viewport_3D.Position + viewport_3D.Direction * 100
 
 	-- Gets the end location of the trace (5000 units ahead)
@@ -279,8 +279,8 @@ Timer.SetInterval(function()
 		-- Otherwise, if I'm grabbing something, tells the server to update it's location
 
 		-- Get the camera location in 3D World Space
-		local viewport_2D_center = Render.GetViewportSize() / 2
-		local viewport_3D = Render.Deproject(viewport_2D_center)
+		local viewport_2D_center = Client.GetViewportSize() / 2
+		local viewport_3D = Client.DeprojectScreenToWorld(viewport_2D_center)
 		local start_location = viewport_3D.Position
 		local camera_direction = viewport_3D.Direction
 

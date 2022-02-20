@@ -3,7 +3,7 @@ Events.Subscribe("SpawnLight", function(player, spawn_location, direction, entit
 	local rotation = direction:Rotation() + Rotator(90, 0, 0)
 
 	-- Spawns a Light Bulb prop
-	local prop_light = Prop(spawn_location, Rotator(), "nanos-world::SM_Lamp", CollisionType.Normal, true, false)
+	local prop_light = Prop(spawn_location, Rotator(), "nanos-world::SM_Lamp", CollisionType.Auto, true, false)
 	prop_light:SetCollision(CollisionType.StaticOnly)
 
 	-- Sets the player to be the network authority immediately of this Prop

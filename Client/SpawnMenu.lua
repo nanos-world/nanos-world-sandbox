@@ -126,8 +126,8 @@ end)
 -- Handle for selecting an Item from the SpawnMenu
 MainHUD:Subscribe("SpawnItem", function(asset_pack, category, asset_id)
 	-- Gets the world spawn location to spawn the Item
-	local viewport_2D_center = Render.GetViewportSize() / 2
-	local viewport_3D = Render.Deproject(viewport_2D_center)
+	local viewport_2D_center = Client.GetViewportSize() / 2
+	local viewport_3D = Client.DeprojectScreenToWorld(viewport_2D_center)
 	local trace_max_distance = 5000
 
 	local start_location = viewport_3D.Position
@@ -255,8 +255,8 @@ end)
 
 -- Auxiliar for Tracing for world object
 function TraceFor(trace_max_distance, collision_channel)
-	local viewport_2D_center = Render.GetViewportSize() / 2
-	local viewport_3D = Render.Deproject(viewport_2D_center)
+	local viewport_2D_center = Client.GetViewportSize() / 2
+	local viewport_3D = Client.DeprojectScreenToWorld(viewport_2D_center)
 
 	local start_location = viewport_3D.Position + viewport_3D.Direction * 100
 	local end_location = viewport_3D.Position + viewport_3D.Direction * trace_max_distance
@@ -342,7 +342,7 @@ AddSpawnMenuItem("nanos-world", "weapons", "Grenade", "Grenade", "assets///Nanos
 
 AddSpawnMenuItem("nanos-world", "weapons", "AWP", "AWP", "assets///NanosWorld/Thumbnails/SK_AWP.jpg", "sniper-rifles")
 
-AddSpawnMenuItem("nanos-world", "weapons", "HFG", "HFG", "assets///NanosWorld/Thumbnails/SK_FlareGun.jpg", "special")
+AddSpawnMenuItem("nanos-world", "weapons", "HFG", "HFG", "assets///NanosWorld/Thumbnails/SK_DC15S.jpg", "special")
 AddSpawnMenuItem("nanos-world", "weapons", "VeggieGun", "Veggie Gun", "assets///NanosWorld/Thumbnails/SK_FlareGun.jpg", "special")
 AddSpawnMenuItem("nanos-world", "weapons", "BouncyGun", "Bouncy Gun", "assets///NanosWorld/Thumbnails/SK_FlareGun.jpg", "special")
 

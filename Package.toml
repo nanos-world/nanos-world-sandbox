@@ -5,7 +5,7 @@
     # contributors
     author =               "nanos™"
     # version
-    version =              "2.9.0"
+    version =              "2.9.1"
     # image URL
     image =                "https://i.imgur.com/aoEa4N4.jpg"
     # package type: 'script' (normal package), 'game-mode' (unique package - can only load one at a time) or 'loading-screen' (special package loaded in loading screen)
