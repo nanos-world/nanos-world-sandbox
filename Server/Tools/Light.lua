@@ -6,9 +6,6 @@ Events.Subscribe("SpawnLight", function(player, spawn_location, direction, entit
 	local prop_light = Prop(spawn_location, Rotator(), "nanos-world::SM_Lamp", CollisionType.Auto, true, false)
 	prop_light:SetCollision(CollisionType.StaticOnly)
 
-	-- Sets the player to be the network authority immediately of this Prop
-	prop_light:SetNetworkAuthority(player)
-
 	-- Sets the prop mesh emissive color to a random color
 	local color = Color.RandomPalette()
 	prop_light:SetMaterialColorParameter("Emissive", color * 50)

@@ -97,7 +97,7 @@ function UndoTick(delta_time)
 
 	if UndoDelay <= 0 then
 		DeleteItemFromHistory()
-		UndoDelay = 0.2
+		UndoDelay = 0.1
 	end
 end
 

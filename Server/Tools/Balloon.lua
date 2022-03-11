@@ -16,9 +16,6 @@ Events.Subscribe("SpawnBalloon", function(player, spawn_location, rotation, forc
 	local color = Color.RandomPalette()
 	balloon:SetMaterialColorParameter("Tint", color)
 
-	-- Sets the player to be the network authority immediately of this Prop (so he can immediately start applying the force on it - on the client side)
-	balloon:SetNetworkAuthority(player)
-
 	-- Subscribes for popping when balloon takes damage
 	balloon:Subscribe("TakeDamage", function(self, damage, bone_name, damage_type, hit_from_direction, instigator, causer)
 		self:Destroy()

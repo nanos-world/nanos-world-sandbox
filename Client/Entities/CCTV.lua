@@ -4,6 +4,7 @@ function SpawnAndSetCameraOnProp(prop, camera)
 	sc:AttachTo(camera, AttachmentRule.SnapToTarget, "", 0)
 
 	prop:SetMaterialFromSceneCapture(sc, 1)
+	prop:SetMaterialColorParameter("Emissive", Color(5, 5, 5))
 end
 
 Events.Subscribe("SpawnCCTV", SpawnAndSetCameraOnProp)

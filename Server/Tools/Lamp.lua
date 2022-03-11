@@ -5,9 +5,6 @@ Events.Subscribe("SpawnLamp", function(player, spawn_location, direction, entity
 	-- Spawns a Lamp Bulb prop
 	local prop_lamp = Prop(spawn_location, Rotator(), "nanos-world::SM_Flashlight", CollisionType.StaticOnly)
 
-	-- Sets the player to be the network authority immediately of this Prop
-	prop_lamp:SetNetworkAuthority(player)
-
 	-- Spawns a Point Light, with the color
 	local intensity = 75
 

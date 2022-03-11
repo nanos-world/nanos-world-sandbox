@@ -25,7 +25,6 @@ function SpawnHFG(location, rotation)
 
 		local grenade = Grenade(spawn_location, Rotator(), "nanos-world::SM_Grenade_G67", "nanos-world::P_Explosion_Dirt", "nanos-world::A_Explosion_Large")
 		grenade:SetScale(Vector(3, 3, 3))
-		grenade:SetNetworkAuthority(character:GetPlayer())
 
 		local trail_particle = Particle(spawn_location, Rotator(), "nanos-world::P_Ribbon", false, true)
 		trail_particle:SetParameterColor("Color", Color.RandomPalette())

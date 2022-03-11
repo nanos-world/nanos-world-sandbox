@@ -6,7 +6,7 @@ Events.Subscribe("PickUp", function(player, weapon, object, is_grabbing, picking
     if (is_grabbing) then
         -- Only updates the Network Authority if this entity is network distributed
         if (object:IsNetworkDistributed()) then
-            object:SetNetworkAuthority(player, 3600000)
+            object:SetNetworkAuthority(player)
         end
 
         object:SetValue("IsBeingGrabbed", true, true)
@@ -22,11 +22,6 @@ Events.Subscribe("PickUp", function(player, weapon, object, is_grabbing, picking
 	        Events.BroadcastRemote("SpawnSound", weapon:GetLocation(), "nanos-world::A_VR_Grab", false, 0.25, 0.9)
         end
     else
-        -- Resets the Network Authority, now anyone can authority this object
-        if (object:IsNetworkDistributed()) then
-            object:SetNetworkAuthority(player, 0)
-        end
-
         object:SetValue("IsBeingGrabbed", false, true)
 
         -- Resets TranslateTo and RotateTo movement
@@ -68,7 +63,7 @@ Events.Subscribe("UpdateObjectPosition", function(player, object, location, rota
 
     -- Only updates the Network Authority if this entity is network distributed
     if (object:IsNetworkDistributed()) then
-        object:SetNetworkAuthority(player, 3600000)
+        object:SetNetworkAuthority(player)
     end
 end)
 

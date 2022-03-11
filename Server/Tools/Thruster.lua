@@ -14,9 +14,6 @@ Events.Subscribe("SpawnThruster", function(player, spawn_location, direction, en
 	-- Adds a constant force to the Thruster
 	thruster:SetForce(Vector(100000, 0, 0), true)
 
-	-- Sets the player to be the network authority immediately of this Prop (so he can immediately start applying the force on it - on the client side)
-	thruster:SetNetworkAuthority(player)
-
 	-- Gets the relative location rotated to attach to the exact point the player aimed
 	thruster:AttachTo(entity, AttachmentRule.KeepWorld, "", 1)
 
