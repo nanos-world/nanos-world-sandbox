@@ -17,11 +17,11 @@ Package.Call("sandbox", "FunctionName", param1, param2, param3...)
 
 ```lua
 -- Adds a Notification in the screen
----@param id string		Unique ID used to store if the notification was already displayed to the player
----@param message string	The message to display
----@param time number		Duration of the notification
----@param delay number		Time to wait until display the notification
----@param force? boolean	To force it to be displayed regardless if it was already displayed before
+---@param id string         Unique ID used to store if the notification was already displayed to the player
+---@param message string    The message to display
+---@param time number       Duration of the notification
+---@param delay number      Time to wait until display the notification
+---@param force? boolean    To force it to be displayed regardless if it was already displayed before
 function AddNotification(id, message, time, delay, force)
 ```
 
@@ -50,14 +50,14 @@ On the Client side, we will define how the Item will be displayed in the Spawn M
 
 ```lua
 -- Adds a new item to the Spawn Menu
----@param group string			Unique ID used to identify from which 'group' it belongs
----@param tab string			The tab to display this item - it must be 'props', 'weapons', 'tools' or 'vehicles'
----@param id string			Unique ID used to identify this item
----@param name string			Display name
----@param image string			Image path
----@param category string		The category of this item, each tab has it's own set of categories
----@param tutorials table		List of tutorials to display in the top left screen, in the format:
---					{ { key = 'KeyName', text = 'description of the action' }, ... }
+---@param group string          Unique ID used to identify from which 'group' it belongs
+---@param tab string            The tab to display this item - it must be 'props', 'weapons', 'tools' or 'vehicles'
+---@param id string             Unique ID used to identify this item
+---@param name string           Display name
+---@param image string          Image path
+---@param category string       The category of this item, each tab has it's own set of categories
+---@param tutorials table       List of tutorials to display in the top left screen, in the format:
+--                              { { key = 'KeyName', text = 'description of the action' }, ... }
 function AddSpawnMenuItem(group, tab, id, name, image, category, tutorials)
 ```
 
@@ -94,11 +94,11 @@ On the Server side, we will define how the item will be spawned, here we will cr
 
 ```lua
 -- Adds a new item to the Spawn Menu
----@param group string			Unique ID used to identify from which 'group' it belongs
----@param tab string			Tab of this item
----@param id string			Unique ID used to identify this item
----@param package_name string		Your package name which will be used to call your spawn function
----@param package_function table	The exported Spawn Function name which will be called from sandbox
+---@param group string              Unique ID used to identify from which 'group' it belongs
+---@param tab string                Tab of this item
+---@param id string                 Unique ID used to identify this item
+---@param package_name string       Your package name which will be used to call your spawn function
+---@param package_function table    The exported Spawn Function name which will be called from sandbox
 function AddSpawnMenuItem(group, tab, id, package_name, package_function)
 ```
 
@@ -131,10 +131,10 @@ end)
 Adds a new tab to the Spawn Menu
 
 ```lua
----@param id string			Unique ID used to identify the tab
----@param name string			Label of the tab
----@param image_active string		Image path when the tab is selected
----@param image_inactive string		Image path when the tab is not selected
+---@param id string                Unique ID used to identify the tab
+---@param name string              Label of the tab
+---@param image_active string      Image path when the tab is selected
+---@param image_inactive string    Image path when the tab is not selected
 function AddSpawnMenuTab(id, name, image_active, image_inactive)
 ```
 
@@ -160,11 +160,11 @@ end)
 Adds a new category to a Spawn Menu Tab
 
 ```lua
----@param tab_id string				Tab ID
----@param id string					Unique ID used to identify the category
----@param label string				Label of the tab
----@param image_active string		Image path when the category is selected
----@param image_inactive string		Image path when the category is not selected
+---@param tab_id string                Tab ID
+---@param id string                    Unique ID used to identify the category
+---@param label string                 Label of the tab
+---@param image_active string          Image path when the category is selected
+---@param image_inactive string        Image path when the category is not selected
 function AddSpawnMenuCategory(tab_id, id, label, image_active, image_inactive)
 ```
 
