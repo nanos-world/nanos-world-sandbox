@@ -18,6 +18,6 @@ jobs:
           # name of the asset/package
           name: 'sandbox'
           # changelog of the release - can be edited on the store before it gets published
-          changelog: ''
+          changelog: 'built through actions'
           # API token - generate at https://store.nanos.world/settings/tokens/ and set under Settings -> Secrets -> Actions with name STORE_SECRET
           token: ${{ secrets.STORE_SECRET }}
