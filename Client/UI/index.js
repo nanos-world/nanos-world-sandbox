@@ -56,56 +56,16 @@ function UpdateHealth(health) {
 
 
 var current_category = "";
-var current_tab = "props";
-var current_asset_pack =  "nanos-world";
+var current_tab = "";
 
-var assets = {
-	NanosWorld: {
-		props: [],
-		weapons: [],
-		entities: [],
-		vehicles: [],
-		tools: [],
-		npcs: [],
-	}
-};
+var spawn_menu_data = {};
+var tabs = {};
 
-// TODO move to Lua?
-var categories = {
-	props: [
-		{ id: "basic", label: "Basic", image_active: "images/categories/shapes.png", image_inactive: "images/categories/shapes-disabled.png" },
-		{ id: "appliances", label: "Appliances", image_active: "images/categories/appliances.png", image_inactive: "images/categories/appliances-disabled.png" },
-		{ id: "construction", label: "Construction", image_active: "images/categories/construction.png", image_inactive: "images/categories/construction-disabled.png" },
-		{ id: "furniture", label: "Furniture", image_active: "images/categories/lamp.png", image_inactive: "images/categories/lamp-disabled.png" },
-		{ id: "funny", label: "Funny", image_active: "images/categories/joker-hat.png", image_inactive: "images/categories/joker-hat-disabled.png" },
-		{ id: "tools", label: "Tools", image_active: "images/categories/tools.png", image_inactive: "images/categories/tools-disabled.png" },
-		{ id: "food", label: "Food", image_active: "images/categories/hot-dog.png", image_inactive: "images/categories/hot-dog-disabled.png" },
-		{ id: "street", label: "Street", image_active: "images/categories/street-lamp.png", image_inactive: "images/categories/street-lamp-disabled.png" },
-		{ id: "nature", label: "Nature", image_active: "images/categories/tree.png", image_inactive: "images/categories/tree-disabled.png" },
-		{ id: "uncategorized", label: "Uncategorized", image_active: "images/categories/menu.png", image_inactive: "images/categories/menu-disabled.png" },
-	],
-	weapons: [
-		{ id: "rifles", label: "Rifles", image_active: "images/categories/rifle.png", image_inactive: "images/categories/rifle-disabled.png" },
-		{ id: "smgs", label: "SMGs", image_active: "images/categories/smg.png", image_inactive: "images/categories/smg-disabled.png" },
-		{ id: "pistols", label: "Pistols", image_active: "images/categories/revolver.png", image_inactive: "images/categories/revolver-disabled.png" },
-		{ id: "shotguns", label: "Shotguns", image_active: "images/categories/shotgun.png", image_inactive: "images/categories/shotgun-disabled.png" },
-		{ id: "sniper-rifles", label: "Sniper Rifles", image_active: "images/categories/sniper-rifle.png", image_inactive: "images/categories/sniper-rifle-disabled.png" },
-		{ id: "special", label: "Special", image_active: "images/categories/laser-gun.png", image_inactive: "images/categories/laser-gun-disabled.png" },
-		{ id: "grenades", label: "Grenade", image_active: "images/categories/grenade.png", image_inactive: "images/categories/grenade-disabled.png" },
-		{ id: "melee", label: "Melee", image_active: "images/categories/knife.png", image_inactive: "images/categories/knife-disabled.png" },
-	],
-	entities: [
-		{ id: "uncategorized", label: "Uncategorized", image_active: "images/categories/menu.png", image_inactive: "images/categories/menu-disabled.png" },
-	],
-	vehicles: [],
-	tools: [],
-	npcs: [],
-}
 
 function SpawnItemClick(e) {
-	const asset_id = e.target.dataset.asset_id;
-	const asset_pack = e.target.dataset.asset_pack;
-	Events.Call("SpawnItem", asset_pack, current_tab, asset_id);
+	const item_id = e.target.dataset.item_id;
+	const group = e.target.dataset.group;
+	Events.Call("SpawnItem", group, current_tab, item_id);
 }
 
 function ItemHover(label, enter, is_spawn_item) {
@@ -123,6 +83,7 @@ function ItemHover(label, enter, is_spawn_item) {
 function TabClick(tab_element) {
 	const new_tab = tab_element.dataset.tab_id;
 
+	// TODO fix workaround for patterns
 	if (current_tab == "weapons")
 		ToggleOptions(false);
 	else if (new_tab == "weapons")
@@ -133,13 +94,17 @@ function TabClick(tab_element) {
 	// Clears Categories List
 	document.querySelector("#spawn_categories").innerHTML = "";
 
-	for (let category in categories[current_tab]) {
-		const item = categories[current_tab][category];
-		AddCategory(item.id, item.label, item.image_active, item.image_inactive);
+	if (tabs[current_tab]) {
+		for (let category in tabs[current_tab].categories) {
+			const category_data = tabs[current_tab].categories[category];
+			DisplayCategory(category_data.id, category_data.label, category_data.image_active, category_data.image_inactive);
+		}
 	}
 
-	AddCategory("all", "All", "images/categories/infinity.png", "images/categories/infinity-disabled.png");
+	// Adds "all" category
+	DisplayCategory("all", "All", "images/categories/infinity.png", "images/categories/infinity-disabled.png");
 
+	// Forces click on first category
 	CategoryClick(document.querySelectorAll(".spawn_category")[0]);
 
 	const old_tab_active = document.querySelector(".tab.active");
@@ -160,7 +125,7 @@ function CategoryClick(category_item) {
 
 	current_category = new_category;
 
-	RefreshAssets();
+	RefreshSpawnMenu();
 
 	const old_category_active = document.querySelector(".spawn_category.active");
 	if (old_category_active) {
@@ -174,7 +139,19 @@ function CategoryClick(category_item) {
 	Events.Call("ClickSound");
 }
 
-function AddCategory(id, name, image_active, image_inactive) {
+function AddCategory(tab_id, id, label, image_active, image_inactive) {
+	if (!tabs[tab_id])
+		tabs[tab_id] = { categories: [] };
+
+	tabs[tab_id].categories.push({
+		id: id,
+		label: label,
+		image_active: image_active,
+		image_inactive: image_inactive,
+	});
+}
+
+function DisplayCategory(id, name, image_active, image_inactive) {
 	const category = document.createElement("span");
 	category.classList.add("spawn_category");
 	category.addEventListener("click", e => CategoryClick(e.target));
@@ -216,29 +193,20 @@ function AddTab(id, name, image_active, image_inactive) {
 	document.querySelector("#tabs").appendChild(tab);
 }
 
-function RefreshAssets() {
+function RefreshSpawnMenu() {
 	// Clears Spawn List
 	document.querySelector("#spawn_list").innerHTML = "";
 
-	if (!assets[current_asset_pack]) {
-		// TODO fix, it's calling it multiple times triggering this error
-		// console.error("Failed to get props from Asset Pack: '" + current_asset_pack + "'.");
-		return;
-	}
-
-	if (!assets[current_asset_pack][current_tab])
-		return;
-
-	// For now, let's just load all assets
-	for (let asset_pack in assets) {
-		for (let asset_pack_item in assets[asset_pack][current_tab]) {
-			const item = assets[asset_pack][current_tab][asset_pack_item];
+	// Loads all items
+	for (let group in spawn_menu_data) {
+		for (let group_item in spawn_menu_data[group][current_tab]) {
+			const item = spawn_menu_data[group][current_tab][group_item];
 
 			// Filter category
 			if (current_category != "all" && item.sub_category != current_category)
 				continue;
 
-			DisplayAsset(asset_pack, item.id, item.name, item.image);
+			AddItem(group, item.id, item.name, item.image);
 		}
 	}
 }
@@ -270,7 +238,7 @@ function SelectOption(element, force_no_event) {
 }
 
 function AddOption(name, texture, texture_thumbnail) {
-	// Todo this is completely wrong, just an workaround for now, we must make it generic
+	// Todo this is completely bad, it's just an workaround for now, we must make it generic
 	
 	const option_checkbox_item = document.createElement("span");
 	option_checkbox_item.classList.add("spawn_option_checkbox_item");
@@ -321,15 +289,10 @@ function ToggleTutorial(is_visible, title, tutorial_list) {
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
-	// Configure Tabs
-	AddTab("props", "props", "images/tabs/chair.png", "images/tabs/chair-disabled.png");
-	AddTab("entities", "entities", "images/tabs/rocket.png", "images/tabs/rocket-disabled.png");
-	AddTab("weapons", "weapons", "images/tabs/gun.png", "images/tabs/gun-disabled.png");
-	AddTab("vehicles", "vehicles", "images/tabs/car.png", "images/tabs/car-disabled.png");
-	AddTab("tools", "tools", "images/tabs/paint-spray.png", "images/tabs/paint-spray-disabled.png");
-	AddTab("npcs", "npcs", "images/tabs/robot.png", "images/tabs/robot-disabled.png");
-
-	TabClick(document.querySelectorAll(".tab")[0]);
+	setTimeout(function() {
+		// Selects the first tab
+		TabClick(document.querySelectorAll(".tab")[0]);
+	}, 1000);
 
 	// Configure options - WORKAROUND FOR NOW
 	AddOption("None", "");
@@ -339,27 +302,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	}
 
 	SelectOption(document.querySelectorAll(".spawn_option_checkbox_item")[0], true);
-
-	// const tabs = document.querySelectorAll(".tab");
-
-	// for (let i = 0; i < tabs.length; i++) {
-	// 	const tab = tabs[i];
-
-	// 	tab.addEventListener("click", e => TabClick(e.target));
-	// 	tab.addEventListener("mouseenter", e => ItemHover("Tab: " + tab.querySelector(".tab_name").innerHTML, true));
-	// 	tab.addEventListener("mouseleave", e => ItemHover(false, false));
-	// }
-
-	// const popup_close = document.querySelector("#popup_close");
-	// popup_close.addEventListener("click", function(e) {
-	// 	e.preventDefault();
-
-	// 	const _popup_callback_event = popup_callback_event;
-
-	// 	ClosePopUpPrompt();
-
-	// 	Events.Call(_popup_callback_event, false);
-	// });
 
 	const popup_input = document.querySelector("#popup_input");
 	popup_input.addEventListener("blur", (e) => {
@@ -407,13 +349,13 @@ function ShowPopUpPrompt(text, callback_event) {
 	popup_callback_event = callback_event;
 }
 
-function DisplayAsset(asset_pack, asset_id, asset_name, image) {
+function AddItem(group, item_id, item_name, image) {
 	if (!image) image = "images/nanosworld_empty.png";
 
 	const spawn_item = document.createElement("span");
 	spawn_item.classList.add("spawn_item");
 	spawn_item.addEventListener('click', SpawnItemClick);
-	spawn_item.addEventListener('mouseenter', e => ItemHover(e.target.dataset.asset_id, true, true));
+	spawn_item.addEventListener('mouseenter', e => ItemHover(e.target.dataset.item_id, true, true));
 	spawn_item.addEventListener('mouseleave', e => ItemHover(false, false, true));
 
 	const spawn_item_image = document.createElement("span");
@@ -422,11 +364,11 @@ function DisplayAsset(asset_pack, asset_id, asset_name, image) {
 	const spawn_item_name = document.createElement("span");
 	spawn_item_name.classList.add("spawn_item_name");
 
-	spawn_item.dataset.asset_pack = asset_pack;
-	spawn_item.dataset.asset_id = asset_id;
+	spawn_item.dataset.group = group;
+	spawn_item.dataset.item_id = item_id;
 	
 	spawn_item_image.style["background-image"] = `url('${image}'), url('images/nanosworld_empty.png')`;
-	spawn_item_name.innerHTML = asset_name;
+	spawn_item_name.innerHTML = item_name;
 
 	spawn_item.appendChild(spawn_item_image);
 	spawn_item.appendChild(spawn_item_name);
@@ -434,10 +376,10 @@ function DisplayAsset(asset_pack, asset_id, asset_name, image) {
 	document.querySelector("#spawn_list").appendChild(spawn_item);
 }
 
-function AddAssetPack(asset_pack_name, data) {
-	assets[asset_pack_name] = JSON.parse(data);
+function AddSpawnMenuGroup(group, group_data) {
+	spawn_menu_data[group] = JSON.parse(group_data);
 
-	RefreshAssets();
+	RefreshSpawnMenu();
 }
 
 function SetTimeOfDayLabel(hours, minutes) {
@@ -509,7 +451,9 @@ Events.Subscribe("ToggleSpawnMenuVisibility", function(is_visible) {
 		spawn_menu.style.display = "none";
 });
 
-Events.Subscribe("AddAssetPack", AddAssetPack);
+Events.Subscribe("AddSpawnMenuGroup", AddSpawnMenuGroup);
+Events.Subscribe("AddTab", AddTab);
+Events.Subscribe("AddCategory", AddCategory);
 Events.Subscribe("ToggleVoice", ToggleVoice);
 Events.Subscribe("AddNotification", AddNotification);
 Events.Subscribe("UpdateWeaponAmmo", UpdateWeaponAmmo);
@@ -519,6 +463,7 @@ Events.Subscribe("ClosePopUpPrompt", ClosePopUpPrompt);
 Events.Subscribe("ToggleTutorial", ToggleTutorial);
 
 
+// TODO fix pattern workaround, move to Lua?
 var PatternList = [
 	"T_80s_Pattern.jpg",
 	"T_Chochip_Pattern.jpg",

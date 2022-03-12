@@ -4,7 +4,7 @@ function Character:MoveRandom(distance)
 	self:MoveTo(random_location, 250)
 end
 
-function SpawnNPC(location, rotation, asset_pack, category, asset)
+function SpawnNPC(location, rotation, group, category, asset)
 	-- Spawns a random Character
 	local character = SpawnCharacterRandomized(location or Vector(), rotation + Rotator(0, math.random(0, 360), 0) or Rotator(), asset)
 

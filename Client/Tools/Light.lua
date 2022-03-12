@@ -21,7 +21,7 @@ function HandleLightTool(weapon)
 	end)
 
 	-- Sets some notification when grabbing the Light Tool
-	SetNotification("LIGHTS_PERFORMANCE", 5000, "too many lights can cause severe lag", 5000)
+	AddNotification("LIGHTS_PERFORMANCE", "too many lights can cause severe lag", 5000, 5000)
 end
 
 Events.Subscribe("PickUpToolGun_LightTool", function(tool)

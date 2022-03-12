@@ -1,4 +1,4 @@
-function SpawnBouncyBall(location, rotation, asset_pack, category, asset)
+function SpawnBouncyBall(location, rotation, group, category, asset)
 	-- Spawns a Ball Prop
 	local bouncy_ball = Prop(location or Vector(), (rotation or Rotator()) + Rotator(0, 90, 0), "nanos-world::SM_Sphere")
 	bouncy_ball:SetPhysicalMaterial("nanos-world::PM_RubberBouncy")

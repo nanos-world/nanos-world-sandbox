@@ -66,6 +66,7 @@ Package.Subscribe("Load", function()
 end)
 
 -- Function to set all needed events on local character (to update the UI when it takes damage or dies)
+---@param character Character
 function UpdateLocalCharacter(character)
 	-- Verifies if character is not nil (eg. when GetControllerCharacter() doesn't return a character)
 	if (character == nil) then return end
@@ -106,8 +107,8 @@ function UpdateLocalCharacter(character)
 			UpdateAmmo(true, object:GetAmmoClip(), object:GetAmmoBag())
 
 			-- Trigger Weapon Hints
-			SetNotification("AIM_DOWN_SIGHT", 3000, "you can use mouse wheel to aim down sight with your Weapon when you are in First Person Mode", 10000)
-			SetNotification("HEADSHOTS", 15000, "headshots can cause more damage", 10000)
+			AddNotification("AIM_DOWN_SIGHT", "you can use mouse wheel to aim down sight with your Weapon when you are in First Person Mode", 10000, 3000)
+			AddNotification("HEADSHOTS", "headshots can cause more damage", 10000, 15000)
 
 			-- Sets on character an event to update the UI when he fires
 			character:Subscribe("Fire", function(charac, weapon)

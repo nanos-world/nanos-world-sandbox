@@ -29,21 +29,21 @@ end
 SpawnMenuItems = {}
 
 -- Event for Spawning and Item from the SpawnMenu
-Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spawn_location, spawn_rotation, selected_option)
+Events.Subscribe("SpawnItem", function(player, group, tab, asset, spawn_location, spawn_rotation, selected_option)
 	local character = player:GetControlledCharacter()
 
 	local item = nil
 
-	if (category == "vehicles") then
+	if (tab == "vehicles") then
 		spawn_location = character:GetLocation() + Vector(0, 0, 50)
 		spawn_rotation = character:GetRotation()
-	elseif (category == "tools" or category == "weapons") then
+	elseif (tab == "tools" or tab == "weapons") then
 		spawn_location = character:GetLocation()
 	end
 
 	-- If spawning a Prop
-	if (category == "props") then
-		local asset_path = asset_pack .. "::" .. asset
+	if (tab == "props") then
+		local asset_path = group .. "::" .. asset
 
 		item = Prop(spawn_location + Vector(0, 0, 50), Rotator(0, spawn_rotation.Yaw + 180, 0), asset_path)
 
@@ -52,21 +52,21 @@ Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 			SetupBreakableProp(item)
 		end
 	else
-		if (not SpawnMenuItems[asset_pack] or not SpawnMenuItems[asset_pack][category] or not SpawnMenuItems[asset_pack][category][asset]) then
-			Package.Error("Failed to find item to spawn: Asset Pack '%s'. Category '%s'. Asset '%s'.", asset_pack, category, asset)
+		if (not SpawnMenuItems[group] or not SpawnMenuItems[group][tab] or not SpawnMenuItems[group][tab][asset]) then
+			Package.Error("Failed to find item to spawn: Asset Pack '%s'. Tab '%s'. Asset '%s'.", group, tab, asset)
 			return
 		end
 
-		local spawn_menu_item = SpawnMenuItems[asset_pack][category][asset]
+		local spawn_menu_item = SpawnMenuItems[group][tab][asset]
 
 		-- If this has a spawn function, uses it, otherwise uses the Package Call method because it may have been created by another package
 		if (spawn_menu_item.spawn_function) then
-			item = spawn_menu_item.spawn_function(spawn_location, spawn_rotation, asset_pack, category, asset)
+			item = spawn_menu_item.spawn_function(spawn_location, spawn_rotation, group, tab, asset)
 		else
-			item = Package.Call(spawn_menu_item.package_name, spawn_menu_item.package_function, spawn_location, spawn_rotation, asset_pack, category, asset)
+			item = Package.Call(spawn_menu_item.package_name, spawn_menu_item.package_function, spawn_location, spawn_rotation, group, tab, asset)
 		end
 
-		if (category == "tools") then
+		if (tab == "tools") then
 			item:SetValue("ToolGun", asset, true)
 
 			item:Subscribe("PickUp", function(weapon, char)
@@ -98,7 +98,7 @@ Events.Subscribe("SpawnItem", function(player, asset_pack, category, asset, spaw
 				if (selected_option ~= "") then
 					ApplyWeaponPattern(item, selected_option)
 				end
-			elseif (category == "vehicles") then
+			elseif (tab == "vehicles") then
 				-- Enters the Character
 				character:EnterVehicle(item, 0)
 			elseif (item:GetType() == "Melee" or item:GetType() == "Grenade") then
@@ -126,17 +126,23 @@ Events.Subscribe("DestroyItem", function(player, item)
 	item:Destroy()
 end)
 
--- Function for Adding new Spawn Menu items
-function AddSpawnMenuItem(asset_pack, category, id, spawn_function, package_name, package_function)
-	if (not SpawnMenuItems[asset_pack]) then
-		SpawnMenuItems[asset_pack] = {}
+-- Adds a new item to the Spawn Menu
+---@param group string				Unique ID used to identify from which 'group' it belongs, not necessarily the asset pack itself
+---@param tab string				Tab of this item - it must be 'props', 'weapons', 'tools' or 'vehicles'
+---@param id string					Unique ID used to identify this item
+---@param spawn_function string		Spawn function
+---@param package_name? string		Your package name which will be used to call your spawn function (used by external packages if spawn_function is not passed)
+---@param package_function? table	Spawn Function name which will be called from sandbox (used by external packages if spawn_function is not passed)
+function AddSpawnMenuItem(group, tab, id, spawn_function, package_name, package_function)
+	if (not SpawnMenuItems[group]) then
+		SpawnMenuItems[group] = {}
 	end
 
-	if (not SpawnMenuItems[asset_pack][category]) then
-		SpawnMenuItems[asset_pack][category] = {}
+	if (not SpawnMenuItems[group][tab]) then
+		SpawnMenuItems[group][tab] = {}
 	end
 
-	SpawnMenuItems[asset_pack][category][id] = {
+	SpawnMenuItems[group][tab][id] = {
 		spawn_function = spawn_function,
 		package_name = package_name,
 		package_function = package_function,
@@ -156,8 +162,8 @@ Events.Subscribe("ApplyWeaponPattern", function(player, weapon, pattern_texture)
 end)
 
 -- Exported functions cannot have functions as arguments, so we get the package name and package_function name and call it the proper way
-Package.Export("AddSpawnMenuItem", function(asset_pack, category, id, package_name, package_function)
-	AddSpawnMenuItem(asset_pack, category, id, nil, package_name, package_function)
+Package.Export("AddSpawnMenuItem", function(group, tab, id, package_name, package_function)
+	AddSpawnMenuItem(group, tab, id, nil, package_name, package_function)
 end)
 
 -- Adds the default NanosWorld items

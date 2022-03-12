@@ -51,7 +51,7 @@ function HandleResizerTool(weapon, character)
 	character:Subscribe("WeaponAimModeChanged", ResizerWeaponAimModeChanged)
 
 	-- Sets some notification when grabbing the Tool
-	SetNotification("RESIZER_GUIDE", 5000, "hold down Left Mouse to select an object, then use mouse wheel to size it up or down", 10000)
+	AddNotification("RESIZER_GUIDE", "hold down Left Mouse to select an object, then use mouse wheel to size it up or down", 10000, 5000)
 end
 
 Client.Subscribe("MouseUp", function(key_name)

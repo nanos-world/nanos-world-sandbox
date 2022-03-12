@@ -17,11 +17,11 @@ SelectedOption = SelectedOption or ""
 Client.SetHighlightColor(Color(0, 20, 0, 1.20), 0, HighlightMode.Always) -- Index 0
 
 Package.Subscribe("Load", function()
-	-- Wait 1 second so all other packages can send their Tools
+	-- Wait 1 second so all other packages can send their Tools during Package Load event
 	Timer.SetTimeout(function()
 		local asset_packs = Assets.GetAssetPacks()
 
-		-- Loads all AssetPacks
+		-- Loads all Asset Packs
 		for _, asset_pack in pairs(asset_packs) do
 			if (not SpawnMenuItems[asset_pack.Path]) then SpawnMenuItems[asset_pack.Path] = {} end
 			if (not SpawnMenuItems[asset_pack.Path].props) then SpawnMenuItems[asset_pack.Path].props = {} end
@@ -36,6 +36,7 @@ Package.Subscribe("Load", function()
 
 			for _, prop in pairs(props) do
 				-- TODO make global way to access categories for other Asset Packs
+				-- Get the category from a default list
 				local asset_category = DEFAULT_ASSET_PACK[prop]
 
 				table.insert(SpawnMenuItems[asset_pack.Path].props, {
@@ -47,9 +48,10 @@ Package.Subscribe("Load", function()
 			end
 		end
 
-		-- Iterate each Asset Pack to add to Spawn Menu
-		for asset_pack, asset_pack_data in pairs(SpawnMenuItems) do
-			MainHUD:CallEvent("AddAssetPack", asset_pack, JSON.stringify(asset_pack_data))
+		-- Iterate each group to add to Spawn Menu, this will add all items to it
+		-- If an item is added after this it will not be added to spawn menu
+		for group, spawn_menu_group_data in pairs(SpawnMenuItems) do
+			MainHUD:CallEvent("AddSpawnMenuGroup", group, JSON.stringify(spawn_menu_group_data))
 		end
 	end, 1000)
 end)
@@ -70,7 +72,7 @@ end)
 -- Function to delete the last item spawned
 function DeleteItemFromHistory()
 	if (#SpawnsHistory == 0) then
-		AddNotification("NO_ITEM_TO_DELETE", "there are no items in your History to destroy!", 3000, true)
+		AddNotification("NO_ITEM_TO_DELETE", "there are no items in your History to destroy!", 3000, 0, true)
 		return
 	end
 
@@ -124,7 +126,7 @@ MainHUD:Subscribe("ClickSound", function(pitch)
 end)
 
 -- Handle for selecting an Item from the SpawnMenu
-MainHUD:Subscribe("SpawnItem", function(asset_pack, category, asset_id)
+MainHUD:Subscribe("SpawnItem", function(group, category, asset_id)
 	-- Gets the world spawn location to spawn the Item
 	local viewport_2D_center = Client.GetViewportSize() / 2
 	local viewport_3D = Client.DeprojectScreenToWorld(viewport_2D_center)
@@ -146,15 +148,15 @@ MainHUD:Subscribe("SpawnItem", function(asset_pack, category, asset_id)
 	end
 
 	-- Triggers client side
-	if (not Events.Call("SpawnItem_" .. asset_id, asset_pack, category, asset_id, spawn_location, spawn_rotation)) then
+	if (not Events.Call("SpawnItem_" .. asset_id, group, category, asset_id, spawn_location, spawn_rotation)) then
 		return
 	end
 
 	-- Calls server to spawn it
-	Events.CallRemote("SpawnItem", asset_pack, category, asset_id, spawn_location, spawn_rotation, SelectedOption)
+	Events.CallRemote("SpawnItem", group, category, asset_id, spawn_location, spawn_rotation, SelectedOption)
 
 	-- Spawns a sound for 'spawning an item'
-	Sound(Vector(), "nanos-world::A_VR_Teleport", true, true, SoundType.SFX, 0.15)
+	Sound(Vector(), "nanos-world::A_VR_Teleport", true, true, SoundType.SFX, 0.15, 1.1)
 end)
 
 -- Subscribes for when I select an Option
@@ -264,12 +266,19 @@ function TraceFor(trace_max_distance, collision_channel)
 	return Client.Trace(start_location, end_location, collision_channel, true, true)
 end
 
--- Function for Adding new Spawn Menu items
-function AddSpawnMenuItem(asset_pack, tab, id, name, image, category, tutorials)
-	if (not SpawnMenuItems[asset_pack]) then SpawnMenuItems[asset_pack] = {} end
-	if (not SpawnMenuItems[asset_pack][tab]) then SpawnMenuItems[asset_pack][tab] = {} end
+-- Adds a new item to the Spawn Menu
+---@param group string			Unique ID used to identify from which 'group' it belongs
+---@param tab string			The tab to display this item - it must be 'props', 'weapons', 'tools' or 'vehicles'
+---@param id string				Unique ID used to identify this item
+---@param name string			Display name
+---@param image string			Image path
+---@param category string		The category of this item, each tab has it's own set of categories (Prop: 'basic', 'appliances', 'construction', 'furniture', 'funny', 'tools', 'food', 'street', 'nature' or 'uncategorized'. Weapon: 'rifles', 'smgs', 'pistols', 'shotguns', 'sniper-rifles', 'special' or 'grenades')
+---@param tutorials table		List of tutorials to display in the top left screen, in the format: { { key = 'KeyName', text = 'description of the action' }, ... }
+function AddSpawnMenuItem(group, tab, id, name, image, category, tutorials)
+	if (not SpawnMenuItems[group]) then SpawnMenuItems[group] = {} end
+	if (not SpawnMenuItems[group][tab]) then SpawnMenuItems[group][tab] = {} end
 
-	table.insert(SpawnMenuItems[asset_pack][tab], {
+	table.insert(SpawnMenuItems[group][tab], {
 		id = id,
 		name = name,
 		image = image,
@@ -298,20 +307,45 @@ end
 -- Exposes this to other packages
 Package.Export("AddSpawnMenuItem", AddSpawnMenuItem)
 
--- Requires all Tools
-Package.Require("Tools/Balloon.lua")
-Package.Require("Tools/Color.lua")
-Package.Require("Tools/Lamp.lua")
-Package.Require("Tools/Light.lua")
-Package.Require("Tools/PhysicsGun.lua")
-Package.Require("Tools/Remover.lua")
-Package.Require("Tools/Resizer.lua")
-Package.Require("Tools/Rope.lua")
-Package.Require("Tools/Thruster.lua")
-Package.Require("Tools/Trail.lua")
-Package.Require("Tools/Weld.lua")
+Package.Export("AddSpawnMenuTab", function(id, name, image_active, image_inactive)
+	MainHUD:CallEvent("AddTab", id, name, image_active, image_inactive)
+end)
 
-Package.Require("Entities/CCTV.lua")
+Package.Export("AddSpawnMenuCategory", function(tab_id, id, label, image_active, image_inactive)
+	MainHUD:CallEvent("AddCategory", tab_id, id, label, image_active, image_inactive)
+end)
+
+-- Configures Tabs
+MainHUD:CallEvent("AddTab", "props", "props", "images/tabs/chair.png", "images/tabs/chair-disabled.png")
+MainHUD:CallEvent("AddTab", "entities", "entities", "images/tabs/rocket.png", "images/tabs/rocket-disabled.png")
+MainHUD:CallEvent("AddTab", "weapons", "weapons", "images/tabs/gun.png", "images/tabs/gun-disabled.png")
+MainHUD:CallEvent("AddTab", "vehicles", "vehicles", "images/tabs/car.png", "images/tabs/car-disabled.png")
+MainHUD:CallEvent("AddTab", "tools", "tools", "images/tabs/paint-spray.png", "images/tabs/paint-spray-disabled.png")
+MainHUD:CallEvent("AddTab", "npcs", "npcs", "images/tabs/robot.png", "images/tabs/robot-disabled.png")
+
+-- Configures Categories
+MainHUD:CallEvent("AddCategory", "props", "basic", "Basic", "images/categories/shapes.png", "images/categories/shapes-disabled.png")
+MainHUD:CallEvent("AddCategory", "props", "appliances", "Appliances", "images/categories/appliances.png", "images/categories/appliances-disabled.png")
+MainHUD:CallEvent("AddCategory", "props", "construction", "Construction", "images/categories/construction.png", "images/categories/construction-disabled.png")
+MainHUD:CallEvent("AddCategory", "props", "furniture", "Furniture", "images/categories/lamp.png", "images/categories/lamp-disabled.png")
+MainHUD:CallEvent("AddCategory", "props", "funny", "Funny", "images/categories/joker-hat.png", "images/categories/joker-hat-disabled.png")
+MainHUD:CallEvent("AddCategory", "props", "tools", "Tools", "images/categories/tools.png", "images/categories/tools-disabled.png")
+MainHUD:CallEvent("AddCategory", "props", "food", "Food", "images/categories/hot-dog.png", "images/categories/hot-dog-disabled.png")
+MainHUD:CallEvent("AddCategory", "props", "street", "Street", "images/categories/street-lamp.png", "images/categories/street-lamp-disabled.png")
+MainHUD:CallEvent("AddCategory", "props", "nature", "Nature", "images/categories/tree.png", "images/categories/tree-disabled.png")
+MainHUD:CallEvent("AddCategory", "props", "uncategorized", "Uncategorized", "images/categories/menu.png", "images/categories/menu-disabled.png")
+
+MainHUD:CallEvent("AddCategory", "weapons", "rifles", "Rifles", "images/categories/rifle.png", "images/categories/rifle-disabled.png")
+MainHUD:CallEvent("AddCategory", "weapons", "smgs", "SMGs", "images/categories/smg.png", "images/categories/smg-disabled.png")
+MainHUD:CallEvent("AddCategory", "weapons", "pistols", "Pistols", "images/categories/revolver.png", "images/categories/revolver-disabled.png")
+MainHUD:CallEvent("AddCategory", "weapons", "shotguns", "Shotguns", "images/categories/shotgun.png", "images/categories/shotgun-disabled.png")
+MainHUD:CallEvent("AddCategory", "weapons", "sniper-rifles", "Sniper Rifles", "images/categories/sniper-rifle.png", "images/categories/sniper-rifle-disabled.png")
+MainHUD:CallEvent("AddCategory", "weapons", "special", "Special", "images/categories/laser-gun.png", "images/categories/laser-gun-disabled.png")
+MainHUD:CallEvent("AddCategory", "weapons", "grenades", "Grenade", "images/categories/grenade.png", "images/categories/grenade-disabled.png")
+MainHUD:CallEvent("AddCategory", "weapons", "melee", "Melee", "images/categories/knife.png", "images/categories/knife-disabled.png")
+
+MainHUD:CallEvent("AddCategory", "entities", "uncategorized", "Uncategorized", "images/categories/menu.png", "images/categories/menu-disabled.png")
+
 -- Adds the default NanosWorld items
 -- Default Weapons
 AddSpawnMenuItem("nanos-world", "weapons", "AK47", "AK-47", "assets///NanosWorld/Thumbnails/SK_AK47.jpg", "rifles")
@@ -370,5 +404,23 @@ AddSpawnMenuItem("nanos-world", "weapons", "Crowbar", "Crowbar", "assets///Nanos
 AddSpawnMenuItem("nanos-world", "entities", "BouncyBall", "BouncyBall", "assets///NanosWorld/Thumbnails/SM_Sphere.jpg", "uncategorized")
 
 -- Defines some Spawn Menu Hints
-SetNotification("SPAWN_MENU", 30000, "you can press Q to open the Spawn Menu", 10000)
-SetNotification("SPAWN_MENU_DESTROY_ITEM", 90000, "you can press X to delete your last spawned item", 10000)
+AddNotification("SPAWN_MENU", "you can press Q to open the Spawn Menu", 10000, 30000)
+AddNotification("SPAWN_MENU_DESTROY_ITEM", "you can press X to delete your last spawned item", 10000, 90000)
+
+
+-- Requires all Tools
+Package.Require("Tools/Balloon.lua")
+Package.Require("Tools/Color.lua")
+Package.Require("Tools/Lamp.lua")
+Package.Require("Tools/Light.lua")
+Package.Require("Tools/PhysicsGun.lua")
+Package.Require("Tools/Remover.lua")
+Package.Require("Tools/Resizer.lua")
+Package.Require("Tools/Rope.lua")
+Package.Require("Tools/Thruster.lua")
+Package.Require("Tools/Trail.lua")
+Package.Require("Tools/Useless.lua")
+Package.Require("Tools/Weld.lua")
+
+Package.Require("Entities/CCTV.lua")
+Package.Require("Entities/TV.lua")

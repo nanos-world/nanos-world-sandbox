@@ -90,11 +90,9 @@ Events.Subscribe("TogglePhysicsGun", function(player, weapon, enable)
         weapon:SetValue("BeamParticle", beam_particle, true)
 
         -- If the weapon is dropped, destroy the particle
-        weapon:Subscribe("Drop", function(weap, character, was_triggered_by_player)
-            StopBeamParticle(weap)
-        end)
+        weapon:Subscribe("Drop", StopBeamParticle)
     else
-        weapon:Unsubscribe("Drop")
+        weapon:Unsubscribe("Drop", StopBeamParticle)
 	    Events.BroadcastRemote("SpawnSound", weapon:GetLocation(), "nanos-world::A_Simulate_End", false, 1, 1)
     end
 end)

@@ -52,10 +52,10 @@ function HandlePhysicsGun(weapon, character)
 	character:Subscribe("WeaponAimModeChanged", PhysicsGunWeaponAimModeChanged)
 
 	-- Sets some notification when grabbing the Light Tool
-	SetNotification("PHYSICS_GUN_FREEZE", 10000, "while using a Physics Gun, press with the Right Click to freeze the object", 8000)
-	SetNotification("PHYSICS_GUN_ROTATE", 25000, "you can rotate the object you are moving while holding E key and Mouse Wheel", 8000)
-	SetNotification("PHYSICS_GUN_ROTATE_ANOTHER", 35000, "you can rotate the object you are moving in another direction while holding Alt+E key and Mouse Wheel", 8000)
-	SetNotification("PHYSICS_GUN_ROTATE_DISTANCE", 50000, "you can approximate the object you are moving with Mouse Wheel", 8000)
+	AddNotification("PHYSICS_GUN_FREEZE", "while using a Physics Gun, press with the Right Click to freeze the object", 8000, 10000)
+	AddNotification("PHYSICS_GUN_ROTATE", "you can rotate the object you are moving while holding E key and Mouse Wheel", 8000, 25000)
+	AddNotification("PHYSICS_GUN_ROTATE_ANOTHER", "you can rotate the object you are moving in another direction while holding Alt+E key and Mouse Wheel", 8000, 35000)
+	AddNotification("PHYSICS_GUN_ROTATE_DISTANCE", "you can approximate the object you are moving with Mouse Wheel", 8000, 50000)
 end
 
 -- Highlight objects being grabbed with index 1

@@ -29,7 +29,7 @@ function HandleBalloonTool(weapon)
 	end)
 
 	-- Sets some notification when grabbing the Balloon Tool
-	SetNotification("BALLOONS_POP", 5000, "balloons will start to pop if they reach a very high height", 5000)
+	AddNotification("BALLOONS_POP", "balloons will start to pop if they reach a very high height", 5000, 5000)
 end
 
 Events.Subscribe("PickUpToolGun_BalloonTool", function(tool)
