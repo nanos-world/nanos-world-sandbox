@@ -17,7 +17,7 @@ Package.Call("sandbox", "FunctionName", param1, param2, param3...)
 
 ```lua
 -- Adds a Notification in the screen
----@param id string			Unique ID used to store if the notification was already displayed to the player
+---@param id string		Unique ID used to store if the notification was already displayed to the player
 ---@param message string	The message to display
 ---@param time number		Duration of the notification
 ---@param delay number		Time to wait until display the notification
@@ -52,22 +52,37 @@ On the Client side, we will define how the Item will be displayed in the Spawn M
 -- Adds a new item to the Spawn Menu
 ---@param group string			Unique ID used to identify from which 'group' it belongs
 ---@param tab string			The tab to display this item - it must be 'props', 'weapons', 'tools' or 'vehicles'
----@param id string				Unique ID used to identify this item
+---@param id string			Unique ID used to identify this item
 ---@param name string			Display name
 ---@param image string			Image path
----@param category string		The category of this item, each tab has it's own set of categories (Prop: 'basic', 'appliances', 'construction', 'furniture', 'funny', 'tools', 'food', 'street', 'nature' or 'uncategorized'. Weapon: 'rifles', 'smgs', 'pistols', 'shotguns', 'sniper-rifles', 'special' or 'grenades')
----@param tutorials table		List of tutorials to display in the top left screen, in the format: { { key = 'KeyName', text = 'description of the action' }, ... }
+---@param category string		The category of this item, each tab has it's own set of categories
+---@param tutorials table		List of tutorials to display in the top left screen, in the format:
+--					{ { key = 'KeyName', text = 'description of the action' }, ... }
 function AddSpawnMenuItem(group, tab, id, name, image, category, tutorials)
 ```
+
+The built-in categories are:
+- **Prop**: 'basic', 'appliances', 'construction', 'furniture', 'funny', 'tools', 'food', 'street', 'nature' or 'uncategorized'
+- **Weapon**: 'rifles', 'smgs', 'pistols', 'shotguns', 'sniper-rifles', 'special' or 'grenades'
 
 Example:
 
 ```lua
 -- Adds an Incredible Tool to spawn Menu (client side)
-Package.Call("sandbox", "AddSpawnMenuItem", "my-package", "tools", "IncredibleTool", "Incredible Tool", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg", nil, {
-	{ key = "LeftClick", text = "do amazing stuff" },
-	{ key = "E", text = "activate power" },
-})
+Package.Call(
+    "sandbox",
+    "AddSpawnMenuItem",
+    "my-package",
+    "tools",
+    "IncredibleTool",
+    "Incredible Tool",
+    "assets///NanosWorld/Thumbnails/SK_Blaster.jpg",
+    nil,
+    {
+        { key = "LeftClick", text = "do amazing stuff" },
+        { key = "E", text = "activate power" },
+    }
+)
 ```
 
 
@@ -79,9 +94,9 @@ On the Server side, we will define how the item will be spawned, here we will cr
 
 ```lua
 -- Adds a new item to the Spawn Menu
----@param group string				Unique ID used to identify from which 'group' it belongs
----@param tab string				Tab of this item
----@param id string					Unique ID used to identify this item
+---@param group string			Unique ID used to identify from which 'group' it belongs
+---@param tab string			Tab of this item
+---@param id string			Unique ID used to identify this item
 ---@param package_name string		Your package name which will be used to call your spawn function
 ---@param package_function table	The exported Spawn Function name which will be called from sandbox
 function AddSpawnMenuItem(group, tab, id, package_name, package_function)
@@ -90,22 +105,23 @@ function AddSpawnMenuItem(group, tab, id, package_name, package_function)
 Example:
 
 ```lua
--- Function which spawns the tool, the parameters location, rotation, group, tab and id will be passed automatically by the caller
+-- Function which spawns the tool
+-- The parameters location, rotation, group, tab and id will be passed automatically by the caller
 function SpawnMyIncredibleTool(location, rotation, group, tab, id)
-	local weapon = Weapon(location, rotation)
+    local weapon = Weapon(location, rotation)
 
-	-- ...
-	-- configure stuff
+    -- ...
+    -- configure stuff
 
-	return weapon
+    return weapon
 end
 
 -- Exports the function to be called by the Sandbox package
 Package.Export("SpawnMyIncredibleTool", SpawnMyIncredibleTool)
 
 Package.Subscribe("Load", function()
-	-- Adds an Incredible Tool to spawn Menu (server side)
-	Package.Call("sandbox", "AddSpawnMenuItem", "my-package", "tools", "IncredibleTool", SpawnMyIncredibleTool)
+    -- Adds an Incredible Tool to spawn Menu (server side)
+    Package.Call("sandbox", "AddSpawnMenuItem", "my-package", "tools", "IncredibleTool", SpawnMyIncredibleTool)
 end)
 ```
 
@@ -115,8 +131,8 @@ end)
 Adds a new tab to the Spawn Menu
 
 ```lua
----@param id string					Unique ID used to identify the tab
----@param name string				Label of the tab
+---@param id string			Unique ID used to identify the tab
+---@param name string			Label of the tab
 ---@param image_active string		Image path when the tab is selected
 ---@param image_inactive string		Image path when the tab is not selected
 function AddSpawnMenuTab(id, name, image_active, image_inactive)
@@ -126,8 +142,15 @@ Example:
 
 ```lua
 Package.Subscribe("Load", function()
-	-- Adds a new tab
-	Package.Call("sandbox", "AddSpawnMenuTab", "consumables", "consumables", "packages///my-package/food.png", "packages///my-package/food_inactive.png")
+    -- Adds a new tab
+    Package.Call(
+        "sandbox",
+        "AddSpawnMenuTab",
+        "consumables",
+        "consumables",
+        "packages///my-package/food.png",
+        "packages///my-package/food_inactive.png"
+    )
 end)
 ```
 
@@ -149,11 +172,27 @@ Example:
 
 ```lua
 Package.Subscribe("Load", function()
-	-- Adds a new category to Props tab
-	Package.Call("sandbox", "AddSpawnMenuCategory", "props", "low-poly", "low poly", "packages///my-package/low-poly.png", "packages///my-package/low-poly_inactive.png")
+    -- Adds a new category to Props tab
+    Package.Call(
+        "sandbox",
+        "AddSpawnMenuCategory",
+        "props",
+        "low-poly",
+        "low poly",
+        "packages///my-package/low-poly.png",
+        "packages///my-package/low-poly_inactive.png"
+    )
 
-	-- Adds a new category to Weapons tab
-	Package.Call("sandbox", "AddSpawnMenuCategory", "weapons", "world-war", "world war", "packages///my-package/ww.png", "packages///my-package/ww_inactive.png")
+    -- Adds a new category to Weapons tab
+    Package.Call(
+        "sandbox",
+        "AddSpawnMenuCategory",
+        "weapons",
+        "world-war",
+        "world war",
+        "packages///my-package/ww.png",
+        "packages///my-package/ww_inactive.png"
+    )
 end)
 ```
 
@@ -171,7 +210,7 @@ Example:
 
 ```lua
 Events.Subscribe("PickUpToolGun_", id, weapon, character)
-	-- do something with the tool
+    -- do something with the tool
 end
 ```
 
@@ -184,7 +223,7 @@ Example:
 
 ```lua
 Events.Subscribe("DropToolGun", id, weapon, character)
-	-- do something with the tool
+    -- do something with the tool
 end
 ```
 
@@ -197,7 +236,7 @@ Example:
 
 ```lua
 Events.Subscribe("PickUpToolGun_IncredibleTool", id, weapon, character)
-	-- do something with the Incredible Tool
+    -- do something with the Incredible Tool
 end
 ```
 
@@ -210,7 +249,7 @@ Example:
 
 ```lua
 Events.Subscribe("DropToolGun_IncredibleTool", id, weapon, character)
-	-- do something with the Incredible Tool
+    -- do something with the Incredible Tool
 end
 ```
 
