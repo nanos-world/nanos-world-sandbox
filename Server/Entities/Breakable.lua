@@ -73,7 +73,7 @@ function InflameProp(prop)
 end
 
 -- This will "Break" a breakable prop into several Debris
-function BreakProp(prop, intensity, velocity)
+function BreakProp(prop, intensity)
 	local breakable_data = BreakableProps[prop:GetAssetName()]
 
 	if (not breakable_data) then
@@ -87,13 +87,9 @@ function BreakProp(prop, intensity, velocity)
 	end
 
 	-- Stores object data
-	local parent_location = prop:GetLocation() + velocity / 30
-	local parent_rotation = prop:GetRotation()
+	local parent_location = prop:GetLocation()
 	local parent_scale = prop:GetScale()
 	local override_lifespan = prop:GetValue("DebrisLifeSpan")
-
-	-- Destroy main prop
-	prop:Destroy()
 
 	for debris_i in pairs(breakable_data.debris) do
 		local debris_data = breakable_data.debris[debris_i]
@@ -103,26 +99,18 @@ function BreakProp(prop, intensity, velocity)
 			return
 		end
 
-		-- Spawns the Debris
-		local debris = Prop(
-			parent_location + ((debris_data.offset and parent_rotation:UnrotateVector(debris_data.offset)) or Vector()),
-			parent_rotation + (debris_data.rotation or Rotator.Random()),
+		-- Spawns the Debris on the client (better performance for server)
+		Events.BroadcastRemote("SpawnDebris",
+			prop,
+			debris_data.offset,
+			debris_data.rotation,
 			debris_data.mesh,
-			CollisionType.StaticOnly,
-			true,
-			false,
-			true
+			override_lifespan or debris_data.lifespan or 10
 		)
-
-		-- Copy parent scale
-		debris:SetScale(parent_scale)
-
-		-- Copy parent velocity, adds a small randomness to make it better
-		debris:AddImpulse(velocity * 0.5 + Vector(math.random(-100, 100), math.random(-100, 100), math.random(-100, 100)), true)
-
-		-- Setup lifespan
-		debris:SetLifeSpan(override_lifespan or debris_data.lifespan or 10)
 	end
+
+	-- Destroy main prop
+	prop:Destroy()
 
 	if (breakable_data.explosive) then
 		ExplodeProp(parent_location, breakable_data.explosive, parent_scale.X)

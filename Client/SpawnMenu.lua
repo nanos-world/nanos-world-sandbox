@@ -424,3 +424,4 @@ Package.Require("Tools/Weld.lua")
 
 Package.Require("Entities/CCTV.lua")
 Package.Require("Entities/TV.lua")
+Package.Require("Entities/Breakable.lua")
