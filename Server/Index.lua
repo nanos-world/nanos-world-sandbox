@@ -40,7 +40,8 @@ MALE_DEATH_SOUNDS = {
 	"nanos-world::A_Male_03_Death",
 	"nanos-world::A_Male_04_Death",
 	"nanos-world::A_Male_05_Death",
-	"nanos-world::A_Male_06_Death"
+	"nanos-world::A_Male_06_Death",
+	"nanos-world::A_Wilhelm_Scream"
 }
 
 -- List of Pain Male voices

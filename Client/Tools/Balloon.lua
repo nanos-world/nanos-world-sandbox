@@ -7,7 +7,7 @@ function HandleBalloonTool(weapon)
 
 		if (trace_result.Success) then
 			local distance_trace_object = Vector()
-			if (trace_result.Entity) then
+			if (trace_result.Entity and trace_result.Entity:IsNetworkDistributed()) then
 				-- If hit an entity, then calculates the offset distance from the Hit and the Object
 				distance_trace_object = trace_result.Entity:GetLocation() - trace_result.Location
 			end

@@ -34,7 +34,7 @@ function HandleWeldTool(tool)
 				return
 
 			-- If is not yet attached to start
-			elseif (trace_result.Entity) then
+			elseif (trace_result.Entity and trace_result.Entity:IsNetworkDistributed()) then
 				WeldTool.welding_start_to = trace_result.Entity
 
 				-- Enable Highlighting on index 0

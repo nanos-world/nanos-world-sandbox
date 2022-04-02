@@ -108,7 +108,7 @@ function TryPickUpObject()
 	local trace_result = Client.Trace(start_location, end_location, collision_trace, false, true)
 
 	-- If hit something and hit an Entity
-	if (trace_result.Success and trace_result.Entity) then
+	if (trace_result.Success and trace_result.Entity and trace_result.Entity:IsNetworkDistributed()) then
 		-- Cannot grab Characters (yet?), cannot grab attached entities or entities which are being grabbed
 		if (NanosUtils.IsA(trace_result.Entity, Character) or trace_result.Entity:GetAttachedTo() or trace_result.Entity:GetValue("IsBeingGrabbed")) then
 			return end_location
@@ -119,7 +119,7 @@ function TryPickUpObject()
 
 		-- Spawns a 'graviting' sound attached to the gravited object
 		PhysicsGun.grabbed_sound = Sound(Vector(), "nanos-world::A_VR_Object_Grabbed_Loop", false, false, SoundType.SFX, 0.25)
-		PhysicsGun.grabbed_sound:AttachTo(PhysicsGun.picking_object)
+		PhysicsGun.grabbed_sound:AttachTo(PhysicsGun.picking_object, AttachmentRule.SnapToTarget, "", 0)
 
 		-- Calculates the offset of the hit and the center of the object
 		PhysicsGun.picking_object_relative_location = PhysicsGun.picking_object:GetRotation():RotateVector(PhysicsGun.picking_object:GetLocation() - trace_result.Location)

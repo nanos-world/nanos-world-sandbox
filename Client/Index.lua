@@ -75,22 +75,14 @@ function UpdateLocalCharacter(character)
 	UpdateHealth(character:GetHealth())
 
 	-- Sets on character an event to update the health's UI after it takes damage
-	character:Subscribe("TakeDamage", function(charac, damage, type, bone, from_direction, instigator, causer)
-		-- Plays a Hit Taken sound effect
-		Sound(Vector(), "nanos-world::A_HitTaken_Feedback", true)
+	character:Subscribe("HealthChanged", function(charac, old_health, new_health)
+		-- Plays a Hit Taken sound effect if took damage
+		if (new_health < old_health) then
+			Sound(Vector(), "nanos-world::A_HitTaken_Feedback", true)
+		end
 
-		-- Updates the Health UI
-		UpdateHealth(math.max(charac:GetHealth() - damage, 0))
-	end)
-
-	-- Sets on character an event to update the health's UI after it dies
-	character:Subscribe("Death", function(charac)
-		UpdateHealth(0)
-	end)
-
-	-- Sets on character an event to update the health's UI after it respawns
-	character:Subscribe("Respawn", function(charac)
-		UpdateHealth(100)
+		-- Immediatelly Updates the Health UI
+		UpdateHealth(new_health)
 	end)
 
 	-- Try to get if the character is holding any weapon
@@ -104,29 +96,28 @@ function UpdateLocalCharacter(character)
 	-- Sets on character an event to update his grabbing weapon (to show ammo on UI)
 	character:Subscribe("PickUp", function(charac, object)
 		if (object:GetType() == "Weapon" and not object:GetValue("ToolGun")) then
+			-- Immediatelly Updates the Ammo UI
 			UpdateAmmo(true, object:GetAmmoClip(), object:GetAmmoBag())
 
 			-- Trigger Weapon Hints
 			AddNotification("AIM_DOWN_SIGHT", "you can use mouse wheel to aim down sight with your Weapon when you are in First Person Mode", 10000, 3000)
 			AddNotification("HEADSHOTS", "headshots can cause more damage", 10000, 15000)
 
-			-- Sets on character an event to update the UI when he fires
-			character:Subscribe("Fire", function(charac, weapon)
-				UpdateAmmo(true, weapon:GetAmmoClip(), weapon:GetAmmoBag())
-			end)
-
-			-- Sets on character an event to update the UI when he reloads the weapon
-			character:Subscribe("Reload", function(charac, weapon, ammo_to_reload)
-				UpdateAmmo(true, weapon:GetAmmoClip(), weapon:GetAmmoBag())
-			end)
+			-- Subscribes on the weapon when the Ammo changes
+			object:Subscribe("AmmoClipChanged", OnAmmoClipChanged)
+			object:Subscribe("AmmoBagChanged", OnAmmoBagChanged)
 		end
 	end)
 
 	-- Sets on character an event to remove the ammo ui when he drops it's weapon
 	character:Subscribe("Drop", function(charac, object)
-		UpdateAmmo(false)
-		character:Unsubscribe("Fire")
-		character:Unsubscribe("Reload")
+		-- Unsubscribes from events
+		if (object:GetType() == "Weapon") then
+			UpdateAmmo(false)
+			object:Unsubscribe("AmmoClipChanged", OnAmmoClipChanged)
+			object:Unsubscribe("AmmoBagChanged", OnAmmoBagChanged)
+		end
+
 		ToggleToolGunAiming(object, "", false)
 	end)
 
@@ -154,6 +145,16 @@ end
 -- Function to update the Health's UI
 function UpdateHealth(health)
 	MainHUD:CallEvent("UpdateHealth", health)
+end
+
+-- Callback when Weapon Ammo Clip changes
+function OnAmmoClipChanged(weapon, old_ammo_clip, new_ammo_clip)
+	UpdateAmmo(true, new_ammo_clip, weapon:GetAmmoBag())
+end
+
+-- Callback when Weapon Ammo Bag changes
+function OnAmmoBagChanged(weapon, old_ammo_bag, new_ammo_bag)
+	UpdateAmmo(true, weapon:GetAmmoClip(), new_ammo_bag)
 end
 
 Input.Bind("NoClip", InputEvent.Pressed, function()
