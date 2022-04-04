@@ -1,4 +1,4 @@
--- Resizer Tool variables
+-- Rope Tool variables
 RopeTool = {
 	attaching_start_to = nil,
 	attaching_start_location = Vector()
@@ -15,6 +15,12 @@ function HandleRopeTool(tool)
 		if (trace_result.Success) then
 			-- If is already attaching the start, then tries to attach the end
 			if (RopeTool.attaching_start_to) then
+				-- Do not allow attaching to itself
+				if (RopeTool.attaching_start_to == trace_result.Entity) then
+					Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
+					return
+				end
+
 				local attaching_end_to = trace_result.Entity
 				local attaching_end_location = trace_result.Location
 

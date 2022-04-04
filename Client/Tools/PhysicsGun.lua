@@ -7,14 +7,18 @@ PhysicsGun = {
 	picking_object_distance = 0,
 	picking_object_initial_rotation = Rotator(),
 	picking_object_snapped_moved = 0,
-	is_holding_alt = false,
-	is_using = false,
 	is_rotating_object = false,
-	quaternion_rotate_front = Rotator(-11.25, 0, 0):Quaternion(),
-	quaternion_rotate_back = Rotator(11.25, 0, 0):Quaternion(),
-	quaternion_rotate_right = Rotator(0, -11.25, 0):Quaternion(),
-	quaternion_rotate_left = Rotator(0, 11.25, 0):Quaternion(),
+	is_snapping_to_grid = false,
+	is_using = false,
 	grabbed_sound = nil,
+	accumulated_rotation_x = 0,
+	accumulated_rotation_y = 0,
+	quaternion_rotate_front = Rotator(-45, 0, 0):Quaternion(), -- Cache it for performance
+	quaternion_rotate_back = Rotator(45, 0, 0):Quaternion(), -- Cache it for performance
+	quaternion_rotate_right = Rotator(0, -45, 0):Quaternion(), -- Cache it for performance
+	quaternion_rotate_left = Rotator(0, 45, 0):Quaternion(), -- Cache it for performance
+	quaternion_mouse_move_x = Quat(0, 0, 0, -1), -- Cache it for performance
+	quaternion_mouse_move_y = Quat(0, 0, 0, 1), -- Cache it for performance
 }
 
 -- All BeamParticles being used
@@ -80,6 +84,7 @@ function TogglePhysicsGunLocal(is_using, freeze)
 			-- Stops the "graviting" sound
 			if (PhysicsGun.grabbed_sound) then
 				PhysicsGun.grabbed_sound:Destroy()
+				PhysicsGun.grabbed_sound = nil
 			end
 		end
 	end
@@ -129,10 +134,6 @@ function TryPickUpObject()
 
 		PhysicsGun.picking_object_initial_rotation = PhysicsGun.picking_object:GetRotation() - Client.GetLocalPlayer():GetControlledCharacter():GetRotation()
 
-		-- Resets settings
-		PhysicsGun.is_rotating_object = false
-		PhysicsGun.is_holding_alt = false
-
 		-- Calls remote to disable gravity of this object (if has)
 		Events.CallRemote("PickUp", PhysicsGun.weapon, PhysicsGun.picking_object, true, PhysicsGun.picking_object_relative_location)
 
@@ -145,29 +146,54 @@ end
 
 -- Handles KeyBindings
 Client.Subscribe("KeyUp", function(key_name)
-	if (not PhysicsGun.weapon or not PhysicsGun.picking_object) then return end
+	if (not PhysicsGun.weapon) then return end
 
-	if (key_name == "LeftAlt") then
-		PhysicsGun.is_holding_alt = false
+	if (key_name == "LeftShift") then
+		PhysicsGun.is_snapping_to_grid = false
+
+		-- Updates rotation to match
+		if (PhysicsGun.is_rotating_object) then
+			PhysicsGun.picking_object_initial_rotation = PhysicsGun.picking_object:GetRotation() - Client.GetLocalPlayer():GetControlledCharacter():GetRotation()
+		end
+
 		return
 	end
 
 	if (key_name == "E") then
 		PhysicsGun.is_rotating_object = false
+
+		-- Updates rotation to match
+		if (PhysicsGun.is_snapping_to_grid) then
+			PhysicsGun.picking_object_initial_rotation = PhysicsGun.picking_object:GetRotation() - Client.GetLocalPlayer():GetControlledCharacter():GetRotation()
+		end
+
 		return
 	end
 end)
 
 Client.Subscribe("KeyPress", function(key_name)
-	if (not PhysicsGun.weapon or not PhysicsGun.picking_object) then return end
+	if (not PhysicsGun.weapon) then return end
 
 	if (key_name == "E") then
 		PhysicsGun.is_rotating_object = true
+		return false
+	end
+
+	if (key_name == "LeftShift") then
+		PhysicsGun.is_snapping_to_grid = true
+		PhysicsGun.accumulated_rotation_x = 0
+		PhysicsGun.accumulated_rotation_y = 0
+
+		if (PhysicsGun.is_rotating_object) then
+			Sound(PhysicsGun.picking_object:GetLocation(), "nanos-world::A_Object_Snaps_To_Grid", false, true, SoundType.SFX, 0.05, 0.5)
+		end
+
 		return
 	end
 
-	if (key_name == "LeftAlt") then
-		PhysicsGun.is_holding_alt = true
+	-- Ignore input while rotating object
+	if (PhysicsGun.is_rotating_object) then
+		return false
 	end
 end)
 
@@ -186,44 +212,73 @@ end)
 Client.Subscribe("MouseUp", function(key_name)
 	if (not PhysicsGun.weapon) then return end
 
-	-- Scrolling will or move the object to far, or rotate it depending on the auxiliar keys pressed
+	-- Scrolling will or move the object to far
 	if (key_name == "MouseScrollUp") then
-		if (PhysicsGun.is_rotating_object) then
-			local new_rot = nil
-
-			if (PhysicsGun.is_holding_alt) then
-				new_rot = PhysicsGun.quaternion_rotate_front * PhysicsGun.picking_object_initial_rotation:Quaternion()
-			else
-				new_rot = PhysicsGun.quaternion_rotate_right * PhysicsGun.picking_object_initial_rotation:Quaternion()
-			end
-
-			PhysicsGun.picking_object_initial_rotation = new_rot:Rotator()
-		else
-			-- If mouse scroll, updates the Distance of the object from the camera
-			PhysicsGun.picking_object_distance = PhysicsGun.picking_object_distance + 25
-		end
+		-- If mouse scroll, updates the Distance of the object from the camera
+		PhysicsGun.picking_object_distance = PhysicsGun.picking_object_distance + 25
 		return
+	end
 
-	-- Scrolling will or move the object to far, or rotate it depending on the auxiliar keys pressed
-	elseif (key_name == "MouseScrollDown") then
-		if (PhysicsGun.is_rotating_object) then
-			local new_rot = nil
+	-- Scrolling will or move the object to far
+	if (key_name == "MouseScrollDown") then
+		-- If mouse scroll, updates the PhysicsGun.picking_object_distance of the object from the camera
+		PhysicsGun.picking_object_distance = PhysicsGun.picking_object_distance - 25
 
-			if (PhysicsGun.is_holding_alt) then
-				new_rot = PhysicsGun.quaternion_rotate_back * PhysicsGun.picking_object_initial_rotation:Quaternion()
-			else
-				new_rot = PhysicsGun.quaternion_rotate_left * PhysicsGun.picking_object_initial_rotation:Quaternion()
-			end
-
-			PhysicsGun.picking_object_initial_rotation = new_rot:Rotator()
-		else
-			-- If mouse scroll, updates the PhysicsGun.picking_object_distance of the object from the camera
-			PhysicsGun.picking_object_distance = PhysicsGun.picking_object_distance - 25
-
-			-- Cannot scroll too close
-			if (PhysicsGun.picking_object_distance < 100) then PhysicsGun.picking_object_distance = 100 end
-		end
+		-- Cannot scroll too close
+		if (PhysicsGun.picking_object_distance < 100) then PhysicsGun.picking_object_distance = 100 end
 		return
+	end
+end)
+
+function RoundRotator(rotator, degrees)
+	return Rotator(
+		NanosMath.Round(rotator.Pitch / degrees) * degrees,
+		NanosMath.Round(rotator.Yaw / degrees) * degrees,
+		NanosMath.Round(rotator.Roll / degrees) * degrees
+	)
+end
+
+Client.Subscribe("MouseMoveX", function(delta, delta_time, num_samples)
+	if (not PhysicsGun.weapon or not PhysicsGun.picking_object) then return end
+
+	if (PhysicsGun.is_rotating_object) then
+		if (PhysicsGun.is_snapping_to_grid) then
+			PhysicsGun.accumulated_rotation_x = PhysicsGun.accumulated_rotation_x + delta * 0.005
+			if (math.abs(PhysicsGun.accumulated_rotation_x) > 1) then
+				local diff = PhysicsGun.accumulated_rotation_x > 0 and PhysicsGun.quaternion_rotate_right or PhysicsGun.quaternion_rotate_left
+				PhysicsGun.accumulated_rotation_x = 0
+				PhysicsGun.picking_object_initial_rotation = (diff * PhysicsGun.picking_object_initial_rotation:Quaternion()):Rotator()
+
+				Sound(PhysicsGun.picking_object:GetLocation(), "nanos-world::A_Object_Snaps_To_Grid", false, true, SoundType.SFX, 0.05, 0.5)
+			end
+		else
+			PhysicsGun.quaternion_mouse_move_x.Z = 0.001 * delta
+			PhysicsGun.picking_object_initial_rotation = (PhysicsGun.quaternion_mouse_move_x * PhysicsGun.picking_object_initial_rotation:Quaternion()):Rotator()
+		end
+
+		return false
+	end
+end)
+
+Client.Subscribe("MouseMoveY", function(delta, delta_time, num_samples)
+	if (not PhysicsGun.weapon or not PhysicsGun.picking_object) then return end
+
+	if (PhysicsGun.is_rotating_object) then
+		if (PhysicsGun.is_snapping_to_grid) then
+			PhysicsGun.accumulated_rotation_y = PhysicsGun.accumulated_rotation_y + delta * 0.005
+			if (math.abs(PhysicsGun.accumulated_rotation_y) > 1) then
+				local diff = PhysicsGun.accumulated_rotation_y > 0 and PhysicsGun.quaternion_rotate_front or PhysicsGun.quaternion_rotate_back
+				PhysicsGun.accumulated_rotation_y = 0
+				PhysicsGun.picking_object_initial_rotation = (diff * PhysicsGun.picking_object_initial_rotation:Quaternion()):Rotator()
+
+				Sound(PhysicsGun.picking_object:GetLocation(), "nanos-world::A_Object_Snaps_To_Grid", false, true, SoundType.SFX, 0.05, 0.5)
+			end
+		else
+			PhysicsGun.quaternion_mouse_move_y.Y = 0.001 * delta
+			PhysicsGun.picking_object_initial_rotation = (PhysicsGun.quaternion_mouse_move_y * PhysicsGun.picking_object_initial_rotation:Quaternion()):Rotator()
+		end
+
+		return false
 	end
 end)
 
@@ -293,8 +348,13 @@ Timer.SetInterval(function()
 		camera_rotation.Pitch = 0
 		local rotation = camera_rotation + PhysicsGun.picking_object_initial_rotation
 
+		-- Rounds if snapping to grid
+		if (PhysicsGun.is_rotating_object and PhysicsGun.is_snapping_to_grid) then
+			rotation = RoundRotator(rotation, 45)
+		end
+
 		-- Calls remote to update it's location
-		Events.CallRemote("UpdateObjectPosition", PhysicsGun.picking_object, end_location, rotation, PhysicsGun.is_holding_alt)
+		Events.CallRemote("UpdateObjectPosition", PhysicsGun.picking_object, end_location, rotation)
 	end
 end, 0.033)
 
@@ -325,6 +385,6 @@ AddSpawnMenuItem("nanos-world", "tools", "PhysicsGun", "Physics Gun", "assets///
 	{ key = "LeftClick", text = "grab object" },
 	{ key = "RightMouseButton", text = "freeze object" },
 	{ key = "MouseScrollUp", text = "increase/decrease beam size" },
-	{ key = "LeftAlt", text = "rotate object" },
 	{ key = "E", text = "rotate object" },
+	{ key = "LeftShift", text = "snap to grid" },
 })

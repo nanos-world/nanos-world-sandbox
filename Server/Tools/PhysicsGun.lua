@@ -54,12 +54,12 @@ Events.Subscribe("PickUp", function(player, weapon, object, is_grabbing, picking
 end)
 
 -- Subscribe for Client's custom event, to update the position of the object he is grabbing
-Events.Subscribe("UpdateObjectPosition", function(player, object, location, rotation, snap_to_grid)
+Events.Subscribe("UpdateObjectPosition", function(player, object, location, rotation)
     -- Maybe the server is closing?
     if (not object) then return end
 
     object:TranslateTo(location, 0.05)
-    object:RotateTo(rotation, 0.05)
+    object:RotateTo(rotation, 0.1)
 
     -- Only updates the Network Authority if this entity is network distributed
     if (object:IsNetworkDistributed()) then
@@ -82,8 +82,8 @@ Events.Subscribe("TogglePhysicsGun", function(player, weapon, enable)
         beam_particle:AttachTo(weapon, AttachmentRule.SnapToTarget, "muzzle")
 
         -- Sets the Color and some settings to make it pretty
-        beam_particle:SetParameterColor("BeamColor", Color(0, 0, 2, 1))
-        beam_particle:SetParameterFloat("BeamWidth", 2)
+        beam_particle:SetParameterColor("BeamColor", Color(0, 0, 1, 1))
+        beam_particle:SetParameterFloat("BeamWidth", 1.5)
         beam_particle:SetParameterFloat("JitterAmount", 1)
 
         -- Sets in the weapon the particle value, so it can be get after all

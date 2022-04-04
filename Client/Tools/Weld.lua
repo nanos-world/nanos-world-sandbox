@@ -14,6 +14,12 @@ function HandleWeldTool(tool)
 		if (trace_result.Success) then
 			-- If is already attaching the start, then tries to attach the end
 			if (WeldTool.welding_start_to) then
+				-- Do not allow attaching to itself
+				if (WeldTool.welding_start_to == trace_result.Entity) then
+					Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
+					return
+				end
+
 				local welding_end_to = trace_result.Entity
 				local welding_end_location = trace_result.Location
 
