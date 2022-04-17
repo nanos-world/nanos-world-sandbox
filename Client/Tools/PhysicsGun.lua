@@ -113,7 +113,7 @@ function TryPickUpObject()
 	local trace_result = Client.Trace(start_location, end_location, collision_trace, false, true)
 
 	-- If hit something and hit an Entity
-	if (trace_result.Success and trace_result.Entity and trace_result.Entity:IsNetworkDistributed()) then
+	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
 		-- Cannot grab Characters (yet?), cannot grab attached entities or entities which are being grabbed
 		if (NanosUtils.IsA(trace_result.Entity, Character) or trace_result.Entity:GetAttachedTo() or trace_result.Entity:GetValue("IsBeingGrabbed")) then
 			return end_location

@@ -221,9 +221,11 @@ Package.Require("Tools/Weld.lua")
 
 -- Extra
 Package.Require("NPC.lua")
+
 Package.Require("Weapons/HFG.lua")
 Package.Require("Weapons/VeggieGun.lua")
 Package.Require("Weapons/BouncyGun.lua")
+
 Package.Require("Entities/CCTV.lua")
 Package.Require("Entities/Breakable.lua")
 Package.Require("Entities/BouncyBall.lua")

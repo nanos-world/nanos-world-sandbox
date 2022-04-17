@@ -249,7 +249,7 @@ Client.Subscribe("Tick", function(delta_time)
 
 		if (not trace_result.Success) then return end
 
-		local color = trace_result.Entity and trace_result.Entity:IsNetworkDistributed() and DrawDebugToolGun.ColorEntity or DrawDebugToolGun.ColorNoEntity
+		local color = trace_result.Entity and DrawDebugToolGun.ColorEntity or DrawDebugToolGun.ColorNoEntity
 
 		Client.DrawDebugCrosshairs(trace_result.Location, Rotator(), 25, color, 0, 2)
 	end

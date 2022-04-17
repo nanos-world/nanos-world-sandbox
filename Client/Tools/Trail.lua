@@ -6,7 +6,7 @@ function HandleTrailTool(weapon)
 		local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
 
 		-- If hit some object, then spawns a trail on attached it
-		if (trace_result.Success and trace_result.Entity and trace_result.Entity:IsNetworkDistributed()) then
+		if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
 			Events.CallRemote("SpawnTrail", trace_result.Location, trace_result.Normal, trace_result.Entity)
 		else
 			-- If didn't hit anything, plays a negative sound

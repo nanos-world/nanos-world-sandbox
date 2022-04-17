@@ -6,7 +6,7 @@ function HandleColorTool(tool)
 		local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
 
 		-- If hit an object, then get a random Color and call server to update the color for everyone
-		if (trace_result.Success and trace_result.Entity and trace_result.Entity:IsNetworkDistributed()) then
+		if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
 			local color = Color.RandomPalette()
 			Events.CallRemote("ColorObject", trace_result.Entity, trace_result.Location, trace_result.Normal, color)
 		else

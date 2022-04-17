@@ -26,7 +26,7 @@ function ResizerPullUse(weapon, shooter)
 	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
 
 	-- If hit an object, then sets this object to be the "resized" one
-	if (trace_result.Success and trace_result.Entity and trace_result.Entity:IsNetworkDistributed()) then
+	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
 		ResizerTool.resizing_object = trace_result.Entity
 		ResizerTool.current_scale = ResizerTool.resizing_object:GetScale()
 		ResizerTool.resizing_object:SetHighlightEnabled(true, 0)

@@ -7,14 +7,14 @@ function HandleBalloonTool(weapon)
 
 		if (trace_result.Success) then
 			local distance_trace_object = Vector()
-			if (trace_result.Entity and trace_result.Entity:IsNetworkDistributed()) then
+			if (trace_result.Entity and not trace_result.Entity:HasAuthority()) then
 				-- If hit an entity, then calculates the offset distance from the Hit and the Object
 				distance_trace_object = trace_result.Entity:GetLocation() - trace_result.Location
 			end
 
 			-- Balloon Upwards force
 			-- TODO: make a menu to client define the force manually
-			local force = math.random() * 10000 + 95000
+			local force = math.random() * 20000 + 90000
 
 			-- Balloon rope length
 			-- TODO: make a menu to client define the rope manually
