@@ -218,7 +218,6 @@ function ToggleToolGunAiming(weapon, tool, enable)
 		elseif (
 			tool == "ColorTool" or
 			tool == "ThrusterTool" or
-			tool == "UselessTool" or
 			tool == "WeldTool" or
 			tool == "TrailTool" or
 			tool == "ResizerTool" or
@@ -419,9 +418,7 @@ Package.Require("Tools/Resizer.lua")
 Package.Require("Tools/Rope.lua")
 Package.Require("Tools/Thruster.lua")
 Package.Require("Tools/Trail.lua")
-Package.Require("Tools/Useless.lua")
 Package.Require("Tools/Weld.lua")
 
 Package.Require("Entities/CCTV.lua")
-Package.Require("Entities/TV.lua")
 Package.Require("Entities/Breakable.lua")
