@@ -308,7 +308,7 @@ Package.Subscribe("Unload", function()
 	for k, p in pairs(Player.GetAll()) do
 		local cha = p:GetControlledCharacter()
 		if (cha) then
-			table.insert(character_locations, { player = p, location = cha:GetLocation(), rotation = cha:GetRotation() })
+			table.insert(character_locations, { player = p, location = cha:GetLocation(), rotation = Rotator(0, cha:GetRotation().Yaw, 0) })
 		end
 	end
 

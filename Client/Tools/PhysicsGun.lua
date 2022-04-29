@@ -163,7 +163,7 @@ Client.Subscribe("KeyUp", function(key_name)
 		PhysicsGun.is_rotating_object = false
 
 		-- Updates rotation to match
-		if (PhysicsGun.is_snapping_to_grid) then
+		if (PhysicsGun.is_snapping_to_grid and PhysicsGun.picking_object) then
 			PhysicsGun.picking_object_initial_rotation = PhysicsGun.picking_object:GetRotation() - Client.GetLocalPlayer():GetControlledCharacter():GetRotation()
 		end
 
@@ -176,7 +176,7 @@ Client.Subscribe("KeyPress", function(key_name)
 
 	if (key_name == "E") then
 		PhysicsGun.is_rotating_object = true
-		return false
+		if (PhysicsGun.picking_object) then return false else return end
 	end
 
 	if (key_name == "LeftShift") then

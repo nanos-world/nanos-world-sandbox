@@ -227,5 +227,6 @@ Package.Require("Weapons/VeggieGun.lua")
 Package.Require("Weapons/BouncyGun.lua")
 
 Package.Require("Entities/CCTV.lua")
+Package.Require("Entities/Destructable.lua")
 Package.Require("Entities/Breakable.lua")
 Package.Require("Entities/BouncyBall.lua")

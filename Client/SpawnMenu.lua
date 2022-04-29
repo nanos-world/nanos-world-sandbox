@@ -344,6 +344,7 @@ MainHUD:CallEvent("AddCategory", "weapons", "grenades", "Grenade", "images/categ
 MainHUD:CallEvent("AddCategory", "weapons", "melee", "Melee", "images/categories/knife.png", "images/categories/knife-disabled.png")
 
 MainHUD:CallEvent("AddCategory", "entities", "uncategorized", "Uncategorized", "images/categories/menu.png", "images/categories/menu-disabled.png")
+MainHUD:CallEvent("AddCategory", "entities", "destructables", "Destructables", "images/categories/destructable.png", "images/categories/destructable-disabled.png")
 
 -- Adds the default NanosWorld items
 -- Default Weapons
@@ -401,6 +402,12 @@ AddSpawnMenuItem("nanos-world", "weapons", "Knife", "Knife", "assets///NanosWorl
 AddSpawnMenuItem("nanos-world", "weapons", "Crowbar", "Crowbar", "assets///NanosWorld/Thumbnails/SM_Crowbar_01.jpg", "melee")
 
 AddSpawnMenuItem("nanos-world", "entities", "BouncyBall", "BouncyBall", "assets///NanosWorld/Thumbnails/SM_Sphere.jpg", "uncategorized")
+
+AddSpawnMenuItem("nanos-world", "entities", "GC_Ball", "GC Ball", "assets///NanosWorld/Thumbnails/SM_Ball_VR.jpg", "destructables")
+AddSpawnMenuItem("nanos-world", "entities", "GC_Cube_01", "GC Cube 01", "assets///NanosWorld/Thumbnails/SM_Cube_01.jpg", "destructables")
+AddSpawnMenuItem("nanos-world", "entities", "GC_Cube_02", "GC Cube 02", "assets///NanosWorld/Thumbnails/SM_Cube_02.jpg", "destructables")
+AddSpawnMenuItem("nanos-world", "entities", "GC_Cube_03", "GC Cube 03", "assets///NanosWorld/Thumbnails/SM_Cube_03.jpg", "destructables")
+AddSpawnMenuItem("nanos-world", "entities", "GC_Pyramid", "GC Pyramid", "assets///NanosWorld/Thumbnails/SM_Pyramid.jpg", "destructables")
 
 -- Defines some Spawn Menu Hints
 AddNotification("SPAWN_MENU", "you can press Q to open the Spawn Menu", 10000, 30000)
