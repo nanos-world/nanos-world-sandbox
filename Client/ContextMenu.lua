@@ -37,3 +37,14 @@ end)
 MainHUD:Subscribe("ChangeTimeOfDay", function(hours, minutes)
 	World.SetTime(hours, minutes)
 end)
+
+MainHUD:Subscribe("LockTimeOfDay", function(lock)
+	print("LockTimeOfDay", lock)
+
+	if lock then
+		World.SetSunSpeed(0)
+	else
+		World.SetSunSpeed(60)
+	end
+end)
+

@@ -7,14 +7,6 @@ World.SetTime((gmt_time.hour * 60 + gmt_time.min) % 24, gmt_time.sec)
 
 -- All notifications already sent
 PERSISTENT_DATA_NOTIFICATIONS = PERSISTENT_DATA_NOTIFICATIONS or {}
-PERSISTENT_DATA_SETTINGS = PERSISTENT_DATA_SETTINGS or {
-	KeyBindings = {
-		SpawnMenu = "Q",
-		ContextMenu = "C",
-		Ragdoll = "J",
-		NoClip = "B"
-	}
-}
 
 -- Spawns Sandbox HUD
 MainHUD = MainHUD or WebUI("Sandbox HUD", "file:///UI/index.html")
@@ -32,6 +24,7 @@ Input.Register("Ragdoll", "J")
 Input.Register("SpawnMenu", "Q")
 Input.Register("ContextMenu", "C")
 Input.Register("Undo", "X")
+Input.Register("Respawn", "Y")
 
 -- When LocalPlayer spawns, sets an event on it to trigger when we possesses a new character, to store the local controlled character locally. This event is only called once, see Package.Subscribe("Load") to load it when reloading a package
 Client.Subscribe("SpawnLocalPlayer", function(local_player)
@@ -57,12 +50,6 @@ Package.Subscribe("Load", function()
 
 	-- Gets all notifications already sent
 	PERSISTENT_DATA_NOTIFICATIONS = Package.GetPersistentData().notifications or {}
-
-	local disk_data_settings = Package.GetPersistentData().settings or PERSISTENT_DATA_SETTINGS
-	PERSISTENT_DATA_SETTINGS.KeyBindings.ContextMenu = disk_data_settings.KeyBindings.ContextMenu or PERSISTENT_DATA_SETTINGS.KeyBindings.ContextMenu
-	PERSISTENT_DATA_SETTINGS.KeyBindings.NoClip = disk_data_settings.KeyBindings.NoClip or PERSISTENT_DATA_SETTINGS.KeyBindings.NoClip
-	PERSISTENT_DATA_SETTINGS.KeyBindings.Ragdoll = disk_data_settings.KeyBindings.Ragdoll or PERSISTENT_DATA_SETTINGS.KeyBindings.Ragdoll
-	PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu = disk_data_settings.KeyBindings.SpawnMenu or PERSISTENT_DATA_SETTINGS.KeyBindings.SpawnMenu
 end)
 
 -- Function to set all needed events on local character (to update the UI when it takes damage or dies)
@@ -163,6 +150,10 @@ end)
 
 Input.Bind("Ragdoll", InputEvent.Pressed, function()
 	Events.CallRemote("EnterRagdoll")
+end)
+
+Input.Bind("Respawn", InputEvent.Pressed, function()
+	Events.CallRemote("RespawnCharacter")
 end)
 
 -- VOIP UI

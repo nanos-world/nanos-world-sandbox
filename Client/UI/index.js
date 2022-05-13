@@ -389,6 +389,8 @@ function SetTimeOfDayLabel(hours, minutes) {
 // Aux for debouncing
 var EnabledChangeTimeOfDay = true;
 
+var LockedTimeOfDay = false;
+
 document.addEventListener("DOMContentLoaded", function() {
 	document.querySelector("#time_of_day_slide").addEventListener("input", function(e) {
 		// Debounce
@@ -422,6 +424,18 @@ document.addEventListener("DOMContentLoaded", function() {
 		this.select();
 	}));
 });
+
+function ToggleLockTimeOfTheDay() {
+	LockedTimeOfDay = !LockedTimeOfDay;
+
+	if (LockedTimeOfDay) {
+		document.querySelector("#time_of_day_slide").classList.add("locked_time_of_day");
+	} else {
+		document.querySelector("#time_of_day_slide").classList.remove("locked_time_of_day");
+	}
+
+	Events.Call("LockTimeOfDay", LockedTimeOfDay);
+}
 
 function ToggleContextMenuVisibility(is_visible, hours, minutes) {
 	const context_menu = document.querySelector("#context_menu");
