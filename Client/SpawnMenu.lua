@@ -15,6 +15,7 @@ SelectedOption = SelectedOption or ""
 
 -- Configures the Highlight colors to be used
 Client.SetHighlightColor(Color(0, 20, 0, 1.20), 0, HighlightMode.Always) -- Index 0
+Client.SetOutlineColor(Color(0, 0, 300), 2) -- Index 2
 
 Package.Subscribe("Load", function()
 	-- Wait 1 second so all other packages can send their Tools during Package Load event
