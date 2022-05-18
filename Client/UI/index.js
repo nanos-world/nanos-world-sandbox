@@ -423,16 +423,15 @@ document.addEventListener("DOMContentLoaded", function() {
 	document.querySelectorAll("#context_menu_keybindings input").forEach(input => input.addEventListener("click", function(e) {
 		this.select();
 	}));
+
+	// Respawn Button
+	document.getElementById("respawn-button").addEventListener("click", function() {
+		Events.Call("RespawnButton");
+	});
 });
 
 function ToggleLockTimeOfTheDay() {
 	LockedTimeOfDay = !LockedTimeOfDay;
-
-	if (LockedTimeOfDay) {
-		document.querySelector("#time_of_day_slide").classList.add("locked_time_of_day");
-	} else {
-		document.querySelector("#time_of_day_slide").classList.remove("locked_time_of_day");
-	}
 
 	Events.Call("LockTimeOfDay", LockedTimeOfDay);
 }

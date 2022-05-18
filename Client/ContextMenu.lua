@@ -39,8 +39,6 @@ MainHUD:Subscribe("ChangeTimeOfDay", function(hours, minutes)
 end)
 
 MainHUD:Subscribe("LockTimeOfDay", function(lock)
-	print("LockTimeOfDay", lock)
-
 	if lock then
 		World.SetSunSpeed(0)
 	else
@@ -48,3 +46,6 @@ MainHUD:Subscribe("LockTimeOfDay", function(lock)
 	end
 end)
 
+MainHUD:Subscribe("RespawnButton", function()
+	Events.CallRemote("RespawnCharacter")
+end)

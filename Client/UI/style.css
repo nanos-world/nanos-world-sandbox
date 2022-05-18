@@ -423,3 +423,27 @@ body {
 	height: 30px;
 	margin-right: 5px;
 }
+
+#TimeOfTheDayCB {
+	margin-left: 30%;
+	width: 20px;
+	height: 20px;
+	margin-right: 5px;
+}
+
+#TimeOfTheDayLabel {
+	font-size: 18px;
+}
+
+#respawn-button {
+	background-color: rgba(255, 255, 255, 0.95);
+	color: black;
+	font-family: 'Gothic A1', sans-serif;
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 70%;
+	margin-left: 15%;
+	font-size: 18px;
+	border: solid 1px black;
+}
