@@ -301,6 +301,13 @@ Events.Subscribe("EnterRagdoll", function(player)
 	character:SetRagdollMode(true)
 end)
 
+Events.Subscribe("RespawnCharacter", function(player)
+	local character = player:GetControlledCharacter()
+	if (not character) then return end
+
+	character:SetHealth(0)
+end)
+
 Package.Subscribe("Unload", function()
 	local character_locations = {}
 
