@@ -21,7 +21,7 @@ function ResizerWeaponAimModeChanged(self, old_state, new_state)
 	end
 end
 
-function ResizerPullUse(weapon, shooter)
+function ResizerFire(weapon, shooter)
 	-- Makes a trace 10000 units ahead
 	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
 
@@ -42,7 +42,7 @@ function HandleResizerTool(weapon, character)
 	ResizerTool.weapon = weapon
 
 	-- Subscribe when the player fires with this weapon
-	weapon:Subscribe("PullUse", ResizerPullUse)
+	weapon:Subscribe("Fire", ResizerFire)
 
 	-- Subscribes when the player stops using this weapon (turn off the Physics Gun)
 	weapon:Subscribe("ReleaseUse", ResizerReleaseUse)
@@ -96,7 +96,7 @@ Events.Subscribe("PickUpToolGun_ResizerTool", function(tool, character)
 end)
 
 Events.Subscribe("DropToolGun_ResizerTool", function(tool, character)
-	tool:Unsubscribe("PullUse", ResizerPullUse)
+	tool:Unsubscribe("Fire", ResizerFire)
 	tool:Unsubscribe("ReleaseUse", ResizerReleaseUse)
 	character:Unsubscribe("WeaponAimModeChanged", ResizerWeaponAimModeChanged)
 

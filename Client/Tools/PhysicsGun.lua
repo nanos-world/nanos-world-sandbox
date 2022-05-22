@@ -26,7 +26,7 @@ PhysicsGun = {
 BeamParticles = setmetatable({}, { __mode = 'k' })
 
 -- Handle for pulling Physics Gun trigger
-function PhysicsGunPullUse(weapon, shooter)
+function PhysicsGunFire(weapon, shooter)
 	TogglePhysicsGunLocal(true)
 end
 
@@ -47,7 +47,7 @@ function HandlePhysicsGun(weapon, character)
 	PhysicsGun.weapon = weapon
 
 	-- Subscribes when the player fires with this weapon (turn on the Physics Gun)
-	weapon:Subscribe("PullUse", PhysicsGunPullUse)
+	weapon:Subscribe("Fire", PhysicsGunFire)
 
 	-- Subscribes when the player stops using this weapon (turn off the Physics Gun)
 	weapon:Subscribe("ReleaseUse", PhysicsGunReleaseUse)
@@ -64,7 +64,7 @@ end
 
 -- Highlight objects being grabbed with index 1
 Events.Subscribe("PickUpObject", function(object, is_grabbing)
-	object:SetHighlightEnabled(is_grabbing, 1)
+	object:SetOutlineEnabled(is_grabbing, 2)
 end)
 
 -- Function to handle when I'm using a Physics Gun
@@ -78,7 +78,7 @@ function TogglePhysicsGunLocal(is_using, freeze)
 			Events.CallRemote("PickUp", PhysicsGun.weapon, PhysicsGun.picking_object, false, nil, freeze)
 
 			-- Disables the highlight on this object
-			PhysicsGun.picking_object:SetHighlightEnabled(false)
+			PhysicsGun.picking_object:SetOutlineEnabled(false)
 			PhysicsGun.picking_object = nil
 
 			-- Stops the "graviting" sound
@@ -136,9 +136,6 @@ function TryPickUpObject()
 
 		-- Calls remote to disable gravity of this object (if has)
 		Events.CallRemote("PickUp", PhysicsGun.weapon, PhysicsGun.picking_object, true, PhysicsGun.picking_object_relative_location)
-
-		-- Enable Highlighting on index 1 on this object
-		PhysicsGun.picking_object:SetHighlightEnabled(true, 1)
 	else
 		PhysicsGun.picking_object = nil
 	end
@@ -372,7 +369,7 @@ Events.Subscribe("PickUpToolGun_PhysicsGun", function(tool, character)
 end)
 
 Events.Subscribe("DropToolGun_PhysicsGun", function(tool, character)
-	tool:Unsubscribe("PullUse", PhysicsGunPullUse)
+	tool:Unsubscribe("Fire", PhysicsGunFire)
 	tool:Unsubscribe("ReleaseUse", PhysicsGunReleaseUse)
 	character:Unsubscribe("WeaponAimModeChanged", PhysicsGunWeaponAimModeChanged)
 
