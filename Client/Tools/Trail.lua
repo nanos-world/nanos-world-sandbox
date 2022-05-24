@@ -7,7 +7,10 @@ function HandleTrailTool(weapon)
 
 		-- If hit some object, then spawns a trail on attached it
 		if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
-			Events.CallRemote("SpawnTrail", trace_result.Location, trace_result.Normal, trace_result.Entity)
+			local trail_rotation = (trace_result.Normal * -1):Rotation() + Rotator(90, 0, 0)
+			local relative_location, relative_rotation = NanosMath.RelativeTo(trace_result.Location, trail_rotation, trace_result.Entity)
+
+			Events.CallRemote("SpawnTrail", trace_result.Location, relative_location, relative_rotation, trace_result.Normal, trace_result.Entity)
 		else
 			-- If didn't hit anything, plays a negative sound
 			Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
@@ -24,7 +27,7 @@ Events.Subscribe("DropToolGun_TrailTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "TrailTool", "Trail", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg", nil, {
+AddSpawnMenuItem("nanos-world", "tools", "TrailTool", "Trail", "package///sandbox/Client/Tools/Trail.jpg", nil, {
 	{ key = "LeftClick", text = "spawn trail" },
 	{ key = "Undo", text = "undo spawn" },
 })

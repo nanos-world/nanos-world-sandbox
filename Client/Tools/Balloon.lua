@@ -41,7 +41,7 @@ Events.Subscribe("DropToolGun_BalloonTool", function(tool)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "BalloonTool", "Balloons", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg", nil, {
+AddSpawnMenuItem("nanos-world", "tools", "BalloonTool", "Balloons", "package///sandbox/Client/Tools/Balloon.jpg", nil, {
 	{ key = "LeftClick", text = "spawn balloon" },
 	{ key = "Undo", text = "undo spawn" },
 })

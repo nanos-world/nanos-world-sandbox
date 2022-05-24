@@ -1,9 +1,9 @@
 -- Event when Client calls to spawn a Lamp
-Events.Subscribe("SpawnLamp", function(player, spawn_location, direction, entity)
+Events.Subscribe("SpawnLamp", function(player, hit_location, relative_location, relative_rotation, direction, entity)
 	local rotation = direction:Rotation()
 
 	-- Spawns a Lamp Bulb prop
-	local prop_lamp = Prop(spawn_location, Rotator(), "nanos-world::SM_Flashlight", CollisionType.StaticOnly)
+	local prop_lamp = Prop(hit_location, Rotator(), "nanos-world::SM_Flashlight", CollisionType.StaticOnly)
 
 	-- Spawns a Point Light, with the color
 	local intensity = 75
@@ -22,6 +22,8 @@ Events.Subscribe("SpawnLamp", function(player, spawn_location, direction, entity
 	-- If to attach to an entity, otherwise creates and attaches to a fixed invisible mesh
 	if (entity) then
 		prop_lamp:AttachTo(entity, AttachmentRule.KeepWorld, "", 0)
+		prop_lamp:SetRelativeLocation(relative_location)
+		prop_lamp:SetRelativeRotation(relative_rotation)
 		prop_lamp:SetGrabbable(false)
 	end
 
@@ -30,7 +32,7 @@ Events.Subscribe("SpawnLamp", function(player, spawn_location, direction, entity
 	-- Calls the client to add it to his spawn history
 	Events.CallRemote("SpawnedItem", player, prop_lamp)
 
-	Particle(spawn_location, direction:Rotation(), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", color)
+	Particle(hit_location, direction:Rotation(), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", color)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu

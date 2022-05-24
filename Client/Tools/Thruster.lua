@@ -7,7 +7,10 @@ function HandleThrusterTool(weapon)
 
 		-- If hit some object, then spawns a thruster on attached it
 		if (trace_result.Success and trace_result.Entity and not NanosUtils.IsA(trace_result.Entity, Character) and not trace_result.Entity:HasAuthority()) then
-			Events.CallRemote("SpawnThruster", trace_result.Location, trace_result.Normal, trace_result.Entity)
+			local thruster_rotation = (trace_result.Normal * -1):Rotation()
+			local relative_location, relative_rotation = NanosMath.RelativeTo(trace_result.Location, thruster_rotation, trace_result.Entity)
+
+			Events.CallRemote("SpawnThruster", trace_result.Location, relative_location, relative_rotation, trace_result.Normal, trace_result.Entity)
 		else
 			-- If didn't hit anything, plays a negative sound
 			Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
@@ -24,7 +27,7 @@ Events.Subscribe("DropToolGun_ThrusterTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "ThrusterTool", "Thruster", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg", nil, {
+AddSpawnMenuItem("nanos-world", "tools", "ThrusterTool", "Thruster", "package///sandbox/Client/Tools/Thruster.jpg", nil, {
 	{ key = "LeftClick", text = "spawn thruster" },
 	{ key = "Undo", text = "undo spawn" },
 })

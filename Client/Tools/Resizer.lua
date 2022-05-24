@@ -60,7 +60,7 @@ Client.Subscribe("MouseUp", function(key_name)
 	-- Scrolls up to increase the scale
 	if (key_name == "MouseScrollUp") then
 		if (ResizerTool.resizing_object) then
-			ResizerTool.current_scale = ResizerTool.current_scale + 0.1
+			ResizerTool.current_scale = ResizerTool.current_scale + ResizerTool.current_scale * 0.1
 			Events.CallRemote("ResizeObject", ResizerTool.resizing_object, ResizerTool.current_scale, true)
 		end
 		return
@@ -69,7 +69,7 @@ Client.Subscribe("MouseUp", function(key_name)
 	-- Scrolls down to dencrease the scale
 	if (key_name == "MouseScrollDown") then
 		if (ResizerTool.resizing_object) then
-			ResizerTool.current_scale = ResizerTool.current_scale - 0.1
+			ResizerTool.current_scale = ResizerTool.current_scale - ResizerTool.current_scale * 0.1
 
 			-- Cannot resize too small
 			if (ResizerTool.current_scale.X < 0.1) then
@@ -108,7 +108,7 @@ Events.Subscribe("DropToolGun_ResizerTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "ResizerTool", "Resizer", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg", nil, {
+AddSpawnMenuItem("nanos-world", "tools", "ResizerTool", "Resizer", "package///sandbox/Client/Tools/Resizer.jpg", nil, {
 	{ key = "LeftClick", text = "select object" },
 	{ key = "R", text = "reset scale" },
 	{ key = "MouseScrollUp", text = "scale" },

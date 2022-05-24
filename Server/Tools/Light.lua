@@ -7,7 +7,7 @@ Events.Subscribe("SpawnLight", function(player, spawn_location, direction, entit
 	prop_light:SetCollision(CollisionType.StaticOnly)
 
 	-- Sets the prop mesh emissive color to a random color
-	local color = Color.RandomPalette()
+	local color = Color.RandomPalette(false)
 	prop_light:SetMaterialColorParameter("Emissive", color * 50)
 	-- prop_light:SetPhysicsDamping(5, 10)
 

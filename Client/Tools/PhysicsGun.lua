@@ -212,14 +212,14 @@ Client.Subscribe("MouseUp", function(key_name)
 	-- Scrolling will or move the object to far
 	if (key_name == "MouseScrollUp") then
 		-- If mouse scroll, updates the Distance of the object from the camera
-		PhysicsGun.picking_object_distance = PhysicsGun.picking_object_distance + 25
+		PhysicsGun.picking_object_distance = PhysicsGun.picking_object_distance + PhysicsGun.picking_object_distance * 0.1
 		return
 	end
 
 	-- Scrolling will or move the object to far
 	if (key_name == "MouseScrollDown") then
 		-- If mouse scroll, updates the PhysicsGun.picking_object_distance of the object from the camera
-		PhysicsGun.picking_object_distance = PhysicsGun.picking_object_distance - 25
+		PhysicsGun.picking_object_distance = PhysicsGun.picking_object_distance - PhysicsGun.picking_object_distance * 0.1
 
 		-- Cannot scroll too close
 		if (PhysicsGun.picking_object_distance < 100) then PhysicsGun.picking_object_distance = 100 end
@@ -378,7 +378,7 @@ Events.Subscribe("DropToolGun_PhysicsGun", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "PhysicsGun", "Physics Gun", "assets///NanosWorld/Thumbnails/SK_Blaster.jpg", nil, {
+AddSpawnMenuItem("nanos-world", "tools", "PhysicsGun", "Physics Gun", "package///sandbox/Client/Tools/PhysicsGun.jpg", nil, {
 	{ key = "LeftClick", text = "grab object" },
 	{ key = "RightMouseButton", text = "freeze object" },
 	{ key = "MouseScrollUp", text = "increase/decrease beam size" },
