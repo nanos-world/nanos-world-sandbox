@@ -1,3 +1,12 @@
+
+/*var testFuncs = {}
+var Events = {}
+Events.Subscribe = function(name, func) {
+    testFuncs[name] = function(...Args) {
+        return func(...Args)
+    }
+}*/
+
 // Registers for ToggleVoice from Scripting
 function ToggleVoice(name, enable) {
 	const existing_span = document.querySelector(`.voice_chat#${name}`);
@@ -391,7 +400,12 @@ var EnabledChangeTimeOfDay = true;
 
 var LockedTimeOfDay = false;
 
+var SelectElements
+var SelectorsOfSelectElements = [];
+
 document.addEventListener("DOMContentLoaded", function() {
+	SelectElements = document.body.querySelectorAll("select");
+
 	document.querySelector("#time_of_day_slide").addEventListener("input", function(e) {
 		// Debounce
 		if (!EnabledChangeTimeOfDay)
@@ -428,6 +442,25 @@ document.addEventListener("DOMContentLoaded", function() {
 	document.getElementById("respawn-button").addEventListener("click", function() {
 		Events.Call("RespawnButton");
 	});
+
+	// Apply 'Selectr' JavaScript replacement to all 'select' elements
+	var i;
+	for (i = 0; i < SelectElements.length; i++) {
+		// You can enable search here if you want.
+		let selector = new Selectr(SelectElements[i], { searchable: false, customClass: "character_select_selectr"});
+		SelectorsOfSelectElements[SelectElements[i].id] = selector;
+	}
+
+	// Notify lua when another character is selected
+	SelectorsOfSelectElements[document.getElementById("character_select").id].on('selectr.change', function(option) {
+		Events.Call("CharacterSelect", option.value);
+	});
+
+	/*testFuncs.AddCharacterSelectionOption("SK_Male")
+	testFuncs.AddCharacterSelectionOption("SK_Female")
+	testFuncs.AddCharacterSelectionOption("3")
+	testFuncs.AddCharacterSelectionOption("4")
+	testFuncs.ToggleContextMenuVisibility("ToggleContextMenuVisibility", true, 3, 4)*/
 });
 
 function ToggleLockTimeOfTheDay() {
@@ -463,6 +496,18 @@ Events.Subscribe("ToggleSpawnMenuVisibility", function(is_visible) {
 	else
 		spawn_menu.style.display = "none";
 });
+
+function AddCharacterSelectionOption(character_name) {
+	/*let character_option = document.createElement("option");
+	character_option.value = character_name;
+	character_option.innerHTML = character_name;
+
+	document.querySelector("#character_select").appendChild(character_option);*/
+
+	let selector = SelectorsOfSelectElements[document.querySelector("#character_select").id];
+	selector.add({ value: character_name, text: character_name });
+}
+Events.Subscribe("AddCharacterSelectionOption", AddCharacterSelectionOption);
 
 Events.Subscribe("AddSpawnMenuGroup", AddSpawnMenuGroup);
 Events.Subscribe("AddTab", AddTab);

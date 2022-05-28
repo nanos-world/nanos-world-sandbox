@@ -447,3 +447,8 @@ body {
 	font-size: 18px;
 	border: solid 1px black;
 }
+
+.character_select_selectr {
+	text-align: center;
+	color: black;
+}

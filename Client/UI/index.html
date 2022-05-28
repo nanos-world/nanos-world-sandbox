@@ -16,6 +16,11 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com">
 		<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;800&display=swap" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+
+		<link href="https://unpkg.com/mobius1-selectr@latest/dist/selectr.min.css" 
+			rel="stylesheet" type="text/css">
+		<script src="https://unpkg.com/mobius1-selectr@latest/dist/selectr.min.js" 
+			type="text/javascript"></script>
 	</head>
 	<body>
 		<div id="tutorials">
@@ -73,6 +78,13 @@
 			<button id="respawn-button">
 				Respawn
 			</button>
+
+			<!-- Character selection with a drop-down list -->
+			<div class="context_menu_item" id="context_menu_character">
+				<span class="context_menu_label">Character</span>
+				<select id="character_select">
+				</select>
+			</div>
 		</div>
 
 		<div id="spawn_menu">

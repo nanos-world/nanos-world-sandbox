@@ -49,3 +49,11 @@ end)
 MainHUD:Subscribe("RespawnButton", function()
 	Events.CallRemote("RespawnCharacter")
 end)
+
+MainHUD:Subscribe("CharacterSelect", function(character_name)
+	Events.CallRemote("CharacterSelect", character_name)
+end)
+
+for k, v in pairs(CHARACTER_MESHES) do
+	MainHUD:CallEvent("AddCharacterSelectionOption", k)
+end

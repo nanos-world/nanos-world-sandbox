@@ -1,3 +1,5 @@
+Package.Require("Config.lua")
+
 -- Spawns/Overrides with default NanosWorld's Sun
 World.SpawnDefaultSun()
 
