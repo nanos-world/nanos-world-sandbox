@@ -11,7 +11,7 @@ function ToggleVoice(name, enable) {
 		span.id = name;
 		span.innerHTML = name;
 
-		document.querySelector("#voice_chats").prepend(span);
+		document.getElementById("voice_chats").prepend(span);
 	} else {
 		if (!existing_span)
 			return;
@@ -26,7 +26,7 @@ function AddNotification(message, time) {
 	span.classList.add("notification");
 	span.innerHTML = message;
 
-	document.querySelector("#notifications").prepend(span);
+	document.getElementById("notifications").prepend(span);
 
 	setTimeout(function(span) {
 		span.remove()
@@ -36,22 +36,22 @@ function AddNotification(message, time) {
 // Register for UpdateWeaponAmmo custom event (from Lua)
 function UpdateWeaponAmmo(enable, clip, bag) {
 	if (enable)
-		document.querySelector("#weapon_ammo_container").style.display = "block";
+		document.getElementById("weapon_ammo_container").style.display = "block";
 	else
-		document.querySelector("#weapon_ammo_container").style.display = "none";
+		document.getElementById("weapon_ammo_container").style.display = "none";
 
 	// Using JQuery, overrides the HTML content of these SPANs with the new Ammo values
-	document.querySelector("#weapon_ammo_clip").innerHTML = clip;
-	document.querySelector("#weapon_ammo_bag").innerHTML = bag;
+	document.getElementById("weapon_ammo_clip").innerHTML = clip;
+	document.getElementById("weapon_ammo_bag").innerHTML = bag;
 }
 
 // Register for UpdateHealth custom event (from Lua)
 function UpdateHealth(health) {
 	// Overrides the HTML content of the SPAN with the new health value
-	document.querySelector("#health_current").innerHTML = health;
+	document.getElementById("health_current").innerHTML = health;
 
 	// Bonus: make the background red when health below 25
-	document.querySelector("#health_container").style.backgroundColor = health <= 25 ? "#ff05053d" : "#0000003d";
+	document.getElementById("health_container").style.backgroundColor = health <= 25 ? "#ff05053d" : "#0000003d";
 }
 
 
@@ -69,7 +69,7 @@ function SpawnItemClick(e) {
 }
 
 function ItemHover(label, enter, is_spawn_item) {
-	const label_element = document.querySelector("#label");
+	const label_element = document.getElementById("label");
 
 	if (enter) {
 		label_element.style.opacity = 1; 
@@ -92,7 +92,7 @@ function TabClick(tab_element) {
 	current_tab = new_tab;
 
 	// Clears Categories List
-	document.querySelector("#spawn_categories").innerHTML = "";
+	document.getElementById("spawn_categories").innerHTML = "";
 
 	if (tabs[current_tab]) {
 		for (let category in tabs[current_tab].categories) {
@@ -165,7 +165,7 @@ function DisplayCategory(id, name, image_active, image_inactive) {
 
 	category.style["background-image"] = `url('${image_inactive}')`;
 
-	document.querySelector("#spawn_categories").appendChild(category);
+	document.getElementById("spawn_categories").appendChild(category);
 }
 
 function AddTab(id, name, image_active, image_inactive) {
@@ -190,12 +190,12 @@ function AddTab(id, name, image_active, image_inactive) {
 	tab.dataset.image_active = image_active;
 	tab.dataset.image_inactive = image_inactive;
 
-	document.querySelector("#tabs").appendChild(tab);
+	document.getElementById("tabs").appendChild(tab);
 }
 
 function RefreshSpawnMenu() {
 	// Clears Spawn List
-	document.querySelector("#spawn_list").innerHTML = "";
+	document.getElementById("spawn_list").innerHTML = "";
 
 	// Loads all items
 	for (let group in spawn_menu_data) {
@@ -212,8 +212,8 @@ function RefreshSpawnMenu() {
 }
 
 function ToggleOptions(enable) {
-	const spawn_list = document.querySelector("#spawn_list");
-	const spawn_options = document.querySelector("#spawn_options");
+	const spawn_list = document.getElementById("spawn_list");
+	const spawn_options = document.getElementById("spawn_options");
 
 	if (enable) {
 		spawn_options.style.display = "block";
@@ -247,21 +247,21 @@ function AddOption(name, texture, texture_thumbnail) {
 	option_checkbox_item.dataset.name = name;
 	option_checkbox_item.dataset.texture = texture;
 
-	option_checkbox_item.addEventListener('click', e => SelectOption(e.target));
-	option_checkbox_item.addEventListener('mouseenter', e => ItemHover("Pattern: " + e.target.dataset.name, true, true));
-	option_checkbox_item.addEventListener('mouseleave', e => ItemHover(false, false, true));
+	option_checkbox_item.addEventListener("click", e => SelectOption(e.target));
+	option_checkbox_item.addEventListener("mouseenter", e => ItemHover("Pattern: " + e.target.dataset.name, true, true));
+	option_checkbox_item.addEventListener("mouseleave", e => ItemHover(false, false, true));
 
 	document.querySelector(".spawn_option_checkbox").appendChild(option_checkbox_item);
 }
 
 function ToggleTutorial(is_visible, title, tutorial_list) {
-	const tutorials = document.querySelector("#tutorials");
+	const tutorials = document.getElementById("tutorials");
 	
 	if (is_visible) {
-		const tutorial_body = document.querySelector("#tutorial-body");
+		const tutorial_body = document.getElementById("tutorial_body");
 		tutorial_body.innerHTML = "";
 
-		const tutorial_title = document.querySelector("#tutorial-title");
+		const tutorial_title = document.getElementById("tutorial_title");
 		tutorial_title.innerHTML = title;
 
 		const tutorial_list_json = JSON.parse(tutorial_list);
@@ -271,7 +271,7 @@ function ToggleTutorial(is_visible, title, tutorial_list) {
 			let text = tutorial_list_json[tutorial].text;
 
 			const tutorial_item_image = document.createElement("img");
-			tutorial_item_image.classList.add("tutorial-key");
+			tutorial_item_image.classList.add("tutorial_key");
 			tutorial_item_image.src = image;
 
 			const tutorial_item = document.createElement("span");
@@ -303,7 +303,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	SelectOption(document.querySelectorAll(".spawn_option_checkbox_item")[0], true);
 
-	const popup_input = document.querySelector("#popup_input");
+	const popup_input = document.getElementById("popup_input");
 	popup_input.addEventListener("blur", (e) => {
 		if (!popup_callback_event)
 			return;
@@ -313,11 +313,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		Events.Call(_popup_callback_event, false);
 	});
 
-	const popup_form = document.querySelector("#popup_form");
+	const popup_form = document.getElementById("popup_form");
 	popup_form.addEventListener("submit", function(e) {
 		e.preventDefault();
 
-		const _popup_input_value = document.querySelector("#popup_input").value;
+		const _popup_input_value = document.getElementById("popup_input").value;
 		const _popup_callback_event = popup_callback_event;
 
 		ClosePopUpPrompt();
@@ -329,20 +329,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
 var popup_callback_event = null;
 
 function ClosePopUpPrompt() {
-	const popup_prompt = document.querySelector("#popup_prompt");
-	popup_prompt.style.display = 'none';
+	const popup_prompt = document.getElementById("popup_prompt");
+	popup_prompt.style.display = "none";
 
 	popup_callback_event = null;
 }
 
 function ShowPopUpPrompt(text, callback_event) {
-	const popup_text = document.querySelector("#popup_text");
+	const popup_text = document.getElementById("popup_text");
 	popup_text.innerHTML = text;
 
-	const popup_prompt = document.querySelector("#popup_prompt");
+	const popup_prompt = document.getElementById("popup_prompt");
 	popup_prompt.style.display = "block";
 
-	const popup_input = document.querySelector("#popup_input");
+	const popup_input = document.getElementById("popup_input");
 	popup_input.value = "";
 	popup_input.focus();
 
@@ -354,9 +354,9 @@ function AddItem(group, item_id, item_name, image) {
 
 	const spawn_item = document.createElement("span");
 	spawn_item.classList.add("spawn_item");
-	spawn_item.addEventListener('click', SpawnItemClick);
-	spawn_item.addEventListener('mouseenter', e => ItemHover(e.target.dataset.item_id, true, true));
-	spawn_item.addEventListener('mouseleave', e => ItemHover(false, false, true));
+	spawn_item.addEventListener("click", SpawnItemClick);
+	spawn_item.addEventListener("mouseenter", e => ItemHover(e.target.dataset.item_id, true, true));
+	spawn_item.addEventListener("mouseleave", e => ItemHover(false, false, true));
 
 	const spawn_item_image = document.createElement("span");
 	spawn_item_image.classList.add("spawn_item_image");
@@ -373,7 +373,7 @@ function AddItem(group, item_id, item_name, image) {
 	spawn_item.appendChild(spawn_item_image);
 	spawn_item.appendChild(spawn_item_name);
 
-	document.querySelector("#spawn_list").appendChild(spawn_item);
+	document.getElementById("spawn_list").appendChild(spawn_item);
 }
 
 function AddSpawnMenuGroup(group, group_data) {
@@ -383,16 +383,15 @@ function AddSpawnMenuGroup(group, group_data) {
 }
 
 function SetTimeOfDayLabel(hours, minutes) {
-	document.querySelector("#context_menu_time_of_day_value").innerHTML = `${('0' + hours).slice(-2)}:${('0' + minutes).slice(-2)}`;
+	document.getElementById("context_menu_time_of_day_value").innerHTML = `${('0' + hours).slice(-2)}:${('0' + minutes).slice(-2)}`;
 }
 
 // Aux for debouncing
 var EnabledChangeTimeOfDay = true;
 
-var LockedTimeOfDay = false;
-
 document.addEventListener("DOMContentLoaded", function() {
-	document.querySelector("#time_of_day_slide").addEventListener("input", function(e) {
+	// Context Menu Time of Day Slide
+	document.getElementById("time_of_day_slide").addEventListener("input", function(e) {
 		// Debounce
 		if (!EnabledChangeTimeOfDay)
 			return;
@@ -413,8 +412,13 @@ document.addEventListener("DOMContentLoaded", function() {
 		}, 33);
 	});
 
+	// Context Menu Lock time of Day
+	document.getElementById("context_menu_lock_time_of_day").addEventListener("change", function(e) {
+		Events.Call("LockTimeOfDay", e.target.checked);
+	});
+
 	// Context Menu close button
-	document.querySelector("#context_menu_close").addEventListener("click", function(e) {
+	document.getElementById("context_menu_close").addEventListener("click", function(e) {
 		ToggleContextMenuVisibility(false);
 		Events.Call("CloseContextMenu");
 	});
@@ -424,25 +428,19 @@ document.addEventListener("DOMContentLoaded", function() {
 		this.select();
 	}));
 
-	// Respawn Button
-	document.getElementById("respawn-button").addEventListener("click", function() {
+	// Context Menu Respawn Button
+	document.getElementById("context_menu_respawn_button").addEventListener("click", function() {
 		Events.Call("RespawnButton");
 	});
 });
 
-function ToggleLockTimeOfTheDay() {
-	LockedTimeOfDay = !LockedTimeOfDay;
-
-	Events.Call("LockTimeOfDay", LockedTimeOfDay);
-}
-
 function ToggleContextMenuVisibility(is_visible, hours, minutes) {
-	const context_menu = document.querySelector("#context_menu");
+	const context_menu = document.getElementById("context_menu");
 
 	if (is_visible)
 	{
 		// Sets current time
-		document.querySelector("#time_of_day_slide").value = hours * 60 + minutes;
+		document.getElementById("time_of_day_slide").value = hours * 60 + minutes;
 		SetTimeOfDayLabel(hours, minutes);
 
 		context_menu.style.display = "block";
@@ -456,7 +454,7 @@ function ToggleContextMenuVisibility(is_visible, hours, minutes) {
 Events.Subscribe("ToggleContextMenuVisibility", ToggleContextMenuVisibility);
 
 Events.Subscribe("ToggleSpawnMenuVisibility", function(is_visible) {
-	const spawn_menu = document.querySelector("#spawn_menu");
+	const spawn_menu = document.getElementById("spawn_menu");
 
 	if (is_visible)
 		spawn_menu.style.display = "block";

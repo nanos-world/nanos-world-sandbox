@@ -403,13 +403,13 @@ body {
 	display: none;
 }
 
-#tutorial-title {
+#tutorial_title {
 	font-size: 70px;
 	font-family: 'Poiret One', cursive;
 	margin-bottom: 10px;
 }
 
-#tutorial-body {
+#tutorial_body {
 	
 }
 
@@ -419,23 +419,24 @@ body {
 	margin: 5px 0;
 }
 
-.tutorial-key {
+.tutorial_key {
 	height: 30px;
 	margin-right: 5px;
 }
 
-#TimeOfTheDayCB {
+#context_menu_lock_time_of_day {
 	margin-left: 30%;
 	width: 20px;
 	height: 20px;
 	margin-right: 5px;
+	cursor: pointer;
 }
 
-#TimeOfTheDayLabel {
+#context_menu_lock_time_of_day_label {
 	font-size: 18px;
 }
 
-#respawn-button {
+#context_menu_respawn_button {
 	background-color: rgba(255, 255, 255, 0.95);
 	color: black;
 	font-family: 'Gothic A1', sans-serif;
@@ -446,4 +447,5 @@ body {
 	margin-left: 15%;
 	font-size: 18px;
 	border: solid 1px black;
+	cursor: pointer;
 }
