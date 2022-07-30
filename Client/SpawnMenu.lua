@@ -13,6 +13,8 @@ ToolGunsTutorials = ToolGunsTutorials or {}
 -- WORKAROUND used for weapons Patterns
 SelectedOption = SelectedOption or ""
 
+SpawnMenuOpened = SpawnMenuOpened or false
+
 -- Configures the Highlight colors to be used
 Client.SetHighlightColor(Color(0, 20, 0, 1.20), 0, HighlightMode.Always) -- Index 0
 Client.SetOutlineColor(Color(0, 0, 300), 2) -- Index 2
@@ -58,13 +60,19 @@ Package.Subscribe("Load", function()
 end)
 
 Input.Bind("SpawnMenu", InputEvent.Released, function()
+	if (ContextMenuOpened) then return end
+
 	MainHUD:CallEvent("ToggleSpawnMenuVisibility", false)
+	SpawnMenuOpened = false
 	Client.SetMouseEnabled(false)
 	Client.SetChatVisibility(true)
 end)
 
 Input.Bind("SpawnMenu", InputEvent.Pressed, function()
+	if (ContextMenuOpened) then return end
+
 	MainHUD:CallEvent("ToggleSpawnMenuVisibility", true)
+	SpawnMenuOpened = true
 	Client.SetMouseEnabled(true)
 	Client.SetChatVisibility(false)
 	MainHUD:BringToFront()

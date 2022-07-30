@@ -1,6 +1,8 @@
 ContextMenuOpened = ContextMenuOpened or false
 
 Input.Bind("ContextMenu", InputEvent.Pressed, function()
+	if (SpawnMenuOpened) then return end
+
 	if (ContextMenuOpened) then
 		MainHUD:CallEvent("ToggleContextMenuVisibility", false)
 
