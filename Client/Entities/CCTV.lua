@@ -17,4 +17,4 @@ Prop.Subscribe("Spawn", function(prop)
 	end
 end)
 
-AddSpawnMenuItem("nanos-world", "entities", "CCTV", "CCTV", "assets///NanosWorld/Thumbnails/SM_Camera.jpg", "uncategorized")
+AddSpawnMenuItem("nanos-world", "entities", "CCTV", "CCTV", "assets://NanosWorld/Thumbnails/SM_Camera.jpg", "uncategorized")

@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	AddOption("None", "");
 
 	for (let i = 0; i < PatternList.length; i++) {
-		AddOption(`Pattern #${i}`, `assets///nanos-world/Textures/Pattern/${PatternList[i]}`, `assets///nanos-world/Textures/Pattern/Thumbnails/${PatternList[i]}`);
+		AddOption(`Pattern #${i}`, `assets://nanos-world/Textures/Pattern/${PatternList[i]}`, `assets://nanos-world/Textures/Pattern/Thumbnails/${PatternList[i]}`);
 	}
 
 	SelectOption(document.querySelectorAll(".spawn_option_checkbox_item")[0], true);

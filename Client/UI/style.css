@@ -3,13 +3,22 @@
 	padding: 0;
 }
 
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #494949;
+}
+
 body {
 	font-family: 'Gothic A1', sans-serif;
 	font-size: 14px;
-	margin: 0px;
-	padding: 0px;
 	color: #ffffffe6;
 	user-select: none;
+    scrollbar-gutter: stable both-edges;
 }
 
 #voice_chats {
@@ -120,7 +129,7 @@ body {
 
 #spawn_list {
 	padding: 5px 20px 5px 10px;
-	overflow-y: scroll;
+	overflow-y: overlay;
 	overflow-x: hidden;
 	position: absolute;
 	bottom: 0;
@@ -128,6 +137,7 @@ body {
 	left: 60px;
 	right: 0;
 	grid-template-columns: repeat(auto-fill, 100px);
+	grid-template-rows: auto auto 1fr;
 	justify-content: space-between;
 	display: grid;
 	grid-gap: 5px;
@@ -136,6 +146,7 @@ body {
 .spawn_item {
 	cursor: pointer;
 	width: 100px;
+    height: 140px;
 	padding: 5px;
 	text-align: center;
 	display: inline-block;
@@ -174,7 +185,7 @@ body {
 	bottom: 0;
 	top: 60px;
 	left: 0;
-	overflow-y: scroll;
+	overflow-y: overlay;
 }
 
 .spawn_category {
@@ -201,7 +212,7 @@ body {
 	bottom: 0;
 	top: 60px;
 	right: 0;
-	overflow-y: scroll;
+	overflow-y: overlay;
 	overflow-x: hidden;
 	display: none;
 }
@@ -224,7 +235,7 @@ body {
 	display: grid;
 	grid-gap: 10px;
 	max-height: 300px;
-	overflow-y: scroll;
+	overflow-y: overlay;
 	padding: 3px;
 }
 
@@ -245,7 +256,7 @@ body {
 	background-color: rgba(0, 0, 0, 0.4);
 	text-align: center;
 	font-size: 20px;
-	overflow-y: scroll;
+	overflow-y: overlay;
 }
 
 .tab {

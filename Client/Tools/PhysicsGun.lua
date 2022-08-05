@@ -378,7 +378,7 @@ Events.Subscribe("DropToolGun_PhysicsGun", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "PhysicsGun", "Physics Gun", "package///sandbox/Client/Tools/PhysicsGun.jpg", nil, {
+AddSpawnMenuItem("nanos-world", "tools", "PhysicsGun", "Physics Gun", "package://sandbox/Client/Tools/PhysicsGun.jpg", nil, {
 	{ key = "LeftClick", text = "grab object" },
 	{ key = "RightMouseButton", text = "freeze object" },
 	{ key = "MouseScrollUp", text = "increase/decrease beam size" },

@@ -27,7 +27,7 @@ Events.Subscribe("DropToolGun_TrailTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "TrailTool", "Trail", "package///sandbox/Client/Tools/Trail.jpg", nil, {
+AddSpawnMenuItem("nanos-world", "tools", "TrailTool", "Trail", "package://sandbox/Client/Tools/Trail.jpg", nil, {
 	{ key = "LeftClick", text = "spawn trail" },
 	{ key = "Undo", text = "undo spawn" },
 })

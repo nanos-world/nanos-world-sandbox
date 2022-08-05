@@ -45,7 +45,7 @@ Package.Subscribe("Load", function()
 				table.insert(SpawnMenuItems[asset_pack.Path].props, {
 					id = prop,
 					name = prop:gsub("SM_", " "):gsub("_", " "), -- Parses it to remove dirty names
-					image = "assets///" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg", -- Gets the Thumbnail path from conventional path "my_asset_pack/Thumbnails/"
+					image = "assets://" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg", -- Gets the Thumbnail path from conventional path "my_asset_pack/Thumbnails/"
 					sub_category = asset_category or "uncategorized"
 				})
 			end
@@ -127,7 +127,7 @@ end)
 
 -- Sound when hovering an Item in the SpawnMenu
 MainHUD:Subscribe("HoverSound", function(pitch)
-	Sound(Vector(), "nanos-world::A_VR_Click_01", true, true, SoundType.SFX, 0.02, pitch or 1)
+	Sound(Vector(), "nanos-world::A_Button_Hover_Cue", true, true, SoundType.SFX, 1, pitch or 1)
 end)
 
 MainHUD:Subscribe("ClickSound", function(pitch)
@@ -437,4 +437,5 @@ Package.Require("Tools/Trail.lua")
 Package.Require("Tools/Weld.lua")
 
 Package.Require("Entities/CCTV.lua")
+Package.Require("Entities/TV.lua")
 Package.Require("Entities/Breakable.lua")

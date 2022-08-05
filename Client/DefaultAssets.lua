@@ -23,6 +23,8 @@ DEFAULT_ASSET_PACK = {
 	["SM_Lamp"] = "furniture",
 	["SM_Flashlight"] = "funny",
 	["SM_Balloon"] = "funny",
+	["SM_MoneyRoll"] = "funny",
+	["SM_MoneyStack"] = "funny",
 	["SM_Camera"] = "funny",
 	["SM_Error"] = "funny",
 

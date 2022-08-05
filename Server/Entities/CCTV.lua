@@ -7,6 +7,7 @@ function SpawnCCTV(location, rotation)
 	cable:AttachStartTo(camera, Vector(-85, 0, 0))
 	cable:AttachEndTo(tv, Vector(0, 0, 10))
 	cable:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, 10000, 0, true, 10000, 100)
+	cable:SetMaterial("nanos-world::M_NanosMasked")
 	cable:SetMaterialColorParameter("Tint", Color.BLACK)
 	cable:SetRenderingSettings(5, 4, 1)
 
