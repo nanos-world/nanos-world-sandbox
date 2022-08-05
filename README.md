@@ -76,7 +76,7 @@ Package.Call(
     "tools",
     "IncredibleTool",
     "Incredible Tool",
-    "assets///NanosWorld/Thumbnails/SK_Blaster.jpg",
+    "assets://NanosWorld/Thumbnails/SK_Blaster.jpg",
     nil,
     {
         { key = "LeftClick", text = "do amazing stuff" },
