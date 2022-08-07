@@ -55,11 +55,11 @@ function UpdateHealth(health) {
 }
 
 
-var current_category = "";
-var current_tab = "";
+let current_category = "";
+let current_tab = "";
 
-var spawn_menu_data = {};
-var tabs = {};
+let spawn_menu_data = {};
+let tabs = {};
 
 
 function SpawnItemClick(e) {
@@ -326,7 +326,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	});
 });
 
-var popup_callback_event = null;
+let popup_callback_event = null;
 
 function ClosePopUpPrompt() {
 	const popup_prompt = document.getElementById("popup_prompt");
@@ -387,7 +387,7 @@ function SetTimeOfDayLabel(hours, minutes) {
 }
 
 // Aux for debouncing
-var EnabledChangeTimeOfDay = true;
+let EnabledChangeTimeOfDay = true;
 
 document.addEventListener("DOMContentLoaded", function() {
 	// Context Menu Time of Day Slide
@@ -475,7 +475,7 @@ Events.Subscribe("ToggleTutorial", ToggleTutorial);
 
 
 // TODO fix pattern workaround, move to Lua?
-var PatternList = [
+const PatternList = [
 	"T_80s_Pattern.jpg",
 	"T_Chochip_Pattern.jpg",
 	"T_Cracks_Pattern.jpg",
