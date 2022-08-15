@@ -5,7 +5,7 @@
     # contributors
     author =               "nanos™"
     # version
-    version =              "2.12.1"
+    version =              "2.12.2"
     # image URL
     image =                "https://i.imgur.com/aoEa4N4.jpg"
     # package type: 'script' (normal package), 'game-mode' (unique package - can only load one at a time), 'library' (doesn't start a Lua VM) or 'loading-screen' (special package for loading screen)

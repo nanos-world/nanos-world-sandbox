@@ -1,6 +1,7 @@
 function SpawnTorch(location, rotation)
 	local torch = Melee(location or Vector(), rotation or Rotator(), "nanos-world::SM_Torch")
 	torch:SetAnimationCharacterUse("nanos-world::AM_Mannequin_Torch_Attack")
+	torch:SetImpactSound(SurfaceType.Flesh, "nanos-world::A_Punch_Cue")
 	torch:SetDamageSettings(0.5, 0.25)
 	torch:SetCooldown(1.5)
 	torch:SetBaseDamage(25)

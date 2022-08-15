@@ -131,7 +131,7 @@ MainHUD:Subscribe("HoverSound", function(pitch)
 end)
 
 MainHUD:Subscribe("ClickSound", function(pitch)
-	Sound(Vector(), "nanos-world::A_VR_Click_02", true, true, SoundType.SFX, 0.01, pitch or 0.7)
+	Sound(Vector(), "nanos-world::A_Button_Click_Cue", true, true, SoundType.SFX, 1, pitch or 1)
 end)
 
 -- Handle for selecting an Item from the SpawnMenu
@@ -145,7 +145,7 @@ MainHUD:Subscribe("SpawnItem", function(group, category, asset_id)
 	local end_location = viewport_3D.Position + viewport_3D.Direction * trace_max_distance
 
 	-- Traces for world things
-    local trace_result = Client.Trace(start_location, end_location, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic)
+    local trace_result = Client.TraceLineSingle(start_location, end_location, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic)
 
 	local spawn_location = end_location
 
@@ -165,7 +165,7 @@ MainHUD:Subscribe("SpawnItem", function(group, category, asset_id)
 	Events.CallRemote("SpawnItem", group, category, asset_id, spawn_location, spawn_rotation, SelectedOption)
 
 	-- Spawns a sound for 'spawning an item'
-	Sound(Vector(), "nanos-world::A_VR_Teleport", true, true, SoundType.SFX, 0.15, 1.1)
+	Sound(Vector(), "nanos-world::A_Button_Click_Up_Cue", true, true, SoundType.SFX, 1, 1.1)
 end)
 
 -- Subscribes for when I select an Option
@@ -177,6 +177,7 @@ MainHUD:Subscribe("SelectOption", function(texture_path)
 	if (local_character) then
 		local current_picked_item = local_character:GetPicked()
 		if (current_picked_item) then
+			Sound(Vector(), "nanos-world::A_Button_Click_Up_Cue", true, true, SoundType.SFX, 1, 1.1)
 			Events.CallRemote("ApplyWeaponPattern", current_picked_item, texture_path)
 		end
 	end
@@ -271,7 +272,7 @@ function TraceFor(trace_max_distance, collision_channel)
 	local start_location = viewport_3D.Position + viewport_3D.Direction * 100
 	local end_location = viewport_3D.Position + viewport_3D.Direction * trace_max_distance
 
-	return Client.Trace(start_location, end_location, collision_channel, true, true)
+	return Client.TraceLineSingle(start_location, end_location, collision_channel, TraceMode.TraceComplex | TraceMode.ReturnEntity)
 end
 
 -- Adds a new item to the Spawn Menu

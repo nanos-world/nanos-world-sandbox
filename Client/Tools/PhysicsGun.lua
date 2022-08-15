@@ -110,7 +110,7 @@ function TryPickUpObject()
 	local collision_trace = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle
 
 	-- Do the Trace
-	local trace_result = Client.Trace(start_location, end_location, collision_trace, false, true)
+	local trace_result = Client.TraceLineSingle(start_location, end_location, collision_trace, TraceMode.ReturnEntity)
 
 	-- If hit something and hit an Entity
 	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
@@ -304,7 +304,7 @@ Client.Subscribe("Tick", function(delta_time)
 				-- Traces 20000 units in front
 				local end_location = start_location + direction * 20000
 				local collision_trace = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle
-				local trace_result = Client.Trace(start_location, end_location, collision_trace, false, true)
+				local trace_result = Client.TraceLineSingle(start_location, end_location, collision_trace)
 
 				-- If hit something
 				if (trace_result.Success) then

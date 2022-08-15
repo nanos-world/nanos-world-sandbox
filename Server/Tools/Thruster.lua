@@ -4,7 +4,7 @@ Events.Subscribe("SpawnThruster", function(player, hit_location, relative_locati
 	local rotation = (direction * -1):Rotation()
 
 	-- Spawns a Thruster Prop
-	local thruster = Prop(hit_location, rotation, "nanos-world::SM_Jet_Thruster", CollisionType.NoCollision, true, false)
+	local thruster = Prop(hit_location, rotation, "nanos-world::SM_Jet_Thruster", CollisionType.NoCollision, true, GrabMode.Disabled)
 
 	-- Spawns a Particle and attaches it to the thruster
 	local particle = Particle(hit_location, Rotator(), "nanos-world::P_Fire", false, true)

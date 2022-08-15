@@ -4,7 +4,7 @@ Events.Subscribe("SpawnTrail", function(player, hit_location, relative_location,
 	local rotation = (direction * -1):Rotation() + Rotator(90, 0, 0)
 
 	-- Spawns a Trail Prop
-	local trail = Prop(hit_location, Rotator(), "nanos-world::SM_CupC", CollisionType.NoCollision, true, false)
+	local trail = Prop(hit_location, Rotator(), "nanos-world::SM_CupC", CollisionType.NoCollision, true, GrabMode.Disabled)
 
 	-- Spawns a Particle and attaches it to the trail
 	local particle = Particle(hit_location, Rotator(), "nanos-world::P_Ribbon", false, true)

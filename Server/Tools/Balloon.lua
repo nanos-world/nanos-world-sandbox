@@ -4,7 +4,7 @@ Balloons = setmetatable({}, { __mode = 'k' })
 -- Spawns a Balloon
 Events.Subscribe("SpawnBalloon", function(player, spawn_location, rotation, force, max_length, entity, distance_trace_object)
 	-- Spawns a Balloon Prop (not allowing characters to pickup it and with CCD disabled)
-	local balloon = Prop(spawn_location + Vector(0, 0, 10), Rotator(0, 0, 0), "nanos-world::SM_Balloon", CollisionType.Normal, true, false, true)
+	local balloon = Prop(spawn_location + Vector(0, 0, 10), Rotator(0, 0, 0), "nanos-world::SM_Balloon", CollisionType.Normal, true, GrabMode.Disabled, CCDMode.Disabled)
 
 	-- Adds a constant force upwards
 	balloon:SetForce(Vector(0, 0, force), false)

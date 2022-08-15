@@ -24,7 +24,7 @@ Events.Subscribe("SpawnLamp", function(player, hit_location, relative_location, 
 		prop_lamp:AttachTo(entity, AttachmentRule.KeepWorld, "", 0)
 		prop_lamp:SetRelativeLocation(relative_location)
 		prop_lamp:SetRelativeRotation(relative_rotation)
-		prop_lamp:SetGrabbable(false)
+		prop_lamp:SetGrabMode(GrabMode.Disabled)
 	end
 
 	prop_lamp:SetRotation(rotation)

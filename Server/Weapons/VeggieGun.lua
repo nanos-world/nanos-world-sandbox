@@ -116,7 +116,7 @@ function SpawnVeggieGun(location, rotation)
 		-- local veggie_mesh = "nanos-world::SM_Boxes_01"
 		-- local veggie_mesh = "nanos-world::SM_CookerStove"
 
-		local prop = Prop(spawn_location, Rotator.Random(), veggie_mesh, CollisionType.Auto, true, false)
+		local prop = Prop(spawn_location, Rotator.Random(), veggie_mesh, CollisionType.Auto, true, GrabMode.Disabled, CCDMode.Disabled)
 		prop:SetLifeSpan(5)
 		prop:SetScale(Vector(2, 2, 2))
 		-- prop:SetScale(Vector(3, 3, 3))
