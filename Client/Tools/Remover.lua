@@ -23,6 +23,6 @@ Events.Subscribe("DropToolGun_RemoverTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "RemoverTool", "Remover", "package://sandbox/Client/Tools/Remover.jpg", nil, {
+AddSpawnMenuItem("nanos-world", "tools", "RemoverTool", "Remover", "package://sandbox/Client/Tools/Remover.webp", nil, {
 	{ key = "LeftClick", text = "remove object" },
 })

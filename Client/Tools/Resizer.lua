@@ -108,7 +108,7 @@ Events.Subscribe("DropToolGun_ResizerTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "ResizerTool", "Resizer", "package://sandbox/Client/Tools/Resizer.jpg", nil, {
+AddSpawnMenuItem("nanos-world", "tools", "ResizerTool", "Resizer", "package://sandbox/Client/Tools/Resizer.webp", nil, {
 	{ key = "LeftClick", text = "select object" },
 	{ key = "R", text = "reset scale" },
 	{ key = "MouseScrollUp", text = "scale" },

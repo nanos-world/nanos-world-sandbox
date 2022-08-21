@@ -5,12 +5,40 @@
 		<link rel="stylesheet" href="style.css">
 		
 		<!-- Scoreboard -->
-		<script src="scoreboard/scoreboard.js"></script>
-		<link rel="stylesheet" href="scoreboard/scoreboard.css">
+		<script src="modules/scoreboard/scoreboard.js"></script>
+		<link rel="stylesheet" href="modules/scoreboard/scoreboard.css">
 
 		<!-- Spawn Menu -->
-		<!-- <script src="spawn_menu/spawn_menu.js"></script>
-		<link rel="stylesheet" href="spawn_menu/spawn_menu.css"> -->
+		<script src="modules/spawn-menu/spawn-menu.js"></script>
+		<link rel="stylesheet" href="modules/spawn-menu/spawn-menu.css">
+
+		<!-- Voice -->
+		<script src="modules/voice/voice.js"></script>
+		<link rel="stylesheet" href="modules/voice/voice.css">
+
+		<!-- Notifications -->
+		<script src="modules/notifications/notifications.js"></script>
+		<link rel="stylesheet" href="modules/notifications/notifications.css">
+
+		<!-- Tutorials -->
+		<script src="modules/tutorials/tutorials.js"></script>
+		<link rel="stylesheet" href="modules/tutorials/tutorials.css">
+
+		<!-- Context Menu -->
+		<script src="modules/context-menu/context-menu.js"></script>
+		<link rel="stylesheet" href="modules/context-menu/context-menu.css">
+
+		<!-- Health -->
+		<script src="modules/health/health.js"></script>
+		<link rel="stylesheet" href="modules/health/health.css">
+
+		<!-- Ammo -->
+		<script src="modules/ammo/ammo.js"></script>
+		<link rel="stylesheet" href="modules/ammo/ammo.css">
+
+		<!-- PopUp -->
+		<script src="modules/popup/popup.js"></script>
+		<link rel="stylesheet" href="modules/popup/popup.css">
 
 		<!-- Google Fonts -->
 		<link rel="preconnect" href="https://fonts.gstatic.com">
@@ -18,86 +46,5 @@
 		<link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
 	</head>
 	<body>
-		<div id="tutorials">
-			<div id="tutorial_title">
-				Tool
-			</div>
-			<div id="tutorial_body">
-				<!-- <span class="tutorial"><img src="..." class="tutorial-key"> Attach Something</span> -->
-				<!-- <span class="tutorial"><img src="..." class="tutorial-key"> Do Another Thing</span> -->
-			</div>
-		</div>
-
-		<div id="voice_chats">
-			<!-- <span class="voice_chat SyedMuhammad">Player</span> -->
-		</div>
-
-		<div id="notifications">
-			<!-- <span class="notification">My Awesome Notification!</span>	 -->
-		</div>
-
-		<!-- Health container (black background) -->
-		<div id="health_container">
-			<img src="images/health.png">
-			<!-- Health value -->
-			<span id="health_current">100</span>
-		</div>
-
-		<!-- Weapon Ammo container (black background) -->
-		<div id="weapon_ammo_container">
-			<!-- Ammo Clip value -->
-			<span id="weapon_ammo_clip">30</span>
-			<span id="weapon_ammo_separator">/</span>
-			<!-- Ammo Bag value -->
-			<span id="weapon_ammo_bag">1000</span>
-		</div>
-		
-		<div id="popup_prompt">
-			<div id="popup_text">Hello please type</div>
-			<!-- <a id="popup_close">X</a> -->
-			<form id ="popup_form">
-				<input id="popup_input" />
-			</form>
-		</div>
-
-		<div id="context_menu">
-			<div id="context_menu_header">context menu <span id="context_menu_close">X</span></div>
-			<div class="context_menu_item" id="context_menu_time_of_day">
-				<span class="context_menu_label">Time of Day (<span id="context_menu_time_of_day_value">9:45</span>)</span>
-				<input type="range" min="0" max="1440" value="720" id="time_of_day_slide">
-			</div>
-
-			<input type="checkbox" id="context_menu_lock_time_of_day">
-			<label for="context_menu_lock_time_of_day" id="context_menu_lock_time_of_day_label">Lock Time of the Day</label>
-
-			<button id="context_menu_respawn_button">Respawn</button>
-		</div>
-
-		<div id="spawn_menu">
-			<div id="label">Label Description</div>
-			<div id="tabs">
-				<!-- <span id="props" class="tab active">
-					<img src="images/tabs/chair.png"/>
-					<span class="tab_name">props</span>
-				</span> -->
-			</div>
-			<div id="spawn_categories">
-				<!-- <span class="spawn_category active" style="background-image: url('images/categories/tools-disabled.png')"></span> -->
-			</div>
-			<div id="spawn_list">
-				<!-- <span class="spawn_item">
-					<span class="spawn_item_image" style="background-image: url('images/nanosworld_empty.png')"></span>
-					<span class="spawn_item_name">Name</span>
-				</span> -->
-			</div>
-			<div id="spawn_options">
-				<span class="spawn_option">
-					<span class="spawn_option_label">Pattern</span>
-					<span class="spawn_option_checkbox">
-						<!-- <span class="spawn_option_checkbox_item" style="background-image: url('T_Stripes_Pattern.jpg')"></span> -->
-					</span>
-				</span>
-			</div>
-		</div>
 	</body>
 </html>

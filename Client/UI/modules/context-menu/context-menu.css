@@ -1,0 +1,88 @@
+
+#context_menu {
+	background-color: #0000005e;
+	position: absolute;
+	right: 30px;
+	bottom: 50%;
+	width: 500px;
+	display: none;
+	border-radius: 5px;
+}
+
+#context_menu_header {
+	background-color: #00000086;
+	font-family: 'Poiret One', cursive;
+	height: 50px;
+	text-align: center;
+	line-height: 45px;
+	font-size: 25px;
+	cursor: default;
+	border-radius: 5px 5px 0 0;
+}
+
+#context_menu_close {
+	position: absolute;
+	right: 15px;
+	color: #ff2626;
+	font-family: Gothic A1;
+	border: 1px solid;
+	padding: 0;
+	height: 30px;
+	width: 30px;
+	top: 10px;
+	line-height: 32px;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+#context_menu_close:hover {
+	color: #b31c1c;
+}
+
+.context_menu_item {
+	padding: 10px;
+}
+
+.context_menu_label {
+	display: block;
+	font-weight: bold;
+	cursor: default;
+}
+
+#time_of_day_slide {
+	width: 100%;
+}
+
+#context_menu_keybindings input {
+	height: 30px;
+	width: 30px;
+	text-transform: uppercase;
+	margin: 5px;
+	text-align: center;
+}
+
+#context_menu_lock_time_of_day {
+	margin-left: 30%;
+	width: 20px;
+	height: 20px;
+	margin-right: 5px;
+	cursor: pointer;
+}
+
+#context_menu_lock_time_of_day_label {
+	font-size: 18px;
+}
+
+#context_menu_respawn_button {
+	background-color: rgba(255, 255, 255, 0.95);
+	color: black;
+	font-family: 'Gothic A1', sans-serif;
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 70%;
+	margin-left: 15%;
+	font-size: 18px;
+	border: solid 1px black;
+	cursor: pointer;
+}

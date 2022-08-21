@@ -1,0 +1,43 @@
+#popup_prompt {
+	background-color: #000000c2;
+	width: 800px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -400px;
+	text-align: center;
+	height: 110px;
+	display: none;
+}
+
+#popup_prompt #popup_text {
+	background-color: #00000077;
+	font-size: 20px;
+	font-family: 'Poiret One', cursive;
+	height: 50px;
+	line-height: 50px;
+	pointer-events: none;
+}
+
+#popup_prompt #popup_input {
+	width: 750px;
+	height: 30px;
+	margin-top: 15px;
+	background: #000;
+	border: none;
+	color: white;
+	padding: 5px;
+}
+
+#popup_prompt #popup_close {
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	border: 1px solid red;
+	line-height: 15px;
+	color: red;
+	background: transparent;
+	cursor: pointer;
+}

@@ -1,0 +1,26 @@
+#tutorials {
+	background-color: #0000003d;
+	border-radius: 5px;
+	position: absolute;
+	top: 30px;
+	left: 30px;
+	padding: 10px 15px;
+	display: none;
+}
+
+#tutorial_title {
+	font-size: 70px;
+	font-family: 'Poiret One', cursive;
+	margin-bottom: 10px;
+}
+
+.tutorial {
+	display: flex;
+	line-height: 30px;
+	margin: 5px 0;
+}
+
+.tutorial_key {
+	height: 30px;
+	margin-right: 5px;
+}

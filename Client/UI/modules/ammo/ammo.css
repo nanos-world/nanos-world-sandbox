@@ -1,0 +1,27 @@
+#weapon_ammo_container {
+	display: none;
+	position: absolute;
+	right: 30px;
+	bottom: 30px;
+	height: 55px;
+	background-color: #0000003d;
+	border-radius: 5px;
+	text-align: right;
+	padding: 0px 10px;
+}
+
+#weapon_ammo_separator {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+#weapon_ammo_bag {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+#weapon_ammo_clip {
+	font-weight: bold;
+	font-size: 32px;
+	line-height: 55px;
+}

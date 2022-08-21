@@ -1,0 +1,25 @@
+#voice_chats {
+	position: absolute;
+	left: 30px;
+	bottom: 50%;
+	height: 200px;
+	overflow: clip;
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: start;
+	margin-bottom: 15px;
+}
+
+.voice_chat {
+	background-color: #0000003d;
+	border-radius: 5px;
+	position: relative;
+	margin-top: 5px;
+	padding: 10px 15px 10px 45px;
+	font-size: 18px;
+	font-weight: normal;
+	background-image: url('modules/voice/sound.png');
+	background-repeat: no-repeat;
+	background-size: 20px;
+	background-position: 15px 50%;
+}

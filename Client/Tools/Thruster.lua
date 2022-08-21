@@ -27,7 +27,7 @@ Events.Subscribe("DropToolGun_ThrusterTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "ThrusterTool", "Thruster", "package://sandbox/Client/Tools/Thruster.jpg", nil, {
+AddSpawnMenuItem("nanos-world", "tools", "ThrusterTool", "Thruster", "package://sandbox/Client/Tools/Thruster.webp", nil, {
 	{ key = "LeftClick", text = "spawn thruster" },
 	{ key = "Undo", text = "undo spawn" },
 })
