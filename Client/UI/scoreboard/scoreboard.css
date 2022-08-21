@@ -10,6 +10,7 @@
 	margin: auto;
 	overflow: auto;
 	display: none;
+	border-radius: 5px;
 }
 
 #scoreboard table {

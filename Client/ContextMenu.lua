@@ -13,7 +13,7 @@ Input.Bind("ContextMenu", InputEvent.Pressed, function()
 	else
 		-- Opens context menu with updated data
 		local time = World.GetTime()
-		MainHUD:CallEvent("ToggleContextMenuVisibility", true, time.hours, time.minutes)
+		MainHUD:CallEvent("ToggleContextMenuVisibility", true, time.Hours, time.Minutes)
 
 		Client.SetMouseEnabled(true)
 		Client.SetChatVisibility(false)

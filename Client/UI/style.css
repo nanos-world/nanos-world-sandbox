@@ -41,10 +41,12 @@ body {
 	right: 200px;
 	bottom: 150px;
 	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 5px 5px 0 5px;
 }
 
 .voice_chat {
 	background-color: #0000003d;
+	border-radius: 5px;
 	position: relative;
 	margin-top: 5px;
 	padding: 10px 15px 10px 45px;
@@ -71,6 +73,7 @@ body {
 
 .notification {
 	background-color: #0000003d;
+	border-radius: 5px;
 	position: relative;
 	margin-top: 5px;
 	padding: 10px 15px;
@@ -85,6 +88,7 @@ body {
 	bottom: 30px;
 	height: 55px;
 	background-color: #0000003d;
+	border-radius: 5px;
 	text-align: right;
 	padding: 0px 10px;
 }
@@ -111,6 +115,7 @@ body {
 	left: 30px;
 	height: 55px;
 	background-color: #0000003d;
+	border-radius: 5px;
 	line-height: 60px;
 	padding: 0px 10px;
 	min-width: 90px;
@@ -254,6 +259,7 @@ body {
 #tabs {
 	height: 60px;
 	background-color: rgba(0, 0, 0, 0.4);
+	border-radius: 5px 5px 0 0;
 	text-align: center;
 	font-size: 20px;
 	overflow-y: overlay;
@@ -352,6 +358,7 @@ body {
 	bottom: 50%;
 	width: 500px;
 	display: none;
+	border-radius: 5px;
 }
 
 #context_menu_header {
@@ -362,6 +369,7 @@ body {
 	line-height: 45px;
 	font-size: 25px;
 	cursor: default;
+	border-radius: 5px 5px 0 0;
 }
 
 #context_menu_close {
@@ -407,6 +415,7 @@ body {
 
 #tutorials {
 	background-color: #0000003d;
+	border-radius: 5px;
 	position: absolute;
 	top: 30px;
 	left: 30px;

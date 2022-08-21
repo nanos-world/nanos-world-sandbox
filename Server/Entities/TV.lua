@@ -4,7 +4,7 @@ function SpawnTV(location, rotation)
 	rotation = (rotation or Rotator()) + Rotator(0, 90, 0)
 
 	-- Spawns a TV prop
-	local prop = Prop(location, rotation, "nanos-world::SM_TV")
+	local prop = Prop(location, rotation, "nanos-world::SM_TV", CollisionType.Auto, true, GrabMode.Enabled)
 	prop:SetScale(Vector(2, 2, 2))
 	prop:SetValue("TV", true, true)
 
