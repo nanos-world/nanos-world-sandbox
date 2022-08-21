@@ -350,7 +350,6 @@ MainHUD:CallEvent("AddCategory", "weapons", "pistols", "Pistols", "categories/re
 MainHUD:CallEvent("AddCategory", "weapons", "shotguns", "Shotguns", "categories/shotgun.webp", "categories/shotgun-disabled.webp")
 MainHUD:CallEvent("AddCategory", "weapons", "sniper-rifles", "Sniper Rifles", "categories/sniper-rifle.webp", "categories/sniper-rifle-disabled.webp")
 MainHUD:CallEvent("AddCategory", "weapons", "special", "Special", "categories/laser-gun.webp", "categories/laser-gun-disabled.webp")
-MainHUD:CallEvent("AddCategory", "weapons", "special", "Special", "categories/laser-gun.webp", "categories/laser-gun-disabled.webp")
 MainHUD:CallEvent("AddCategory", "weapons", "grenades", "Grenade", "categories/grenade.webp", "categories/grenade-disabled.webp")
 MainHUD:CallEvent("AddCategory", "weapons", "melee", "Melee", "categories/knife.webp", "categories/knife-disabled.webp")
 
