@@ -121,7 +121,7 @@ Package.Export("SpawnMyIncredibleTool", SpawnMyIncredibleTool)
 
 Package.Subscribe("Load", function()
     -- Adds an Incredible Tool to spawn Menu (server side)
-    Package.Call("sandbox", "AddSpawnMenuItem", "my-package", "tools", "IncredibleTool", SpawnMyIncredibleTool)
+    Package.Call("sandbox", "AddSpawnMenuItem", "my-package", "tools", "IncredibleTool", Package.GetPath(), "SpawnMyIncredibleTool")
 end)
 ```
 
