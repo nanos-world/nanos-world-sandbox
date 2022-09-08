@@ -61,6 +61,12 @@ Client.Subscribe("MouseUp", function(key_name)
 	if (key_name == "MouseScrollUp") then
 		if (ResizerTool.resizing_object) then
 			ResizerTool.current_scale = ResizerTool.current_scale + ResizerTool.current_scale * 0.1
+
+			-- Cannot resize too big
+			if (ResizerTool.current_scale.X > 20) then
+				ResizerTool.current_scale = Vector(20)
+			end
+
 			Events.CallRemote("ResizeObject", ResizerTool.resizing_object, ResizerTool.current_scale, true)
 		end
 		return

@@ -71,7 +71,7 @@ Events.Subscribe("DropToolGun_WeldTool", function(tool, character)
 end)
 
 -- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "WeldTool", "Weld", "package://sandbox/Client/Tools/Weld.jpg", nil, {
+AddSpawnMenuItem("nanos-world", "tools", "WeldTool", "Weld", "package://sandbox/Client/Tools/Weld.webp", nil, {
 	{ key = "LeftClick", text = "weld object" },
 	{ key = "Undo", text = "undo weld" },
 })
