@@ -53,20 +53,6 @@ Events.Subscribe("PickUp", function(player, weapon, object, is_grabbing, picking
     Events.BroadcastRemote("PickUpObject", object, is_grabbing)
 end)
 
--- Subscribe for Client's custom event, to update the position of the object he is grabbing
-Events.Subscribe("UpdateObjectPosition", function(player, object, location, rotation)
-    -- Maybe the server is closing?
-    if (not object) then return end
-
-    object:TranslateTo(location, 0.05)
-    object:RotateTo(rotation, 0.1)
-
-    -- Only updates the Network Authority if this entity is network distributed
-    if (object:IsNetworkDistributed()) then
-        object:SetNetworkAuthority(player)
-    end
-end)
-
 -- Subscribes for Clients event for turning on/off the physics gun
 Events.Subscribe("TogglePhysicsGun", function(player, weapon, enable)
     -- Maybe the server is closing?

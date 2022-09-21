@@ -19,6 +19,15 @@ SpawnMenuOpened = SpawnMenuOpened or false
 Client.SetHighlightColor(Color(0, 20, 0, 1.20), 0, HighlightMode.Always) -- Index 0
 Client.SetOutlineColor(Color(0, 0, 300), 2) -- Index 2
 
+-- Caches Sounds with Auto Play = false
+SoundDeleteItemFromHistory = Sound(Vector(), "nanos-world::A_Player_Eject", true, false, SoundType.UI, 0.1, 1, 400, 3600, 0, false, 0, false)
+SoundButtonHover = Sound(Vector(), "nanos-world::A_Button_Hover_Cue", true, false, SoundType.UI, 1, 1, 400, 3600, 0, false, 0, false)
+SoundButtonClick = Sound(Vector(), "nanos-world::A_Button_Click_Cue", true, false, SoundType.UI, 1, 1, 400, 3600, 0, false, 0, false)
+SoundSpawnItem = Sound(Vector(), "nanos-world::A_Button_Click_Up_Cue", true, false, SoundType.UI, 1, 1.1, 400, 3600, 0, false, 0, false)
+SoundSelectOption = Sound(Vector(), "nanos-world::A_Button_Click_Up_Cue", true, false, SoundType.UI, 1, 1.1, 400, 3600, 0, false, 0, false)
+SoundInvalidAction = Sound(Vector(), "nanos-world::A_Invalid_Action", true, false, SoundType.UI, 1, 1, 400, 3600, 0, false, 0, false)
+
+
 Package.Subscribe("Load", function()
 	-- Wait 1 second so all other packages can send their Tools during Package Load event
 	Timer.SetTimeout(function()
@@ -54,7 +63,7 @@ Package.Subscribe("Load", function()
 		-- Iterate each group to add to Spawn Menu, this will add all items to it
 		-- If an item is added after this it will not be added to spawn menu
 		for group, spawn_menu_group_data in pairs(SpawnMenuItems) do
-			MainHUD:CallEvent("AddSpawnMenuGroup", group, JSON.stringify(spawn_menu_group_data))
+			MainHUD:CallEvent("AddSpawnMenuGroup", group, spawn_menu_group_data)
 		end
 	end, 1000)
 end)
@@ -90,7 +99,7 @@ function DeleteItemFromHistory()
 	-- If there is a item to destroy, otherwise tries the next from the list, recursively
 	if (data.item and data.item:IsValid()) then
 		Events.CallRemote("DestroyItem", data.item)
-		Sound(Vector(), "nanos-world::A_Player_Eject", true, true, SoundType.SFX, 0.1)
+		SoundDeleteItemFromHistory:Play()
 	else
 		DeleteItemFromHistory()
 	end
@@ -127,11 +136,13 @@ end)
 
 -- Sound when hovering an Item in the SpawnMenu
 MainHUD:Subscribe("HoverSound", function(pitch)
-	Sound(Vector(), "nanos-world::A_Button_Hover_Cue", true, true, SoundType.SFX, 1, pitch or 1)
+	SoundButtonHover:SetPitch(pitch or 1)
+	SoundButtonHover:Play()
 end)
 
 MainHUD:Subscribe("ClickSound", function(pitch)
-	Sound(Vector(), "nanos-world::A_Button_Click_Cue", true, true, SoundType.SFX, 1, pitch or 1)
+	SoundButtonClick:SetPitch(pitch or 1)
+	SoundButtonClick:Play()
 end)
 
 -- Handle for selecting an Item from the SpawnMenu
@@ -145,7 +156,7 @@ MainHUD:Subscribe("SpawnItem", function(group, category, asset_id)
 	local end_location = viewport_3D.Position + viewport_3D.Direction * trace_max_distance
 
 	-- Traces for world things
-    local trace_result = Client.TraceLineSingle(start_location, end_location, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic)
+    local trace_result = Client.TraceLineSingle(start_location, end_location, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.Water)
 
 	local spawn_location = end_location
 
@@ -165,7 +176,7 @@ MainHUD:Subscribe("SpawnItem", function(group, category, asset_id)
 	Events.CallRemote("SpawnItem", group, category, asset_id, spawn_location, spawn_rotation, SelectedOption)
 
 	-- Spawns a sound for 'spawning an item'
-	Sound(Vector(), "nanos-world::A_Button_Click_Up_Cue", true, true, SoundType.SFX, 1, 1.1)
+	SoundSpawnItem:Play()
 end)
 
 -- Subscribes for when I select an Option
@@ -177,7 +188,7 @@ MainHUD:Subscribe("SelectOption", function(texture_path)
 	if (local_character) then
 		local current_picked_item = local_character:GetPicked()
 		if (current_picked_item) then
-			Sound(Vector(), "nanos-world::A_Button_Click_Up_Cue", true, true, SoundType.SFX, 1, 1.1)
+			SoundSelectOption:Play()
 			Events.CallRemote("ApplyWeaponPattern", current_picked_item, texture_path)
 		end
 	end
@@ -272,7 +283,7 @@ function TraceFor(trace_max_distance, collision_channel)
 	local start_location = viewport_3D.Position + viewport_3D.Direction * 100
 	local end_location = viewport_3D.Position + viewport_3D.Direction * trace_max_distance
 
-	return Client.TraceLineSingle(start_location, end_location, collision_channel, TraceMode.TraceComplex | TraceMode.ReturnEntity)
+	return Client.TraceLineSingle(start_location, end_location, collision_channel, TraceMode.TraceComplex | TraceMode.ReturnEntity, { Client.GetLocalPlayer():GetControlledCharacter() })
 end
 
 -- Adds a new item to the Spawn Menu
@@ -309,7 +320,7 @@ function AddSpawnMenuItem(group, tab, id, name, image, category, tutorials)
 			table.insert(tutorials_parsed, { image = key_icon, text = tutorial_data.text })
 		end
 
-		ToolGunsTutorials[id] = { tutorials = JSON.stringify(tutorials_parsed), name = name }
+		ToolGunsTutorials[id] = { tutorials = tutorials_parsed, name = name }
 	end
 end
 

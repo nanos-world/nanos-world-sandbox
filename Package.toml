@@ -1,19 +1,19 @@
 # package configurations
 [package]
     # package name
-    name =                 "Sandbox"
+    name =                  "Sandbox"
     # contributors
-    author =               "nanos™"
+    author =                "nanos™"
     # version
-    version =              "2.13.1"
+    version =               "2.14.0"
     # image URL
-    image =                "https://i.imgur.com/aoEa4N4.jpg"
+    image =                 "https://i.imgur.com/aoEa4N4.jpg"
     # package type: 'script' (normal package), 'game-mode' (unique package - can only load one at a time), 'library' (doesn't start a Lua VM) or 'loading-screen' (special package for loading screen)
-    type =                 "game-mode"
+    type =                  "game-mode"
     # whether to force the custom map script to do not load
-    force_no_map_script =  false
+    force_no_map_script =   false
     # auto destroy all entities spawned by this package when it unloads
-    auto_cleanup =         true
+    auto_cleanup =          true
     # packages requirements
     packages_requirements = [
         

@@ -25,11 +25,9 @@ function ToggleTutorial(is_visible, title, tutorial_list) {
 		const tutorial_title = document.getElementById("tutorial_title");
 		tutorial_title.innerHTML = title;
 
-		const tutorial_list_json = JSON.parse(tutorial_list);
-
-		for (let tutorial in tutorial_list_json) {
-			let image = tutorial_list_json[tutorial].image;
-			let text = tutorial_list_json[tutorial].text;
+		for (let tutorial in tutorial_list) {
+			let image = tutorial_list[tutorial].image;
+			let text = tutorial_list[tutorial].text;
 
 			const tutorial_item_image = document.createElement("img");
 			tutorial_item_image.classList.add("tutorial_key");

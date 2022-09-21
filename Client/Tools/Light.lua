@@ -16,7 +16,7 @@ function HandleLightTool(weapon)
 			Events.CallRemote("SpawnLight", trace_result.Location, trace_result.Normal, trace_result.Entity, distance_trace_object)
 		else
 			-- If didn't hit anything, plays a negative sound
-			Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
+			SoundInvalidAction:Play()
 		end
 	end)
 

@@ -16,7 +16,7 @@ function HandleWeldTool(tool)
 			if (WeldTool.welding_start_to) then
 				-- Do not allow attaching to itself
 				if (WeldTool.welding_start_to == trace_result.Entity) then
-					Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
+					SoundInvalidAction:Play()
 					return
 				end
 
@@ -53,7 +53,7 @@ function HandleWeldTool(tool)
 		end
 
 		-- If didn't hit anything, plays a negative sound
-		Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
+		SoundInvalidAction:Play()
 	end)
 end
 

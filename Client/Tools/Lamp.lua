@@ -17,7 +17,7 @@ function HandleLampTool(weapon)
 			Events.CallRemote("SpawnLamp", trace_result.Location, relative_location, relative_rotation, trace_result.Normal, trace_result.Entity)
 		else
 			-- If didn't hit anything, plays a negative sound
-			Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
+			SoundInvalidAction:Play()
 		end
 	end)
 end

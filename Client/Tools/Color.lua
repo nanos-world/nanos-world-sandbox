@@ -11,7 +11,7 @@ function HandleColorTool(tool)
 			Events.CallRemote("ColorObject", trace_result.Entity, trace_result.Location, trace_result.Normal, color)
 		else
 			-- If didn't hit anything, plays a negative sound
-			Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
+			SoundInvalidAction:Play()
 		end
 	end)
 end

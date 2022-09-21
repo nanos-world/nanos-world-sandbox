@@ -33,7 +33,7 @@ function ResizerFire(weapon, shooter)
 		Events.CallRemote("ToggleResizing", true)
 	else
 		-- If didn't hit anything, plays a negative sound
-		Sound(Vector(), "nanos-world::A_Invalid_Action", true, true, SoundType.SFX, 1)
+		SoundInvalidAction:Play()
 	end
 end
 

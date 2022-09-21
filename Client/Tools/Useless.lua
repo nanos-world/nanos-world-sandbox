@@ -10,7 +10,7 @@ function HandleUselessTool(tool)
 			Events.CallRemote("UselessObject", trace_result.Entity, trace_result.Location, trace_result.Normal)
 		else
 			-- If didn't hit anything, plays a negative sound
-			Sound(Vector(), "nanos-world::A_Button_Click_Down_Cue", true, true, SoundType.SFX, 4)
+			SoundInvalidAction:Play()
 		end
 	end)
 end

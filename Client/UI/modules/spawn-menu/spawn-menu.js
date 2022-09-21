@@ -45,7 +45,7 @@ function TabClick(tab_element) {
 	}
 
 	// Adds "all" category
-	DisplayCategory("all", "All", "./images/categories/infinity.png", "./images/categories/infinity-disabled.png");
+	DisplayCategory("all", "All", "modules/spawn-menu/images/categories/infinity.webp", "modules/spawn-menu/images/categories/infinity-disabled.webp");
 
 	// Forces click on first category
 	CategoryClick(document.querySelectorAll(".spawn_category")[0]);
@@ -273,7 +273,7 @@ function AddItem(group, item_id, item_name, image) {
 }
 
 function AddSpawnMenuGroup(group, group_data) {
-	spawn_menu_data[group] = JSON.parse(group_data);
+	spawn_menu_data[group] = group_data;
 
 	RefreshSpawnMenu();
 }

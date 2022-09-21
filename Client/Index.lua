@@ -25,6 +25,10 @@ Input.Register("SpawnMenu", "Q")
 Input.Register("ContextMenu", "C")
 Input.Register("Undo", "X")
 
+-- Hit Taken Feedback Sound Cached
+SoundHitTakenFeedback = Sound(Vector(), "nanos-world::A_HitTaken_Feedback", true, false, SoundType.SFX, 1, 1, 400, 3600, 0, false, 0, false)
+
+
 -- When LocalPlayer spawns, sets an event on it to trigger when we possesses a new character, to store the local controlled character locally. This event is only called once, see Package.Subscribe("Load") to load it when reloading a package
 Client.Subscribe("SpawnLocalPlayer", function(local_player)
 	local_player:Subscribe("Possess", function(player, character)
@@ -64,7 +68,7 @@ function UpdateLocalCharacter(character)
 	character:Subscribe("HealthChanged", function(charac, old_health, new_health)
 		-- Plays a Hit Taken sound effect if took damage
 		if (new_health < old_health) then
-			Sound(Vector(), "nanos-world::A_HitTaken_Feedback", true)
+			SoundHitTakenFeedback:Play()
 		end
 
 		-- Immediatelly Updates the Health UI

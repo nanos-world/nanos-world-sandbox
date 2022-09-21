@@ -1,3 +1,7 @@
+-- Sounds Cached
+SoundNotification = Sound(Vector(), "nanos-world::A_VR_Click_01", true, false, SoundType.UI, 0.1, 1, 400, 3600, 0, false, 0, false)
+
+
 -- Adds the Notification on the Screen
 ---@param id string			Unique ID used to store if the notification was already displayed to the player
 ---@param message string	The message to display
@@ -17,7 +21,7 @@ function AddNotification(id, message, time, delay, force)
 		end
 
 		-- Plays a sound
-		Sound(Vector(), "nanos-world::A_VR_Click_01", true, true, SoundType.SFX, 0.1, 1)
+		SoundNotification:Play()
 
 		-- Trigger WebUI to display it
 		MainHUD:CallEvent("AddNotification", _message, _time)

@@ -328,6 +328,12 @@ Timer.SetInterval(function()
 			if (PhysicsGun.picking_object == nil) then return end
 		end
 
+		-- If lost network authority somehow, stops gravitating it
+		if (not PhysicsGun.picking_object:HasNetworkAuthority()) then
+			TogglePhysicsGunLocal(false)
+			return
+		end
+
 		-- Otherwise, if I'm grabbing something, tells the server to update it's location
 
 		-- Get the camera location in 3D World Space
@@ -350,8 +356,9 @@ Timer.SetInterval(function()
 			rotation = RoundRotator(rotation, 45)
 		end
 
-		-- Calls remote to update it's location
-		Events.CallRemote("UpdateObjectPosition", PhysicsGun.picking_object, end_location, rotation)
+		-- Updates it's location (it is only possible to call those methods as this Player is the network authority)
+		PhysicsGun.picking_object:TranslateTo(end_location, 0.05)
+		PhysicsGun.picking_object:RotateTo(rotation, 0.1)
 	end
 end, 0.033)
 
