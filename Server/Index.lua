@@ -213,35 +213,49 @@ function SpawnCharacterRandomized(location, rotation, asset)
 	return new_char
 end
 
+-- Handles Characters Death, to auto respawn after a time
+function OnPlayerCharacterDeath(chara, last_damage_taken, last_bone_damaged, damage_reason, hit_from, instigator)
+	local controller = chara:GetPlayer()
+
+	-- Was it supposed to happen? Maybe I was unpossessed
+	if (not controller) then return end
+
+	-- Outputs a message when dying
+	if (instigator) then
+		if (instigator == controller) then
+			Server.BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> committed suicide")
+		else
+			Server.BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> killed <cyan>" .. controller:GetName() .. "</>")
+		end
+	else
+		Server.BroadcastChatMessage("<cyan>" .. controller:GetName() .. "</> died")
+	end
+
+	-- Respawns the Character after 5 seconds, we Bind the Timer to the Character, this way if the Character gets destroyed in the meanwhile, this Timer never gets destroyed
+	Timer.Bind(
+		Timer.SetTimeout(function(character)
+			-- If he is not dead anymore after 5 seconds, ignores it
+			if (character:GetHealth() ~= 0) then return end
+
+			-- Respawns the Character at a random point
+			local spawn_point = GetRandomSpawnPoint()
+			character:Respawn(spawn_point.location, spawn_point.rotation)
+		end, 5000, chara),
+		chara
+	)
+end
+
 function SpawnPlayer(player, location, rotation)
 	local new_char = SpawnCharacterRandomized(location, rotation)
 
 	player:Possess(new_char)
 
-	-- Sets a callback to automatically respawn the character, 10 seconds after he dies
-	new_char:Subscribe("Death", function(chara, last_damage_taken, last_bone_damaged, damage_reason, hit_from, instigator)
-		if (instigator) then
-			if (instigator == player) then
-				Server.BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> committed suicide")
-			else
-				Server.BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> killed <cyan>" .. player:GetName() .. "</>")
-			end
-		else
-			Server.BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> died")
-		end
+	-- Subscribe to Death event
+	new_char:Subscribe("Death", OnPlayerCharacterDeath)
 
-		-- Respawns the Character after 5 seconds, we Bind the Timer to the Character, this way if the Character gets destroyed in the meanwhile, this Timer never gets destroyed
-		Timer.Bind(
-			Timer.SetTimeout(function(character)
-				-- If he is not dead anymore after 5 seconds, ignores it
-				if (character:GetHealth() ~= 0) then return end
-
-				-- Respawns the Character at a random point
-				local spawn_point = GetRandomSpawnPoint()
-				character:Respawn(spawn_point.location, spawn_point.rotation)
-			end, 5000, chara),
-			chara
-		)
+	-- Unsubscribe to Death event if unpossessed (in case we got possessed into another Character)
+	new_char:Subscribe("UnPossessed", function(self)
+		self:Unsubscribe("Death", OnPlayerCharacterDeath)
 	end)
 end
 
