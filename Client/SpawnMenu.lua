@@ -239,6 +239,7 @@ function ToggleToolGunAiming(weapon, tool, enable)
 		elseif (
 			tool == "ColorTool" or
 			tool == "ThrusterTool" or
+			tool == "UselessTool" or
 			tool == "WeldTool" or
 			tool == "TrailTool" or
 			tool == "ResizerTool" or
@@ -403,12 +404,17 @@ AddSpawnMenuItem("nanos-world", "weapons", "VeggieGun", "Veggie Gun", "assets://
 AddSpawnMenuItem("nanos-world", "weapons", "BouncyGun", "Bouncy Gun", "assets://NanosWorld/Thumbnails/SK_FlareGun.jpg", "special")
 
 -- Default Vehicles
+AddSpawnMenuItem("nanos-world", "vehicles", "Wagon", "Wagon", "assets://NanosWorld/Thumbnails/SK_Wagon.jpg")
+AddSpawnMenuItem("nanos-world", "vehicles", "Van", "Van", "assets://NanosWorld/Thumbnails/SK_Van.jpg")
+AddSpawnMenuItem("nanos-world", "vehicles", "Sedan", "Sedan", "assets://NanosWorld/Thumbnails/SK_Sedan.jpg")
+AddSpawnMenuItem("nanos-world", "vehicles", "CamperVan", "CamperVan", "assets://NanosWorld/Thumbnails/SK_CamperVan.jpg")
 AddSpawnMenuItem("nanos-world", "vehicles", "SUV", "SUV", "assets://NanosWorld/Thumbnails/SK_SUV.jpg")
 AddSpawnMenuItem("nanos-world", "vehicles", "Hatchback", "Hatchback", "assets://NanosWorld/Thumbnails/SK_Hatchback.jpg")
 AddSpawnMenuItem("nanos-world", "vehicles", "SportsCar", "SportsCar", "assets://NanosWorld/Thumbnails/SK_SportsCar.jpg")
 AddSpawnMenuItem("nanos-world", "vehicles", "TruckBox", "TruckBox", "assets://NanosWorld/Thumbnails/SK_Truck_Box.jpg")
 AddSpawnMenuItem("nanos-world", "vehicles", "TruckChassis", "TruckChassis", "assets://NanosWorld/Thumbnails/SK_Truck_Chassis.jpg")
 AddSpawnMenuItem("nanos-world", "vehicles", "Pickup", "Pickup", "assets://NanosWorld/Thumbnails/SK_Pickup.jpg")
+AddSpawnMenuItem("nanos-world", "vehicles", "Offroad", "Offroad", "assets://NanosWorld/Thumbnails/SK_Offroad.jpg")
 
 -- Default NPCs
 AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_Mannequin", "Mannequin", "assets://NanosWorld/Thumbnails/SK_Mannequin.jpg")
@@ -447,6 +453,7 @@ Package.Require("Tools/Resizer.lua")
 Package.Require("Tools/Rope.lua")
 Package.Require("Tools/Thruster.lua")
 Package.Require("Tools/Trail.lua")
+Package.Require("Tools/Useless.lua")
 Package.Require("Tools/Weld.lua")
 
 Package.Require("Entities/CCTV.lua")

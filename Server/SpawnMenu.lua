@@ -195,12 +195,17 @@ AddSpawnMenuItem("nanos-world", "weapons", "AWP", NanosWorldWeapons.AWP)
 AddSpawnMenuItem("nanos-world", "weapons", "Grenade", function(location, rotation) return Grenade(location, rotation, "nanos-world::SM_Grenade_G67") end)
 
 -- Default Vehicles
+AddSpawnMenuItem("nanos-world", "vehicles", "Sedan", NanosWorldVehicles.Sedan)
+AddSpawnMenuItem("nanos-world", "vehicles", "Wagon", NanosWorldVehicles.Wagon)
+AddSpawnMenuItem("nanos-world", "vehicles", "Van", NanosWorldVehicles.Van)
+AddSpawnMenuItem("nanos-world", "vehicles", "CamperVan", NanosWorldVehicles.CamperVan)
 AddSpawnMenuItem("nanos-world", "vehicles", "SUV", NanosWorldVehicles.SUV)
 AddSpawnMenuItem("nanos-world", "vehicles", "Hatchback", NanosWorldVehicles.Hatchback)
 AddSpawnMenuItem("nanos-world", "vehicles", "SportsCar", NanosWorldVehicles.SportsCar)
 AddSpawnMenuItem("nanos-world", "vehicles", "TruckBox", NanosWorldVehicles.TruckBox)
 AddSpawnMenuItem("nanos-world", "vehicles", "TruckChassis", NanosWorldVehicles.TruckChassis)
 AddSpawnMenuItem("nanos-world", "vehicles", "Pickup", NanosWorldVehicles.Pickup)
+AddSpawnMenuItem("nanos-world", "vehicles", "Offroad", NanosWorldVehicles.Offroad)
 
 -- Default Tools
 AddSpawnMenuItem("nanos-world", "tools", "RemoverTool", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.RED) end)
@@ -217,6 +222,7 @@ Package.Require("Tools/Rope.lua")
 Package.Require("Tools/Thruster.lua")
 Package.Require("Tools/Torch.lua")
 Package.Require("Tools/Trail.lua")
+Package.Require("Tools/Useless.lua")
 Package.Require("Tools/Weld.lua")
 
 -- Extra
