@@ -1,6 +1,6 @@
 -- Event from server to set a SceneCapture in a CCTV
 function SpawnAndSetCameraOnProp(prop, camera)
-	local sc = SceneCapture(camera:GetLocation(), Rotator(), 650, 400)
+	local sc = SceneCapture(camera:GetLocation(), Rotator(), 650, 400, 0.016)
 	sc:AttachTo(camera, AttachmentRule.SnapToTarget, "", 0)
 
 	prop:SetMaterialFromSceneCapture(sc, 1)
