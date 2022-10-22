@@ -378,7 +378,6 @@ AddSpawnMenuItem("nanos-world", "weapons", "ASVal", "AS-Val", "assets://NanosWor
 AddSpawnMenuItem("nanos-world", "weapons", "GE3", "Gewehr 3", "assets://NanosWorld/Thumbnails/SK_GE3.jpg", "rifles")
 AddSpawnMenuItem("nanos-world", "weapons", "GE36", "Gewehr 36", "assets://NanosWorld/Thumbnails/SK_GE36.jpg", "rifles")
 AddSpawnMenuItem("nanos-world", "weapons", "SA80", "SA-80", "assets://NanosWorld/Thumbnails/SK_SA80.jpg", "rifles")
-AddSpawnMenuItem("nanos-world", "weapons", "DC15S", "DC-15S", "assets://NanosWorld/Thumbnails/SK_DC15S.jpg", "rifles")
 
 AddSpawnMenuItem("nanos-world", "weapons", "AP5", "MP5", "assets://NanosWorld/Thumbnails/SK_AP5.jpg", "smgs")
 AddSpawnMenuItem("nanos-world", "weapons", "P90", "P90", "assets://NanosWorld/Thumbnails/SK_P90.jpg", "smgs")
