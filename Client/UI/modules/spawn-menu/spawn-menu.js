@@ -278,6 +278,16 @@ function AddSpawnMenuGroup(group, group_data) {
 	RefreshSpawnMenu();
 }
 
+Events.Subscribe("ToggleSpawnMenuVisibility", function(is_visible) {
+	const spawn_menu = document.getElementById("spawn_menu");
+
+	if (is_visible)
+		spawn_menu.style.display = "block";
+	else
+		spawn_menu.style.display = "none";
+});
+
+
 Events.Subscribe("AddSpawnMenuGroup", AddSpawnMenuGroup);
 Events.Subscribe("AddTab", AddTab);
 Events.Subscribe("AddCategory", AddCategory);
