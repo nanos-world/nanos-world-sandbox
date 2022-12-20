@@ -32,6 +32,7 @@
 	padding: 5px;
 	text-align: center;
 	display: inline-block;
+	border-radius: 5px;
 }
 
 .spawn_item:hover {

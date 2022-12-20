@@ -147,68 +147,72 @@ function GetRandomSpawnPoint()
 	return #SPAWN_POINTS > 0 and SPAWN_POINTS[math.random(#SPAWN_POINTS)] or { location = Vector(), rotation = Rotator() }
 end
 
+function CustomizeCharacter(character, mesh)
+	-- Customization
+	if (mesh == "nanos-world::SK_Male") then
+		local selected_hair = SK_MALE_HAIR_MESHES[math.random(#SK_MALE_HAIR_MESHES)]
+		if (selected_hair ~= "") then
+			character:AddStaticMeshAttached("hair", selected_hair, "hair_male")
+		end
+
+		local selected_beard = SK_MALE_BEARD_MESHES[math.random(#SK_MALE_BEARD_MESHES)]
+		if (selected_beard ~= "") then
+			character:AddStaticMeshAttached("beard", selected_beard, "beard")
+		end
+	end
+
+	if (mesh == "nanos-world::SK_Male" or mesh == "nanos-world::SK_Mannequin") then
+		local selected_death_Sound = MALE_DEATH_SOUNDS[math.random(#MALE_DEATH_SOUNDS)]
+		character:SetDeathSound(selected_death_Sound)
+
+		local selected_pain_Sound = MALE_PAIN_SOUNDS[math.random(#MALE_PAIN_SOUNDS)]
+		character:SetPainSound(selected_pain_Sound)
+	end
+
+	if (mesh == "nanos-world::SK_Female" or mesh == "nanos-world::SK_Mannequin_Female") then
+		local selected_death_Sound = FEMALE_DEATH_SOUNDS[math.random(#FEMALE_DEATH_SOUNDS)]
+		character:SetDeathSound(selected_death_Sound)
+
+		local selected_pain_Sound = FEMALE_PAIN_SOUNDS[math.random(#FEMALE_PAIN_SOUNDS)]
+		character:SetPainSound(selected_pain_Sound)
+	end
+
+	if (mesh == "nanos-world::SK_Female") then
+		local selected_hair = SK_FEMALE_HAIR_MESHES[math.random(#SK_FEMALE_HAIR_MESHES)]
+		if (selected_hair ~= "") then
+			character:AddStaticMeshAttached("hair", selected_hair, "hair_female")
+		end
+
+		-- Those parameters are specific to female mesh
+		character:SetMaterialColorParameter("BlushTint", Color(0.52, 0.12, 0.15))
+		character:SetMaterialColorParameter("EyeShadowTint", Color(0.24, 0.05, 0.07))
+		character:SetMaterialColorParameter("LipstickTint", Color(0.31, 0.03, 0.1))
+	end
+
+	-- Adds eyes to humanoid meshes
+	if (mesh == "nanos-world::SK_Male" or mesh == "nanos-world::SK_Female") then
+		character:AddStaticMeshAttached("eye_left", "nanos-world::SM_Eye", "eye_left")
+		character:AddStaticMeshAttached("eye_right", "nanos-world::SM_Eye", "eye_right")
+
+		-- Those parameters are specific to humanoid meshes (were added in their materials)
+		character:SetMaterialColorParameter("HairTint", HAIR_TINTS[math.random(#HAIR_TINTS)])
+		character:SetMaterialColorParameter("Tint", HUMAN_SKIN_TONES[math.random(#HUMAN_SKIN_TONES)])
+
+		character:SetMaterialScalarParameter("Muscular", math.random(100) / 100)
+		character:SetMaterialScalarParameter("BaseColorPower", math.random(2) + 0.5)
+
+		for _, morph_target in ipairs(HUMAN_MORPH_TARGETS) do
+			character:SetMorphTarget(morph_target, math.random(200) / 100 - 1)
+		end
+	end
+end
+
 function SpawnCharacterRandomized(location, rotation, asset)
 	local selected_mesh = asset or CHARACTER_MESHES[math.random(#CHARACTER_MESHES)]
 	local spawn_point = GetRandomSpawnPoint()
 	local new_char = Character(location or spawn_point.location, rotation or spawn_point.rotation, selected_mesh)
 
-	-- Customization
-	if (selected_mesh == "nanos-world::SK_Male") then
-		local selected_hair = SK_MALE_HAIR_MESHES[math.random(#SK_MALE_HAIR_MESHES)]
-		if (selected_hair ~= "") then
-			new_char:AddStaticMeshAttached("hair", selected_hair, "hair_male")
-		end
-
-		local selected_beard = SK_MALE_BEARD_MESHES[math.random(#SK_MALE_BEARD_MESHES)]
-		if (selected_beard ~= "") then
-			new_char:AddStaticMeshAttached("beard", selected_beard, "beard")
-		end
-	end
-
-	if (selected_mesh == "nanos-world::SK_Male" or selected_mesh == "nanos-world::SK_Mannequin") then
-		local selected_death_Sound = MALE_DEATH_SOUNDS[math.random(#MALE_DEATH_SOUNDS)]
-		new_char:SetDeathSound(selected_death_Sound)
-
-		local selected_pain_Sound = MALE_PAIN_SOUNDS[math.random(#MALE_PAIN_SOUNDS)]
-		new_char:SetPainSound(selected_pain_Sound)
-	end
-
-	if (selected_mesh == "nanos-world::SK_Female" or selected_mesh == "nanos-world::SK_Mannequin_Female") then
-		local selected_death_Sound = FEMALE_DEATH_SOUNDS[math.random(#FEMALE_DEATH_SOUNDS)]
-		new_char:SetDeathSound(selected_death_Sound)
-
-		local selected_pain_Sound = FEMALE_PAIN_SOUNDS[math.random(#FEMALE_PAIN_SOUNDS)]
-		new_char:SetPainSound(selected_pain_Sound)
-	end
-
-	if (selected_mesh == "nanos-world::SK_Female") then
-		local selected_hair = SK_FEMALE_HAIR_MESHES[math.random(#SK_FEMALE_HAIR_MESHES)]
-		if (selected_hair ~= "") then
-			new_char:AddStaticMeshAttached("hair", selected_hair, "hair_female")
-		end
-
-		-- Those parameters are specific to female mesh
-		new_char:SetMaterialColorParameter("BlushTint", Color(0.52, 0.12, 0.15))
-		new_char:SetMaterialColorParameter("EyeShadowTint", Color(0.24, 0.05, 0.07))
-		new_char:SetMaterialColorParameter("LipstickTint", Color(0.31, 0.03, 0.1))
-	end
-
-	-- Adds eyes to humanoid meshes
-	if (selected_mesh == "nanos-world::SK_Male" or selected_mesh == "nanos-world::SK_Female") then
-		new_char:AddStaticMeshAttached("eye_left", "nanos-world::SM_Eye", "eye_left")
-		new_char:AddStaticMeshAttached("eye_right", "nanos-world::SM_Eye", "eye_right")
-
-		-- Those parameters are specific to humanoid meshes (were added in their materials)
-		new_char:SetMaterialColorParameter("HairTint", HAIR_TINTS[math.random(#HAIR_TINTS)])
-		new_char:SetMaterialColorParameter("Tint", HUMAN_SKIN_TONES[math.random(#HUMAN_SKIN_TONES)])
-
-		new_char:SetMaterialScalarParameter("Muscular", math.random(100) / 100)
-		new_char:SetMaterialScalarParameter("BaseColorPower", math.random(2) + 0.5)
-
-		for i, morph_target in ipairs(HUMAN_MORPH_TARGETS) do
-			new_char:SetMorphTarget(morph_target, math.random(200) / 100 - 1)
-		end
-	end
+	CustomizeCharacter(new_char, selected_mesh)
 
 	return new_char
 end
@@ -288,7 +292,7 @@ Player.Subscribe("Destroy", function(player)
 	Server.BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has left the server")
 end)
 
-Events.Subscribe("ToggleNoClip", function(player)
+Events.SubscribeRemote("ToggleNoClip", function(player)
 	local character = player:GetControlledCharacter()
 	if (not character) then return end
 
@@ -305,7 +309,7 @@ Events.Subscribe("ToggleNoClip", function(player)
 	character:SetValue("NoClip", not is_noclipping)
 end)
 
-Events.Subscribe("EnterRagdoll", function(player)
+Events.SubscribeRemote("EnterRagdoll", function(player)
 	local character = player:GetControlledCharacter()
 	if (not character) then return end
 
@@ -315,7 +319,7 @@ Events.Subscribe("EnterRagdoll", function(player)
 	character:SetRagdollMode(true)
 end)
 
-Events.Subscribe("RespawnCharacter", function(player)
+Events.SubscribeRemote("RespawnCharacter", function(player)
 	local character = player:GetControlledCharacter()
 	if (not character) then return end
 

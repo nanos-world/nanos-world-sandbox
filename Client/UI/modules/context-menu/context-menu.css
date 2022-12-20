@@ -1,12 +1,12 @@
-
 #context_menu {
 	background-color: #0000005e;
 	position: absolute;
 	right: 30px;
-	bottom: 50%;
-	width: 500px;
+	width: 300px;
 	display: none;
 	border-radius: 5px;
+	transform: translate(0, -50%);
+	top: 50%;
 }
 
 #context_menu_header {
@@ -24,7 +24,6 @@
 	position: absolute;
 	right: 15px;
 	color: #ff2626;
-	font-family: Gothic A1;
 	border: 1px solid;
 	padding: 0;
 	height: 30px;
@@ -39,50 +38,165 @@
 	color: #b31c1c;
 }
 
-.context_menu_item {
+#context_menu .context_menu_item {
 	padding: 10px;
 }
 
-.context_menu_label {
-	display: block;
-	font-weight: bold;
-	cursor: default;
-}
-
-#time_of_day_slide {
-	width: 100%;
-}
-
-#context_menu_keybindings input {
-	height: 30px;
-	width: 30px;
-	text-transform: uppercase;
-	margin: 5px;
-	text-align: center;
-}
-
-#context_menu_lock_time_of_day {
-	margin-left: 30%;
-	width: 20px;
-	height: 20px;
-	margin-right: 5px;
-	cursor: pointer;
-}
-
-#context_menu_lock_time_of_day_label {
-	font-size: 18px;
-}
-
-#context_menu_respawn_button {
+#context_menu .context_menu_item_button button {
 	background-color: rgba(255, 255, 255, 0.95);
 	color: black;
-	font-family: 'Gothic A1', sans-serif;
+	font-family: 'Alef', sans-serif;
+	font-weight: bold;
 	text-align: center;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	width: 70%;
-	margin-left: 15%;
-	font-size: 18px;
-	border: solid 1px black;
+	width: 100%;
+	font-size: 16px;
+	border: 0;
 	cursor: pointer;
+	border-radius: 5px;
+	height: 35px;
+}
+
+#context_menu .context_menu_item_range,
+#context_menu .context_menu_item_checkbox,
+#context_menu .context_menu_item_color,
+#context_menu .context_menu_item_select_image {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#context_menu .context_menu_item_range input,
+#context_menu .context_menu_item_checkbox input,
+#context_menu .context_menu_item_color input,
+#context_menu .context_menu_item_select_image img {
+	flex-grow: 1;
+	margin-right: 10px;
+	cursor: pointer;
+}
+
+#context_menu .context_menu_item_range input:hover,
+#context_menu .context_menu_item_checkbox input:hover,
+#context_menu .context_menu_item_color input:hover,
+#context_menu .context_menu_item_select_image img:hover,
+#context_menu .context_menu_item_button button:hover {
+	opacity: 0.9;
+}
+
+#context_menu .context_menu_item_range label,
+#context_menu .context_menu_item_checkbox label,
+#context_menu .context_menu_item_select_image label,
+#context_menu .context_menu_item_color label {
+	text-align: center;
+	flex-basis: 30%;
+}
+
+#context_menu .context_menu_item_checkbox input {
+	flex-grow: 0;
+	width: 35px;
+	height: 35px;
+}
+
+#context_menu .context_menu_item_select_image img {
+	flex-grow: 0;
+	width: 75px;
+	height: 75px;
+}
+
+#context_menu .divider {
+	display: flex;
+	align-items: center;
+	text-align: center;
+	margin: 10px 0 5px 0;
+}
+
+#context_menu .divider::after,
+#context_menu .divider::before {
+	content: "";
+	border: 1px solid #ffffffbd;
+	flex: 1;
+	margin: 10px;
+}
+
+#context_menu #context_menu_items {
+	max-height: 600px;
+	overflow-y: scroll;
+}
+
+#context_menu_selector {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #0000006e;
+	display: none;
+	z-index: 1;
+}
+
+#context_menu_selector_background {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+}
+
+#context_menu_selector_list {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	top: 50%;
+	left: 50%;
+	max-width: 50%;
+	max-height: 50%;
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 5px;
+	padding: 15px;
+	overflow-x: hidden;
+}
+
+#context_menu_selector .context_menu_selector_item {
+	cursor: pointer;
+	width: 100px;
+    height: 140px;
+	padding: 5px;
+	text-align: center;
+	display: inline-block;
+	border-radius: 5px;
+	margin: 1px;
+}
+
+#context_menu_selector .context_menu_selector_item:hover {
+	background-color: #c1c1c147;
+}
+
+#context_menu_selector .context_menu_selector_item .context_menu_selector_item_image {
+	display: inline-block;
+	width: 100%;
+	height: 100px;
+	background-size: 100% auto;
+	background-position: 50%;
+	pointer-events: none;
+	background-repeat: no-repeat;
+	border-radius: 1px;
+}
+
+#context_menu_selector .context_menu_selector_item .context_menu_selector_item_name {
+	text-align: center;
+	display: inline-block;
+	font-size: 12px;
+	margin-top: 5px;
+	overflow: hidden;
+	height: 30px;
+	pointer-events: none;
+	word-wrap: break-word;
+}
+
+#context_menu .context_menu_item_color input {
+	-webkit-appearance: none;
+	appearance: none;
+	height: 40px;
+	background-color: transparent;
+	border: none;
+}
+
+#context_menu .context_menu_item_color input::-webkit-color-swatch {
+	border: none;
+	border-radius: 5px;
 }

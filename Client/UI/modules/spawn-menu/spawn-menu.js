@@ -1,14 +1,13 @@
 let current_category = "";
 let current_tab = "";
 
-let spawn_menu_data = {};
+let spawn_menu_items = {};
 let tabs = {};
 
 
 function SpawnItemClick(e) {
 	const item_id = e.target.dataset.item_id;
-	const group = e.target.dataset.group;
-	Events.Call("SpawnItem", group, current_tab, item_id);
+	Events.Call("SpawnItem", current_tab, item_id);
 }
 
 function ItemHover(label, enter, is_spawn_item) {
@@ -141,16 +140,14 @@ function RefreshSpawnMenu() {
 	document.getElementById("spawn_list").innerHTML = "";
 
 	// Loads all items
-	for (let group in spawn_menu_data) {
-		for (let group_item in spawn_menu_data[group][current_tab]) {
-			const item = spawn_menu_data[group][current_tab][group_item];
+	for (let item_id in spawn_menu_items[current_tab]) {
+		const item = spawn_menu_items[current_tab][item_id];
 
-			// Filter category
-			if (current_category != "all" && item.sub_category != current_category)
-				continue;
+		// Filter category
+		if (current_category != "all" && item.category != current_category)
+			continue;
 
-			AddItem(group, item.id, item.name, item.image);
-		}
+		AddItem(item.id, item.name, item.image);
 	}
 }
 
@@ -245,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	SelectOption(document.querySelectorAll(".spawn_option_checkbox_item")[0], true);
 });
 
-function AddItem(group, item_id, item_name, image) {
+function AddItem(item_id, item_name, image) {
 	if (!image) image = "modules/spawn-menu/images/nanosworld_empty.webp";
 
 	const spawn_item = document.createElement("span");
@@ -260,7 +257,6 @@ function AddItem(group, item_id, item_name, image) {
 	const spawn_item_name = document.createElement("span");
 	spawn_item_name.classList.add("spawn_item_name");
 
-	spawn_item.dataset.group = group;
 	spawn_item.dataset.item_id = item_id;
 	
 	spawn_item_image.style["background-image"] = `url('${image}'), url('modules/spawn-menu/images/nanosworld_empty.webp')`;
@@ -272,8 +268,8 @@ function AddItem(group, item_id, item_name, image) {
 	document.getElementById("spawn_list").appendChild(spawn_item);
 }
 
-function AddSpawnMenuGroup(group, group_data) {
-	spawn_menu_data[group] = group_data;
+function SetSpawnMenuItems(items) {
+	spawn_menu_items = items;
 
 	RefreshSpawnMenu();
 }
@@ -288,7 +284,7 @@ Events.Subscribe("ToggleSpawnMenuVisibility", function(is_visible) {
 });
 
 
-Events.Subscribe("AddSpawnMenuGroup", AddSpawnMenuGroup);
+Events.Subscribe("SetSpawnMenuItems", SetSpawnMenuItems);
 Events.Subscribe("AddTab", AddTab);
 Events.Subscribe("AddCategory", AddCategory);
 

@@ -1,20 +1,17 @@
--- Event from server to set a SceneCapture in a CCTV
-function SpawnAndSetCameraOnProp(prop, camera)
+CCTV = Prop.Inherit("CCTV")
+
+CCTV.name = "CCTV"
+CCTV.image = "assets://NanosWorld/Thumbnails/SM_Camera.jpg"
+CCTV.category = "uncategorized"
+
+function CCTV:OnSpawn()
+	local camera = self:GetValue("Camera")
 	local sc = SceneCapture(camera:GetLocation(), Rotator(), 650, 400, 0.016)
 	sc:AttachTo(camera, AttachmentRule.SnapToTarget, "", 0)
 
-	prop:SetMaterialFromSceneCapture(sc, 1)
-	prop:SetMaterialColorParameter("Emissive", Color(5, 5, 5))
+	self:SetMaterialFromSceneCapture(sc, 1)
+	self:SetMaterialColorParameter("Emissive", Color(10, 10, 10))
+	self:SetMaterialScalarParameter("Roughness", 0.25)
 end
 
-Events.Subscribe("SpawnCCTV", SpawnAndSetCameraOnProp)
-
-Prop.Subscribe("Spawn", function(prop)
-	local camera = prop:GetValue("CCTV")
-
-	if (camera) then
-		SpawnAndSetCameraOnProp(prop, camera)
-	end
-end)
-
-AddSpawnMenuItem("nanos-world", "entities", "CCTV", "CCTV", "assets://NanosWorld/Thumbnails/SM_Camera.jpg", "uncategorized")
+CCTV.Subscribe("Spawn", CCTV.OnSpawn)

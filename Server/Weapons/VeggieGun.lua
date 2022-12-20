@@ -1,4 +1,6 @@
-Veggies = {
+VeggieGun = Weapon.Inherit("VeggieGun")
+
+VeggieGun.veggies = {
 	"nanos-world::SM_Fruit_Apple_01",
 	"nanos-world::SM_Fruit_Apple_01_Half_01",
 	"nanos-world::SM_Fruit_Apple_01_Quarter_01",
@@ -84,51 +86,48 @@ Veggies = {
 }
 
 
-function SpawnVeggieGun(location, rotation)
-	local weapon = Weapon(location or Vector(), rotation or Rotator(), "nanos-world::SK_FlareGun")
+function VeggieGun:Constructor(location, rotation)
+	self.Super:Constructor(location or Vector(), rotation or Rotator(), "nanos-world::SK_FlareGun")
 
-	weapon:SetAmmoSettings(9999, 0)
-	weapon:SetDamage(0)
-	weapon:SetRecoil(0)
-	weapon:SetSightTransform(Vector(0, 0, -4), Rotator(0, 0, 0))
-	weapon:SetLeftHandTransform(Vector(0, 1, -5), Rotator(0, 60, 100))
-	weapon:SetRightHandOffset(Vector(-25, -5, 0))
-	weapon:SetHandlingMode(HandlingMode.SingleHandedWeapon)
-	weapon:SetCadence(0.1)
-	weapon:SetSoundDry("nanos-world::A_Pistol_Dry")
-	weapon:SetSoundZooming("nanos-world::A_AimZoom")
-	weapon:SetSoundAim("nanos-world::A_Rattle")
-	weapon:SetSoundFire("nanos-world::A_Whoosh")
-	weapon:SetAnimationCharacterFire("nanos-world::A_Mannequin_Sight_Fire_Pistol")
-	weapon:SetParticlesBarrel("nanos-world::P_Weapon_BarrelSmoke")
-	weapon:SetCrosshairMaterial("nanos-world::MI_Crosshair_Square")
-	weapon:SetUsageSettings(true, false)
-
-	weapon:Subscribe("Fire", function(self, character)
-		local control_rotation = character:GetControlRotation()
-		local forward_vector = control_rotation:GetForwardVector()
-		local spawn_location = self:GetLocation() + forward_vector * 100
-
-		-- local veggie_mesh = Veggies[math.random(#Veggies)]
-		-- local veggie_mesh = "nanos-world::SM_Fruit_Banana_01"
-		local veggie_mesh = "nanos-world::SM_Fruit_Watermelon_01"
-		-- local veggie_mesh = "nanos-world::SM_Bread_Pizza_01"
-		-- local veggie_mesh = "nanos-world::SM_Boxes_01"
-		-- local veggie_mesh = "nanos-world::SM_CookerStove"
-
-		local prop = Prop(spawn_location, Rotator.Random(), veggie_mesh, CollisionType.Auto, true, GrabMode.Disabled, CCDMode.Disabled)
-		prop:SetLifeSpan(5)
-		prop:SetScale(Vector(2, 2, 2))
-		-- prop:SetScale(Vector(3, 3, 3))
-		prop:SetValue("DebrisLifeSpan", 2)
-
-		SetupBreakableProp(prop)
-
-		prop:AddImpulse(forward_vector * 3000, true)
-	end)
-
-	return weapon
+	self:SetAmmoSettings(9999, 0)
+	self:SetDamage(0)
+	self:SetRecoil(0)
+	self:SetSightTransform(Vector(0, 0, -4), Rotator(0, 0, 0))
+	self:SetLeftHandTransform(Vector(0, 1, -5), Rotator(0, 60, 100))
+	self:SetRightHandOffset(Vector(-25, -5, 0))
+	self:SetHandlingMode(HandlingMode.SingleHandedWeapon)
+	self:SetCadence(0.1)
+	self:SetSoundDry("nanos-world::A_Pistol_Dry")
+	self:SetSoundZooming("nanos-world::A_AimZoom")
+	self:SetSoundAim("nanos-world::A_Rattle")
+	self:SetSoundFire("nanos-world::A_Whoosh")
+	self:SetAnimationCharacterFire("nanos-world::A_Mannequin_Sight_Fire_Pistol")
+	self:SetCrosshairMaterial("nanos-world::MI_Crosshair_Square")
+	self:SetUsageSettings(true, false)
 end
 
--- Adds this weapon to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "weapons", "VeggieGun", SpawnVeggieGun)
+function VeggieGun:OnFire(character)
+	local control_rotation = character:GetControlRotation()
+	local forward_vector = control_rotation:GetForwardVector()
+	local capsule_size = character:GetCapsuleSize()
+	local spawn_location = self:GetLocation() + Vector(0, 0, capsule_size.HalfHeight / 2) + forward_vector * 100
+
+	-- local veggie_mesh = VeggieGun.veggies[math.random(#VeggieGun.veggies)]
+	-- local veggie_mesh = "nanos-world::SM_Fruit_Banana_01"
+	local veggie_mesh = "nanos-world::SM_Fruit_Watermelon_01"
+	-- local veggie_mesh = "nanos-world::SM_Bread_Pizza_01"
+	-- local veggie_mesh = "nanos-world::SM_Boxes_01"
+	-- local veggie_mesh = "nanos-world::SM_CookerStove"
+
+	local prop = Prop(spawn_location, Rotator.Random(), veggie_mesh, CollisionType.Auto, true, GrabMode.Disabled, CCDMode.Disabled)
+	prop:SetLifeSpan(5)
+	prop:SetScale(Vector(2, 2, 2))
+	-- prop:SetScale(Vector(3, 3, 3))
+	prop:SetValue("DebrisLifeSpan", 2)
+
+	SetupBreakableProp(prop)
+
+	prop:AddImpulse(forward_vector * 3000, true)
+end
+
+VeggieGun.SubscribeRemote("Fire", VeggieGun.OnFire)

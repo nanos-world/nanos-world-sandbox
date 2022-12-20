@@ -19,4 +19,5 @@ body {
 	color: #ffffffe6;
 	user-select: none;
     scrollbar-gutter: stable both-edges;
+	overflow: hidden;
 }

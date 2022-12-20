@@ -1,59 +1,77 @@
--- PhysicsGun variables
-PhysicsGun = {
-	weapon = nil,
-	beam_particle = nil,
-	picking_object = nil,
-	picking_object_relative_location = Vector(),
-	picking_object_distance = 0,
-	picking_object_initial_rotation = Rotator(),
-	picking_object_snapped_moved = 0,
-	is_rotating_object = false,
-	is_snapping_to_grid = false,
-	is_using = false,
-	grabbed_sound = nil,
-	accumulated_rotation_x = 0,
-	accumulated_rotation_y = 0,
-	quaternion_rotate_front = Rotator(-45, 0, 0):Quaternion(), -- Cache it for performance
-	quaternion_rotate_back = Rotator(45, 0, 0):Quaternion(), -- Cache it for performance
-	quaternion_rotate_right = Rotator(0, -45, 0):Quaternion(), -- Cache it for performance
-	quaternion_rotate_left = Rotator(0, 45, 0):Quaternion(), -- Cache it for performance
-	quaternion_mouse_move_x = Quat(0, 0, 0, -1), -- Cache it for performance
-	quaternion_mouse_move_y = Quat(0, 0, 0, 1), -- Cache it for performance
+PhysicsGun = ToolGun.Inherit("PhysicsGun")
+
+-- Tool Name
+PhysicsGun.name = "Physics Gun"
+
+-- Tool Image
+PhysicsGun.image = "package://sandbox/Client/Tools/PhysicsGun.webp"
+
+-- Tool Tutorials
+PhysicsGun.tutorials = {
+	{ key = "LeftClick", text = "grab object" },
+	{ key = "RightMouseButton", text = "freeze object" },
+	{ key = "MouseScrollUp", text = "increase/decrease beam size" },
+	{ key = "E", text = "rotate object" },
+	{ key = "LeftShift", text = "snap to grid" },
 }
 
--- All BeamParticles being used
--- We set metamethod with __mode 'k' to make it's values be weak and auto destroyed from the table automatically
-BeamParticles = setmetatable({}, { __mode = 'k' })
+-- PhysicsGun variables
+PhysicsGun.weapon = nil
+PhysicsGun.picking_object = nil
+PhysicsGun.picking_object_relative_location = Vector()
+PhysicsGun.picking_object_distance = 0
+PhysicsGun.picking_object_initial_rotation = Rotator()
+PhysicsGun.picking_object_snapped_moved = 0
+PhysicsGun.is_rotating_object = false
+PhysicsGun.is_snapping_to_grid = false
+PhysicsGun.is_using = false
+PhysicsGun.grabbed_sound = nil
+PhysicsGun.accumulated_rotation_x = 0
+PhysicsGun.accumulated_rotation_y = 0
+PhysicsGun.quaternion_rotate_front = Rotator(-45, 0, 0):Quaternion() -- Cache it for performance
+PhysicsGun.quaternion_rotate_back = Rotator(45, 0, 0):Quaternion() -- Cache it for performance
+PhysicsGun.quaternion_rotate_right = Rotator(0, -45, 0):Quaternion() -- Cache it for performance
+PhysicsGun.quaternion_rotate_left = Rotator(0, 45, 0):Quaternion() -- Cache it for performance
+PhysicsGun.quaternion_mouse_move_x = Quat(0, 0, 0, -1) -- Cache it for performance
+PhysicsGun.quaternion_mouse_move_y = Quat(0, 0, 0, 1) -- Cache it for performance
+PhysicsGun.tick_timer = nil
 
--- Handle for pulling Physics Gun trigger
-function PhysicsGunFire(weapon, shooter)
-	TogglePhysicsGunLocal(true)
+
+function PhysicsGun:OnSpawn()
+	self.beam_particle = self:GetValue("BeamParticle")
+
+	self.target_particle = Particle(Vector(), Rotator(), "nanos-world::P_Fountain", false, false)
+	self.target_particle:SetParameterColor("Color", Color(0, 0, 50, 0.5))
+	self.target_particle:SetParameterFloat("VelocityConeAngle", 60)
+	self.target_particle:SetParameterFloat("MaxSize", 4)
+	self.target_particle:SetParameterFloat("MinSize", 2)
+	self.target_particle:SetParameterFloat("VelocityStrengthMax", 400)
+	self.target_particle:SetParameterFloat("VelocityStrengthMin", 200)
+	self.target_particle:SetParameterFloat("SphereRadius", 1)
+	self.target_particle:SetParameterFloat("SpawnRate", 50)
 end
 
--- Handle for releasing Physics Gun trigger
-function PhysicsGunReleaseUse(weapon, shooter)
-	TogglePhysicsGunLocal(false)
+function PhysicsGun:OnDestroy()
+	self.target_particle:Destroy()
 end
 
--- Handle for switching aim mode on Physics Gun
-function PhysicsGunWeaponAimModeChanged(self, old_state, new_state)
-	if (new_state == AimMode.None) then
-		TogglePhysicsGunLocal(false)
-	end
-end
+PhysicsGun.Subscribe("Destroy", PhysicsGun.OnDestroy)
+PhysicsGun.Subscribe("Spawn", PhysicsGun.OnSpawn)
 
--- Method to handle when Player picks up the Tool
-function HandlePhysicsGun(weapon, character)
-	PhysicsGun.weapon = weapon
+function PhysicsGun:OnLocalPlayerPickUp(character)
+	PhysicsGun.weapon = self
 
-	-- Subscribes when the player fires with this weapon (turn on the Physics Gun)
-	weapon:Subscribe("Fire", PhysicsGunFire)
-
-	-- Subscribes when the player stops using this weapon (turn off the Physics Gun)
-	weapon:Subscribe("ReleaseUse", PhysicsGunReleaseUse)
-
-	-- Subscribes when I change my AimMode (turn off the Physics Gun)
+	self:Subscribe("ReleaseUse", PhysicsGun.OnReleaseUse)
 	character:Subscribe("WeaponAimModeChanged", PhysicsGunWeaponAimModeChanged)
+	Client.Subscribe("KeyUp", PhysicsGunKeyUp)
+	Client.Subscribe("KeyPress", PhysicsGunKeyPress)
+	Client.Subscribe("KeyDown", PhysicsGunKeyDown)
+	Client.Subscribe("MouseDown", PhysicsGunMouseDown)
+	Client.Subscribe("MouseUp", PhysicsGunMouseUp)
+	Client.Subscribe("MouseMoveX", PhysicsGunMouseMoveX)
+	Client.Subscribe("MouseMoveY", PhysicsGunMouseMoveY)
+
+	PhysicsGun.tick_timer = Timer.SetInterval(PhysicsGunTick, 0.033)
 
 	-- Sets some notification when grabbing the Light Tool
 	AddNotification("PHYSICS_GUN_FREEZE", "while using a Physics Gun, press with the Right Click to freeze the object", 8000, 10000)
@@ -62,8 +80,52 @@ function HandlePhysicsGun(weapon, character)
 	AddNotification("PHYSICS_GUN_ROTATE_DISTANCE", "you can approximate the object you are moving with Mouse Wheel", 8000, 50000)
 end
 
--- Highlight objects being grabbed with index 1
-Events.Subscribe("PickUpObject", function(object, is_grabbing)
+function PhysicsGun:OnLocalPlayerDrop(character)
+	PhysicsGun.weapon = nil
+
+	self:Unsubscribe("ReleaseUse", PhysicsGun.OnReleaseUse)
+	character:Unsubscribe("WeaponAimModeChanged", PhysicsGunWeaponAimModeChanged)
+	Client.Unsubscribe("KeyUp", PhysicsGunKeyUp)
+	Client.Unsubscribe("KeyPress", PhysicsGunKeyPress)
+	Client.Unsubscribe("KeyDown", PhysicsGunKeyDown)
+	Client.Unsubscribe("MouseDown", PhysicsGunMouseDown)
+	Client.Unsubscribe("MouseUp", PhysicsGunMouseUp)
+	Client.Unsubscribe("MouseMoveX", PhysicsGunMouseMoveX)
+	Client.Unsubscribe("MouseMoveY", PhysicsGunMouseMoveY)
+
+	Timer.ClearInterval(PhysicsGun.tick_timer)
+
+	TogglePhysicsGunLocal(false)
+end
+
+function PhysicsGun:OnToggleTargetParticles(enable)
+	if (enable) then
+		self.target_particle:Activate(true)
+	else
+		self.target_particle:Deactivate()
+	end
+end
+
+PhysicsGun.SubscribeRemote("ToggleTargetParticles", PhysicsGun.OnToggleTargetParticles)
+
+-- Handle for pulling Physics Gun trigger
+function PhysicsGun:OnLocalPlayerFire(shooter)
+	TogglePhysicsGunLocal(true)
+end
+
+-- Handle for releasing Physics Gun trigger
+function PhysicsGun:OnReleaseUse(shooter)
+	TogglePhysicsGunLocal(false)
+end
+
+-- Handle for switching aim mode on Physics Gun
+function PhysicsGunWeaponAimModeChanged(character, old_state, new_state)
+	if (new_state == AimMode.None) then
+		TogglePhysicsGunLocal(false)
+	end
+end
+
+Events.SubscribeRemote("PickUpObject", function(object, is_grabbing)
 	object:SetOutlineEnabled(is_grabbing, 2)
 end)
 
@@ -75,7 +137,7 @@ function TogglePhysicsGunLocal(is_using, freeze)
 	if (not is_using) then
 		if (PhysicsGun.picking_object) then
 			-- Calls remote to "drop" the object
-			Events.CallRemote("PickUp", PhysicsGun.weapon, PhysicsGun.picking_object, false, nil, freeze)
+			PhysicsGun.weapon:CallRemoteEvent("PickUpObject", PhysicsGun.picking_object, false, nil, freeze)
 
 			-- Disables the highlight on this object
 			PhysicsGun.picking_object:SetOutlineEnabled(false)
@@ -87,12 +149,15 @@ function TogglePhysicsGunLocal(is_using, freeze)
 				PhysicsGun.grabbed_sound = nil
 			end
 		end
+
+		PhysicsGun.is_rotating_object = false
+		PhysicsGun.is_snapping_to_grid = false
 	end
 
 	PhysicsGun.is_using = is_using
 
 	-- Calls remote to toggle the Physics Gun off/on
-	Events.CallRemote("TogglePhysicsGun", PhysicsGun.weapon, is_using)
+	PhysicsGun.weapon:CallRemoteEvent("Toggle", is_using)
 end
 
 -- Function to try to pickup an object
@@ -115,7 +180,7 @@ function TryPickUpObject()
 	-- If hit something and hit an Entity
 	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
 		-- Cannot grab Characters (yet?), cannot grab attached entities or entities which are being grabbed
-		if (NanosUtils.IsA(trace_result.Entity, Character) or trace_result.Entity:GetAttachedTo() or trace_result.Entity:GetValue("IsBeingGrabbed")) then
+		if (trace_result.Entity:IsA(Character) or trace_result.Entity:GetAttachedTo() or trace_result.Entity:GetValue("IsBeingGrabbed")) then
 			return end_location
 		end
 
@@ -135,15 +200,15 @@ function TryPickUpObject()
 		PhysicsGun.picking_object_initial_rotation = PhysicsGun.picking_object:GetRotation() - Client.GetLocalPlayer():GetControlledCharacter():GetRotation()
 
 		-- Calls remote to disable gravity of this object (if has)
-		Events.CallRemote("PickUp", PhysicsGun.weapon, PhysicsGun.picking_object, true, PhysicsGun.picking_object_relative_location)
+		PhysicsGun.weapon:CallRemoteEvent("PickUpObject", PhysicsGun.picking_object, true, PhysicsGun.picking_object_relative_location)
 	else
 		PhysicsGun.picking_object = nil
 	end
 end
 
 -- Handles KeyBindings
-Client.Subscribe("KeyUp", function(key_name)
-	if (not PhysicsGun.weapon) then return end
+function PhysicsGunKeyUp(key_name)
+	if (not PhysicsGun.picking_object) then return end
 
 	if (key_name == "LeftShift") then
 		PhysicsGun.is_snapping_to_grid = false
@@ -166,11 +231,9 @@ Client.Subscribe("KeyUp", function(key_name)
 
 		return
 	end
-end)
+end
 
-Client.Subscribe("KeyPress", function(key_name)
-	if (not PhysicsGun.weapon) then return end
-
+function PhysicsGunKeyPress(key_name)
 	if (key_name == "E") then
 		PhysicsGun.is_rotating_object = true
 		if (PhysicsGun.picking_object) then return false else return end
@@ -181,7 +244,7 @@ Client.Subscribe("KeyPress", function(key_name)
 		PhysicsGun.accumulated_rotation_x = 0
 		PhysicsGun.accumulated_rotation_y = 0
 
-		if (PhysicsGun.is_rotating_object) then
+		if (PhysicsGun.is_rotating_object and PhysicsGun.picking_object) then
 			Sound(PhysicsGun.picking_object:GetLocation(), "nanos-world::A_Object_Snaps_To_Grid", false, true, SoundType.SFX, 0.05, 0.5)
 		end
 
@@ -189,14 +252,19 @@ Client.Subscribe("KeyPress", function(key_name)
 	end
 
 	-- Ignore input while rotating object
-	if (PhysicsGun.is_rotating_object) then
+	if (PhysicsGun.picking_object and PhysicsGun.is_rotating_object) then
 		return false
 	end
-end)
+end
 
-Client.Subscribe("MouseDown", function(key_name)
-	if (not PhysicsGun.weapon) then return end
+function PhysicsGunKeyDown(key_name)
+	-- Ignore input while rotating object
+	if (key_name == "E" and PhysicsGun.picking_object) then
+		return false
+	end
+end
 
+function PhysicsGunMouseDown(key_name)
 	-- Right Click will turn off the Gravity Gun and freeze the object
 	if (key_name == "RightMouseButton") then
 		if (PhysicsGun.picking_object) then
@@ -204,11 +272,9 @@ Client.Subscribe("MouseDown", function(key_name)
 			return false
 		end
 	end
-end)
+end
 
-Client.Subscribe("MouseUp", function(key_name)
-	if (not PhysicsGun.weapon) then return end
-
+function PhysicsGunMouseUp(key_name, a, b)
 	-- Scrolling will or move the object to far
 	if (key_name == "MouseScrollUp") then
 		-- If mouse scroll, updates the Distance of the object from the camera
@@ -225,18 +291,10 @@ Client.Subscribe("MouseUp", function(key_name)
 		if (PhysicsGun.picking_object_distance < 100) then PhysicsGun.picking_object_distance = 100 end
 		return
 	end
-end)
-
-function RoundRotator(rotator, degrees)
-	return Rotator(
-		NanosMath.Round(rotator.Pitch / degrees) * degrees,
-		NanosMath.Round(rotator.Yaw / degrees) * degrees,
-		NanosMath.Round(rotator.Roll / degrees) * degrees
-	)
 end
 
-Client.Subscribe("MouseMoveX", function(delta, delta_time, num_samples)
-	if (not PhysicsGun.weapon or not PhysicsGun.picking_object) then return end
+function PhysicsGunMouseMoveX(delta, delta_time, num_samples)
+	if (not PhysicsGun.picking_object) then return end
 
 	if (PhysicsGun.is_rotating_object) then
 		if (PhysicsGun.is_snapping_to_grid) then
@@ -255,10 +313,10 @@ Client.Subscribe("MouseMoveX", function(delta, delta_time, num_samples)
 
 		return false
 	end
-end)
+end
 
-Client.Subscribe("MouseMoveY", function(delta, delta_time, num_samples)
-	if (not PhysicsGun.weapon or not PhysicsGun.picking_object) then return end
+function PhysicsGunMouseMoveY(delta, delta_time, num_samples)
+	if (not PhysicsGun.picking_object) then return end
 
 	if (PhysicsGun.is_rotating_object) then
 		if (PhysicsGun.is_snapping_to_grid) then
@@ -277,13 +335,14 @@ Client.Subscribe("MouseMoveY", function(delta, delta_time, num_samples)
 
 		return false
 	end
-end)
+end
 
 Client.Subscribe("Tick", function(delta_time)
-	-- Every Frame, updates all Beam Particels spawned
+	-- Every Frame, updates all PhysicsGun's Beam Particles
 	-- This particle has a special Vector parameter 'BeamEnd' which defines where the Beam will end
-	for k, beam_particle in pairs(BeamParticles) do
-		if (beam_particle:IsValid()) then
+	for k, physics_gun in pairs(PhysicsGun.GetAll()) do
+		local beam_particle = physics_gun.beam_particle
+		if (beam_particle and beam_particle:IsValid()) then
 			-- Gets the graviting object
 			local beam_end_object = beam_particle:GetValue("BeamEndObject")
 
@@ -293,7 +352,8 @@ Client.Subscribe("Tick", function(delta_time)
 				local picking_object_relative_location = beam_particle:GetValue("RelativeLocationObject")
 
 				-- Sets the BeamEnd location, with some math to rotate the relative location relative to the object rotation
-				beam_particle:SetParameterVector("BeamEnd", beam_end_object:GetLocation() + beam_end_object:GetRotation():UnrotateVector(-picking_object_relative_location))
+				local end_location = beam_end_object:GetLocation() + beam_end_object:GetRotation():UnrotateVector(-picking_object_relative_location)
+				beam_particle:SetParameterVector("BeamEnd", end_location)
 			else
 				-- If there is no object being gravitated, then points the BeamEnd to very far
 				-- Gets where the particle is pointing (as it is attached to the weapon, it will point where the weapon is pointing as well)
@@ -312,14 +372,28 @@ Client.Subscribe("Tick", function(delta_time)
 				end
 
 				beam_particle:SetParameterVector("BeamEnd", end_location)
+
+				local target_particle = physics_gun.target_particle
+				if (target_particle and target_particle:IsValid()) then
+					target_particle:SetLocation(end_location)
+					target_particle:SetRotation(trace_result.Normal:Rotation() - Rotator(90, 0, 0))
+				end
 			end
 		end
 	end
 end)
 
-Timer.SetInterval(function()
+function RoundRotator(rotator, degrees)
+	return Rotator(
+		NanosMath.Round(rotator.Pitch / degrees) * degrees,
+		NanosMath.Round(rotator.Yaw / degrees) * degrees,
+		NanosMath.Round(rotator.Roll / degrees) * degrees
+	)
+end
+
+function PhysicsGunTick()
 	-- If I'm using the Gravity Gun
-	if (PhysicsGun.weapon and PhysicsGun.weapon:IsValid() and PhysicsGun.is_using) then
+	if (PhysicsGun.is_using) then
 		-- If I'm not grabbing anything, then try to grab something
 		if (PhysicsGun.picking_object == nil or not PhysicsGun.picking_object:IsValid()) then
 			TryPickUpObject()
@@ -360,35 +434,4 @@ Timer.SetInterval(function()
 		PhysicsGun.picking_object:TranslateTo(end_location, 0.05)
 		PhysicsGun.picking_object:RotateTo(rotation, 0.1)
 	end
-end, 0.033)
-
--- If a weapon has been added the BeamParticle value, adds it to our BeamParticles table
-Weapon.Subscribe("ValueChange", function(weapon, key, value)
-	if (key == "BeamParticle") then
-		if (value ~= nil) then
-			table.insert(BeamParticles, value)
-		end
-	end
-end)
-
-Events.Subscribe("PickUpToolGun_PhysicsGun", function(tool, character)
-	HandlePhysicsGun(tool, character)
-end)
-
-Events.Subscribe("DropToolGun_PhysicsGun", function(tool, character)
-	tool:Unsubscribe("Fire", PhysicsGunFire)
-	tool:Unsubscribe("ReleaseUse", PhysicsGunReleaseUse)
-	character:Unsubscribe("WeaponAimModeChanged", PhysicsGunWeaponAimModeChanged)
-
-	TogglePhysicsGunLocal(false)
-	PhysicsGun.weapon = nil
-end)
-
--- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "PhysicsGun", "Physics Gun", "package://sandbox/Client/Tools/PhysicsGun.webp", nil, {
-	{ key = "LeftClick", text = "grab object" },
-	{ key = "RightMouseButton", text = "freeze object" },
-	{ key = "MouseScrollUp", text = "increase/decrease beam size" },
-	{ key = "E", text = "rotate object" },
-	{ key = "LeftShift", text = "snap to grid" },
-})
+end

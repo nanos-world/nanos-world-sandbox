@@ -50,20 +50,20 @@ On the Client side, we will define how the Item will be displayed in the Spawn M
 
 ```lua
 -- Adds a new item to the Spawn Menu
----@param group string          Unique ID used to identify from which 'group' it belongs
----@param tab string            The tab to display this item - it must be 'props', 'weapons', 'tools' or 'vehicles'
+---@param tab_id string         The tab to display this item
 ---@param id string             Unique ID used to identify this item
 ---@param name string           Display name
 ---@param image string          Image path
----@param category string       The category of this item, each tab has it's own set of categories
----@param tutorials table       List of tutorials to display in the top left screen, in the format:
---                              { { key = 'KeyName', text = 'description of the action' }, ... }
-function AddSpawnMenuItem(group, tab, id, name, image, category, tutorials)
+---@param category_id? string   The category of this item
+function AddSpawnMenuItem(tab_id, id, name, image, category_id?)
 ```
 
-The built-in categories are:
-- **Prop**: 'basic', 'appliances', 'construction', 'furniture', 'funny', 'tools', 'food', 'street', 'nature' or 'uncategorized'
-- **Weapon**: 'rifles', 'smgs', 'pistols', 'shotguns', 'sniper-rifles', 'special' or 'grenades'
+The built-in tabs are: 'props', 'weapons', 'tools', 'vehicles' or 'npcs'.
+
+The built-in categories for each tab are:
+- Tab **props**: 'basic', 'appliances', 'construction', 'furniture', 'funny', 'tools', 'food', 'street', 'nature' or 'uncategorized'
+- Tab **weapons**: 'rifles', 'smgs', 'pistols', 'shotguns', 'sniper-rifles', 'special' or 'grenades'
+
 
 Example:
 
@@ -72,16 +72,11 @@ Example:
 Package.Call(
     "sandbox",
     "AddSpawnMenuItem",
-    "my-package",
     "tools",
     "IncredibleTool",
     "Incredible Tool",
     "assets://NanosWorld/Thumbnails/SK_Blaster.jpg",
-    nil,
-    {
-        { key = "LeftClick", text = "do amazing stuff" },
-        { key = "E", text = "activate power" },
-    }
+    nil
 )
 ```
 
@@ -94,12 +89,11 @@ On the Server side, we will define how the item will be spawned, here we will cr
 
 ```lua
 -- Adds a new item to the Spawn Menu
----@param group string              Unique ID used to identify from which 'group' it belongs
 ---@param tab string                Tab of this item
 ---@param id string                 Unique ID used to identify this item
 ---@param package_name string       Your package name which will be used to call your spawn function
 ---@param package_function table    The exported Spawn Function name which will be called from sandbox
-function AddSpawnMenuItem(group, tab, id, package_name, package_function)
+function AddSpawnMenuItem(tab, id, package_name, package_function)
 ```
 
 Example:
@@ -121,7 +115,7 @@ Package.Export("SpawnMyIncredibleTool", SpawnMyIncredibleTool)
 
 Package.Subscribe("Load", function()
     -- Adds an Incredible Tool to spawn Menu (server side)
-    Package.Call("sandbox", "AddSpawnMenuItem", "my-package", "tools", "IncredibleTool", Package.GetPath(), "SpawnMyIncredibleTool")
+    Package.Call("sandbox", "AddSpawnMenuItem", "tools", "IncredibleTool", Package.GetPath(), "SpawnMyIncredibleTool")
 end)
 ```
 
@@ -202,58 +196,6 @@ end)
 Also the Sandbox game-mode have the following events:
 
 
-### PickUpToolGun (client side)
-
-This is called on client side when you pick up a tool gun (spawned from Spawn Menu)
-
-Example:
-
-```lua
-Events.Subscribe("PickUpToolGun_", id, weapon, character)
-    -- do something with the tool
-end
-```
-
-
-### DropToolGun (client side)
-
-This is called on client side when you drop a tool gun (spawned from Spawn Menu)
-
-Example:
-
-```lua
-Events.Subscribe("DropToolGun", id, weapon, character)
-    -- do something with the tool
-end
-```
-
-
-### PickUpToolGun_[ID] (client side)
-
-This is like PickUpToolGun, but specific for an tool, replace [ID] with the ID of your tool
-
-Example:
-
-```lua
-Events.Subscribe("PickUpToolGun_IncredibleTool", id, weapon, character)
-    -- do something with the Incredible Tool
-end
-```
-
-
-### DropToolGun_[ID] (client side)
-
-This is like DropToolGun, but specific for an tool, replace [ID] with the ID of your tool
-
-Example:
-
-```lua
-Events.Subscribe("DropToolGun_IncredibleTool", id, weapon, character)
-    -- do something with the Incredible Tool
-end
-```
-
-
 ### SpawnSound (client side)
 
 You can call it from server side to spawn a sound
@@ -261,6 +203,7 @@ You can call it from server side to spawn a sound
 ```lua
 Events.BroadcastRemote("SpawnSound", location, sound_asset, is_2D, volume, pitch)
 ```
+
 
 ### SpawnSoundAttached (client side)
 

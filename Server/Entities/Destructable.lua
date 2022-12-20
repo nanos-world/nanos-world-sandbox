@@ -6,8 +6,8 @@ end
 
 
 -- Adds this to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "entities", "GC_Ball", function(location, rotation) return SpawnDestructable(location, rotation, "NanosWorld/Props/VRShapes/GC_Ball") end)
-AddSpawnMenuItem("nanos-world", "entities", "GC_Cube_01", function(location, rotation) return SpawnDestructable(location, rotation, "NanosWorld/Props/VRShapes/GC_Cube_01") end)
-AddSpawnMenuItem("nanos-world", "entities", "GC_Cube_02", function(location, rotation) return SpawnDestructable(location, rotation, "NanosWorld/Props/VRShapes/GC_Cube_02") end)
-AddSpawnMenuItem("nanos-world", "entities", "GC_Cube_03", function(location, rotation) return SpawnDestructable(location, rotation, "NanosWorld/Props/VRShapes/GC_Cube_03") end)
-AddSpawnMenuItem("nanos-world", "entities", "GC_Pyramid", function(location, rotation) return SpawnDestructable(location, rotation, "NanosWorld/Props/VRShapes/GC_Pyramid") end)
+SpawnMenu.AddItem("entities", "GC_Ball", function(location, rotation) return SpawnDestructable(location, rotation, "/Script/GeometryCollectionEngine.GeometryCollection'/Game/NanosWorld/Props/VRShapes/SM_Ball_VR_GeometryCollection.SM_Ball_VR_GeometryCollection'") end)
+SpawnMenu.AddItem("entities", "GC_Cube_01", function(location, rotation) return SpawnDestructable(location, rotation, "/Script/GeometryCollectionEngine.GeometryCollection'/Game/NanosWorld/Props/VRShapes/SM_Cube_VR_01_GeometryCollection.SM_Cube_VR_01_GeometryCollection'") end)
+SpawnMenu.AddItem("entities", "GC_Cube_02", function(location, rotation) return SpawnDestructable(location, rotation, "/Script/GeometryCollectionEngine.GeometryCollection'/Game/NanosWorld/Props/VRShapes/SM_Cube_VR_02_GeometryCollection.SM_Cube_VR_02_GeometryCollection'") end)
+SpawnMenu.AddItem("entities", "GC_Cube_03", function(location, rotation) return SpawnDestructable(location, rotation, "/Script/GeometryCollectionEngine.GeometryCollection'/Game/NanosWorld/Props/VRShapes/SM_Cube_VR_03_GeometryCollection.SM_Cube_VR_03_GeometryCollection'3") end)
+SpawnMenu.AddItem("entities", "GC_Pyramid", function(location, rotation) return SpawnDestructable(location, rotation, "/Script/GeometryCollectionEngine.GeometryCollection'/Game/NanosWorld/Props/VRShapes/SM_Pyramid_VR_GeometryCollection.SM_Pyramid_VR_GeometryCollection'") end)

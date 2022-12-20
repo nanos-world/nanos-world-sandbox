@@ -1,4 +1,4 @@
-Events.Subscribe("SpawnDebris", function(prop, debris_offset, debris_rotation, mesh, lifespan)
+Events.SubscribeRemote("SpawnDebris", function(prop, debris_offset, debris_rotation, mesh, lifespan)
     local velocity = prop:GetVelocity()
 	local parent_location = prop:GetLocation()-- + velocity / 30
 	local parent_rotation = prop:GetRotation()

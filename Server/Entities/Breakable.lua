@@ -1,7 +1,7 @@
 -- Checks for existing Props (maybe loaded by map-script) and apply Breakable on them, if applicable
 Package.Subscribe("Load", function()
 	for k, prop in pairs(Prop.GetPairs()) do
-		if (BreakableProps[prop:GetAssetName()]) then
+		if (BreakableProps[prop:GetMesh()]) then
 			SetupBreakableProp(prop)
 		end
 	end
@@ -10,7 +10,7 @@ end)
 -- Function to setup the Prop to be able to Break (usually called by SpawnMenu)
 function SetupBreakableProp(prop)
 	-- Checks if this Prop can be breakable (a.k.a. was configured previously with SetBreakableProp)
-	local breakable_data = BreakableProps[prop:GetAssetName()]
+	local breakable_data = BreakableProps[prop:GetMesh()]
 
 	if (not breakable_data) then
 		return
@@ -36,10 +36,10 @@ end
 
 -- This will trigger "Inflame" in a Inflamable Prop - I.e. make it fire for some seconds then explode
 function InflameProp(prop)
-	local breakable_data = BreakableProps[prop:GetAssetName()]
+	local breakable_data = BreakableProps[prop:GetMesh()]
 
 	if (not breakable_data) then
-		Package.Warn("Failed to find Breakable data for Prop '" .. prop:GetAssetName() .."'. Maybe missed configuration?")
+		Package.Warn("Failed to find Breakable data for Prop '" .. prop:GetMesh() .."'. Maybe missed configuration?")
 		return
 	end
 
@@ -55,7 +55,13 @@ function InflameProp(prop)
 	prop:SetValue("IsLeaking", true)
 	prop:SetForce(Vector(0, 0, breakable_data.explosive.inflamable.force or -100000), true)
 
-	Events.BroadcastRemote("SpawnSoundAttached", prop, "nanos-world::A_WhiteNoise", false, false, 0.05, 0.05)
+	local gas_leak_sounds = {
+		"nanos-world::A_Gas_Leak_Loop_01",
+		"nanos-world::A_Gas_Leak_Loop_02",
+		"nanos-world::A_Gas_Leak_Loop_03",
+	}
+
+	Events.BroadcastRemote("SpawnSoundAttached", prop, gas_leak_sounds[math.random(#gas_leak_sounds)], false, false, 0.5, math.random(9, 11) / 10)
 
 	local particle = Particle(prop:GetLocation(), Rotator(), "nanos-world::P_LeadersRing", false, true)
 	particle:AttachTo(prop, AttachmentRule.SnapToTarget, "", 0.05)
@@ -74,10 +80,10 @@ end
 
 -- This will "Break" a breakable prop into several Debris
 function BreakProp(prop, intensity)
-	local breakable_data = BreakableProps[prop:GetAssetName()]
+	local breakable_data = BreakableProps[prop:GetMesh()]
 
 	if (not breakable_data) then
-		Package.Warn("Failed to find Breakable data for Prop '" .. prop:GetAssetName() .."'. Maybe missed configuration?")
+		Package.Warn("Failed to find Breakable data for Prop '" .. prop:GetMesh() .."'. Maybe missed configuration?")
 		return
 	end
 

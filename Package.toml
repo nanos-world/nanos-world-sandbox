@@ -5,7 +5,7 @@
     # contributors
     author =                "nanos™"
     # version
-    version =               "2.15.3"
+    version =               "3.0.0"
     # image URL
     image =                 "https://i.imgur.com/aoEa4N4.jpg"
     # package type: 'script' (normal package), 'game-mode' (unique package - can only load one at a time), 'library' (doesn't start a Lua VM) or 'loading-screen' (special package for loading screen)
@@ -14,6 +14,8 @@
     force_no_map_script =   false
     # auto destroy all entities spawned by this package when it unloads
     auto_cleanup =          true
+    # the game version (major.minor) at the time this package was created, for granting compatibility between breaking changes
+    compatibility_version = "1.25"
     # packages requirements
     packages_requirements = [
         

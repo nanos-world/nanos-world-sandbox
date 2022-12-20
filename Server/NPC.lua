@@ -1,12 +1,9 @@
--- Aux function to Randomly walk a NPC to somwehere around within distance
-function Character:MoveRandom(distance)
-	local random_location = self:GetLocation() + Vector(math.random(distance) - distance / 2, math.random(distance) - distance / 2, 0)
-	self:MoveTo(random_location, 250)
-end
+NPC = Character.Inherit("NPC")
 
-function SpawnNPC(location, rotation, group, category, asset)
-	-- Spawns a random Character
-	local character = SpawnCharacterRandomized(location or Vector(), rotation + Rotator(0, math.random(0, 360), 0) or Rotator(), asset)
+function NPC:Constructor(location, rotation, mesh)
+	self.Super:Constructor(location or Vector(), (rotation or Rotator()) + Rotator(0, math.random(0, 360), 0), mesh)
+
+	CustomizeCharacter(self, mesh)
 
 	Timer.Bind(
 		-- After 5-10 seconds, move again
@@ -16,49 +13,92 @@ function SpawnNPC(location, rotation, group, category, asset)
 
 			-- Walk 30 meters away max
 			chara:MoveRandom(3000)
-		end, math.random(5000) + 5000, character),
-		character
+		end, math.random(5000) + 5000, self),
+		self
 	)
 
-	-- When take damage
-	character:Subscribe("TakeDamage", function(self, damage, bone, type, from_direction, instigator, causer)
-		-- Make him run
-		self:SetGaitMode(GaitMode.Sprinting)
-
-		local current_location = self:GetLocation()
-		local run_to_location = current_location + from_direction * 3000
-
-		-- Run 30 meters away max in the opposite direction
-		character:MoveTo(Vector(run_to_location.X, run_to_location.Y, current_location.Z), 1000)
-	end)
-
-	-- After dying, destroys the Character after 10 seconds
-	character:Subscribe("Death", function(self)
-		self:SetLifeSpan(10)
-	end)
-
-	-- After entering ragdoll, after some time, get up
-	character:Subscribe("RagdollModeChanged", function(self, was_in_ragdoll, is_in_ragdoll)
-		if (not is_in_ragdoll) then return end
-
-		Timer.Bind(
-			Timer.SetTimeout(function(chara)
-				chara:Jump()
-			end, 3000, self),
-			self
-		)
-	end)
-
 	-- Immediately walks after spawning
-	character:MoveRandom(2000)
-
-	return character
+	self:MoveRandom(2000)
 end
 
--- Default NPCs
-AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_Mannequin", SpawnNPC)
-AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_Mannequin_Female", SpawnNPC)
-AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_Male", SpawnNPC)
-AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_Female", SpawnNPC)
-AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_PostApocalyptic", SpawnNPC)
-AddSpawnMenuItem("nanos-world", "npcs", "nanos-world::SK_ClassicMale", SpawnNPC)
+-- Randomly walk a NPC to somwehere around within distance
+function NPC:MoveRandom(distance)
+	local random_location = self:GetLocation() + Vector(math.random(distance) - distance / 2, math.random(distance) - distance / 2, 0)
+	self:MoveTo(random_location, 250)
+end
+
+-- When take damage
+function NPC:OnTakeDamage(damage, bone, type, from_direction, instigator, causer)
+	-- Make him run
+	self:SetGaitMode(GaitMode.Sprinting)
+
+	local current_location = self:GetLocation()
+	local run_to_location = current_location + from_direction * 3000
+
+	-- Run 30 meters away max in the opposite direction
+	self:MoveTo(Vector(run_to_location.X, run_to_location.Y, current_location.Z), 1000)
+end
+
+-- After dying, destroys the Character after 10 seconds
+function NPC:OnDeath()
+	self:SetLifeSpan(10)
+end
+
+-- After entering ragdoll, after some time, get up
+function NPC:OnRagdollModeChanged(was_in_ragdoll, is_in_ragdoll)
+	if (not is_in_ragdoll) then return end
+
+	Timer.Bind(
+		Timer.SetTimeout(function(chara)
+			chara:Jump()
+		end, 3000, self),
+		self
+	)
+end
+
+NPC.Subscribe("TakeDamage", NPC.OnTakeDamage)
+NPC.Subscribe("Death", NPC.OnDeath)
+NPC.Subscribe("RagdollModeChanged", NPC.OnRagdollModeChanged)
+
+
+
+NPC_MannequinMale = NPC.Inherit("NPC_MannequinMale")
+
+function NPC_MannequinMale:Constructor(location, rotation)
+	NPC.Constructor(self, location or Vector(), rotation or Rotator(), "nanos-world::SK_Mannequin")
+end
+
+
+NPC_MannequinFemale = NPC.Inherit("NPC_MannequinFemale")
+
+function NPC_MannequinFemale:Constructor(location, rotation)
+	NPC.Constructor(self, location or Vector(), rotation or Rotator(), "nanos-world::SK_Mannequin_Female")
+end
+
+
+NPC_PostApocalyptic = NPC.Inherit("NPC_PostApocalyptic")
+
+function NPC_PostApocalyptic:Constructor(location, rotation)
+	NPC.Constructor(self, location or Vector(), rotation or Rotator(), "nanos-world::SK_PostApocalyptic")
+end
+
+
+NPC_ClassicMale = NPC.Inherit("NPC_ClassicMale")
+
+function NPC_ClassicMale:Constructor(location, rotation)
+	NPC.Constructor(self, location or Vector(), rotation or Rotator(), "nanos-world::SK_ClassicMale")
+end
+
+
+NPC_Male = NPC.Inherit("NPC_Male")
+
+function NPC_Male:Constructor(location, rotation)
+	NPC.Constructor(self, location or Vector(), rotation or Rotator(), "nanos-world::SK_Male")
+end
+
+
+NPC_Female = NPC.Inherit("NPC_Female")
+
+function NPC_Female:Constructor(location, rotation)
+	NPC.Constructor(self, location or Vector(), rotation or Rotator(), "nanos-world::SK_Female")
+end

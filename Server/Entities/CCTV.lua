@@ -1,29 +1,31 @@
-function SpawnCCTV(location, rotation)
+CCTV = Prop.Inherit("CCTV")
+
+function CCTV:Constructor(location, rotation)
 	-- Spawns a TV prop
-	local tv = Prop(location , rotation + Rotator(0, 90, 0), "nanos-world::SM_TV")
-	local camera = Prop(location + rotation:UnrotateVector(Vector(150, 0, 0)), rotation, "nanos-world::SM_Camera")
+	self.Super:Constructor(location, rotation + Rotator(0, 90, 0), "nanos-world::SM_TV")
 
-	local cable = Cable(location or Vector())
-	cable:AttachStartTo(camera, Vector(-85, 0, 0))
-	cable:AttachEndTo(tv, Vector(0, 0, 10))
-	cable:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, 10000, 0, true, 10000, 100)
-	cable:SetMaterial("nanos-world::M_NanosMasked")
-	cable:SetMaterialColorParameter("Tint", Color.BLACK)
-	cable:SetRenderingSettings(5, 4, 1)
+	-- Spawns the Camera Prop
+	self.camera = Prop(location + rotation:UnrotateVector(Vector(150, 0, 0)), rotation, "nanos-world::SM_Camera")
 
-	tv:SetValue("CCTV", camera, true)
+	-- Spawns a Cable
+	self.cable = Cable(location)
+	self.cable:AttachStartTo(self.camera, Vector(-85, 0, 0))
+	self.cable:AttachEndTo(self, Vector(0, 0, 10))
+	self.cable:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, 10000, 0, true, 10000, 100)
+	self.cable:SetMaterial("nanos-world::M_NanosMasked")
+	self.cable:SetMaterialColorParameter("Tint", Color.BLACK)
+	self.cable:SetRenderingSettings(5, 4, 1)
 
-	tv:Subscribe("Destroy", function(self)
-		local camera_prop = self:GetValue("CCTV")
-		if (camera_prop and camera_prop:IsValid()) then
-			camera_prop:Destroy()
-		end
-	end)
-
-	Events.BroadcastRemote("SpawnCCTV", tv, camera)
-
-	return tv
+	-- Sets this so we can access through Client
+	self:SetValue("Camera", self.camera, true)
 end
 
--- Adds this to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "entities", "CCTV", SpawnCCTV)
+function CCTV:OnDestroy()
+	-- Destroys the Camera when I get destroyed
+	local camera_prop = self.camera
+	if (camera_prop and camera_prop:IsValid()) then
+		camera_prop:Destroy()
+	end
+end
+
+CCTV.Subscribe("Destroy", CCTV.OnDestroy)

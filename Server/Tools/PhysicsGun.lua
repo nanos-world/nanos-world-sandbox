@@ -1,95 +1,92 @@
--- Subscribe for Client's custom event, for when the object is grabbed/dropped
-Events.Subscribe("PickUp", function(player, weapon, object, is_grabbing, picking_object_relative_location, freeze)
-    -- Gets the Laser particle of this weapon, if existing
-    local particle = weapon and weapon:GetValue("BeamParticle") or nil
+PhysicsGun = ToolGun.Inherit("PhysicsGun")
 
-    if (is_grabbing) then
-        -- Only updates the Network Authority if this entity is network distributed
-        if (object:IsNetworkDistributed()) then
-            object:SetNetworkAuthority(player)
-        end
+function PhysicsGun:Constructor(location, rotation)
+	-- Calls parent ToolGun constructor
+	ToolGun.Constructor(self, location, rotation, Color.BLUE)
 
-        object:SetValue("IsBeingGrabbed", true, true)
+	-- Spawns a Beam Particle and attaches it to the weapon
+	self.beam_particle = Particle(Vector(), Rotator(), "nanos-world::P_Beam", false, false)
+	self.beam_particle:AttachTo(self, AttachmentRule.SnapToTarget, "muzzle", 0)
 
-        -- Sets the particle values so all Clients can set the correct position of them
-        if (particle) then
-            particle:SetValue("RelativeLocationObject", picking_object_relative_location, true)
-            particle:SetValue("BeamEndObject", object, true)
-        end
+	-- Sets the Color and some settings to make it pretty
+	self.beam_particle:SetParameterColor("BeamColor", Color(0, 0, 0.05, 1))
+	self.beam_particle:SetParameterFloat("BeamWidth", 1.5)
+	self.beam_particle:SetParameterFloat("JitterAmount", 1)
 
-        -- Spawns a sound for grabbing it
-        if (weapon) then
-	        Events.BroadcastRemote("SpawnSound", weapon:GetLocation(), "nanos-world::A_VR_Grab", false, 0.25, 0.9)
-        end
-    else
-        object:SetValue("IsBeingGrabbed", false, true)
-
-        -- Resets TranslateTo and RotateTo movement
-        object:TranslateTo(object:GetLocation(), 0)
-        object:RotateTo(object:GetRotation(), 0)
-
-        -- Resets particle values
-        if (particle) then
-            particle:SetValue("RelativeLocationObject", nil, true)
-            particle:SetValue("BeamEndObject", nil, true)
-        end
-
-        -- Spawns a sound for ungrabbing it
-        if (weapon) then
-            Events.BroadcastRemote("SpawnSound", weapon:GetLocation(), "nanos-world::A_VR_Ungrab", false, 0.25, 0.9)
-        end
-    end
-
-    -- Disables/Enables the gravity of the object so he can 'fly' freely
-    object:SetGravityEnabled(not freeze and not is_grabbing)
-
-    if (freeze) then
-        Particle(object:GetLocation(), Rotator(), "nanos-world::P_OmnidirectionalBurst")
-    end
-
-    -- Disables/Enables the character to Aim, so he can use the Mouse Wheel properly
-    player:GetControlledCharacter():SetCanAim(not is_grabbing)
-
-    Events.BroadcastRemote("PickUpObject", object, is_grabbing)
-end)
-
--- Subscribes for Clients event for turning on/off the physics gun
-Events.Subscribe("TogglePhysicsGun", function(player, weapon, enable)
-    -- Maybe the server is closing?
-    if (not weapon) then return end
-
-    -- Attempt to Stop if existing the beam particle
-    StopBeamParticle(weapon)
-
-    -- If the Physics Gun is being enabled
-    if (enable) then
-        -- Spawns a Beam Particle and attaches it to the weapon
-        local beam_particle = Particle(Vector(), Rotator(), "nanos-world::P_Beam", false, true)
-        beam_particle:AttachTo(weapon, AttachmentRule.SnapToTarget, "muzzle")
-
-        -- Sets the Color and some settings to make it pretty
-        beam_particle:SetParameterColor("BeamColor", Color(0, 0, 1, 1))
-        beam_particle:SetParameterFloat("BeamWidth", 1.5)
-        beam_particle:SetParameterFloat("JitterAmount", 1)
-
-        -- Sets in the weapon the particle value, so it can be get after all
-        weapon:SetValue("BeamParticle", beam_particle, true)
-
-        -- If the weapon is dropped, destroy the particle
-        weapon:Subscribe("Drop", StopBeamParticle)
-    else
-        weapon:Unsubscribe("Drop", StopBeamParticle)
-	    Events.BroadcastRemote("SpawnSound", weapon:GetLocation(), "nanos-world::A_Simulate_End", false, 1, 1)
-    end
-end)
-
-function StopBeamParticle(weapon)
-    local particle = weapon:GetValue("BeamParticle")
-    if (not particle) then return end
-
-    weapon:SetValue("BeamParticle", nil, true)
-    particle:Destroy()
+	-- Syncs the Particle with Clients
+	self:SetValue("BeamParticle", self.beam_particle, true)
 end
 
--- Adds this tool to the Sandbox Spawn Menu
-AddSpawnMenuItem("nanos-world", "tools", "PhysicsGun", function() return SpawnGenericToolGun(Vector(), Rotator(), Color.BLUE) end)
+function PhysicsGun:OnPickUpObject(player, object, is_grabbing, picking_object_relative_location, freeze)
+	if (is_grabbing) then
+		-- Forces it not being network authority distributed while someone is grabbing it
+		object:SetNetworkAuthorityAutoDistributed(false)
+
+		-- Only updates the Network Authority if this entity is network distributed
+		if (object:IsNetworkDistributed()) then
+			object:SetNetworkAuthority(player)
+		end
+
+		object:SetValue("IsBeingGrabbed", true, true)
+
+		-- Sets the particle values so all Clients can set the correct position of them
+		self.beam_particle:SetValue("RelativeLocationObject", picking_object_relative_location, true)
+		self.beam_particle:SetValue("BeamEndObject", object, true)
+
+		-- Spawns a sound for grabbing it
+		Events.BroadcastRemote("SpawnSound", object:GetLocation(), "nanos-world::A_VR_Grab", false, 0.25, 0.9)
+
+		self:BroadcastRemoteEvent("ToggleTargetParticles", false)
+	else
+		-- Restores auto network authority distribution of this object
+		object:SetNetworkAuthorityAutoDistributed(true)
+
+		object:SetValue("IsBeingGrabbed", false, true)
+
+		-- Resets TranslateTo and RotateTo movement
+		object:TranslateTo(object:GetLocation(), 0)
+		object:RotateTo(object:GetRotation(), 0)
+
+		-- Resets particle values
+		self.beam_particle:SetValue("RelativeLocationObject", nil, true)
+		self.beam_particle:SetValue("BeamEndObject", nil, true)
+
+		-- Spawns a sound for ungrabbing it
+		Events.BroadcastRemote("SpawnSound", object:GetLocation(), "nanos-world::A_VR_Ungrab", false, 0.25, 0.9)
+
+		self:BroadcastRemoteEvent("ToggleTargetParticles", true)
+	end
+
+	-- Disables/Enables the gravity of the object so he can 'fly' freely
+	object:SetGravityEnabled(not freeze and not is_grabbing)
+
+	if (freeze) then
+		Particle(object:GetLocation(), Rotator(), "nanos-world::P_OmnidirectionalBurst")
+	end
+
+	-- Disables/Enables the character to Aim, so he can use the Mouse Wheel properly
+	player:GetControlledCharacter():SetCanAim(not is_grabbing)
+
+	Events.BroadcastRemote("PickUpObject", object, is_grabbing)
+end
+
+function PhysicsGun:OnToggle(player, enable)
+	-- If the Physics Gun is being enabled
+	if (enable) then
+		self.beam_particle:Activate(true)
+		self:BroadcastRemoteEvent("ToggleTargetParticles", true)
+	else
+		Events.BroadcastRemote("SpawnSound", self:GetLocation(), "nanos-world::A_Simulate_End", false, 1, 1)
+		self:StopParticles()
+	end
+end
+
+function PhysicsGun:StopParticles()
+	self.beam_particle:Deactivate()
+	self:BroadcastRemoteEvent("ToggleTargetParticles", false)
+end
+
+-- TODO this broke if using 'PickUp' name
+PhysicsGun.SubscribeRemote("PickUpObject", PhysicsGun.OnPickUpObject)
+PhysicsGun.SubscribeRemote("Toggle", PhysicsGun.OnToggle)
+PhysicsGun.SubscribeRemote("Drop", PhysicsGun.StopParticles)

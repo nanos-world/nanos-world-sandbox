@@ -1,9 +1,9 @@
 -- Spawns/Overrides with default NanosWorld's Sun
-World.SpawnDefaultSun()
+Sky.Spawn()
 
 -- Sets the same time for everyone
 local gmt_time = os.date("!*t", os.time())
-World.SetTime((gmt_time.hour * 60 + gmt_time.min) % 24, gmt_time.sec)
+Sky.SetTimeOfDay(gmt_time.hour, gmt_time.min)
 
 -- All notifications already sent
 PERSISTENT_DATA_NOTIFICATIONS = PERSISTENT_DATA_NOTIFICATIONS or {}
@@ -79,13 +79,13 @@ function UpdateLocalCharacter(character)
 	local current_picked_item = character:GetPicked()
 
 	-- If so, update the UI
-	if (current_picked_item and current_picked_item:GetType() == "Weapon" and not current_picked_item:GetValue("ToolGun")) then
+	if (current_picked_item and current_picked_item:IsA(Weapon) and not current_picked_item:IsA(ToolGun)) then
 		UpdateAmmo(true, current_picked_item:GetAmmoClip(), current_picked_item:GetAmmoBag())
 	end
 
 	-- Sets on character an event to update his grabbing weapon (to show ammo on UI)
 	character:Subscribe("PickUp", function(charac, object)
-		if (object:GetType() == "Weapon" and not object:GetValue("ToolGun")) then
+		if (object:IsA(Weapon) and not object:IsA(ToolGun)) then
 			-- Immediatelly Updates the Ammo UI
 			UpdateAmmo(true, object:GetAmmoClip(), object:GetAmmoBag())
 
@@ -102,29 +102,12 @@ function UpdateLocalCharacter(character)
 	-- Sets on character an event to remove the ammo ui when he drops it's weapon
 	character:Subscribe("Drop", function(charac, object)
 		-- Unsubscribes from events
-		if (object:GetType() == "Weapon") then
+		if (object:IsA(Weapon) and not object:IsA(ToolGun)) then
 			UpdateAmmo(false)
 			object:Unsubscribe("AmmoClipChanged", OnAmmoClipChanged)
 			object:Unsubscribe("AmmoBagChanged", OnAmmoBagChanged)
 		end
-
-		ToggleToolGunAiming(object, "", false)
 	end)
-
-	character:Subscribe("WeaponAimModeChanged", function(char, old_state, new_state)
-		local weapon = char:GetPicked()
-		if (not weapon or weapon:GetType() ~= "Weapon") then return end
-
-		local tool_gun = weapon:GetValue("ToolGun")
-		if (not tool_gun) then return end
-
-		if (new_state == AimMode.None) then
-			ToggleToolGunAiming(weapon, tool_gun, false)
-		else
-			ToggleToolGunAiming(weapon, tool_gun, true)
-		end
-	end)
-
 end
 
 -- Function to update the Ammo's UI
@@ -165,11 +148,11 @@ Player.Subscribe("Destroy", function(player)
 	MainHUD:CallEvent("UpdatePlayer", player:GetID(), false)
 end)
 
-Events.Subscribe("SpawnSound", function(location, sound_asset, is_2D, volume, pitch)
+Events.SubscribeRemote("SpawnSound", function(location, sound_asset, is_2D, volume, pitch)
 	Sound(location, sound_asset, is_2D, true, SoundType.SFX, volume or 1, pitch or 1)
 end)
 
-Events.Subscribe("SpawnSoundAttached", function(object, sound_asset, is_2D, auto_destroy, volume, pitch)
+Events.SubscribeRemote("SpawnSoundAttached", function(object, sound_asset, is_2D, auto_destroy, volume, pitch)
 	local sound = Sound(object:GetLocation(), sound_asset, is_2D, auto_destroy ~= false, SoundType.SFX, volume or 1, pitch or 1)
 	sound:AttachTo(object, AttachmentRule.SnapToTarget, "", 0)
 end)
