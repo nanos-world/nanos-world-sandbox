@@ -38,44 +38,47 @@ SpawnMenu.AddInheritedClasses = function(tab, parent_class, blacklist_class)
 end
 
 Package.Subscribe("Load", function()
-	-- Loads all Asset Packs
-	local asset_packs = Assets.GetAssetPacks()
-	for _, asset_pack in pairs(asset_packs) do
+	-- Wait 1 second so all other packages can send their Tools during Package Load event
+	Timer.SetTimeout(function()
+		-- Loads all Asset Packs
+		local asset_packs = Assets.GetAssetPacks()
+		for _, asset_pack in pairs(asset_packs) do
 
-		-- Loads all StaticMeshes as Props
-		local props = Assets.GetStaticMeshes(asset_pack.Path)
+			-- Loads all StaticMeshes as Props
+			local props = Assets.GetStaticMeshes(asset_pack.Path)
 
-		for _, prop in pairs(props) do
-			-- TODO make global way to access categories for other Asset Packs
-			-- Get the category from a default list
-			local asset_category = DEFAULT_ASSET_PACK[prop]
+			for _, prop in pairs(props) do
+				-- TODO make global way to access categories for other Asset Packs
+				-- Get the category from a default list
+				local asset_category = DEFAULT_ASSET_PACK[prop]
 
-			SpawnMenu.AddItem(
-				"props",
-				asset_pack.Path .. "::" .. prop,
-				prop:gsub("SM_", " "):gsub("_", " "), -- Parses it to remove dirty names
-				"assets://" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg",-- Gets the Thumbnail path from conventional path "my_asset_pack/Thumbnails/"
-				asset_category or "uncategorized"
-			)
+				SpawnMenu.AddItem(
+					"props",
+					asset_pack.Path .. "::" .. prop,
+					prop:gsub("SM_", " "):gsub("_", " "), -- Parses it to remove dirty names
+					"assets://" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg",-- Gets the Thumbnail path from conventional path "my_asset_pack/Thumbnails/"
+					asset_category or "uncategorized"
+				)
+			end
 		end
-	end
 
-	SpawnMenu.AddInheritedClasses("tools", ToolGun)
-	SpawnMenu.AddInheritedClasses("npcs", NPC)
-	SpawnMenu.AddInheritedClasses("weapons", Melee)
-	SpawnMenu.AddInheritedClasses("weapons", Grenade)
-	SpawnMenu.AddInheritedClasses("weapons", Weapon, ToolGun)
-	SpawnMenu.AddInheritedClasses("vehicles", Vehicle)
+		SpawnMenu.AddInheritedClasses("tools", ToolGun)
+		SpawnMenu.AddInheritedClasses("npcs", NPC)
+		SpawnMenu.AddInheritedClasses("weapons", Melee)
+		SpawnMenu.AddInheritedClasses("weapons", Grenade)
+		SpawnMenu.AddInheritedClasses("weapons", Weapon, ToolGun)
+		SpawnMenu.AddInheritedClasses("vehicles", Vehicle)
 
-	-- Inherited from Prop is Entity?
-	for _, class in ipairs(Prop.GetInheritedClasses(true)) do
-		-- Props child without property .name we consider don't wish to display on Spawn Menu
-		if (class.name) then
-			SpawnMenu.AddItem("entities", class.GetName(), class.name, class.image, class.category)
+		-- Inherited from Prop is Entity?
+		for _, class in ipairs(Prop.GetInheritedClasses(true)) do
+			-- Props child without property .name we consider don't wish to display on Spawn Menu
+			if (class.name) then
+				SpawnMenu.AddItem("entities", class.GetName(), class.name, class.image, class.category)
+			end
 		end
-	end
 
-	MainHUD:CallEvent("SetSpawnMenuItems", SpawnMenu.items)
+		MainHUD:CallEvent("SetSpawnMenuItems", SpawnMenu.items)
+	end, 1000)
 end)
 
 Input.Bind("SpawnMenu", InputEvent.Released, function()
