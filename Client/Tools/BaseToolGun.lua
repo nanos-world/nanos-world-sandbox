@@ -93,8 +93,7 @@ function TraceFor(trace_max_distance, collision_channel)
 	local start_location = viewport_3D.Position + viewport_3D.Direction * 100
 	local end_location = viewport_3D.Position + viewport_3D.Direction * trace_max_distance
 
-	-- return Client.TraceLineSingle(start_location, end_location, collision_channel, TraceMode.TraceComplex | TraceMode.ReturnEntity, { Client.GetLocalPlayer():GetControlledCharacter() })
-	return Client.TraceLineSingle(start_location, end_location, collision_channel, TraceMode.TraceComplex | TraceMode.ReturnEntity)
+	return Client.TraceLineSingle(start_location, end_location, collision_channel, TraceMode.TraceComplex | TraceMode.ReturnEntity, { Client.GetLocalPlayer():GetControlledCharacter() })
 end
 
 -- Called on Tick when possessing a ToolGun to draw a Crosshair in the world

@@ -1,15 +1,11 @@
 NPC = Character.Inherit("NPC")
 
-NPCMannequin = NPC.Inherit("NPCMannequin")
-NPCMannequin.name = "Mannequin"
-NPCMannequin.image = "assets://NanosWorld/Thumbnails/SK_Mannequin.jpg"
-
 NPC_MannequinMale = NPC.Inherit("NPC_MannequinMale")
-NPC_MannequinMale.name = "Mannequin Female"
-NPC_MannequinMale.image = "assets://NanosWorld/Thumbnails/SK_Male.jpg"
+NPC_MannequinMale.name = "Mannequin Male"
+NPC_MannequinMale.image = "assets://NanosWorld/Thumbnails/SK_Mannequin.jpg"
 
 NPC_MannequinFemale = NPC.Inherit("NPC_MannequinFemale")
-NPC_MannequinFemale.name = "Mannequin Male"
+NPC_MannequinFemale.name = "Mannequin Female"
 NPC_MannequinFemale.image = "assets://NanosWorld/Thumbnails/SK_Mannequin_Female.jpg"
 
 NPC_PostApocalyptic = NPC.Inherit("NPC_PostApocalyptic")

@@ -82,7 +82,7 @@ Events.SubscribeRemote("SpawnItem", function(player, tab, id, spawn_location, sp
 	Events.CallRemote("SpawnedItem", player, item)
 end)
 
--- Called by Client to destroy an spawned item 
+-- Called by Client to destroy an spawned item
 Events.SubscribeRemote("DestroyItem", function(player, item)
 	-- Spawns some sounds and particles
 	Events.BroadcastRemote("SpawnSound", item:GetLocation(), "nanos-world::A_Player_Eject", false, 0.3, 1)
@@ -94,7 +94,7 @@ end)
 
 SpawnMenu.AddInheritedClasses = function(tab, parent_class, blacklist_class)
 	for _, class in pairs(parent_class.GetInheritedClasses(true)) do
-		if (not blacklist_class or not class.IsChildOf(blacklist_class)) then
+		if (not blacklist_class or (not class.IsChildOf(blacklist_class) and class ~= blacklist_class)) then
 			SpawnMenu.AddItem(tab, class.GetName(), class)
 		end
 	end

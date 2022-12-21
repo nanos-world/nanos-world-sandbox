@@ -31,7 +31,7 @@ SoundInvalidAction = Sound(Vector(), "nanos-world::A_Invalid_Action", true, fals
 
 SpawnMenu.AddInheritedClasses = function(tab, parent_class, blacklist_class)
 	for _, class in pairs(parent_class.GetInheritedClasses(true)) do
-		if (not blacklist_class or not class.IsChildOf(blacklist_class)) then
+		if (not blacklist_class or (not class.IsChildOf(blacklist_class) and class ~= blacklist_class)) then
 			SpawnMenu.AddItem(tab, class.GetName(), class.name, class.image, class.category)
 		end
 	end
