@@ -32,7 +32,12 @@ end
 Package.Export("AddNotification", AddNotification)
 
 -- Setup some default notifications
-AddNotification("PARACHUTE", "you can press space while falling to open your parachute", 10000, 10000)
-AddNotification("VIEW_MODE", "you can press V to change the View Mode", 10000, 50000)
-AddNotification("CAMERA_SIDE", "you can press Middle Mouse Button to change the Camera Side", 10000, 70000)
-AddNotification("PARACHUTE", "you can press C to open the Context Menu", 10000, 100000)
+local jump_keybind = Input.GetMappedKey("Jump") or "not set"
+local camera_switch_keybind = Input.GetMappedKey("CameraSwitch") or "not set"
+local camera_side_keybind = Input.GetMappedKey("CameraSide") or "not set"
+local context_menu_keybind = Input.GetMappedKey("ContextMenu") or "not set"
+
+AddNotification("PARACHUTE", "you can press " .. jump_keybind .. " while falling to open your parachute", 10000, 10000)
+AddNotification("VIEW_MODE", "you can press " .. camera_switch_keybind .. " to change the View Mode", 10000, 50000)
+AddNotification("CAMERA_SIDE", "you can press " .. camera_side_keybind .. " to change the Camera Side", 10000, 70000)
+AddNotification("CONTEXT_MENU", "you can press " .. context_menu_keybind .. " to open the Context Menu", 10000, 100000)

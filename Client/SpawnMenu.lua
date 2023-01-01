@@ -301,8 +301,11 @@ SpawnMenu.AddCategory("entities", "uncategorized", "Uncategorized", "categories/
 SpawnMenu.AddCategory("entities", "destructables", "Destructables", "categories/destructable.webp", "categories/destructable-disabled.webp")
 
 -- Defines some Spawn Menu Hints
-AddNotification("SPAWN_MENU", "you can press Q to open the Spawn Menu", 10000, 30000)
-AddNotification("SPAWN_MENU_DESTROY_ITEM", "you can press X to delete your last spawned item", 10000, 90000)
+local spawn_menu_keybind = Input.GetMappedKey("SpawnMenu") or "not set"
+local undo_keybind = Input.GetMappedKey("Undo") or "not set"
+
+AddNotification("SPAWN_MENU", "you can press " .. spawn_menu_keybind .. " to open the Spawn Menu", 10000, 30000)
+AddNotification("SPAWN_MENU_DESTROY_ITEM", "you can press " .. undo_keybind .. " to delete your last spawned item", 10000, 90000)
 
 
 function RequireAllLuaFilesInFolder(folder)
