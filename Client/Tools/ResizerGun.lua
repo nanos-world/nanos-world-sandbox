@@ -50,8 +50,8 @@ function ResizerGun:OnLocalPlayerPickUp(character)
 
 	self:Subscribe("ReleaseUse", ResizerGun.OnReleaseUse)
 	character:Subscribe("WeaponAimModeChanged", ResizerGunWeaponAimModeChanged)
-	Client.Subscribe("MouseUp", ResizerGunMouseUp)
-	Client.Subscribe("KeyPress", ResizerGunKeyPress)
+	Input.Subscribe("MouseUp", ResizerGunMouseUp)
+	Input.Subscribe("KeyPress", ResizerGunKeyPress)
 
 	-- Sets some notification when grabbing the Tool
 	AddNotification("RESIZER_GUIDE", "hold down Left Mouse to select an object, then use mouse wheel to size it up or down", 10000, 5000)
@@ -63,8 +63,8 @@ function ResizerGun:OnLocalPlayerDrop(character)
 
 	self:Unsubscribe("ReleaseUse", ResizerGun.OnReleaseUse)
 	character:Unsubscribe("WeaponAimModeChanged", ResizerGunWeaponAimModeChanged)
-	Client.Unsubscribe("MouseUp", ResizerGunMouseUp)
-	Client.Unsubscribe("KeyPress", ResizerGunKeyPress)
+	Input.Unsubscribe("MouseUp", ResizerGunMouseUp)
+	Input.Unsubscribe("KeyPress", ResizerGunKeyPress)
 
 	if (ResizerGun.resizing_object) then
 		ResizerGun.resizing_object:SetHighlightEnabled(false)

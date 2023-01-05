@@ -39,7 +39,6 @@ end
 -- Overrides ToolGun method
 function ColorGun:OnLocalPlayerPickUp(character)
 	-- Adds an entry to Context Menu
-	print(ColorGun.color:ToHex())
 	ContextMenu.AddItems("color_gun", "color gun", {
 		{ id = "color_gun_color", type = "color", label = "color", callback_event = "SetColorGunColor", value = ColorGun.color:ToHex(false) },
 	})

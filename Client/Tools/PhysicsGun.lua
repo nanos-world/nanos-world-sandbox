@@ -63,13 +63,13 @@ function PhysicsGun:OnLocalPlayerPickUp(character)
 
 	self:Subscribe("ReleaseUse", PhysicsGun.OnReleaseUse)
 	character:Subscribe("WeaponAimModeChanged", PhysicsGunWeaponAimModeChanged)
-	Client.Subscribe("KeyUp", PhysicsGunKeyUp)
-	Client.Subscribe("KeyPress", PhysicsGunKeyPress)
-	Client.Subscribe("KeyDown", PhysicsGunKeyDown)
-	Client.Subscribe("MouseDown", PhysicsGunMouseDown)
-	Client.Subscribe("MouseUp", PhysicsGunMouseUp)
-	Client.Subscribe("MouseMoveX", PhysicsGunMouseMoveX)
-	Client.Subscribe("MouseMoveY", PhysicsGunMouseMoveY)
+	Input.Subscribe("KeyUp", PhysicsGunKeyUp)
+	Input.Subscribe("KeyPress", PhysicsGunKeyPress)
+	Input.Subscribe("KeyDown", PhysicsGunKeyDown)
+	Input.Subscribe("MouseDown", PhysicsGunMouseDown)
+	Input.Subscribe("MouseUp", PhysicsGunMouseUp)
+	Input.Subscribe("MouseMoveX", PhysicsGunMouseMoveX)
+	Input.Subscribe("MouseMoveY", PhysicsGunMouseMoveY)
 
 	PhysicsGun.tick_timer = Timer.SetInterval(PhysicsGunTick, 0.033)
 
@@ -85,13 +85,13 @@ function PhysicsGun:OnLocalPlayerDrop(character)
 
 	self:Unsubscribe("ReleaseUse", PhysicsGun.OnReleaseUse)
 	character:Unsubscribe("WeaponAimModeChanged", PhysicsGunWeaponAimModeChanged)
-	Client.Unsubscribe("KeyUp", PhysicsGunKeyUp)
-	Client.Unsubscribe("KeyPress", PhysicsGunKeyPress)
-	Client.Unsubscribe("KeyDown", PhysicsGunKeyDown)
-	Client.Unsubscribe("MouseDown", PhysicsGunMouseDown)
-	Client.Unsubscribe("MouseUp", PhysicsGunMouseUp)
-	Client.Unsubscribe("MouseMoveX", PhysicsGunMouseMoveX)
-	Client.Unsubscribe("MouseMoveY", PhysicsGunMouseMoveY)
+	Input.Unsubscribe("KeyUp", PhysicsGunKeyUp)
+	Input.Unsubscribe("KeyPress", PhysicsGunKeyPress)
+	Input.Unsubscribe("KeyDown", PhysicsGunKeyDown)
+	Input.Unsubscribe("MouseDown", PhysicsGunMouseDown)
+	Input.Unsubscribe("MouseUp", PhysicsGunMouseUp)
+	Input.Unsubscribe("MouseMoveX", PhysicsGunMouseMoveX)
+	Input.Unsubscribe("MouseMoveY", PhysicsGunMouseMoveY)
 
 	Timer.ClearInterval(PhysicsGun.tick_timer)
 
@@ -163,8 +163,8 @@ end
 -- Function to try to pickup an object
 function TryPickUpObject()
 	-- Get the camera location in 3D World Space
-	local viewport_2D_center = Client.GetViewportSize() / 2
-	local viewport_3D = Client.DeprojectScreenToWorld(viewport_2D_center)
+	local viewport_2D_center = Viewport.GetViewportSize() / 2
+	local viewport_3D = Viewport.DeprojectScreenToWorld(viewport_2D_center)
 	local start_location = viewport_3D.Position + viewport_3D.Direction * 100
 
 	-- Gets the end location of the trace (5000 units ahead)
@@ -175,7 +175,7 @@ function TryPickUpObject()
 	local collision_trace = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle
 
 	-- Do the Trace
-	local trace_result = Client.TraceLineSingle(start_location, end_location, collision_trace, TraceMode.ReturnEntity)
+	local trace_result = Trace.LineSingle(start_location, end_location, collision_trace, TraceMode.ReturnEntity)
 
 	-- If hit something and hit an Entity
 	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
@@ -364,7 +364,7 @@ Client.Subscribe("Tick", function(delta_time)
 				-- Traces 20000 units in front
 				local end_location = start_location + direction * 20000
 				local collision_trace = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle
-				local trace_result = Client.TraceLineSingle(start_location, end_location, collision_trace)
+				local trace_result = Trace.LineSingle(start_location, end_location, collision_trace)
 
 				-- If hit something
 				if (trace_result.Success) then
@@ -411,8 +411,8 @@ function PhysicsGunTick()
 		-- Otherwise, if I'm grabbing something, tells the server to update it's location
 
 		-- Get the camera location in 3D World Space
-		local viewport_2D_center = Client.GetViewportSize() / 2
-		local viewport_3D = Client.DeprojectScreenToWorld(viewport_2D_center)
+		local viewport_2D_center = Viewport.GetViewportSize() / 2
+		local viewport_3D = Viewport.DeprojectScreenToWorld(viewport_2D_center)
 		local start_location = viewport_3D.Position
 		local camera_direction = viewport_3D.Direction
 

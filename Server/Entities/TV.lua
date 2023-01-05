@@ -43,7 +43,7 @@ function TV:SetWebsite(player, url)
 	-- Parse Link
 	local parsed_url = GetYouTubeVideoIDFromURL(url)
 	if (not parsed_url) then
-		Package.Warn("TV: Trying to load an invalid YouTube URL: '%s'", url)
+		Console.Warn("TV: Trying to load an invalid YouTube URL: '%s'", url)
 		self:SetValue("Website", false, true)
 		return
 	end

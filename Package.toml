@@ -1,30 +1,37 @@
-# package configurations
-[package]
-    # package name
-    name =                  "Sandbox"
+# vault configurations
+[meta]
+    # friendly name
+    title =                 "Sandbox"
     # contributors
     author =                "nanos™"
     # version
-    version =               "3.0.1"
-    # image URL
-    image =                 "https://i.imgur.com/aoEa4N4.jpg"
-    # package type: 'script' (normal package), 'game-mode' (unique package - can only load one at a time), 'library' (doesn't start a Lua VM) or 'loading-screen' (special package for loading screen)
-    type =                  "game-mode"
-    # whether to force the custom map script to do not load
-    force_no_map_script =   false
+    version =               "3.1.0"
+
+# game-mode configurations
+[game_mode]
+    # whether to force the custom map package to do not load
+    force_no_map_package =  false
     # auto destroy all entities spawned by this package when it unloads
     auto_cleanup =          true
     # the game version (major.minor) at the time this package was created, for granting compatibility between breaking changes
     compatibility_version = "1.25"
     # packages requirements
     packages_requirements = [
-
+        "default-weapons",
+        "default-vehicles",
     ]
     # asset packs requirements
     assets_requirements = [
-
+        
     ]
     # compatible maps - maps to be highlighted when starting a new game through main menu
     compatible_maps = [
-
+        
     ]
+
+# game-mode custom settings configurations
+# those settings can be overriden through new game menu and through command line
+# and are accessed through Server.GetCustomSettings() method
+[custom_settings]
+    enable_noclip = { label = "enable noclip", type = "boolean", description = "enable players to noclip", default = true }
+    enable_pvp = { label = "enable pvp", type = "boolean", description = "enable players to shoot themselves", default = true }

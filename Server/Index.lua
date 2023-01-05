@@ -143,6 +143,9 @@ HAIR_TINTS = {
 -- List of Spawn Locations
 SPAWN_POINTS = Server.GetMapSpawnPoints()
 
+-- Custom Settings
+SANDBOX_CUSTOM_SETTINGS = Server.GetCustomSettings()
+
 function GetRandomSpawnPoint()
 	return #SPAWN_POINTS > 0 and SPAWN_POINTS[math.random(#SPAWN_POINTS)] or { location = Vector(), rotation = Rotator() }
 end
@@ -227,12 +230,12 @@ function OnPlayerCharacterDeath(chara, last_damage_taken, last_bone_damaged, dam
 	-- Outputs a message when dying
 	if (instigator) then
 		if (instigator == controller) then
-			Server.BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> committed suicide")
+			Chat.BroadcastMessage("<cyan>" .. instigator:GetName() .. "</> committed suicide")
 		else
-			Server.BroadcastChatMessage("<cyan>" .. instigator:GetName() .. "</> killed <cyan>" .. controller:GetName() .. "</>")
+			Chat.BroadcastMessage("<cyan>" .. instigator:GetName() .. "</> killed <cyan>" .. controller:GetName() .. "</>")
 		end
 	else
-		Server.BroadcastChatMessage("<cyan>" .. controller:GetName() .. "</> died")
+		Chat.BroadcastMessage("<cyan>" .. controller:GetName() .. "</> died")
 	end
 
 	-- Respawns the Character after 5 seconds, we Bind the Timer to the Character, this way if the Character gets destroyed in the meanwhile, this Timer never gets destroyed
@@ -252,6 +255,10 @@ end
 function SpawnPlayer(player, location, rotation)
 	local new_char = SpawnCharacterRandomized(location, rotation)
 
+	if (not SANDBOX_CUSTOM_SETTINGS.enable_pvp) then
+		new_char:SetTeam(1)
+	end
+
 	player:Possess(new_char)
 
 	-- Subscribe to Death event
@@ -265,7 +272,7 @@ end
 
 -- When Player Connects, spawns a new Character and gives it to him
 Player.Subscribe("Spawn", function(player)
-	Server.BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has joined the server")
+	Chat.BroadcastMessage("<cyan>" .. player:GetName() .. "</> has joined the server")
 
 	SpawnPlayer(player)
 end)
@@ -289,10 +296,12 @@ Player.Subscribe("Destroy", function(player)
 		character:Destroy()
 	end
 
-	Server.BroadcastChatMessage("<cyan>" .. player:GetName() .. "</> has left the server")
+	Chat.BroadcastMessage("<cyan>" .. player:GetName() .. "</> has left the server")
 end)
 
 Events.SubscribeRemote("ToggleNoClip", function(player)
+	if (not SANDBOX_CUSTOM_SETTINGS.enable_noclip) then return end
+
 	local character = player:GetControlledCharacter()
 	if (not character) then return end
 
@@ -357,7 +366,7 @@ Package.Subscribe("Load", function()
 		end
 	end
 
-	Server.BroadcastChatMessage("The package <cyan>Sandbox</> has been reloaded!")
+	Chat.BroadcastMessage("The package <cyan>Sandbox</> has been reloaded!")
 end)
 
 -- Exposes this to other packages

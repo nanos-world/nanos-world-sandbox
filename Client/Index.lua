@@ -38,8 +38,8 @@ end)
 
 -- When package loads, verify if LocalPlayer already exists (eg. when reloading the package), then try to get and store it's controlled character
 Package.Subscribe("Load", function()
-	Client.SetMouseEnabled(false)
-	Client.SetInputEnabled(true)
+	Input.SetMouseEnabled(false)
+	Input.SetInputEnabled(true)
 
 	local local_player = Client.GetLocalPlayer()
 

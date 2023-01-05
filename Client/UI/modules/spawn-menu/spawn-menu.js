@@ -14,11 +14,11 @@ function ItemHover(label, enter, is_spawn_item) {
 	const label_element = document.getElementById("label");
 
 	if (enter) {
-		label_element.style.opacity = 1; 
+		label_element.style.opacity = 1;
 		label_element.innerHTML = label;
 		Events.Call("HoverSound", is_spawn_item ? 1 : 0.9);
 	} else {
-		label_element.style.opacity = 0; 
+		label_element.style.opacity = 0;
 	}
 }
 
@@ -179,7 +179,7 @@ function SelectOption(element, force_no_event) {
 
 function AddOption(name, texture, texture_thumbnail) {
 	// Todo this is completely bad, it's just an workaround for now, we must make it generic
-	
+
 	const option_checkbox_item = document.createElement("span");
 	option_checkbox_item.classList.add("spawn_option_checkbox_item");
 	option_checkbox_item.style.backgroundImage = `url('${texture_thumbnail || texture}'), url("modules/spawn-menu/images/empty-set.webp")`;
@@ -258,7 +258,7 @@ function AddItem(item_id, item_name, image) {
 	spawn_item_name.classList.add("spawn_item_name");
 
 	spawn_item.dataset.item_id = item_id;
-	
+
 	spawn_item_image.style["background-image"] = `url('${image}'), url('modules/spawn-menu/images/nanosworld_empty.webp')`;
 	spawn_item_name.innerHTML = item_name;
 
@@ -274,6 +274,12 @@ function SetSpawnMenuItems(items) {
 	RefreshSpawnMenu();
 }
 
+function AddSpawnMenuItem(tab_id, item) {
+	spawn_menu_items[tab_id].push(item);
+
+	RefreshSpawnMenu();
+}
+
 Events.Subscribe("ToggleSpawnMenuVisibility", function(is_visible) {
 	const spawn_menu = document.getElementById("spawn_menu");
 
@@ -285,6 +291,7 @@ Events.Subscribe("ToggleSpawnMenuVisibility", function(is_visible) {
 
 
 Events.Subscribe("SetSpawnMenuItems", SetSpawnMenuItems);
+Events.Subscribe("AddSpawnMenuItem", AddSpawnMenuItem);
 Events.Subscribe("AddTab", AddTab);
 Events.Subscribe("AddCategory", AddCategory);
 

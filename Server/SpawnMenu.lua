@@ -32,18 +32,12 @@ Events.SubscribeRemote("SpawnItem", function(player, tab, id, spawn_location, sp
 		end
 	else
 		if (not SpawnMenu.items[tab] or not SpawnMenu.items[tab][id]) then
-			Package.Error("Failed to find item to spawn: Tab '%s'. ID '%s'.", tab, id)
+			Console.Error("Failed to find item to spawn: Tab '%s'. ID '%s'.", tab, id)
 			return
 		end
 
-		local spawn_menu_item = SpawnMenu.items[tab][id]
-
-		-- If this has a spawn function, uses it, otherwise uses the Package Call method because it may have been created by another package
-		if (spawn_menu_item.spawn_function) then
-			item = spawn_menu_item.spawn_function(spawn_location, spawn_rotation, tab, id)
-		else
-			item = Package.Call(spawn_menu_item.package_name, spawn_menu_item.package_function, spawn_location, spawn_rotation, tab, id)
-		end
+		-- Calls the spawn function
+		item = SpawnMenu.items[tab][id].spawn_function(spawn_location, spawn_rotation, tab, id)
 
 		if (character) then
 			if (item:IsA(Weapon)) then
@@ -93,10 +87,20 @@ Events.SubscribeRemote("DestroyItem", function(player, item)
 end)
 
 SpawnMenu.AddInheritedClasses = function(tab, parent_class, blacklist_class)
+	-- Iterates all existing classes
 	for _, class in pairs(parent_class.GetInheritedClasses(true)) do
-		if (not blacklist_class or (not class.IsChildOf(blacklist_class) and class ~= blacklist_class)) then
-			SpawnMenu.AddItem(tab, class.GetName(), class)
-		end
+		SpawnMenu.AddInheritedClass(tab, class, blacklist_class)
+	end
+
+	-- Subscribes for further created classes
+	parent_class.Subscribe("ClassRegister", function(class)
+		SpawnMenu.AddInheritedClass(tab, class, blacklist_class)
+	end)
+end
+
+SpawnMenu.AddInheritedClass = function(tab, class, blacklist_class)
+	if (not blacklist_class or (not class.IsChildOf(blacklist_class) and class ~= blacklist_class)) then
+		SpawnMenu.AddItem(tab, class.GetName(), class)
 	end
 end
 
@@ -113,18 +117,14 @@ end)
 -- Adds a new item to the Spawn Menu
 ---@param tab_id string				Tab of this item - it must be 'props', 'weapons', 'tools' or 'vehicles'
 ---@param id string					Unique ID used to identify this item
----@param spawn_function string		Spawn function
----@param package_name? string		Your package name which will be used to call your spawn function (used by external packages if spawn_function is not passed)
----@param package_function? table	Spawn Function name which will be called from sandbox (used by external packages if spawn_function is not passed)
-SpawnMenu.AddItem = function(tab_id, id, spawn_function, package_name, package_function)
+---@param spawn_function function	Spawn function
+SpawnMenu.AddItem = function(tab_id, id, spawn_function)
 	if (not SpawnMenu.items[tab_id]) then
-		Package.Warn("Invalid tab when trying to add a new Spawn Menu item: '%s'.", tab_id)
+		Console.Warn("Invalid tab when trying to add a new Spawn Menu item: '%s'.", tab_id)
 	end
 
 	SpawnMenu.items[tab_id][id] = {
-		spawn_function = spawn_function,
-		package_name = package_name,
-		package_function = package_function,
+		spawn_function = spawn_function
 	}
 end
 
@@ -140,10 +140,8 @@ Events.SubscribeRemote("ApplyWeaponPattern", function(player, weapon, pattern_te
 	ApplyWeaponPattern(weapon, pattern_texture)
 end)
 
--- Exported functions cannot have functions as arguments, so we get the package name and package_function name and call it the proper way
-Package.Export("AddSpawnMenuItem", function(tab, id, package_name, package_function)
-	SpawnMenu.AddItem(tab, id, nil, package_name, package_function)
-end)
+-- Exposes SpawnMenu to other packages
+Package.Export("SpawnMenu", SpawnMenu)
 
 function RequireAllLuaFilesInFolder(folder)
 	local files = Package.GetFiles(folder, ".lua")

@@ -7,11 +7,8 @@ Default Sandbox nanos world package
 
 ## Exported Functions
 
-The Sandbox game-mode exports the following functions, which can be called like:
+The Sandbox game-mode exports the following functions to the global scope:
 
-```lua
-Package.Call("sandbox", "FunctionName", param1, param2, param3...)
-```
 
 ### AddNotification (client side)
 
@@ -29,7 +26,7 @@ Example:
 
 ```lua
 -- Displays the message 'playing with friends is much more fun!' after 10 seconds, for 5 seconds
-Package.Call("sandbox", "AddNotification", "FRIENDS", "playing with friends is much more fun!", 5000, 10000)
+AddNotification("FRIENDS", "playing with friends is much more fun!", 5000, 10000)
 ```
 
 
@@ -42,11 +39,11 @@ function UpdateLocalCharacter(character)
 ```
 
 
-### AddSpawnMenuItem (client side)
+### SpawnMenu.AddItem (client side)
 
 On the Client side, we will define how the Item will be displayed in the Spawn Menu, including it's label, tab, category, image and tutorials.
 
-*Note: you must call AddSpawnMenuItem from both client and server side. Each side has it's own parameters.*
+*Note: you must call SpawnMenu.AddItem from both client and server side. Each side has it's own parameters.*
 
 ```lua
 -- Adds a new item to the Spawn Menu
@@ -55,7 +52,7 @@ On the Client side, we will define how the Item will be displayed in the Spawn M
 ---@param name string           Display name
 ---@param image string          Image path
 ---@param category_id? string   The category of this item
-function AddSpawnMenuItem(tab_id, id, name, image, category_id?)
+function SpawnMenu.AddItem(tab_id, id, name, image, category_id?)
 ```
 
 The built-in tabs are: 'props', 'weapons', 'tools', 'vehicles' or 'npcs'.
@@ -69,9 +66,7 @@ Example:
 
 ```lua
 -- Adds an Incredible Tool to spawn Menu (client side)
-Package.Call(
-    "sandbox",
-    "AddSpawnMenuItem",
+SpawnMenu.AddItem(
     "tools",
     "IncredibleTool",
     "Incredible Tool",
@@ -81,46 +76,41 @@ Package.Call(
 ```
 
 
-### AddSpawnMenuItem (server side)
+### SpawnMenu.AddItem (server side)
 
 On the Server side, we will define how the item will be spawned, here we will create the "spawn function" for this item, and tell sandbox package which function it must call to be able to spawn it.
 
-*Note: you must call AddSpawnMenuItem from both client and server side. Each side has it's own parameters.*
+*Note: you must call SpawnMenu.AddItem from both client and server side. Each side has it's own parameters.*
 
 ```lua
 -- Adds a new item to the Spawn Menu
 ---@param tab string                Tab of this item
 ---@param id string                 Unique ID used to identify this item
----@param package_name string       Your package name which will be used to call your spawn function
----@param package_function table    The exported Spawn Function name which will be called from sandbox
-function AddSpawnMenuItem(tab, id, package_name, package_function)
+---@param spawn_function function	Spawn function
+function SpawnMenu.AddItem(tab, id, spawn_function)
 ```
 
 Example:
 
 ```lua
--- Function which spawns the tool
--- The parameters location, rotation, group, tab and id will be passed automatically by the caller
-function SpawnMyIncredibleTool(location, rotation, group, tab, id)
-    local weapon = Weapon(location, rotation)
+-- Function which spawns an entity
+-- The parameters location, rotation, tab and id will be passed automatically by the caller
+function SpawnMyIncredibleEntity(location, rotation, tab, id)
+    local my_stuff = MyEntity(location, rotation)
 
-    -- ...
-    -- configure stuff
+    -- configure stuff...
 
-    return weapon
+    return my_stuff
 end
 
--- Exports the function to be called by the Sandbox package
-Package.Export("SpawnMyIncredibleTool", SpawnMyIncredibleTool)
-
 Package.Subscribe("Load", function()
-    -- Adds an Incredible Tool to spawn Menu (server side)
-    Package.Call("sandbox", "AddSpawnMenuItem", "tools", "IncredibleTool", Package.GetPath(), "SpawnMyIncredibleTool")
+    -- Adds this to spawn Menu (server side)
+   	SpawnMenu.AddItem("tools", "IncredibleEntity", SpawnMyIncredibleEntity)
 end)
 ```
 
 
-### AddSpawnMenuTab (client side)
+### SpawnMenu.AddTab (client side)
 
 Adds a new tab to the Spawn Menu
 
@@ -129,7 +119,7 @@ Adds a new tab to the Spawn Menu
 ---@param name string              Label of the tab
 ---@param image_active string      Image path when the tab is selected
 ---@param image_inactive string    Image path when the tab is not selected
-function AddSpawnMenuTab(id, name, image_active, image_inactive)
+function SpawnMenu.AddTab(id, name, image_active, image_inactive)
 ```
 
 Example:
@@ -137,9 +127,7 @@ Example:
 ```lua
 Package.Subscribe("Load", function()
     -- Adds a new tab
-    Package.Call(
-        "sandbox",
-        "AddSpawnMenuTab",
+    SpawnMenu.AddTab(
         "consumables",
         "consumables",
         "packages///my-package/food.png",
@@ -149,7 +137,7 @@ end)
 ```
 
 
-### AddSpawnMenuCategory (client side)
+### SpawnMenu.AddCategory (client side)
 
 Adds a new category to a Spawn Menu Tab
 
@@ -159,7 +147,7 @@ Adds a new category to a Spawn Menu Tab
 ---@param label string                 Label of the tab
 ---@param image_active string          Image path when the category is selected
 ---@param image_inactive string        Image path when the category is not selected
-function AddSpawnMenuCategory(tab_id, id, label, image_active, image_inactive)
+function SpawnMenu.AddCategory(tab_id, id, label, image_active, image_inactive)
 ```
 
 Example:
@@ -167,9 +155,7 @@ Example:
 ```lua
 Package.Subscribe("Load", function()
     -- Adds a new category to Props tab
-    Package.Call(
-        "sandbox",
-        "AddSpawnMenuCategory",
+    SpawnMenu.AddCategory(
         "props",
         "low-poly",
         "low poly",
@@ -178,9 +164,7 @@ Package.Subscribe("Load", function()
     )
 
     -- Adds a new category to Weapons tab
-    Package.Call(
-        "sandbox",
-        "AddSpawnMenuCategory",
+    SpawnMenu.AddCategory(
         "weapons",
         "world-war",
         "world war",
@@ -216,9 +200,8 @@ Events.BroadcastRemote("SpawnSoundAttached", actor, sound_asset, is_2D, volume, 
 
 ## Example of packages which exports Items to Spawn Menu
 
-Those Packages can be loaded together Sandbox as well!
+Those Packages can be loaded together Sandbox and the item will show up in the Spawn Menu!
 
-- https://github.com/nanos-world/nanos-world-quaternius
 - https://github.com/gtnardy/nanos-world-ts-fireworks
 
 

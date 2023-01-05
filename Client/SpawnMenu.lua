@@ -30,55 +30,55 @@ SoundInvalidAction = Sound(Vector(), "nanos-world::A_Invalid_Action", true, fals
 
 
 SpawnMenu.AddInheritedClasses = function(tab, parent_class, blacklist_class)
+	-- Iterates all existing classes
 	for _, class in pairs(parent_class.GetInheritedClasses(true)) do
-		if (not blacklist_class or (not class.IsChildOf(blacklist_class) and class ~= blacklist_class)) then
-			SpawnMenu.AddItem(tab, class.GetName(), class.name, class.image, class.category)
-		end
+		SpawnMenu.AddInheritedClass(tab, class, blacklist_class)
+	end
+
+	-- Subscribes for further created classes
+	parent_class.Subscribe("ClassRegister", function(class)
+		SpawnMenu.AddInheritedClass(tab, class, blacklist_class, true)
+	end)
+end
+
+SpawnMenu.AddInheritedClass = function(tab, class, blacklist_class, add_to_spawn_menu)
+	if (class.name and (not blacklist_class or (not class.IsChildOf(blacklist_class) and class ~= blacklist_class))) then
+		SpawnMenu.AddItem(tab, class.GetName(), class.name, class.image, class.category, add_to_spawn_menu)
 	end
 end
 
 Package.Subscribe("Load", function()
-	-- Wait 1 second so all other packages can send their Tools during Package Load event
-	Timer.SetTimeout(function()
-		-- Loads all Asset Packs
-		local asset_packs = Assets.GetAssetPacks()
-		for _, asset_pack in pairs(asset_packs) do
+	-- Loads all Asset Packs
+	local asset_packs = Assets.GetAssetPacks()
+	for _, asset_pack in pairs(asset_packs) do
 
-			-- Loads all StaticMeshes as Props
-			local props = Assets.GetStaticMeshes(asset_pack.Path)
+		-- Loads all StaticMeshes as Props
+		local props = Assets.GetStaticMeshes(asset_pack.Path)
 
-			for _, prop in pairs(props) do
-				-- TODO make global way to access categories for other Asset Packs
-				-- Get the category from a default list
-				local asset_category = DEFAULT_ASSET_PACK[prop]
+		for _, prop in pairs(props) do
+			-- TODO make global way to access categories for other Asset Packs
+			-- Get the category from a default list
+			local asset_category = DEFAULT_ASSET_PACK[prop]
 
-				SpawnMenu.AddItem(
-					"props",
-					asset_pack.Path .. "::" .. prop,
-					prop:gsub("SM_", " "):gsub("_", " "), -- Parses it to remove dirty names
-					"assets://" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg",-- Gets the Thumbnail path from conventional path "my_asset_pack/Thumbnails/"
-					asset_category or "uncategorized"
-				)
-			end
+			SpawnMenu.AddItem(
+				"props",
+				asset_pack.Path .. "::" .. prop,
+				prop:gsub("SM_", " "):gsub("_", " "), -- Parses it to remove dirty names
+				"assets://" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg",-- Gets the Thumbnail path from conventional path "my_asset_pack/Thumbnails/"
+				asset_category or "uncategorized"
+			)
 		end
+	end
 
-		SpawnMenu.AddInheritedClasses("tools", ToolGun)
-		SpawnMenu.AddInheritedClasses("npcs", NPC)
-		SpawnMenu.AddInheritedClasses("weapons", Melee)
-		SpawnMenu.AddInheritedClasses("weapons", Grenade)
-		SpawnMenu.AddInheritedClasses("weapons", Weapon, ToolGun)
-		SpawnMenu.AddInheritedClasses("vehicles", Vehicle)
+	SpawnMenu.AddInheritedClasses("tools", ToolGun)
+	SpawnMenu.AddInheritedClasses("npcs", NPC)
+	SpawnMenu.AddInheritedClasses("weapons", Melee)
+	SpawnMenu.AddInheritedClasses("entities", Prop) -- Inherited from Prop is Entity?
+	SpawnMenu.AddInheritedClasses("weapons", Grenade)
+	SpawnMenu.AddInheritedClasses("weapons", Weapon, ToolGun)
+	SpawnMenu.AddInheritedClasses("vehicles", Vehicle)
 
-		-- Inherited from Prop is Entity?
-		for _, class in ipairs(Prop.GetInheritedClasses(true)) do
-			-- Props child without property .name we consider don't wish to display on Spawn Menu
-			if (class.name) then
-				SpawnMenu.AddItem("entities", class.GetName(), class.name, class.image, class.category)
-			end
-		end
-
-		MainHUD:CallEvent("SetSpawnMenuItems", SpawnMenu.items)
-	end, 1000)
+	MainHUD:CallEvent("SetSpawnMenuItems", SpawnMenu.items)
 end)
 
 Input.Bind("SpawnMenu", InputEvent.Released, function()
@@ -86,8 +86,8 @@ Input.Bind("SpawnMenu", InputEvent.Released, function()
 
 	MainHUD:CallEvent("ToggleSpawnMenuVisibility", false)
 	SpawnMenu.is_opened = false
-	Client.SetMouseEnabled(false)
-	Client.SetChatVisibility(true)
+	Input.SetMouseEnabled(false)
+	Chat.SetVisibility(true)
 
 	PlayClickSound(0.9)
 end)
@@ -97,8 +97,8 @@ Input.Bind("SpawnMenu", InputEvent.Pressed, function()
 
 	MainHUD:CallEvent("ToggleSpawnMenuVisibility", true)
 	SpawnMenu.is_opened = true
-	Client.SetMouseEnabled(true)
-	Client.SetChatVisibility(false)
+	Input.SetMouseEnabled(true)
+	Chat.SetVisibility(false)
 	MainHUD:BringToFront()
 
 	PlayClickSound(1.1)
@@ -169,15 +169,15 @@ MainHUD:Subscribe("ClickSound", PlayClickSound)
 -- Handle for selecting an Item from the SpawnMenu
 MainHUD:Subscribe("SpawnItem", function(category, asset_id)
 	-- Gets the world spawn location to spawn the Item
-	local viewport_2D_center = Client.GetViewportSize() / 2
-	local viewport_3D = Client.DeprojectScreenToWorld(viewport_2D_center)
+	local viewport_2D_center = Viewport.GetViewportSize() / 2
+	local viewport_3D = Viewport.DeprojectScreenToWorld(viewport_2D_center)
 	local trace_max_distance = 5000
 
 	local start_location = viewport_3D.Position
 	local end_location = viewport_3D.Position + viewport_3D.Direction * trace_max_distance
 
 	-- Traces for world things
-    local trace_result = Client.TraceLineSingle(start_location, end_location, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.Water)
+    local trace_result = Trace.LineSingle(start_location, end_location, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.Water)
 
 	local spawn_location = end_location
 
@@ -226,17 +226,23 @@ end)
 ---@param name string			Display name
 ---@param image string			Image path
 ---@param category_id? string		The category of this item, each tab has it's own set of categories (Prop: 'basic', 'appliances', 'construction', 'furniture', 'funny', 'tools', 'food', 'street', 'nature' or 'uncategorized'. Weapon: 'rifles', 'smgs', 'pistols', 'shotguns', 'sniper-rifles', 'special' or 'grenades')
-SpawnMenu.AddItem = function(tab_id, id, name, image, category_id)
+SpawnMenu.AddItem = function(tab_id, id, name, image, category_id, add_to_spawn_menu)
 	if (not SpawnMenu.items[tab_id]) then
-		Package.Warn("Invalid tab when trying to add a new Spawn Menu item: '%s'.", tab_id)
+		Console.Warn("Invalid tab when trying to add a new Spawn Menu item: '%s'.", tab_id)
 	end
 
-	table.insert(SpawnMenu.items[tab_id], {
+	local item = {
 		id = id,
 		name = name,
 		image = image,
 		category = category_id
-	})
+	}
+
+	table.insert(SpawnMenu.items[tab_id], item)
+
+	if (add_to_spawn_menu) then
+		MainHUD:CallEvent("AddSpawnMenuItem", tab_id, item)
+	end
 end
 
 -- Adds a new tab to the Spawn Menu
@@ -257,16 +263,14 @@ end
 ---@param image_inactive string	Image path when tab is not selected
 SpawnMenu.AddCategory = function(tab_id, id, label, image_active, image_inactive)
 	if (not SpawnMenu.items[tab_id]) then
-		Package.Warn("Invalid tab when trying to add a new Spawn Menu category: '%s'.", tab_id)
+		Console.Warn("Invalid tab when trying to add a new Spawn Menu category: '%s'.", tab_id)
 	end
 
 	MainHUD:CallEvent("AddCategory", tab_id, id, label, image_active, image_inactive)
 end
 
--- Exposes this to other packages
-Package.Export("AddSpawnMenuItem", SpawnMenu.AddItem)
-Package.Export("AddSpawnMenuTab", SpawnMenu.AddTab)
-Package.Export("AddSpawnMenuCategory", SpawnMenu.AddCategory)
+-- Exposes SpawnMenu to other packages
+Package.Export("SpawnMenu", SpawnMenu)
 
 -- Configures Tabs
 SpawnMenu.AddTab("props", "props", "tabs/chair.webp", "tabs/chair-disabled.webp")

@@ -122,8 +122,8 @@ CURRENTLY_INTERACTING_TV = nil
 
 -- Subscribes from WebUI, to know when the PopUp has been submitted
 MainHUD:Subscribe("OnTVSetWebsite", function(submitted, text)
-	Client.SetMouseEnabled(false)
-	Client.SetInputEnabled(true)
+	Input.SetMouseEnabled(false)
+	Input.SetInputEnabled(true)
 
 	if (not submitted) then
 		CURRENTLY_INTERACTING_TV = nil
@@ -131,7 +131,7 @@ MainHUD:Subscribe("OnTVSetWebsite", function(submitted, text)
 	end
 
 	if (not CURRENTLY_INTERACTING_TV or not CURRENTLY_INTERACTING_TV:IsValid()) then
-		Package.Error("Failed to find currently interacting TV!")
+		Console.Error("Failed to find currently interacting TV!")
 		return
 	end
 
@@ -144,8 +144,8 @@ Events.SubscribeRemote("InteractTV", function(tv_prop)
 	CURRENTLY_INTERACTING_TV = tv_prop
 
 	-- Disables Input
-	Client.SetMouseEnabled(true)
-	Client.SetInputEnabled(false)
+	Input.SetMouseEnabled(true)
+	Input.SetInputEnabled(false)
 
 	-- Opens PopUp to enter the TV URL
 	MainHUD:CallEvent("ShowPopUpPrompt", "enter a YouTube URL", "OnTVSetWebsite")

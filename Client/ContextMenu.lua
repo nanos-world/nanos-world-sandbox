@@ -18,8 +18,8 @@ Input.Bind("ContextMenu", InputEvent.Pressed, function()
 	if (ContextMenu.is_opened) then
 		MainHUD:CallEvent("ToggleContextMenuVisibility", false)
 
-		Client.SetMouseEnabled(false)
-		Client.SetChatVisibility(true)
+		Input.SetMouseEnabled(false)
+		Chat.SetVisibility(true)
 
 		ContextMenu.is_opened = false
 		PlayClickSound(0.9)
@@ -31,8 +31,8 @@ Input.Bind("ContextMenu", InputEvent.Pressed, function()
 		local hours, minutes, seconds = Sky.GetTimeOfDay()
 		UpdateTimeOfDayValue(hours, minutes)
 
-		Client.SetMouseEnabled(true)
-		Client.SetChatVisibility(false)
+		Input.SetMouseEnabled(true)
+		Chat.SetVisibility(false)
 
 		MainHUD:BringToFront()
 
@@ -43,8 +43,8 @@ end)
 
 -- Called from Context Menu when pressing X
 MainHUD:Subscribe("CloseContextMenu", function()
-	Client.SetMouseEnabled(false)
-	Client.SetChatVisibility(true)
+	Input.SetMouseEnabled(false)
+	Chat.SetVisibility(true)
 	ContextMenu.is_opened = false
 
 	PlayClickSound(0.9)
