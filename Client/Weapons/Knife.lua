@@ -4,7 +4,7 @@ Knife = Melee.Inherit("Knife")
 Knife.name = "Knife"
 
 -- Tool Image
-Knife.image = "assets://NanosWorld/Thumbnails/SM_M9.jpg"
+Knife.image = "assets://nanos-world/Thumbnails/SM_M9.jpg"
 
 -- Spawn Menu Category
 Knife.category = "melee"

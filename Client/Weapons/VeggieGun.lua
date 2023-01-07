@@ -4,7 +4,7 @@ VeggieGun = Weapon.Inherit("VeggieGun")
 VeggieGun.name = "Veggie Gun"
 
 -- Tool Image
-VeggieGun.image = "assets://NanosWorld/Thumbnails/SK_FlareGun.jpg"
+VeggieGun.image = "assets://nanos-world/Thumbnails/SK_FlareGun.jpg"
 
 -- Spawn Menu Category
 VeggieGun.category = "special"

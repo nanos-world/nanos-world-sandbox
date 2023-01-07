@@ -1,7 +1,7 @@
 TV = Prop.Inherit("TV")
 
 TV.name = "TV"
-TV.image = "assets://NanosWorld/Thumbnails/SM_TV.jpg"
+TV.image = "assets://nanos-world/Thumbnails/SM_TV.jpg"
 TV.category = "uncategorized"
 
 

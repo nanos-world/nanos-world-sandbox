@@ -32,18 +32,18 @@ SoundInvalidAction = Sound(Vector(), "nanos-world::A_Invalid_Action", true, fals
 SpawnMenu.AddInheritedClasses = function(tab, parent_class, blacklist_class)
 	-- Iterates all existing classes
 	for _, class in pairs(parent_class.GetInheritedClasses(true)) do
-		SpawnMenu.AddInheritedClass(tab, class, blacklist_class)
+		SpawnMenu.AddInheritedClass(tab, class, blacklist_class, true)
 	end
 
 	-- Subscribes for further created classes
 	parent_class.Subscribe("ClassRegister", function(class)
-		SpawnMenu.AddInheritedClass(tab, class, blacklist_class, true)
+		SpawnMenu.AddInheritedClass(tab, class, blacklist_class)
 	end)
 end
 
-SpawnMenu.AddInheritedClass = function(tab, class, blacklist_class, add_to_spawn_menu)
+SpawnMenu.AddInheritedClass = function(tab, class, blacklist_class, dont_add_to_spawn_menu)
 	if (class.name and (not blacklist_class or (not class.IsChildOf(blacklist_class) and class ~= blacklist_class))) then
-		SpawnMenu.AddItem(tab, class.GetName(), class.name, class.image, class.category, add_to_spawn_menu)
+		SpawnMenu.AddItem(tab, class.GetName(), class.name, class.image, class.category, dont_add_to_spawn_menu)
 	end
 end
 
@@ -65,7 +65,8 @@ Package.Subscribe("Load", function()
 				asset_pack.Path .. "::" .. prop,
 				prop:gsub("SM_", " "):gsub("_", " "), -- Parses it to remove dirty names
 				"assets://" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg",-- Gets the Thumbnail path from conventional path "my_asset_pack/Thumbnails/"
-				asset_category or "uncategorized"
+				asset_category or "uncategorized",
+				true
 			)
 		end
 	end
@@ -226,7 +227,7 @@ end)
 ---@param name string			Display name
 ---@param image string			Image path
 ---@param category_id? string		The category of this item, each tab has it's own set of categories (Prop: 'basic', 'appliances', 'construction', 'furniture', 'funny', 'tools', 'food', 'street', 'nature' or 'uncategorized'. Weapon: 'rifles', 'smgs', 'pistols', 'shotguns', 'sniper-rifles', 'special' or 'grenades')
-SpawnMenu.AddItem = function(tab_id, id, name, image, category_id, add_to_spawn_menu)
+SpawnMenu.AddItem = function(tab_id, id, name, image, category_id, dont_add_to_spawn_menu)
 	if (not SpawnMenu.items[tab_id]) then
 		Console.Warn("Invalid tab when trying to add a new Spawn Menu item: '%s'.", tab_id)
 	end
@@ -240,7 +241,7 @@ SpawnMenu.AddItem = function(tab_id, id, name, image, category_id, add_to_spawn_
 
 	table.insert(SpawnMenu.items[tab_id], item)
 
-	if (add_to_spawn_menu) then
+	if (not dont_add_to_spawn_menu) then
 		MainHUD:CallEvent("AddSpawnMenuItem", tab_id, item)
 	end
 end
@@ -331,7 +332,3 @@ RequireAllLuaFilesInFolder("Client/Entities")
 
 -- Extra
 Package.Require("NPC.lua")
-
--- Adds the default NanosWorld packs
-Package.RequirePackage("nanos-world-weapons")
-Package.RequirePackage("nanos-world-vehicles")

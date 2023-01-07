@@ -4,7 +4,7 @@ BouncyGun = Weapon.Inherit("BouncyGun")
 BouncyGun.name = "Bouncy Gun"
 
 -- Tool Image
-BouncyGun.image = "assets://NanosWorld/Thumbnails/SK_FlareGun.jpg"
+BouncyGun.image = "assets://nanos-world/Thumbnails/SK_FlareGun.jpg"
 
 -- Spawn Menu Category
 BouncyGun.category = "special"

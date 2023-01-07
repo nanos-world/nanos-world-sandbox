@@ -4,7 +4,7 @@ Crowbar = Melee.Inherit("Crowbar")
 Crowbar.name = "Crowbar"
 
 -- Tool Image
-Crowbar.image = "assets://NanosWorld/Thumbnails/SM_Crowbar_01.jpg"
+Crowbar.image = "assets://nanos-world/Thumbnails/SM_Crowbar_01.jpg"
 
 -- Spawn Menu Category
 Crowbar.category = "melee"

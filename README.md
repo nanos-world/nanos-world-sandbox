@@ -70,7 +70,7 @@ SpawnMenu.AddItem(
     "tools",
     "IncredibleTool",
     "Incredible Tool",
-    "assets://NanosWorld/Thumbnails/SK_Blaster.jpg",
+    "assets://nanos-world/Thumbnails/SK_Blaster.jpg",
     nil
 )
 ```

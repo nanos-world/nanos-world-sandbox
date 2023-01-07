@@ -162,7 +162,3 @@ RequireAllLuaFilesInFolder("Server/Entities")
 
 -- Extra
 Package.Require("NPC.lua")
-
--- Adds the default NanosWorld packs
-Package.RequirePackage("nanos-world-weapons")
-Package.RequirePackage("nanos-world-vehicles")
