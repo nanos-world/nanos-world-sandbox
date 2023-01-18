@@ -1,5 +1,6 @@
 let current_category = "";
 let current_tab = "";
+let observer = null;
 
 let spawn_menu_items = {};
 let tabs = {};
@@ -149,6 +150,8 @@ function RefreshSpawnMenu() {
 
 		AddItem(item.id, item.name, item.image);
 	}
+
+	observer.observe();
 }
 
 function ToggleOptions(enable) {
@@ -181,8 +184,8 @@ function AddOption(name, texture, texture_thumbnail) {
 	// Todo this is completely bad, it's just an workaround for now, we must make it generic
 
 	const option_checkbox_item = document.createElement("span");
-	option_checkbox_item.classList.add("spawn_option_checkbox_item");
-	option_checkbox_item.style.backgroundImage = `url('${texture_thumbnail || texture}'), url("modules/spawn-menu/images/empty-set.webp")`;
+	option_checkbox_item.classList.add("spawn_option_checkbox_item", "lozad");
+	option_checkbox_item.setAttribute("data-background-image", `${texture_thumbnail || texture}, modules/spawn-menu/images/empty-set.webp`);
 
 	option_checkbox_item.dataset.name = name;
 	option_checkbox_item.dataset.texture = texture;
@@ -239,7 +242,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		AddOption(`Pattern #${i}`, `assets://nanos-world/Textures/Pattern/${PatternList[i]}`, `assets://nanos-world/Textures/Pattern/Thumbnails/${PatternList[i]}`);
 	}
 
+	// Selects the first option by default
 	SelectOption(document.querySelectorAll(".spawn_option_checkbox_item")[0], true);
+
+	// Loads Lozad (Lazy Loader)
+	observer = lozad();
+	observer.observe();
 });
 
 function AddItem(item_id, item_name, image) {
@@ -250,16 +258,14 @@ function AddItem(item_id, item_name, image) {
 	spawn_item.addEventListener("click", SpawnItemClick);
 	spawn_item.addEventListener("mouseenter", e => ItemHover(e.target.dataset.item_id, true, true));
 	spawn_item.addEventListener("mouseleave", e => ItemHover(false, false, true));
+	spawn_item.dataset.item_id = item_id;
 
 	const spawn_item_image = document.createElement("span");
-	spawn_item_image.classList.add("spawn_item_image");
+	spawn_item_image.classList.add("spawn_item_image", "lozad");
+	spawn_item_image.setAttribute("data-background-image", `${image}, modules/spawn-menu/images/nanosworld_empty.webp`);
 
 	const spawn_item_name = document.createElement("span");
 	spawn_item_name.classList.add("spawn_item_name");
-
-	spawn_item.dataset.item_id = item_id;
-
-	spawn_item_image.style["background-image"] = `url('${image}'), url('modules/spawn-menu/images/nanosworld_empty.webp')`;
 	spawn_item_name.innerHTML = item_name;
 
 	spawn_item.appendChild(spawn_item_image);

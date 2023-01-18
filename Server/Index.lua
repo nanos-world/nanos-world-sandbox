@@ -265,7 +265,7 @@ function SpawnPlayer(player, location, rotation)
 	new_char:Subscribe("Death", OnPlayerCharacterDeath)
 
 	-- Unsubscribe to Death event if unpossessed (in case we got possessed into another Character)
-	new_char:Subscribe("UnPossessed", function(self)
+	new_char:Subscribe("UnPossess", function(self)
 		self:Unsubscribe("Death", OnPlayerCharacterDeath)
 	end)
 end
@@ -322,7 +322,7 @@ Events.SubscribeRemote("EnterRagdoll", function(player)
 	local character = player:GetControlledCharacter()
 	if (not character) then return end
 
-	if (not character:IsMovementEnabled()) then return end
+	if (not character:IsInputEnabled()) then return end
 	if (character:GetVehicle()) then return end
 
 	character:SetRagdollMode(true)

@@ -65,7 +65,7 @@ function UpdateLocalCharacter(character)
 	UpdateHealth(character:GetHealth())
 
 	-- Sets on character an event to update the health's UI after it takes damage
-	character:Subscribe("HealthChanged", function(charac, old_health, new_health)
+	character:Subscribe("HealthChange", function(charac, old_health, new_health)
 		-- Plays a Hit Taken sound effect if took damage
 		if (new_health < old_health) then
 			SoundHitTakenFeedback:Play()
@@ -94,8 +94,8 @@ function UpdateLocalCharacter(character)
 			AddNotification("HEADSHOTS", "headshots can cause more damage", 10000, 15000)
 
 			-- Subscribes on the weapon when the Ammo changes
-			object:Subscribe("AmmoClipChanged", OnAmmoClipChanged)
-			object:Subscribe("AmmoBagChanged", OnAmmoBagChanged)
+			object:Subscribe("AmmoClipChange", OnAmmoClipChanged)
+			object:Subscribe("AmmoBagChange", OnAmmoBagChanged)
 		end
 	end)
 
@@ -104,8 +104,8 @@ function UpdateLocalCharacter(character)
 		-- Unsubscribes from events
 		if (object:IsA(Weapon) and not object:IsA(ToolGun)) then
 			UpdateAmmo(false)
-			object:Unsubscribe("AmmoClipChanged", OnAmmoClipChanged)
-			object:Unsubscribe("AmmoBagChanged", OnAmmoBagChanged)
+			object:Unsubscribe("AmmoClipChange", OnAmmoClipChanged)
+			object:Unsubscribe("AmmoBagChange", OnAmmoBagChanged)
 		end
 	end)
 end

@@ -49,7 +49,7 @@ function ResizerGun:OnLocalPlayerPickUp(character)
 	ResizerGun.weapon = self
 
 	self:Subscribe("ReleaseUse", ResizerGun.OnReleaseUse)
-	character:Subscribe("WeaponAimModeChanged", ResizerGunWeaponAimModeChanged)
+	character:Subscribe("WeaponAimModeChange", ResizerGunWeaponAimModeChanged)
 	Input.Subscribe("MouseUp", ResizerGunMouseUp)
 	Input.Subscribe("KeyPress", ResizerGunKeyPress)
 
@@ -62,7 +62,7 @@ function ResizerGun:OnLocalPlayerDrop(character)
 	ResizerGun.weapon = nil
 
 	self:Unsubscribe("ReleaseUse", ResizerGun.OnReleaseUse)
-	character:Unsubscribe("WeaponAimModeChanged", ResizerGunWeaponAimModeChanged)
+	character:Unsubscribe("WeaponAimModeChange", ResizerGunWeaponAimModeChanged)
 	Input.Unsubscribe("MouseUp", ResizerGunMouseUp)
 	Input.Unsubscribe("KeyPress", ResizerGunKeyPress)
 

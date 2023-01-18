@@ -62,7 +62,7 @@ function PhysicsGun:OnLocalPlayerPickUp(character)
 	PhysicsGun.weapon = self
 
 	self:Subscribe("ReleaseUse", PhysicsGun.OnReleaseUse)
-	character:Subscribe("WeaponAimModeChanged", PhysicsGunWeaponAimModeChanged)
+	character:Subscribe("WeaponAimModeChange", PhysicsGunWeaponAimModeChanged)
 	Input.Subscribe("KeyUp", PhysicsGunKeyUp)
 	Input.Subscribe("KeyPress", PhysicsGunKeyPress)
 	Input.Subscribe("KeyDown", PhysicsGunKeyDown)
@@ -84,7 +84,7 @@ function PhysicsGun:OnLocalPlayerDrop(character)
 	PhysicsGun.weapon = nil
 
 	self:Unsubscribe("ReleaseUse", PhysicsGun.OnReleaseUse)
-	character:Unsubscribe("WeaponAimModeChanged", PhysicsGunWeaponAimModeChanged)
+	character:Unsubscribe("WeaponAimModeChange", PhysicsGunWeaponAimModeChanged)
 	Input.Unsubscribe("KeyUp", PhysicsGunKeyUp)
 	Input.Unsubscribe("KeyPress", PhysicsGunKeyPress)
 	Input.Unsubscribe("KeyDown", PhysicsGunKeyDown)

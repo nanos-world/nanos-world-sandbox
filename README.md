@@ -5,6 +5,9 @@ Default Sandbox nanos world package
 ![image](https://user-images.githubusercontent.com/6226807/121760112-7d254d80-caff-11eb-968e-20f77aa3c7d3.png)
 
 
+Please refer to the [Official Sandbox Documentation Page](https://docs.nanos.world/docs/next/getting-started/sandbox-game-mode/spawn-menu) for more information on how to customize and make use of this package.
+
+
 ## Exported Functions
 
 The Sandbox game-mode exports the following functions to the global scope:
@@ -38,141 +41,6 @@ AddNotification("FRIENDS", "playing with friends is much more fun!", 5000, 10000
 function UpdateLocalCharacter(character)
 ```
 
-
-### SpawnMenu.AddItem (client side)
-
-On the Client side, we will define how the Item will be displayed in the Spawn Menu, including it's label, tab, category, image and tutorials.
-
-*Note: you must call SpawnMenu.AddItem from both client and server side. Each side has it's own parameters.*
-
-```lua
--- Adds a new item to the Spawn Menu
----@param tab_id string         The tab to display this item
----@param id string             Unique ID used to identify this item
----@param name string           Display name
----@param image string          Image path
----@param category_id? string   The category of this item
-function SpawnMenu.AddItem(tab_id, id, name, image, category_id?)
-```
-
-The built-in tabs are: 'props', 'weapons', 'tools', 'vehicles' or 'npcs'.
-
-The built-in categories for each tab are:
-- Tab **props**: 'basic', 'appliances', 'construction', 'furniture', 'funny', 'tools', 'food', 'street', 'nature' or 'uncategorized'
-- Tab **weapons**: 'rifles', 'smgs', 'pistols', 'shotguns', 'sniper-rifles', 'special' or 'grenades'
-
-
-Example:
-
-```lua
--- Adds an Incredible Tool to spawn Menu (client side)
-SpawnMenu.AddItem(
-    "tools",
-    "IncredibleTool",
-    "Incredible Tool",
-    "assets://nanos-world/Thumbnails/SK_Blaster.jpg",
-    nil
-)
-```
-
-
-### SpawnMenu.AddItem (server side)
-
-On the Server side, we will define how the item will be spawned, here we will create the "spawn function" for this item, and tell sandbox package which function it must call to be able to spawn it.
-
-*Note: you must call SpawnMenu.AddItem from both client and server side. Each side has it's own parameters.*
-
-```lua
--- Adds a new item to the Spawn Menu
----@param tab string                Tab of this item
----@param id string                 Unique ID used to identify this item
----@param spawn_function function	Spawn function
-function SpawnMenu.AddItem(tab, id, spawn_function)
-```
-
-Example:
-
-```lua
--- Function which spawns an entity
--- The parameters location, rotation, tab and id will be passed automatically by the caller
-function SpawnMyIncredibleEntity(location, rotation, tab, id)
-    local my_stuff = MyEntity(location, rotation)
-
-    -- configure stuff...
-
-    return my_stuff
-end
-
-Package.Subscribe("Load", function()
-    -- Adds this to spawn Menu (server side)
-   	SpawnMenu.AddItem("tools", "IncredibleEntity", SpawnMyIncredibleEntity)
-end)
-```
-
-
-### SpawnMenu.AddTab (client side)
-
-Adds a new tab to the Spawn Menu
-
-```lua
----@param id string                Unique ID used to identify the tab
----@param name string              Label of the tab
----@param image_active string      Image path when the tab is selected
----@param image_inactive string    Image path when the tab is not selected
-function SpawnMenu.AddTab(id, name, image_active, image_inactive)
-```
-
-Example:
-
-```lua
-Package.Subscribe("Load", function()
-    -- Adds a new tab
-    SpawnMenu.AddTab(
-        "consumables",
-        "consumables",
-        "packages///my-package/food.png",
-        "packages///my-package/food_inactive.png"
-    )
-end)
-```
-
-
-### SpawnMenu.AddCategory (client side)
-
-Adds a new category to a Spawn Menu Tab
-
-```lua
----@param tab_id string                Tab ID
----@param id string                    Unique ID used to identify the category
----@param label string                 Label of the tab
----@param image_active string          Image path when the category is selected
----@param image_inactive string        Image path when the category is not selected
-function SpawnMenu.AddCategory(tab_id, id, label, image_active, image_inactive)
-```
-
-Example:
-
-```lua
-Package.Subscribe("Load", function()
-    -- Adds a new category to Props tab
-    SpawnMenu.AddCategory(
-        "props",
-        "low-poly",
-        "low poly",
-        "packages///my-package/low-poly.png",
-        "packages///my-package/low-poly_inactive.png"
-    )
-
-    -- Adds a new category to Weapons tab
-    SpawnMenu.AddCategory(
-        "weapons",
-        "world-war",
-        "world war",
-        "packages///my-package/ww.png",
-        "packages///my-package/ww_inactive.png"
-    )
-end)
-```
 
 
 ## Events

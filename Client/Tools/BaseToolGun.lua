@@ -26,7 +26,7 @@ function ToolGun:__OnLocalPlayerPickUp(character)
 	end
 
 	-- Subscribes for LocalPlayer events
-	character:Subscribe("WeaponAimModeChanged", OnToolGunLocalPlayerWeaponAimModeChanged)
+	character:Subscribe("WeaponAimModeChange", OnToolGunLocalPlayerWeaponAimModeChanged)
 	self:Subscribe("Fire", ToolGun.__OnLocalPlayerFire)
 
 	-- Calls children method
@@ -40,7 +40,7 @@ function ToolGun:__OnLocalPlayerDrop(character)
 
 	-- Unsubscribes for LocalPlayer events
 	self:Unsubscribe("Fire", ToolGun.__OnLocalPlayerFire)
-	character:Unsubscribe("WeaponAimModeChanged", OnToolGunLocalPlayerWeaponAimModeChanged)
+	character:Unsubscribe("WeaponAimModeChange", OnToolGunLocalPlayerWeaponAimModeChanged)
 
 	-- Calls children method
 	self:OnLocalPlayerDrop(character)

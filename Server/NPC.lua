@@ -45,7 +45,7 @@ function NPC:OnDeath()
 end
 
 -- After entering ragdoll, after some time, get up
-function NPC:OnRagdollModeChanged(was_in_ragdoll, is_in_ragdoll)
+function NPC:OnRagdollModeChange(was_in_ragdoll, is_in_ragdoll)
 	if (not is_in_ragdoll) then return end
 
 	Timer.Bind(
@@ -58,7 +58,7 @@ end
 
 NPC.Subscribe("TakeDamage", NPC.OnTakeDamage)
 NPC.Subscribe("Death", NPC.OnDeath)
-NPC.Subscribe("RagdollModeChanged", NPC.OnRagdollModeChanged)
+NPC.Subscribe("RagdollModeChange", NPC.OnRagdollModeChange)
 
 
 
