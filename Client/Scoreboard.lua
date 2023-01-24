@@ -9,7 +9,7 @@ end)
 
 -- Updates someone scoreboard data
 function UpdatePlayerScoreboard(player)
-	MainHUD:CallEvent("UpdatePlayer", player:GetID(), true, player:GetName(), player:GetPing())
+	MainHUD:CallEvent("UpdatePlayer", player:GetID(), true, player:GetAccountIconURL(), player:GetName(), player:GetPing())
 end
 
 --  Adds someone to the scoreboard

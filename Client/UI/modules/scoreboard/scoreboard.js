@@ -13,7 +13,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					</tr>
 				</thead>
 				<tbody id="scoreboard_tbody">
-					<!-- <tr id="scoreboard_entry_id1"><td class="scoreboard_id">1</td><td class="scoreboard_name">SyedMuhammad</td><td class="scoreboard_ping">100</td></tr> -->
+					<!-- <tr id="scoreboard_entry_id1">
+						<td>1</td>
+						<td>
+							<span class="player_image"></span>
+							<span class="player_name">SyedMuhammad</span>
+						</td>
+						<td class="scoreboard_ping">100</td>
+					</tr> -->
 				</tbody>
 			</table>
 		</div>
@@ -29,7 +36,8 @@ function ToggleScoreboard(enable) {
 		scoreboard.style.display = "none";
 }
 
-function UpdatePlayer(id, active, name, ping) {
+// TODO one method to update, another to create/remove
+function UpdatePlayer(id, active, image, name, ping) {
 	const existing_scoreboard_entry = document.querySelector(`#scoreboard_entry_id${id}`);
 
 	if (active) {
@@ -43,15 +51,23 @@ function UpdatePlayer(id, active, name, ping) {
 		scoreboard_entry_tr.id = `scoreboard_entry_id${id}`;
 
 		const scoreboard_entry_td_id = document.createElement("td");
-		scoreboard_entry_td_id.className = "scoreboard_id";
 		scoreboard_entry_td_id.innerHTML = id;
 		scoreboard_entry_tr.appendChild(scoreboard_entry_td_id);
-		
-		const scoreboard_entry_td_name = document.createElement("td");
-		scoreboard_entry_td_name.className = "scoreboard_name";
-		scoreboard_entry_td_name.innerHTML = name;
-		scoreboard_entry_tr.appendChild(scoreboard_entry_td_name);
-		
+
+		const scoreboard_image = document.createElement("span");
+		scoreboard_image.className = "player_image";
+		scoreboard_image.style["background-image"] = `url('${image}'), url('./nanosworld_empty.webp')`;
+
+		const scoreboard_name = document.createElement("span");
+		scoreboard_name.className = "player_name";
+		scoreboard_name.innerHTML = name;
+
+		const scoreboard_entry_td_player = document.createElement("td");
+		scoreboard_entry_td_player.appendChild(scoreboard_image);
+		scoreboard_entry_td_player.appendChild(scoreboard_name);
+
+		scoreboard_entry_tr.appendChild(scoreboard_entry_td_player);
+
 		const scoreboard_entry_td_ping = document.createElement("td");
 		scoreboard_entry_td_ping.className = "scoreboard_ping";
 		scoreboard_entry_td_ping.innerHTML = ping;

@@ -1,5 +1,5 @@
 -- Spawns/Overrides with default NanosWorld's Sun
-Sky.Spawn()
+Sky.Spawn(true)
 
 -- Sets the same time for everyone
 local gmt_time = os.date("!*t", os.time())

@@ -166,6 +166,33 @@ function AddContextMenuItems(id, title, items) {
 				context_menu_item.append(label);
 				break;
 			}
+			case "select":
+			{
+				const select = document.createElement("select");
+				select.addEventListener("change", function(e) {
+					Events.Call("ClickSound");
+					Events.Call(item.callback_event, e.target.value);
+				});
+
+				item.options.forEach(option => {
+					const option_element = document.createElement("option");
+					option_element.value = option.id;
+					option_element.text = option.name;
+
+					if (item.selected == option.id)
+						option_element.selected = true;
+
+					select.append(option_element);
+				});
+
+				const label = document.createElement("label");
+				label.innerText = item.label;
+
+				context_menu_item.classList.add("context_menu_item_select");
+				context_menu_item.append(select);
+				context_menu_item.append(label);
+				break;
+			}
 		}
 
 		context_menu_category.append(context_menu_item);
@@ -283,7 +310,7 @@ Events.Subscribe("SetContextMenuValue", SetContextMenuValue);
 				<button id="context_menu_respawn_button">Respawn</button>
 			</div>
 		</div>
-		
+
 		<div class="context_menu_category">
 			<span class="divider">Input Range</span>
 

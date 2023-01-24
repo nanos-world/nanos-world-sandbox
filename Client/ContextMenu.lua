@@ -51,11 +51,34 @@ MainHUD:Subscribe("CloseContextMenu", function()
 end)
 
 
--- Time
-ContextMenu.AddItems("time", "time", {
+-- Sky
+ContextMenu.AddItems("sky", "sky", {
 	{ id = "time_of_day", type = "range", label = "time of day (00:00)", min = 0, max = 1440, value = 720, callback_event = "ContextMenu_SetTimeOfDay", auto_update_label = false },
 	{ id = "lock_time_of_day", type = "checkbox", label = "lock time of the day", callback_event = "ContextMenu_LockTimeOfDay" },
+	{ id = "weather", type = "select", label = "weather", selected = "PartlyCloudy", callback_event = "ContextMenu_ChangeWeather", options = {
+		{ id = 1, name = "ClearSkies" },
+		{ id = 2, name = "Cloudy" },
+		{ id = 3, name = "Foggy" },
+		{ id = 4, name = "Overcast" },
+		{ id = 5, name = "PartlyCloudy" },
+		{ id = 6, name = "Rain" },
+		{ id = 7, name = "RainLight" },
+		{ id = 8, name = "RainThunderstorm" },
+		{ id = 9, name = "SandDustCalm" },
+		{ id = 10, name = "SandDustStorm" },
+		{ id = 11, name = "Snow" },
+		{ id = 12, name = "SnowBlizzard" },
+		{ id = 13, name = "SnowLight" }
+	}},
 })
+
+MainHUD:Subscribe("ContextMenu_SetTimeOfDay", function(value)
+	local hours = math.floor(value / 60)
+	local minutes = math.fmod(value, 60)
+	Sky.SetTimeOfDay(hours, minutes)
+
+	UpdateTimeOfDayLabel(hours, minutes)
+end)
 
 MainHUD:Subscribe("ContextMenu_LockTimeOfDay", function(enabled)
 	if (enabled) then
@@ -65,12 +88,8 @@ MainHUD:Subscribe("ContextMenu_LockTimeOfDay", function(enabled)
 	end
 end)
 
-MainHUD:Subscribe("ContextMenu_SetTimeOfDay", function(value)
-	local hours = math.floor(value / 60)
-	local minutes = math.fmod(value, 60)
-	Sky.SetTimeOfDay(hours, minutes)
-
-	UpdateTimeOfDayLabel(hours, minutes)
+MainHUD:Subscribe("ContextMenu_ChangeWeather", function(value)
+	Sky.ChangeWeather(tonumber(value), 10)
 end)
 
 function UpdateTimeOfDayLabel(hours, minutes)

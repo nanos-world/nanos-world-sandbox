@@ -59,6 +59,7 @@
 #context_menu .context_menu_item_range,
 #context_menu .context_menu_item_checkbox,
 #context_menu .context_menu_item_color,
+#context_menu .context_menu_item_select,
 #context_menu .context_menu_item_select_image {
 	display: flex;
 	justify-content: space-between;
@@ -68,6 +69,7 @@
 #context_menu .context_menu_item_range input,
 #context_menu .context_menu_item_checkbox input,
 #context_menu .context_menu_item_color input,
+#context_menu .context_menu_item_select select,
 #context_menu .context_menu_item_select_image img {
 	flex-grow: 1;
 	margin-right: 10px;
@@ -78,6 +80,7 @@
 #context_menu .context_menu_item_checkbox input:hover,
 #context_menu .context_menu_item_color input:hover,
 #context_menu .context_menu_item_select_image img:hover,
+#context_menu .context_menu_item_select select:hover,
 #context_menu .context_menu_item_button button:hover {
 	opacity: 0.9;
 }
@@ -85,6 +88,7 @@
 #context_menu .context_menu_item_range label,
 #context_menu .context_menu_item_checkbox label,
 #context_menu .context_menu_item_select_image label,
+#context_menu .context_menu_item_select label,
 #context_menu .context_menu_item_color label {
 	text-align: center;
 	flex-basis: 30%;
@@ -199,4 +203,14 @@
 #context_menu .context_menu_item_color input::-webkit-color-swatch {
 	border: none;
 	border-radius: 5px;
+}
+
+#context_menu .context_menu_item_select select {
+	border: 1px solid var(--select-border);
+	border-radius: 5px;
+	padding: 0.25em 0.5em;
+	font-size: 1rem;
+	cursor: pointer;
+	line-height: 1.1;
+	background-color: #fff;
 }
