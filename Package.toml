@@ -5,7 +5,7 @@
     # contributors
     author =                "nanos™"
     # version
-    version =               "3.3.0"
+    version =               "3.3.1"
 
 # game-mode configurations
 [game_mode]
@@ -19,21 +19,21 @@
     compatibility_version = "1.27"
     # packages requirements
     packages_requirements = [
-        "default-weapons",
-        "default-vehicles",
+                            "default-weapons",
+                            "default-vehicles",
     ]
     # asset packs requirements
     assets_requirements = [
-        
+                            
     ]
     # compatible maps - maps to be highlighted when starting a new game through main menu
     compatible_maps = [
-        
+                            
     ]
 
 # game-mode custom settings configurations
-# those settings can be overriden through new game menu and through command line
-# and are accessed through Server.GetCustomSettings() method
+# those settings can be configured through new game menu, Config.toml and server command line
+# and can be accessed through Server.GetCustomSettings() method from any package
 [custom_settings]
     enable_noclip = { label = "enable noclip", type = "boolean", description = "enable players to noclip", default = true }
     enable_pvp = { label = "enable pvp", type = "boolean", description = "enable players to shoot themselves", default = true }

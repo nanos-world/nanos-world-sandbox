@@ -56,7 +56,7 @@ function UpdatePlayer(id, active, image, name, ping) {
 
 		const scoreboard_image = document.createElement("span");
 		scoreboard_image.className = "player_image";
-		scoreboard_image.style["background-image"] = `url('${image}'), url('./nanosworld_empty.webp')`;
+		scoreboard_image.style["background-image"] = `url('${image}'), url('./modules/scoreboard/nanosworld_empty.webp')`;
 
 		const scoreboard_name = document.createElement("span");
 		scoreboard_name.className = "player_name";

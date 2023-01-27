@@ -208,13 +208,11 @@ end
 
 -- Handles KeyBindings
 function PhysicsGunKeyUp(key_name)
-	if (not PhysicsGun.picking_object) then return end
-
 	if (key_name == "LeftShift") then
 		PhysicsGun.is_snapping_to_grid = false
 
 		-- Updates rotation to match
-		if (PhysicsGun.is_rotating_object) then
+		if (PhysicsGun.is_rotating_object and PhysicsGun.picking_object) then
 			PhysicsGun.picking_object_initial_rotation = PhysicsGun.picking_object:GetRotation() - Client.GetLocalPlayer():GetControlledCharacter():GetRotation()
 		end
 

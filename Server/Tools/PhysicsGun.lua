@@ -43,10 +43,6 @@ function PhysicsGun:OnPickUpObject(player, object, is_grabbing, picking_object_r
 
 		object:SetValue("IsBeingGrabbed", false, true)
 
-		-- Resets TranslateTo and RotateTo movement
-		object:TranslateTo(object:GetLocation(), 0)
-		object:RotateTo(object:GetRotation(), 0)
-
 		-- Resets particle values
 		self.beam_particle:SetValue("RelativeLocationObject", nil, true)
 		self.beam_particle:SetValue("BeamEndObject", nil, true)

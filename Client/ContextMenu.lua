@@ -55,7 +55,7 @@ end)
 ContextMenu.AddItems("sky", "sky", {
 	{ id = "time_of_day", type = "range", label = "time of day (00:00)", min = 0, max = 1440, value = 720, callback_event = "ContextMenu_SetTimeOfDay", auto_update_label = false },
 	{ id = "lock_time_of_day", type = "checkbox", label = "lock time of the day", callback_event = "ContextMenu_LockTimeOfDay" },
-	{ id = "weather", type = "select", label = "weather", selected = "PartlyCloudy", callback_event = "ContextMenu_ChangeWeather", options = {
+	{ id = "weather", type = "select", label = "weather", selected = 5, callback_event = "ContextMenu_ChangeWeather", options = {
 		{ id = 1, name = "ClearSkies" },
 		{ id = 2, name = "Cloudy" },
 		{ id = 3, name = "Foggy" },
