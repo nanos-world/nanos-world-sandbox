@@ -1,10 +1,3 @@
--- Spawns/Overrides with default NanosWorld's Sun
-Sky.Spawn(true)
-
--- Sets the same time for everyone
-local gmt_time = os.date("!*t", os.time())
-Sky.SetTimeOfDay(gmt_time.hour, gmt_time.min)
-
 -- All notifications already sent
 PERSISTENT_DATA_NOTIFICATIONS = PERSISTENT_DATA_NOTIFICATIONS or {}
 
@@ -16,6 +9,7 @@ Package.Require("Notifications.lua")
 Package.Require("ContextMenu.lua")
 Package.Require("SpawnMenu.lua")
 Package.Require("Scoreboard.lua")
+Package.Require("Sky.lua")
 
 -- Configures Keybindings Inputs
 Input.Register("NoClip", "B")

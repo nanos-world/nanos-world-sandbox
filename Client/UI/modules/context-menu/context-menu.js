@@ -211,8 +211,20 @@ function SetContextMenuLabel(id, text) {
 // Sets a Context Menu Item Value into an input
 function SetContextMenuValue(id, value) {
 	const context_menu_item = document.getElementById(`item_${id}`);
-	const input = context_menu_item.getElementsByTagName("input")[0]; // TODO we are hardcoding input here, should we have a special id?
-	input.value = value;
+
+	const input = context_menu_item.getElementsByTagName("input")[0];
+	if (input) {
+		input.value = value;
+		return;
+	}
+
+	const select = context_menu_item.getElementsByTagName("select")[0];
+	if (select) {
+		select.value = value;
+		return;
+	}
+
+	// TODO add other types
 }
 
 // Toggles Context Menu Visibility

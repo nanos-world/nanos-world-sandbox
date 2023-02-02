@@ -1,4 +1,5 @@
 Package.Require("SpawnMenu.lua")
+Package.Require("Sky.lua")
 
 -- List of Character Meshes
 CHARACTER_MESHES = {

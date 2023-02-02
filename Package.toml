@@ -5,7 +5,7 @@
     # contributors
     author =                "nanos™"
     # version
-    version =               "3.3.1"
+    version =               "3.4.0"
 
 # game-mode configurations
 [game_mode]
@@ -35,5 +35,7 @@
 # those settings can be configured through new game menu, Config.toml and server command line
 # and can be accessed through Server.GetCustomSettings() method from any package
 [custom_settings]
-    enable_noclip = { label = "enable noclip", type = "boolean", description = "enable players to noclip", default = true }
-    enable_pvp = { label = "enable pvp", type = "boolean", description = "enable players to shoot themselves", default = true }
+    enable_auto_weather = { label = "auto change weather", type = "boolean", description = "enable weather to change automatically", default = true }
+    enable_default_sky = { label = "spawn default sun & sky", type = "boolean", description = "enable overriding map lights with Ultra Dynamic Sky", default = true }
+    enable_noclip = { label = "noclip", type = "boolean", description = "enable players to noclip", default = true }
+    enable_pvp = { label = "pvp", type = "boolean", description = "enable players to shoot themselves", default = true }
