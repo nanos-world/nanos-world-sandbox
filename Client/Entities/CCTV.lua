@@ -10,7 +10,7 @@ function CCTV:OnSpawn()
 	sc:AttachTo(camera, AttachmentRule.SnapToTarget, "", 0)
 
 	self:SetMaterialFromSceneCapture(sc, 1)
-	self:SetMaterialColorParameter("Emissive", Color(10, 10, 10))
+	self:SetMaterialColorParameter("Emissive", Color(2, 2, 2))
 	self:SetMaterialScalarParameter("Roughness", 0.25)
 end
 

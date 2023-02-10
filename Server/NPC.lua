@@ -102,3 +102,47 @@ NPC_Female = NPC.Inherit("NPC_Female")
 function NPC_Female:Constructor(location, rotation)
 	NPC.Constructor(self, location or Vector(), rotation or Rotator(), "nanos-world::SK_Female")
 end
+
+
+StackOBot = CharacterSimple.Inherit("StackOBot")
+
+function StackOBot:Constructor(location, rotation)
+	self.Super:Constructor(location or Vector(), (rotation or Rotator()) + Rotator(0, math.random(0, 360), 0), "nanos-world::SK_StackOBot", "nanos-world::ABP_StackOBot")
+
+	-- Temp if for update
+	if (CharacterSimple.SetSpeedSettings) then
+		self:SetSpeedSettings(275, 150)
+	end
+
+	Timer.Bind(
+		Timer.SetInterval(function(stack_o_bot)
+			self:SetMood(math.random(0, 15))
+		end, 15000, self),
+		self
+	)
+
+	self:SetMood(math.random(0, 15))
+
+	-- TODO duplicated bad code
+	Timer.Bind(
+		-- After 5-10 seconds, move again
+		Timer.SetInterval(function(chara)
+			-- Walk 30 meters away max
+			chara:MoveRandom(3000)
+		end, math.random(5000) + 5000, self),
+		self
+	)
+
+	-- Immediately walks after spawning
+	self:MoveRandom(2000)
+end
+
+function StackOBot:SetMood(value)
+	self:SetMaterialScalarParameter("Mood", value)
+end
+
+-- Randomly walk a NPC to somwehere around within distance
+function StackOBot:MoveRandom(distance)
+	local random_location = self:GetLocation() + Vector(math.random(distance) - distance / 2, math.random(distance) - distance / 2, 0)
+	self:MoveTo(random_location, 250)
+end

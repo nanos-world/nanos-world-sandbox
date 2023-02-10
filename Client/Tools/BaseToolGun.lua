@@ -11,7 +11,7 @@ function ToolGun:__OnLocalPlayerPickUp(character)
 		local tutorials_parsed = {}
 
 		for _, tutorial_data in pairs(tool_gun_tutorials) do
-			local mapped_key = Input.GetMappedKey(tutorial_data.key)
+			local mapped_key = Input.GetMappedKeys(tutorial_data.key)[1]
 
 			-- If didn't find mapped key, then use it as Raw
 			if (mapped_key == "") then mapped_key = tutorial_data.key end

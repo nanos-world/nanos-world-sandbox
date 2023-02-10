@@ -72,7 +72,8 @@ Package.Subscribe("Load", function()
 	end
 
 	SpawnMenu.AddInheritedClasses("tools", ToolGun)
-	SpawnMenu.AddInheritedClasses("npcs", NPC)
+	SpawnMenu.AddInheritedClasses("npcs", Character)
+	SpawnMenu.AddInheritedClasses("npcs", CharacterSimple)
 	SpawnMenu.AddInheritedClasses("weapons", Melee)
 	SpawnMenu.AddInheritedClasses("entities", Prop) -- Inherited from Prop is Entity?
 	SpawnMenu.AddInheritedClasses("weapons", Grenade)
@@ -306,8 +307,8 @@ SpawnMenu.AddCategory("entities", "uncategorized", "Uncategorized", "categories/
 SpawnMenu.AddCategory("entities", "destructables", "Destructables", "categories/destructable.webp", "categories/destructable-disabled.webp")
 
 -- Defines some Spawn Menu Hints
-local spawn_menu_keybind = Input.GetMappedKey("SpawnMenu") or "not set"
-local undo_keybind = Input.GetMappedKey("Undo") or "not set"
+local spawn_menu_keybind = Input.GetMappedKeys("SpawnMenu")[1] or "not set"
+local undo_keybind = Input.GetMappedKeys("Undo")[1] or "not set"
 
 AddNotification("SPAWN_MENU", "you can press " .. spawn_menu_keybind .. " to open the Spawn Menu", 10000, 30000)
 AddNotification("SPAWN_MENU_DESTROY_ITEM", "you can press " .. undo_keybind .. " to delete your last spawned item", 10000, 90000)

@@ -106,7 +106,8 @@ end
 
 Package.Subscribe("Load", function()
 	SpawnMenu.AddInheritedClasses("tools", ToolGun)
-	SpawnMenu.AddInheritedClasses("npcs", NPC)
+	SpawnMenu.AddInheritedClasses("npcs", Character)
+	SpawnMenu.AddInheritedClasses("npcs", CharacterSimple)
 	SpawnMenu.AddInheritedClasses("weapons", Melee)
 	SpawnMenu.AddInheritedClasses("entities", Prop) -- Inherited from Prop is Entity?
 	SpawnMenu.AddInheritedClasses("weapons", Grenade)
