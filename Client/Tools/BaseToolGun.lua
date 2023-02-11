@@ -11,10 +11,8 @@ function ToolGun:__OnLocalPlayerPickUp(character)
 		local tutorials_parsed = {}
 
 		for _, tutorial_data in pairs(tool_gun_tutorials) do
-			local mapped_key = Input.GetMappedKeys(tutorial_data.key)[1]
-
-			-- If didn't find mapped key, then use it as Raw
-			if (mapped_key == "") then mapped_key = tutorial_data.key end
+			-- Get the mapped key or use it as Raw if didn't find (probably it's a raw key)
+			local mapped_key = Input.GetMappedKeys(tutorial_data.key)[1] or tutorial_data.key
 
 			-- Gets the image path
 			local key_icon = Input.GetKeyIcon(mapped_key)
