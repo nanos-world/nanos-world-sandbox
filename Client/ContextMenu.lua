@@ -77,3 +77,40 @@ MainHUD:Subscribe("ContextMenu_Respawn", function()
 	Events.CallRemote("RespawnCharacter")
 end)
 -- Common
+
+
+local Character_Models_Option_List = {}
+for i, v in ipairs(CHARACTER_MESHES) do
+	table.insert(Character_Models_Option_List, { id = i, name = v })
+end
+
+ContextMenu.AddItems("character_models", "character model", {
+	{ id = "character_model", type = "select", label = "Character Model", selected = 5, callback_event = "ContextMenu_ChangePM", options = Character_Models_Option_List},
+})
+
+function UpdatePMValue(id)
+	MainHUD:CallEvent("SetContextMenuValue", "character_model", id)
+end
+Player.Subscribe("Possess", function(ply, char)
+	if ply == Client.GetLocalPlayer() then
+		local id
+		for i, v in ipairs(CHARACTER_MESHES) do
+			if v == char:GetMesh() then
+				id = i
+				break
+			end
+		end
+		if id then
+			UpdatePMValue(id)
+		end
+	end
+end)
+
+MainHUD:Subscribe("ContextMenu_ChangePM", function(value)
+	if Client.GetLocalPlayer() then
+		--print(value)
+		if Client.GetLocalPlayer():GetControlledCharacter() then
+			Events.CallRemote("SetCharacterModel", value)
+		end
+	end
+end)

@@ -5,7 +5,7 @@
     # contributors
     author =                "nanos™"
     # version
-    version =               "3.4.2"
+    version =               "3.5.0"
 
 # game-mode configurations
 [game_mode]
@@ -16,11 +16,12 @@
     # whether to load all level entities on client - only enable it if your package needs to use level static meshes entities
     load_level_entities =   false
     # the game version (major.minor) at the time this package was created, for granting compatibility between breaking changes
-    compatibility_version = "1.35"
+    compatibility_version = "1.36"
     # packages requirements
     packages_requirements = [
                             "default-weapons",
                             "default-vehicles",
+                            "pickable-inventory",
     ]
     # asset packs requirements
     assets_requirements = [
