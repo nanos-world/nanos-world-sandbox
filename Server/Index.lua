@@ -2,6 +2,8 @@ Package.Require("Config.lua")
 Package.Require("SpawnMenu.lua")
 Package.Require("Sky.lua")
 
+Pickable_Inventory_Loaded = false
+
 -- List of Spawn Locations
 SPAWN_POINTS = Server.GetMapSpawnPoints()
 
@@ -117,6 +119,10 @@ end
 function SpawnPlayer(player, location, rotation)
 	local new_char = SpawnCharacterRandomized(location, rotation)
 
+	if Pickable_Inventory_Loaded then
+		CreateCharacterInventory(new_char, 3, true, false)
+	end
+
 	if (not SANDBOX_CUSTOM_SETTINGS.enable_pvp) then
 		new_char:SetTeam(1)
 	end
@@ -212,6 +218,21 @@ Events.SubscribeRemote("SelectCharacterMesh", function(player, mesh)
 	end
 end)
 
+
+Events.SubscribeRemote("InventorySwitchSlot", function(ply, slot)
+	if Pickable_Inventory_Loaded then
+		local char = ply:GetControlledCharacter()
+		if char then
+			local charInvID = GetCharacterInventoryID(char)
+			if charInvID then
+				if CharactersInventories[charInvID].slots_nb >= slot then
+					EquipSlot(char, slot)
+				end
+			end
+		end
+	end
+end)
+
 Package.Subscribe("Unload", function()
 	local character_locations = {}
 
@@ -240,6 +261,19 @@ Package.Subscribe("Load", function()
 			if (p.player and p.player:IsValid()) then
 				SpawnPlayer(p.player, p.location, p.rotation)
 			end
+		end
+	end
+
+	for k, v in pairs(Server.GetPackages(true)) do
+		if v == "pickable-inventory" then
+			Pickable_Inventory_Loaded = true
+			for k2, v2 in pairs(Character.GetPairs()) do
+				if v2:GetPlayer() then
+					CreateCharacterInventory(v2, 3, true, false)
+				end
+			end
+			--Console.Log("Sandbox pickable-inventory support running")
+			break
 		end
 	end
 
