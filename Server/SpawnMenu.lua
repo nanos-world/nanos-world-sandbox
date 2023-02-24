@@ -44,7 +44,11 @@ Events.SubscribeRemote("SpawnItem", function(player, tab, id, spawn_location, sp
 				-- Stores the old Aim Mode
 				local current_aiming_mode = character:GetWeaponAimMode()
 
-				AddCharacterWeapon(character, item, true)
+				-- Destroys the current picked up item
+				local current_picking_weapon = character:GetPicked()
+				if (current_picking_weapon) then current_picking_weapon:Destroy() end
+
+				character:PickUp(item)
 
 				-- If has previous Aim Mode, sets it again after some small delay
 				if (current_aiming_mode == AimMode.ADS or current_aiming_mode == AimMode.Zoomed or current_aiming_mode == AimMode.ZoomedZoom) then
@@ -59,7 +63,11 @@ Events.SubscribeRemote("SpawnItem", function(player, tab, id, spawn_location, sp
 				-- Enters the Character
 				character:EnterVehicle(item, 0)
 			elseif (item:IsA(Melee) or item:IsA(Grenade)) then
-				AddCharacterWeapon(character, item, true)
+				-- Destroys the current picked up item
+				local current_picking_weapon = character:GetPicked()
+				if (current_picking_weapon) then current_picking_weapon:Destroy() end
+
+				character:PickUp(item)
 			end
 		end
 	end

@@ -21,7 +21,6 @@
     packages_requirements = [
                             "default-weapons",
                             "default-vehicles",
-                            "pickable-inventory",
     ]
     # asset packs requirements
     assets_requirements = [

@@ -6,8 +6,6 @@ MainHUD = MainHUD or WebUI("Sandbox HUD", "file:///UI/index.html")
 
 
 Package.Require("Config.lua")
-
--- Requires the SpawnMenu
 Package.Require("Notifications.lua")
 Package.Require("ContextMenu.lua")
 Package.Require("SpawnMenu.lua")
@@ -153,54 +151,6 @@ Events.SubscribeRemote("SpawnSoundAttached", function(object, sound_asset, is_2D
 	local sound = Sound(object:GetLocation(), sound_asset, is_2D, auto_destroy ~= false, SoundType.SFX, volume or 1, pitch or 1)
 	sound:AttachTo(object, AttachmentRule.SnapToTarget, "", 0)
 end)
-
-local InventoryKeyBindings = {
-	QWERTY = {
-		["One"] = 1,
-		["Two"] = 2,
-		["Three"] = 3,
-		["Four"] = 4,
-		["Five"] = 5,
-		["Six"] = 6,
-		["Seven"] = 7,
-		["Eight"] = 8,
-		["Nine"] = 9,
-	},
-	AZERTY_FR = {
-		["Ampersand"] = 1,
-		["E_AccentAigu"] = 2,
-		-- Those keys open the console
-		--["Quote"] = 3, 
-		--["Apostrophe"] = 4,
-		["LeftParantheses"] = 3,
-		["Hyphen"] = 4,
-		["E_AccentGrave"] = 5,
-		["Underscore"] = 6,
-		["C_Cedille"] = 7,
-	}
-}
-
-Input.Subscribe("KeyPress", function(key_name, delta)
-	local ply = Client.GetLocalPlayer()
-	if ply then
-		local char = ply:GetControlledCharacter()
-		if char then
-			local slot
-			for k, v in pairs(InventoryKeyBindings) do
-				if v[key_name] then
-					slot = v[key_name]
-					break
-				end
-			end
-			if slot then
-				Events.CallRemote("InventorySwitchSlot", slot)
-			end
-		end
-	end
-end)
-
-
-
 
 
 -- Exposes this to other packages

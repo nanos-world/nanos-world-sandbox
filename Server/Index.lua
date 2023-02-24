@@ -117,8 +117,6 @@ end
 function SpawnPlayer(player, location, rotation)
 	local new_char = SpawnCharacterRandomized(location, rotation)
 
-	CreateCharacterInventory(new_char, 3, true, false)
-
 	if (not SANDBOX_CUSTOM_SETTINGS.enable_pvp) then
 		new_char:SetTeam(1)
 	end
@@ -210,18 +208,6 @@ Events.SubscribeRemote("SetCharacterModel", function(player, mesh_id)
 		char:ClearMorphTargets()
 
 		CustomizeCharacter(char, CHARACTER_MESHES[tonumber(mesh_id)])
-	end
-end)
-
-Events.SubscribeRemote("InventorySwitchSlot", function(ply, slot)
-	local char = ply:GetControlledCharacter()
-	if char then
-		local charInvID = GetCharacterInventoryID(char)
-		if charInvID then
-			if CharactersInventories[charInvID].slots_nb >= slot then
-				EquipSlot(char, slot)
-			end
-		end
 	end
 end)
 
