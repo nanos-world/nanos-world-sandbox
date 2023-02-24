@@ -109,10 +109,7 @@ StackOBot = CharacterSimple.Inherit("StackOBot")
 function StackOBot:Constructor(location, rotation)
 	self.Super:Constructor(location or Vector(), (rotation or Rotator()) + Rotator(0, math.random(0, 360), 0), "nanos-world::SK_StackOBot", "nanos-world::ABP_StackOBot")
 
-	-- Temp if for update
-	if (CharacterSimple.SetSpeedSettings) then
-		self:SetSpeedSettings(275, 150)
-	end
+	self:SetSpeedSettings(275, 150)
 
 	Timer.Bind(
 		Timer.SetInterval(function(stack_o_bot)

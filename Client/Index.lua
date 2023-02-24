@@ -134,11 +134,11 @@ end)
 
 -- VOIP UI
 Player.Subscribe("VOIP", function(player, is_talking)
-	MainHUD:CallEvent("ToggleVoice", player:GetName(), is_talking)
+	MainHUD:CallEvent("ToggleVoice", player:GetID(), is_talking, player:GetName(), player:GetAccountIconURL())
 end)
 
 Player.Subscribe("Destroy", function(player)
-	MainHUD:CallEvent("ToggleVoice", player:GetName(), false)
+	MainHUD:CallEvent("ToggleVoice", player:GetID(), false)
 	MainHUD:CallEvent("UpdatePlayer", player:GetID(), false)
 end)
 
