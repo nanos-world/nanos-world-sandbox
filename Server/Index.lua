@@ -197,17 +197,18 @@ Events.SubscribeRemote("RespawnCharacter", function(player)
 	character:SetHealth(0)
 end)
 
-Events.SubscribeRemote("SetCharacterModel", function(player, mesh_id)
-	local char = player:GetControlledCharacter()
-	if char then
-		char:SetMesh(CHARACTER_MESHES[tonumber(mesh_id)])
+Events.SubscribeRemote("SelectCharacterMesh", function(player, mesh)
+	local chararacter = player:GetControlledCharacter()
 
-		char:RemoveAllSkeletalMeshesAttached()
-		char:RemoveAllStaticMeshesAttached()
+	if (chararacter) then
+		chararacter:SetMesh(mesh)
 
-		char:ClearMorphTargets()
+		chararacter:RemoveAllSkeletalMeshesAttached()
+		chararacter:RemoveAllStaticMeshesAttached()
 
-		CustomizeCharacter(char, CHARACTER_MESHES[tonumber(mesh_id)])
+		chararacter:ClearMorphTargets()
+
+		CustomizeCharacter(chararacter, mesh)
 	end
 end)
 

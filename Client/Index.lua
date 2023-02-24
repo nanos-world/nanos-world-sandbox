@@ -11,6 +11,7 @@ Package.Require("ContextMenu.lua")
 Package.Require("SpawnMenu.lua")
 Package.Require("Scoreboard.lua")
 Package.Require("Sky.lua")
+Package.Require("CharacterCustomization.lua")
 
 -- Configures Keybindings Inputs
 Input.Register("NoClip", "B")

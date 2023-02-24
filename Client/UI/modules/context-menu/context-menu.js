@@ -131,7 +131,7 @@ function AddContextMenuItems(id, title, items) {
 			}
 			case "select_image":
 			{
-				const selected = item.options.find(element => element.id = item.selected);
+				const selected = item.options.find(element => element.id == item.selected);
 
 				const img = document.createElement("img");
 				img.src = selected.image;
