@@ -194,8 +194,8 @@ function TryPickUpObject()
 		-- Calculates the offset of the hit and the center of the object
 		PhysicsGun.picking_object_relative_location = PhysicsGun.picking_object:GetRotation():RotateVector(PhysicsGun.picking_object:GetLocation() - trace_result.Location)
 
-		-- Calculates the distance of the object and the camera
-		PhysicsGun.picking_object_distance = trace_result.Location:Distance(viewport_3D.Position)
+		-- Calculates the distance of the object and the camera, adds ArmLength to normalize Camera Views
+		PhysicsGun.picking_object_distance = trace_result.Location:Distance(viewport_3D.Position) - Client.GetLocalPlayer():GetCameraArmLength()
 
 		PhysicsGun.picking_object_initial_rotation = PhysicsGun.picking_object:GetRotation() - Client.GetLocalPlayer():GetControlledCharacter():GetRotation()
 
@@ -416,7 +416,7 @@ function PhysicsGunTick()
 
 		-- Gets the new object location using some Math, first gets the overall location: start_location + camera_direction * the distance
 		-- Then adds the offset of the object when it was grabbed, rotating it with the object rotation
-		local end_location = (start_location + camera_direction * PhysicsGun.picking_object_distance) + PhysicsGun.picking_object:GetRotation():UnrotateVector(PhysicsGun.picking_object_relative_location)
+		local end_location = (start_location + camera_direction * (PhysicsGun.picking_object_distance + Client.GetLocalPlayer():GetCameraArmLength())) + PhysicsGun.picking_object:GetRotation():UnrotateVector(PhysicsGun.picking_object_relative_location)
 
 		-- The new object rotation will be the initial rotation + the camera rotation
 		local camera_rotation = Client.GetLocalPlayer():GetCameraRotation()

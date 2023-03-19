@@ -143,3 +143,10 @@ function StackOBot:MoveRandom(distance)
 	local random_location = self:GetLocation() + Vector(math.random(distance) - distance / 2, math.random(distance) - distance / 2, 0)
 	self:MoveTo(random_location, 250)
 end
+
+-- After dying, destroys the Character after 10 seconds
+function StackOBot:OnDeath()
+	self:SetLifeSpan(10)
+end
+
+StackOBot.Subscribe("Death", StackOBot.OnDeath)
