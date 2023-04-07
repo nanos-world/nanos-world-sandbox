@@ -13,17 +13,14 @@ SpawnMenu = {
 Events.SubscribeRemote("SpawnItem", function(player, tab, id, spawn_location, spawn_rotation, selected_option)
 	local character = player:GetControlledCharacter()
 
-	if (tab == "vehicles") then
-		spawn_location = character:GetLocation() + Vector(0, 0, 50)
-		spawn_rotation = character:GetRotation()
-	elseif (tab == "tools" or tab == "weapons") then
-		spawn_location = character:GetLocation()
+        if (tab == "tools" or tab == "weapons") then
+	        spawn_location = character:GetLocation()
 	end
 
 	local item = nil
 
 	-- If spawning a Prop
-	if (tab == "props") then
+	if (tab == "props" or tab == "vehicles") then
 		item = Prop(spawn_location + Vector(0, 0, 50), Rotator(0, spawn_rotation.Yaw + 180, 0), id)
 
 		-- If this Prop is a Breakable Prop, setup it (we only configure Props from Spawn Menu to break*)
@@ -50,18 +47,10 @@ Events.SubscribeRemote("SpawnItem", function(player, tab, id, spawn_location, sp
 
 				character:PickUp(item)
 
-				-- If has previous Aim Mode, sets it again after some small delay
-				if (current_aiming_mode == AimMode.ADS or current_aiming_mode == AimMode.Zoomed or current_aiming_mode == AimMode.ZoomedZoom) then
-					character:SetWeaponAimMode(current_aiming_mode)
-				end
-
 				-- workaround
 				if (selected_option ~= "") then
 					ApplyWeaponPattern(item, selected_option)
 				end
-			elseif (tab == "vehicles") then
-				-- Enters the Character
-				character:EnterVehicle(item, 0)
 			elseif (item:IsA(Melee) or item:IsA(Grenade)) then
 				-- Destroys the current picked up item
 				local current_picking_weapon = character:GetPicked()
