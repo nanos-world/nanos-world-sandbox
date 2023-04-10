@@ -14,8 +14,7 @@ Events.SubscribeRemote("SpawnItem", function(player, tab, id, spawn_location, sp
 	local character = player:GetControlledCharacter()
 
 	if (tab == "vehicles") then
-		spawn_location = character:GetLocation() + Vector(0, 0, 50)
-		spawn_rotation = character:GetRotation()
+		spawn_rotation.Yaw = spawn_rotation.Yaw - 90
 	elseif (tab == "tools" or tab == "weapons") then
 		spawn_location = character:GetLocation()
 	end
@@ -59,9 +58,6 @@ Events.SubscribeRemote("SpawnItem", function(player, tab, id, spawn_location, sp
 				if (selected_option ~= "") then
 					ApplyWeaponPattern(item, selected_option)
 				end
-			elseif (tab == "vehicles") then
-				-- Enters the Character
-				character:EnterVehicle(item, 0)
 			elseif (item:IsA(Melee) or item:IsA(Grenade)) then
 				-- Destroys the current picked up item
 				local current_picking_weapon = character:GetPicked()

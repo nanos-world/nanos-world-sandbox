@@ -19,24 +19,20 @@ end
 
 function PhysicsGun:OnPickUpObject(player, object, is_grabbing, picking_object_relative_location, freeze)
 	if (is_grabbing) then
-		-- Forces it not being network authority distributed while someone is grabbing it
-		object:SetNetworkAuthorityAutoDistributed(false)
 
 		-- Only updates the Network Authority if this entity is network distributed
 		if (object:IsNetworkDistributed()) then
 			object:SetNetworkAuthority(player)
 		end
 
+		-- Forces it not being network authority distributed while someone is grabbing it
+		object:SetNetworkAuthorityAutoDistributed(false)
+
 		object:SetValue("IsBeingGrabbed", true, true)
 
 		-- Sets the particle values so all Clients can set the correct position of them
 		self.beam_particle:SetValue("RelativeLocationObject", picking_object_relative_location, true)
 		self.beam_particle:SetValue("BeamEndObject", object, true)
-
-		-- Spawns a sound for grabbing it
-		Events.BroadcastRemote("SpawnSound", object:GetLocation(), "nanos-world::A_VR_Grab", false, 0.25, 0.9)
-
-		self:BroadcastRemoteEvent("ToggleTargetParticles", false)
 	else
 		-- Restores auto network authority distribution of this object
 		object:SetNetworkAuthorityAutoDistributed(true)
@@ -46,11 +42,6 @@ function PhysicsGun:OnPickUpObject(player, object, is_grabbing, picking_object_r
 		-- Resets particle values
 		self.beam_particle:SetValue("RelativeLocationObject", nil, true)
 		self.beam_particle:SetValue("BeamEndObject", nil, true)
-
-		-- Spawns a sound for ungrabbing it
-		Events.BroadcastRemote("SpawnSound", object:GetLocation(), "nanos-world::A_VR_Ungrab", false, 0.25, 0.9)
-
-		self:BroadcastRemoteEvent("ToggleTargetParticles", true)
 	end
 
 	-- Disables/Enables the gravity of the object so he can 'fly' freely
@@ -63,7 +54,7 @@ function PhysicsGun:OnPickUpObject(player, object, is_grabbing, picking_object_r
 	-- Disables/Enables the character to Aim, so he can use the Mouse Wheel properly
 	player:GetControlledCharacter():SetCanAim(not is_grabbing)
 
-	Events.BroadcastRemote("PickUpObject", object, is_grabbing)
+	self:BroadcastRemoteEvent("PickUpObject", object, is_grabbing)
 end
 
 function PhysicsGun:OnToggle(player, enable)

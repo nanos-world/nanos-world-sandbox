@@ -1,7 +1,7 @@
 SandboxSky = {
 	current_weather = 5, -- PartlyCloudy
 	probability_change_weather = 0.5, -- 50% of chance
-	weather_change_check_interval = 120000, -- 2 minutes
+	weather_change_check_interval = 300000, -- 5 minutes
 	weather_transition_time_min = 20,
 	weather_transition_time_max = 40,
 }

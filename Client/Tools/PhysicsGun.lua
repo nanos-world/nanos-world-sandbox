@@ -25,6 +25,7 @@ PhysicsGun.picking_object_snapped_moved = 0
 PhysicsGun.is_rotating_object = false
 PhysicsGun.is_snapping_to_grid = false
 PhysicsGun.is_using = false
+PhysicsGun.is_picking_object_server = false
 PhysicsGun.grabbed_sound = nil
 PhysicsGun.accumulated_rotation_x = 0
 PhysicsGun.accumulated_rotation_y = 0
@@ -67,9 +68,8 @@ function PhysicsGun:OnLocalPlayerPickUp(character)
 	Input.Subscribe("KeyPress", PhysicsGunKeyPress)
 	Input.Subscribe("KeyDown", PhysicsGunKeyDown)
 	Input.Subscribe("MouseDown", PhysicsGunMouseDown)
-	Input.Subscribe("MouseUp", PhysicsGunMouseUp)
-	Input.Subscribe("MouseMoveX", PhysicsGunMouseMoveX)
-	Input.Subscribe("MouseMoveY", PhysicsGunMouseMoveY)
+	Input.Subscribe("MouseScroll", PhysicsGunMouseScroll)
+	Input.Subscribe("MouseMove", PhysicsGunMouseMove)
 
 	PhysicsGun.tick_timer = Timer.SetInterval(PhysicsGunTick, 0.033)
 
@@ -89,9 +89,8 @@ function PhysicsGun:OnLocalPlayerDrop(character)
 	Input.Unsubscribe("KeyPress", PhysicsGunKeyPress)
 	Input.Unsubscribe("KeyDown", PhysicsGunKeyDown)
 	Input.Unsubscribe("MouseDown", PhysicsGunMouseDown)
-	Input.Unsubscribe("MouseUp", PhysicsGunMouseUp)
-	Input.Unsubscribe("MouseMoveX", PhysicsGunMouseMoveX)
-	Input.Unsubscribe("MouseMoveY", PhysicsGunMouseMoveY)
+	Input.Unsubscribe("MouseScroll", PhysicsGunMouseScroll)
+	Input.Unsubscribe("MouseMove", PhysicsGunMouseMove)
 
 	Timer.ClearInterval(PhysicsGun.tick_timer)
 
@@ -125,9 +124,23 @@ function PhysicsGunWeaponAimModeChanged(character, old_state, new_state)
 	end
 end
 
-Events.SubscribeRemote("PickUpObject", function(object, is_grabbing)
+function PhysicsGun:OnPickUpObject(object, is_grabbing)
 	object:SetOutlineEnabled(is_grabbing, 2)
-end)
+	self:OnToggleTargetParticles(not is_grabbing)
+
+	-- Spawns a sound for grabbing/ungrabbing it
+	if (is_grabbing) then
+		Sound(object:GetLocation(), "nanos-world::A_VR_Grab", false, true, SoundType.SFX, 0.25, 0.9)
+	else
+		Sound(object:GetLocation(), "nanos-world::A_VR_Ungrab", false, true, SoundType.SFX, 0.25, 0.9)
+	end
+
+	if (self == PhysicsGun.weapon) then
+		PhysicsGun.is_picking_object_server = is_grabbing
+	end
+end
+
+PhysicsGun.SubscribeRemote("PickUpObject", PhysicsGun.OnPickUpObject)
 
 -- Function to handle when I'm using a Physics Gun
 function TogglePhysicsGunLocal(is_using, freeze)
@@ -152,6 +165,7 @@ function TogglePhysicsGunLocal(is_using, freeze)
 
 		PhysicsGun.is_rotating_object = false
 		PhysicsGun.is_snapping_to_grid = false
+		PhysicsGun.is_picking_object_server = false
 	end
 
 	PhysicsGun.is_using = is_using
@@ -272,63 +286,48 @@ function PhysicsGunMouseDown(key_name)
 	end
 end
 
-function PhysicsGunMouseUp(key_name, a, b)
-	-- Scrolling will or move the object to far
-	if (key_name == "MouseScrollUp") then
-		-- If mouse scroll, updates the Distance of the object from the camera
-		PhysicsGun.picking_object_distance = PhysicsGun.picking_object_distance + PhysicsGun.picking_object_distance * 0.1
-		return
-	end
+function PhysicsGunMouseScroll(mouse_x, mouse_y, delta)
+	-- If mouse scroll, updates the Distance of the object from the camera
+	PhysicsGun.picking_object_distance = PhysicsGun.picking_object_distance + PhysicsGun.picking_object_distance * 0.1 * delta
 
-	-- Scrolling will or move the object to far
-	if (key_name == "MouseScrollDown") then
-		-- If mouse scroll, updates the PhysicsGun.picking_object_distance of the object from the camera
-		PhysicsGun.picking_object_distance = PhysicsGun.picking_object_distance - PhysicsGun.picking_object_distance * 0.1
-
-		-- Cannot scroll too close
-		if (PhysicsGun.picking_object_distance < 100) then PhysicsGun.picking_object_distance = 100 end
-		return
+	-- Cannot scroll too close
+	if (delta < 0 and PhysicsGun.picking_object_distance < 100) then
+		PhysicsGun.picking_object_distance = 100
 	end
 end
 
-function PhysicsGunMouseMoveX(delta, delta_time, num_samples)
+function PhysicsGunMouseMove(delta_x, delta_y, mouse_x, mouse_y)
 	if (not PhysicsGun.picking_object) then return end
 
 	if (PhysicsGun.is_rotating_object) then
 		if (PhysicsGun.is_snapping_to_grid) then
-			PhysicsGun.accumulated_rotation_x = PhysicsGun.accumulated_rotation_x + delta * 0.005
-			if (math.abs(PhysicsGun.accumulated_rotation_x) > 1) then
-				local diff = PhysicsGun.accumulated_rotation_x > 0 and PhysicsGun.quaternion_rotate_right or PhysicsGun.quaternion_rotate_left
-				PhysicsGun.accumulated_rotation_x = 0
-				PhysicsGun.picking_object_initial_rotation = (diff * PhysicsGun.picking_object_initial_rotation:Quaternion()):Rotator()
+			-- Accumulates rotation
+			PhysicsGun.accumulated_rotation_x = PhysicsGun.accumulated_rotation_x + delta_x * 0.005
+			PhysicsGun.accumulated_rotation_y = PhysicsGun.accumulated_rotation_y - delta_y * 0.005
 
+			local has_accumulated_enough_x = math.abs(PhysicsGun.accumulated_rotation_x) > 1
+			local has_accumulated_enough_y = math.abs(PhysicsGun.accumulated_rotation_y) > 1
+
+			if (has_accumulated_enough_x or has_accumulated_enough_y) then
 				Sound(PhysicsGun.picking_object:GetLocation(), "nanos-world::A_Object_Snaps_To_Grid", false, true, SoundType.SFX, 0.05, 0.5)
+
+				if (has_accumulated_enough_x) then
+					local diff = PhysicsGun.accumulated_rotation_x > 0 and PhysicsGun.quaternion_rotate_right or PhysicsGun.quaternion_rotate_left
+					PhysicsGun.accumulated_rotation_x = 0
+					PhysicsGun.picking_object_initial_rotation = (diff * PhysicsGun.picking_object_initial_rotation:Quaternion()):Rotator()
+				end
+
+				if (has_accumulated_enough_y) then
+					local diff = PhysicsGun.accumulated_rotation_y > 0 and PhysicsGun.quaternion_rotate_front or PhysicsGun.quaternion_rotate_back
+					PhysicsGun.accumulated_rotation_y = 0
+					PhysicsGun.picking_object_initial_rotation = (diff * PhysicsGun.picking_object_initial_rotation:Quaternion()):Rotator()
+				end
 			end
 		else
-			PhysicsGun.quaternion_mouse_move_x.Z = 0.001 * delta
-			PhysicsGun.picking_object_initial_rotation = (PhysicsGun.quaternion_mouse_move_x * PhysicsGun.picking_object_initial_rotation:Quaternion()):Rotator()
-		end
+			PhysicsGun.quaternion_mouse_move_x.Z = 0.001 * delta_x
+			PhysicsGun.quaternion_mouse_move_y.Y = 0.001 * -delta_y
 
-		return false
-	end
-end
-
-function PhysicsGunMouseMoveY(delta, delta_time, num_samples)
-	if (not PhysicsGun.picking_object) then return end
-
-	if (PhysicsGun.is_rotating_object) then
-		if (PhysicsGun.is_snapping_to_grid) then
-			PhysicsGun.accumulated_rotation_y = PhysicsGun.accumulated_rotation_y + delta * 0.005
-			if (math.abs(PhysicsGun.accumulated_rotation_y) > 1) then
-				local diff = PhysicsGun.accumulated_rotation_y > 0 and PhysicsGun.quaternion_rotate_front or PhysicsGun.quaternion_rotate_back
-				PhysicsGun.accumulated_rotation_y = 0
-				PhysicsGun.picking_object_initial_rotation = (diff * PhysicsGun.picking_object_initial_rotation:Quaternion()):Rotator()
-
-				Sound(PhysicsGun.picking_object:GetLocation(), "nanos-world::A_Object_Snaps_To_Grid", false, true, SoundType.SFX, 0.05, 0.5)
-			end
-		else
-			PhysicsGun.quaternion_mouse_move_y.Y = 0.001 * delta
-			PhysicsGun.picking_object_initial_rotation = (PhysicsGun.quaternion_mouse_move_y * PhysicsGun.picking_object_initial_rotation:Quaternion()):Rotator()
+			PhysicsGun.picking_object_initial_rotation = (PhysicsGun.quaternion_mouse_move_y * PhysicsGun.quaternion_mouse_move_x * PhysicsGun.picking_object_initial_rotation:Quaternion()):Rotator()
 		end
 
 		return false
@@ -371,6 +370,7 @@ Client.Subscribe("Tick", function(delta_time)
 
 				beam_particle:SetParameterVector("BeamEnd", end_location)
 
+				-- TODO move target particle to a new Physics Gun beam particle asset
 				local target_particle = physics_gun.target_particle
 				if (target_particle and target_particle:IsValid()) then
 					target_particle:SetLocation(end_location)
@@ -398,6 +398,11 @@ function PhysicsGunTick()
 
 			-- If still not grabbed grabbed, then I'm done
 			if (PhysicsGun.picking_object == nil) then return end
+		end
+
+		-- If server didn't confirm yet, skips
+		if (not PhysicsGun.is_picking_object_server) then
+			return
 		end
 
 		-- If lost network authority somehow, stops gravitating it

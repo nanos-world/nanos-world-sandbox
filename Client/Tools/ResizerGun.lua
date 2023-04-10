@@ -50,7 +50,7 @@ function ResizerGun:OnLocalPlayerPickUp(character)
 
 	self:Subscribe("ReleaseUse", ResizerGun.OnReleaseUse)
 	character:Subscribe("WeaponAimModeChange", ResizerGunWeaponAimModeChanged)
-	Input.Subscribe("MouseUp", ResizerGunMouseUp)
+	Input.Subscribe("MouseScroll", ResizerGunMouseScroll)
 	Input.Subscribe("KeyPress", ResizerGunKeyPress)
 
 	-- Sets some notification when grabbing the Tool
@@ -63,7 +63,7 @@ function ResizerGun:OnLocalPlayerDrop(character)
 
 	self:Unsubscribe("ReleaseUse", ResizerGun.OnReleaseUse)
 	character:Unsubscribe("WeaponAimModeChange", ResizerGunWeaponAimModeChanged)
-	Input.Unsubscribe("MouseUp", ResizerGunMouseUp)
+	Input.Unsubscribe("MouseScroll", ResizerGunMouseScroll)
 	Input.Unsubscribe("KeyPress", ResizerGunKeyPress)
 
 	if (ResizerGun.resizing_object) then
@@ -81,38 +81,24 @@ function ResizerGunWeaponAimModeChanged(character, old_state, new_state)
 	end
 end
 
-function ResizerGunMouseUp(key_name)
-	if (not ResizerGun.weapon) then return end
+function ResizerGunMouseScroll(mouse_x, mouse_y, delta)
+	if (not ResizerGun.weapon or not ResizerGun.resizing_object) then return end
 
 	-- Scrolls up to increase the scale
-	if (key_name == "MouseScrollUp") then
-		if (ResizerGun.resizing_object) then
-			ResizerGun.current_scale = ResizerGun.current_scale + ResizerGun.current_scale * 0.1
+	ResizerGun.current_scale = ResizerGun.current_scale + ResizerGun.current_scale * 0.1 * delta
 
-			-- Cannot resize too big
-			if (ResizerGun.current_scale.X > 20) then
-				ResizerGun.current_scale = Vector(20)
-			end
-
-			ResizerGun.weapon:CallRemoteEvent("ResizeObject", ResizerGun.resizing_object, ResizerGun.current_scale, true)
+	-- Cannot resize too big or too small
+	if (delta > 0) then
+		if (ResizerGun.current_scale.X > 20) then
+			ResizerGun.current_scale = Vector(20)
 		end
-		return
+	elseif (delta < 0) then
+		if (ResizerGun.current_scale.X < 0.1) then
+			ResizerGun.current_scale = Vector(0.1)
+		end
 	end
 
-	-- Scrolls down to dencrease the scale
-	if (key_name == "MouseScrollDown") then
-		if (ResizerGun.resizing_object) then
-			ResizerGun.current_scale = ResizerGun.current_scale - ResizerGun.current_scale * 0.1
-
-			-- Cannot resize too small
-			if (ResizerGun.current_scale.X < 0.1) then
-				ResizerGun.current_scale = Vector(0.1)
-			end
-
-			ResizerGun.weapon:CallRemoteEvent("ResizeObject", ResizerGun.resizing_object, ResizerGun.current_scale, false)
-		end
-		return
-	end
+	ResizerGun.weapon:CallRemoteEvent("ResizeObject", ResizerGun.resizing_object, ResizerGun.current_scale, true)
 end
 
 function ResizerGunKeyPress(key_name)
