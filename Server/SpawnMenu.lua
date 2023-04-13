@@ -124,10 +124,16 @@ SpawnMenu.AddItem = function(tab_id, id, spawn_function)
 end
 
 -- Event for Spawning and Item from the SpawnMenu
-Events.SubscribeRemote("SpawnItem", SpawnMenu.SpawnItem)
+Events.SubscribeRemote("SpawnItem", function(...)
+	-- Note: we explicitly call it so other scripts can override this function
+	SpawnMenu.SpawnItem(...)
+end)
 
 -- Called by Client to destroy an spawned item
-Events.SubscribeRemote("DestroyItem", SpawnMenu.DestroyItem)
+Events.SubscribeRemote("DestroyItem", function(...)
+	-- Note: we explicitly call it so other scripts can override this function
+	SpawnMenu.DestroyItem(...)
+end)
 
 Package.Subscribe("Load", function()
 	SpawnMenu.AddInheritedClasses("tools", ToolGun)
