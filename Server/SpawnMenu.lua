@@ -22,7 +22,7 @@ SpawnMenu.SpawnItem = function(player, tab, id, spawn_location, spawn_rotation, 
 
 	if (tab == "vehicles") then
 		spawn_rotation.Yaw = spawn_rotation.Yaw - 90
-	elseif (tab == "tools" or tab == "weapons" and character) then
+	elseif (character and (tab == "tools" or tab == "weapons")) then
 		spawn_location = character:GetLocation()
 	end
 
