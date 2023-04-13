@@ -1,4 +1,5 @@
 SpawnMenu = {
+	-- List of items defined
 	items = {
 		props = {},
 		entities = {},
@@ -9,13 +10,19 @@ SpawnMenu = {
 	}
 }
 
--- Event for Spawning and Item from the SpawnMenu
-Events.SubscribeRemote("SpawnItem", function(player, tab, id, spawn_location, spawn_rotation, selected_option)
+-- Handles a Spawn Item event called by client
+---@param player Player				The player who triggered it
+---@param tab string				The tab of the item
+---@param id string					The id of the item
+---@param spawn_location Vector		The spawn location passed by the client
+---@param spawn_rotation Rotator	The spawn rotation passed by the client
+---@param selected_option string	Temp custom hack parameter to set weapon patterns
+SpawnMenu.SpawnItem = function(player, tab, id, spawn_location, spawn_rotation, selected_option)
 	local character = player:GetControlledCharacter()
 
 	if (tab == "vehicles") then
 		spawn_rotation.Yaw = spawn_rotation.Yaw - 90
-	elseif (tab == "tools" or tab == "weapons") then
+	elseif (tab == "tools" or tab == "weapons" and character) then
 		spawn_location = character:GetLocation()
 	end
 
@@ -39,7 +46,11 @@ Events.SubscribeRemote("SpawnItem", function(player, tab, id, spawn_location, sp
 		item = SpawnMenu.items[tab][id].spawn_function(spawn_location, spawn_rotation, tab, id)
 
 		if (character) then
-			if (item:IsA(Weapon)) then
+			local is_weapon = item:IsA(Weapon)
+			local is_melee = item:IsA(Melee)
+			local is_grenade = item:IsA(Grenade)
+
+			if (is_weapon or is_melee or is_grenade) then
 				-- Stores the old Aim Mode
 				local current_aiming_mode = character:GetWeaponAimMode()
 
@@ -49,38 +60,36 @@ Events.SubscribeRemote("SpawnItem", function(player, tab, id, spawn_location, sp
 
 				character:PickUp(item)
 
-				-- If has previous Aim Mode, sets it again after some small delay
-				if (current_aiming_mode == AimMode.ADS or current_aiming_mode == AimMode.Zoomed or current_aiming_mode == AimMode.ZoomedZoom) then
-					character:SetWeaponAimMode(current_aiming_mode)
-				end
+				if (is_weapon) then
+					-- If has previous Aim Mode, sets it again so the Character keeps aiming
+					if (current_aiming_mode == AimMode.ADS or current_aiming_mode == AimMode.Zoomed or current_aiming_mode == AimMode.ZoomedZoom) then
+						character:SetWeaponAimMode(current_aiming_mode)
+					end
 
-				-- workaround
-				if (selected_option ~= "") then
-					ApplyWeaponPattern(item, selected_option)
+					-- workaround
+					if (selected_option ~= "") then
+						ApplyWeaponPattern(item, selected_option)
+					end
 				end
-			elseif (item:IsA(Melee) or item:IsA(Grenade)) then
-				-- Destroys the current picked up item
-				local current_picking_weapon = character:GetPicked()
-				if (current_picking_weapon) then current_picking_weapon:Destroy() end
-
-				character:PickUp(item)
 			end
 		end
 	end
 
 	-- Calls the client to update his history
 	Events.CallRemote("SpawnedItem", player, item)
-end)
+end
 
--- Called by Client to destroy an spawned item
-Events.SubscribeRemote("DestroyItem", function(player, item)
+-- Handles a Spawn Item event called by client
+---@param player Player				The player who triggered it
+---@param item any					The item to be destroyed
+SpawnMenu.DestroyItem = function(player, item)
 	-- Spawns some sounds and particles
 	Events.BroadcastRemote("SpawnSound", item:GetLocation(), "nanos-world::A_Player_Eject", false, 0.3, 1)
 	Particle(item:GetLocation() + Vector(0, 0, 30), Rotator(), "nanos-world::P_OmnidirectionalBurst")
 
 	-- Destroy the item
 	item:Destroy()
-end)
+end
 
 SpawnMenu.AddInheritedClasses = function(tab, parent_class, blacklist_class)
 	-- Iterates all existing classes
@@ -100,17 +109,6 @@ SpawnMenu.AddInheritedClass = function(tab, class, blacklist_class)
 	end
 end
 
-Package.Subscribe("Load", function()
-	SpawnMenu.AddInheritedClasses("tools", ToolGun)
-	SpawnMenu.AddInheritedClasses("npcs", Character)
-	SpawnMenu.AddInheritedClasses("npcs", CharacterSimple)
-	SpawnMenu.AddInheritedClasses("weapons", Melee)
-	SpawnMenu.AddInheritedClasses("entities", Prop) -- Inherited from Prop is Entity?
-	SpawnMenu.AddInheritedClasses("weapons", Grenade)
-	SpawnMenu.AddInheritedClasses("weapons", Weapon, ToolGun)
-	SpawnMenu.AddInheritedClasses("vehicles", Vehicle)
-end)
-
 -- Adds a new item to the Spawn Menu
 ---@param tab_id string				Tab of this item - it must be 'props', 'weapons', 'tools' or 'vehicles'
 ---@param id string					Unique ID used to identify this item
@@ -124,6 +122,23 @@ SpawnMenu.AddItem = function(tab_id, id, spawn_function)
 		spawn_function = spawn_function
 	}
 end
+
+-- Event for Spawning and Item from the SpawnMenu
+Events.SubscribeRemote("SpawnItem", SpawnMenu.SpawnItem)
+
+-- Called by Client to destroy an spawned item
+Events.SubscribeRemote("DestroyItem", SpawnMenu.DestroyItem)
+
+Package.Subscribe("Load", function()
+	SpawnMenu.AddInheritedClasses("tools", ToolGun)
+	SpawnMenu.AddInheritedClasses("npcs", Character)
+	SpawnMenu.AddInheritedClasses("npcs", CharacterSimple)
+	SpawnMenu.AddInheritedClasses("weapons", Melee)
+	SpawnMenu.AddInheritedClasses("entities", Prop) -- Inherited from Prop is Entity?
+	SpawnMenu.AddInheritedClasses("weapons", Grenade)
+	SpawnMenu.AddInheritedClasses("weapons", Weapon, ToolGun)
+	SpawnMenu.AddInheritedClasses("vehicles", Vehicle)
+end)
 
 -- Function to apply a Texture Pattern in a Weapon (currently only work on default nanos world Weapons as their materials are prepared beforehand)
 function ApplyWeaponPattern(weapon, pattern_texture)
