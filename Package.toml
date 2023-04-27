@@ -5,7 +5,7 @@
     # contributors
     author =                "nanos™"
     # version
-    version =               "3.6.0"
+    version =               "3.6.1"
 
 # game-mode configurations
 [game_mode]
@@ -24,11 +24,11 @@
     ]
     # asset packs requirements
     assets_requirements = [
-                            
+
     ]
     # compatible maps - maps to be highlighted when starting a new game through main menu
     compatible_maps = [
-                            
+
     ]
 
 # game-mode custom settings configurations

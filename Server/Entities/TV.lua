@@ -19,12 +19,12 @@ function TV:Constructor(location, rotation)
 
 	cable_01:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, 10000, 0, true, 10000, 100)
 	cable_01:SetRenderingSettings(2, 4, 1)
-	cable_01:SetMaterial("nanos-world::M_NanosMasked")
+	cable_01:SetMaterial("nanos-world::M_Default_Masked_Lit")
 	cable_01:SetMaterialColorParameter("Tint", Color.BLACK)
 
 	cable_02:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, 10000, 0, true, 10000, 100)
 	cable_02:SetRenderingSettings(2, 4, 1)
-	cable_02:SetMaterial("nanos-world::M_NanosMasked")
+	cable_02:SetMaterial("nanos-world::M_Default_Masked_Lit")
 	cable_02:SetMaterialColorParameter("Tint", Color.BLACK)
 
 	cable_01:AttachStartTo(self, Vector(0, 0, 15))
@@ -40,6 +40,11 @@ end
 
 -- Subscribes to sync TV website with other players
 function TV:SetWebsite(player, url)
+	if (url == "") then
+		self:SetValue("Website", "", true)
+		return
+	end
+
 	-- Parse Link
 	local parsed_url = GetYouTubeVideoIDFromURL(url)
 	if (not parsed_url) then

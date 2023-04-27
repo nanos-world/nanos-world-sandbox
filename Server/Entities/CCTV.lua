@@ -12,7 +12,7 @@ function CCTV:Constructor(location, rotation)
 	self.cable:AttachStartTo(self.camera, Vector(-85, 0, 0))
 	self.cable:AttachEndTo(self, Vector(0, 0, 10))
 	self.cable:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, 10000, 0, true, 10000, 100)
-	self.cable:SetMaterial("nanos-world::M_NanosMasked")
+	self.cable:SetMaterial("nanos-world::M_Default_Masked_Lit")
 	self.cable:SetMaterialColorParameter("Tint", Color.BLACK)
 	self.cable:SetRenderingSettings(5, 4, 1)
 

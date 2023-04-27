@@ -36,7 +36,11 @@ function TV:SetWebsite(url)
 
 	-- If so, just reloads the page
 	if (website_webui_value and website_webui_value:IsValid()) then
-		if (not url) then
+		if (url == "") then
+			website_webui_value:Destroy()
+			self:ResetMaterial()
+			self:Reset()
+		elseif (not url) then
 			website_webui_value:Destroy()
 			self:SetNoSignal()
 		else
@@ -46,21 +50,25 @@ function TV:SetWebsite(url)
 		return
 	end
 
-	if (not url) then
+	if (url == "") then
+		self:ResetMaterial()
+		self:Reset()
+		return
+	elseif (not url) then
 		self:SetNoSignal()
 		return
 	end
 
 	-- Spawns the WebUI
-	local webui = WebUI("TV", url, false, false, false, 1120, 630)
+	local webui = WebUI("TV", url, WidgetVisibility.Hidden, false, false, 1120, 630)
 
 	-- Spawns the Sound from the WebUI and attaches to the TV prop
 	local soundbox_01 = self:GetValue("SoundBox_01")
-	local sound_01 = webui:SpawnSound(self:GetLocation(), false, 10, 100, 3600, AttenuationFunction.NaturalSound)
+	local sound_01 = webui:SpawnSound(self:GetLocation(), false, 1, 100, 3600, AttenuationFunction.NaturalSound)
 	sound_01:AttachTo(soundbox_01, AttachmentRule.SnapToTarget, "", 0)
 
 	local soundbox_02 = self:GetValue("SoundBox_02")
-	local sound_02 = webui:SpawnSound(self:GetLocation(), false, 10, 100, 3600, AttenuationFunction.NaturalSound)
+	local sound_02 = webui:SpawnSound(self:GetLocation(), false, 1, 100, 3600, AttenuationFunction.NaturalSound)
 	sound_02:AttachTo(soundbox_02, AttachmentRule.SnapToTarget, "", 0)
 
 	-- Sets the new WebUI as the Material
@@ -70,12 +78,7 @@ function TV:SetWebsite(url)
 	self:SetValue("MaterialWebUI", webui)
 end
 
--- Sets the webui URL
-function TV:SetWebUIMaterial(webui)
-	self:SetMaterialFromWebUI(webui, 1)
-	self:SetMaterialColorParameter("Emissive", Color(0.3))
-	self:SetMaterialScalarParameter("Roughness", 0.1)
-
+function TV:Reset()
 	local existing_white_noise_01 = self:GetValue("WhiteNoise_01")
 	if (existing_white_noise_01 and existing_white_noise_01:IsValid()) then
 		existing_white_noise_01:Destroy()
@@ -85,6 +88,15 @@ function TV:SetWebUIMaterial(webui)
 	if (existing_white_noise_02 and existing_white_noise_02:IsValid()) then
 		existing_white_noise_02:Destroy()
 	end
+end
+
+-- Sets the webui URL
+function TV:SetWebUIMaterial(webui)
+	self:SetMaterialFromWebUI(webui, 1)
+	self:SetMaterialColorParameter("Emissive", Color(0.3))
+	self:SetMaterialScalarParameter("Roughness", 0.1)
+
+	self:Reset()
 end
 
 -- Sets a no-signal effect on the TV
