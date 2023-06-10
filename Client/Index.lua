@@ -14,12 +14,12 @@ Package.Require("Sky.lua")
 Package.Require("CharacterCustomization.lua")
 
 -- Configures Keybindings Inputs
-Input.Register("NoClip", "B")
-Input.Register("Scoreboard", "Tab")
-Input.Register("Ragdoll", "J")
-Input.Register("SpawnMenu", "Q")
-Input.Register("ContextMenu", "C")
-Input.Register("Undo", "X")
+Input.Register("NoClip", "B", "Toggles the No Clip mode")
+Input.Register("Scoreboard", "Tab", "Toggles the Scoreboard")
+Input.Register("Ragdoll", "J", "Enters Ragdoll Mode")
+Input.Register("SpawnMenu", "Q", "Toggles the Spawn Menu")
+Input.Register("ContextMenu", "C", "Toggles the Context Menu")
+Input.Register("Undo", "X", "Destroy last spawned Item")
 
 -- Hit Taken Feedback Sound Cached
 SoundHitTakenFeedback = Sound(Vector(), "nanos-world::A_HitTaken_Feedback", true, false, SoundType.SFX, 1, 1, 400, 3600, 0, false, 0, false)

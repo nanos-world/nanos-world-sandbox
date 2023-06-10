@@ -56,16 +56,12 @@ Package.Subscribe("Load", function()
 		local props = Assets.GetStaticMeshes(asset_pack.Path)
 
 		for _, prop in pairs(props) do
-			-- TODO make global way to access categories for other Asset Packs
-			-- Get the category from a default list
-			local asset_category = DEFAULT_ASSET_PACK[prop]
-
 			SpawnMenu.AddItem(
 				"props",
-				asset_pack.Path .. "::" .. prop,
-				prop:gsub("SM_", " "):gsub("_", " "), -- Parses it to remove dirty names
-				"assets://" .. asset_pack.Path .. "/Thumbnails/" .. prop .. ".jpg",-- Gets the Thumbnail path from conventional path "my_asset_pack/Thumbnails/"
-				asset_category or "uncategorized",
+				asset_pack.Path .. "::" .. prop.key,
+				prop.key:gsub("SM_", " "):gsub("_", " "), -- Parses it to remove dirty names
+				"assets://" .. asset_pack.Path .. "/" .. (prop.thumbnail or ("Thumbnails/" .. prop.key .. ".jpg")), -- Gets the Thumbnail path from conventional path "my-asset-pack/Thumbnails/"
+				prop.category or "uncategorized",
 				true
 			)
 		end

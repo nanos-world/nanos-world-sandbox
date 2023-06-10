@@ -7,6 +7,9 @@ ContextMenu = {
 	update_functions = {}
 }
 
+-- Exposes ContextMenu to other packages
+Package.Export("ContextMenu", ContextMenu)
+
 ContextMenu.AddItems = function(id, title, items)
 	MainHUD:CallEvent("AddContextMenuItems", id, title, items)
 end

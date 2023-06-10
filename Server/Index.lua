@@ -60,7 +60,7 @@ function CustomizeCharacter(character, mesh)
 		character:AddStaticMeshAttached("eye_right", "nanos-world::SM_Eye", "eye_right")
 
 		-- Those parameters are specific to humanoid meshes (were added in their materials)
-		character:SetMaterialColorParameter("HairTint", HAIR_TINTS[math.random(#HAIR_TINTS)])
+		character:SetMaterialColorParameter("HairTint", HAIR_TINTS[math.random(#HAIR_TINTS)], -1, "hair")
 		character:SetMaterialColorParameter("Tint", HUMAN_SKIN_TONES[math.random(#HUMAN_SKIN_TONES)])
 
 		character:SetMaterialScalarParameter("Muscular", math.random(100) / 100)
