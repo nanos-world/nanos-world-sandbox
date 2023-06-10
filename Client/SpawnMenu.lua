@@ -1,6 +1,3 @@
--- Loads the Default Asset Pack list (categorized)
-Package.Require("DefaultAssets.lua")
-
 -- Spawn Menu Data
 SpawnMenu = SpawnMenu or {
 	-- Whether the menu is opened
