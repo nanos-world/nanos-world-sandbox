@@ -155,6 +155,12 @@ function ApplyWeaponPattern(weapon, pattern_texture)
 end
 
 Events.SubscribeRemote("ApplyWeaponPattern", function(player, weapon, pattern_texture)
+	local char = player:GetControlledCharacter()
+	if not char then return end
+
+	local picked = char:GetPicked()
+	if not picked or (picked ~= weapon) then return end
+
 	ApplyWeaponPattern(weapon, pattern_texture)
 end)
 
