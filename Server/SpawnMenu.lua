@@ -143,7 +143,8 @@ Package.Subscribe("Load", function()
 	SpawnMenu.AddInheritedClasses("entities", Prop) -- Inherited from Prop is Entity?
 	SpawnMenu.AddInheritedClasses("weapons", Grenade)
 	SpawnMenu.AddInheritedClasses("weapons", Weapon, ToolGun)
-	SpawnMenu.AddInheritedClasses("vehicles", Vehicle)
+	SpawnMenu.AddInheritedClasses("vehicles", VehicleWheeled)
+	SpawnMenu.AddInheritedClasses("vehicles", VehicleWater)
 end)
 
 -- Function to apply a Texture Pattern in a Weapon (currently only work on default nanos world Weapons as their materials are prepared beforehand)
