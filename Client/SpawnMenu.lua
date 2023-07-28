@@ -71,8 +71,8 @@ Package.Subscribe("Load", function()
 	SpawnMenu.AddInheritedClasses("entities", Prop) -- Inherited from Prop is Entity?
 	SpawnMenu.AddInheritedClasses("weapons", Grenade)
 	SpawnMenu.AddInheritedClasses("weapons", Weapon, ToolGun)
-	SpawnMenu.AddInheritedClasses("vehicles", Vehicle)
-
+	SpawnMenu.AddInheritedClasses("vehicles", VehicleWheeled)
+	SpawnMenu.AddInheritedClasses("vehicles", VehicleWater)
 	MainHUD:CallEvent("SetSpawnMenuItems", SpawnMenu.items)
 end)
 
