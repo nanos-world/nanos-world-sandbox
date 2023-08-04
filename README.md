@@ -5,7 +5,7 @@ Default Sandbox nanos world package
 ![image](https://user-images.githubusercontent.com/6226807/121760112-7d254d80-caff-11eb-968e-20f77aa3c7d3.png)
 
 
-Please refer to the [Official Sandbox Documentation Page](https://docs.nanos.world/docs/next/getting-started/sandbox-game-mode/spawn-menu) for more information on how to customize and make use of this package.
+Please refer to the [Official Sandbox Documentation Page](https://docs.nanos.world/docs/next/explore/sandbox-game-mode/spawn-menu) for more information on how to customize and make use of this package.
 
 
 ## Exported Functions
