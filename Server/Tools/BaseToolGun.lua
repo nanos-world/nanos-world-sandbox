@@ -19,7 +19,6 @@ function ToolGun:Constructor(location, rotation, color)
 	self:SetCrosshairMaterial("nanos-world::MI_Crosshair_Dot")
 	self:SetUsageSettings(false, false)
 
-	self:SetValue("Color", color, true)
 	self:SetMaterialColorParameter("Emissive", color * 100)
 end
 
