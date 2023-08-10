@@ -21,7 +21,6 @@ PhysicsGun.picking_object = nil
 PhysicsGun.picking_object_relative_location = Vector()
 PhysicsGun.picking_object_distance = 0
 PhysicsGun.picking_object_initial_rotation = Rotator()
-PhysicsGun.picking_object_snapped_moved = 0
 PhysicsGun.is_rotating_object = false
 PhysicsGun.is_snapping_to_grid = false
 PhysicsGun.is_using = false
