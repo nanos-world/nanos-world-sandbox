@@ -315,7 +315,7 @@ function RequireAllLuaFilesInFolder(folder)
 end
 
 -- Requires all the Tools
-Package.Require("Tools/BaseToolGun.lua")
+Package.Require("BaseToolGun.lua")
 RequireAllLuaFilesInFolder("Client/Tools")
 
 -- Weapons
