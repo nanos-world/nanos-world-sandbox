@@ -29,19 +29,31 @@ function PhysicsGun:OnPickUpObject(player, object, is_grabbing, picking_object_r
 		object:SetNetworkAuthorityAutoDistributed(false)
 
 		object:SetValue("IsBeingGrabbed", true, true)
+		object:SetValue("PlayerGrabbing", player)
+		player:SetValue("ObjectGrabbing", object)
 
 		-- Sets the particle values so all Clients can set the correct position of them
 		self.beam_particle:SetValue("RelativeLocationObject", picking_object_relative_location, true)
 		self.beam_particle:SetValue("BeamEndObject", object, true)
+
+		-- Subscribe to Destroy event, so we can clean up
+		object:Subscribe("Destroy", PhysicsGun.OnObjectDestroyed)
+		player:Subscribe("Destroy", PhysicsGun.OnPlayerDestroyed)
 	else
 		-- Restores auto network authority distribution of this object
 		object:SetNetworkAuthorityAutoDistributed(true)
 
 		object:SetValue("IsBeingGrabbed", false, true)
+		object:SetValue("PlayerGrabbing", nil)
+		player:SetValue("ObjectGrabbing", nil)
 
 		-- Resets particle values
 		self.beam_particle:SetValue("RelativeLocationObject", nil, true)
 		self.beam_particle:SetValue("BeamEndObject", nil, true)
+
+		-- Unsubscribe to Destroy events
+		object:Unsubscribe("Destroy", PhysicsGun.OnObjectDestroyed)
+		player:Unsubscribe("Destroy", PhysicsGun.OnPlayerDestroyed)
 	end
 
 	-- Disables/Enables the gravity of the object so he can 'fly' freely
@@ -71,6 +83,25 @@ end
 function PhysicsGun:StopParticles()
 	self.beam_particle:Deactivate()
 	self:BroadcastRemoteEvent("ToggleTargetParticles", false)
+end
+
+-- Restores Player values if Object is destroyed
+function PhysicsGun.OnObjectDestroyed(object)
+	local player_grabbing = object:GetValue("PlayerGrabbing")
+	if (player_grabbing and player_grabbing:IsValid()) then
+		player_grabbing:GetControlledCharacter():SetCanAim(true)
+		player_grabbing:Unsubscribe("Destroy", PhysicsGun.OnPlayerDestroyed)
+	end
+end
+
+-- Restores Object values if Player is destroyed
+function PhysicsGun.OnPlayerDestroyed(player)
+	local object_grabbing = player:GetValue("ObjectGrabbing")
+	if (object_grabbing and object_grabbing:IsValid()) then
+		object_grabbing:SetNetworkAuthorityAutoDistributed(true)
+		object_grabbing:SetGravityEnabled(true)
+		object_grabbing:Unsubscribe("Destroy", PhysicsGun.OnObjectDestroyed)
+	end
 end
 
 -- TODO this broke if using 'PickUp' name

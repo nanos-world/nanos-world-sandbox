@@ -45,7 +45,7 @@ Events.SubscribeRemote("MakeObjectUseless", function(entity, website)
 	end
 
 	-- Spawns the WebUI
-	local website_webui = WebUI("", website, false, false, false, 500, 500)
+	local website_webui = WebUI("useless-object", website, WidgetVisibility.Hidden, false, false, 500, 500)
 
 	-- Sets the new WebUI as the Material
 	entity:SetMaterialFromWebUI(website_webui)

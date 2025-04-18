@@ -200,7 +200,7 @@ function TryPickUpObject()
 		-- Sets the new picked up object
 		PhysicsGun.picking_object = trace_result.Entity
 
-		-- Spawns a 'graviting' sound attached to the gravited object
+		-- Spawns a 'gravitating' sound attached to the gravitated object
 		PhysicsGun.grabbed_sound = Sound(Vector(), "nanos-world::A_VR_Object_Grabbed_Loop", false, false, SoundType.SFX, 0.25)
 		PhysicsGun.grabbed_sound:AttachTo(PhysicsGun.picking_object, AttachmentRule.SnapToTarget, "", 0)
 
@@ -339,7 +339,7 @@ Client.Subscribe("Tick", function(delta_time)
 	for k, physics_gun in pairs(PhysicsGun.GetAll()) do
 		local beam_particle = physics_gun.beam_particle
 		if (beam_particle and beam_particle:IsValid()) then
-			-- Gets the graviting object
+			-- Gets the gravitating object
 			local beam_end_object = beam_particle:GetValue("BeamEndObject")
 
 			-- If there is an object being gravitating
@@ -353,7 +353,7 @@ Client.Subscribe("Tick", function(delta_time)
 			else
 				-- If there is no object being gravitated, then points the BeamEnd to very far
 				-- Gets where the particle is pointing (as it is attached to the weapon, it will point where the weapon is pointing as well)
-				-- And traces in the front of it, to hit and stopa t any wall if existed
+				-- And traces in the front of it, to hit and stop at any wall if existed
 				local direction = beam_particle:GetRotation():GetForwardVector()
 				local start_location = beam_particle:GetLocation()
 

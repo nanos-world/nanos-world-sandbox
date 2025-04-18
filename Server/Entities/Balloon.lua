@@ -58,12 +58,6 @@ function Balloon:OnTakeDamage(damage, bone_name, damage_type, hit_from_direction
 	self:Destroy()
 end
 
-function Balloon:OnDestroy()
-	Events.BroadcastRemote("SpawnSound", self:GetLocation(), "nanos-world::A_Balloon_Pop", false, 1, 1)
-	Particle(self:GetLocation() + Vector(0, 0, 30), Rotator(), "nanos-world::P_OmnidirectionalBurst"):SetParameterColor("Color", self:GetValue("Color"))
-end
-
-Balloon.Subscribe("Destroy", Balloon.OnDestroy)
 Balloon.Subscribe("TakeDamage", Balloon.OnTakeDamage)
 
 

@@ -28,7 +28,7 @@ function LightGun:OnLocalPlayerFire(shooter)
 		local distance_trace_object = Vector()
 		if (trace_result.Entity) then
 			-- If hit an entity, then calculates the offset distance from the Hit and the Object
-			distance_trace_object = trace_result.Entity:GetLocation() - trace_result.Location
+			distance_trace_object = (trace_result.Entity:GetLocation() - trace_result.Location) / trace_result.Entity:GetScale()
 		end
 
 		-- Calls remote to spawn the Light

@@ -83,7 +83,7 @@ function OnToolGunLocalPlayerWeaponAimModeChanged(character, old_state, new_stat
 	end
 end
 
--- Auxiliar for Tracing for world object
+-- Aux for Tracing for world object
 function TraceFor(trace_max_distance, collision_channel)
 	local viewport_2D_center = Viewport.GetViewportSize() / 2
 	local viewport_3D = Viewport.DeprojectScreenToWorld(viewport_2D_center)

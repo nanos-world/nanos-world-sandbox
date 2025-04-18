@@ -25,11 +25,10 @@ Input.Register("Undo", "X", "Destroy last spawned Item")
 SoundHitTakenFeedback = Sound(Vector(), "nanos-world::A_HitTaken_Feedback", true, false, SoundType.SFX, 1, 1, 400, 3600, 0, false, 0, false)
 
 
--- When LocalPlayer spawns, sets an event on it to trigger when we possesses a new character, to store the local controlled character locally. This event is only called once, see Package.Subscribe("Load") to load it when reloading a package
+-- When LocalPlayer spawns, sets an event on it to trigger when we possesses a new character, to store the local controlled character locally.
+-- This event is only called once, see Package.Subscribe("Load") to load it when reloading a package
 Client.Subscribe("SpawnLocalPlayer", function(local_player)
-	local_player:Subscribe("Possess", function(player, character)
-		UpdateLocalCharacter(character)
-	end)
+	SetupLocalPlayer(local_player)
 end)
 
 -- When package loads, verify if LocalPlayer already exists (eg. when reloading the package), then try to get and store it's controlled character
@@ -41,10 +40,7 @@ Package.Subscribe("Load", function()
 
 	if (local_player ~= nil) then
 		UpdateLocalCharacter(local_player:GetControlledCharacter())
-
-		local_player:Subscribe("Possess", function(player, character)
-			UpdateLocalCharacter(character)
-		end)
+		SetupLocalPlayer(local_player)
 	end
 
 	-- Gets all notifications already sent
@@ -57,19 +53,14 @@ function UpdateLocalCharacter(character)
 	-- Verifies if character is not nil (eg. when GetControllerCharacter() doesn't return a character)
 	if (character == nil) then return end
 
-	-- Updates the UI with the current character's health
-	UpdateHealth(character:GetHealth())
-
 	-- Sets on character an event to update the health's UI after it takes damage
-	character:Subscribe("HealthChange", function(charac, old_health, new_health)
-		-- Plays a Hit Taken sound effect if took damage
-		if (new_health < old_health) then
-			SoundHitTakenFeedback:Play()
-		end
+	character:Subscribe("HealthChange", OnCharacterHealthChange)
 
-		-- Immediatelly Updates the Health UI
-		UpdateHealth(new_health)
-	end)
+	-- Sets on character an event to update his grabbing weapon (to show ammo on UI)
+	character:Subscribe("PickUp", OnCharacterPickup)
+
+	-- Sets on character an event to remove the ammo ui when he drops it's weapon
+	character:Subscribe("Drop", OnCharacterDrop)
 
 	-- Try to get if the character is holding any weapon
 	local current_picked_item = character:GetPicked()
@@ -79,31 +70,60 @@ function UpdateLocalCharacter(character)
 		UpdateAmmo(true, current_picked_item:GetAmmoClip(), current_picked_item:GetAmmoBag())
 	end
 
-	-- Sets on character an event to update his grabbing weapon (to show ammo on UI)
-	character:Subscribe("PickUp", function(charac, object)
-		if (object:IsA(Weapon) and not object:IsA(ToolGun)) then
-			-- Immediatelly Updates the Ammo UI
-			UpdateAmmo(true, object:GetAmmoClip(), object:GetAmmoBag())
+	-- Updates the UI with the current character's health
+	UpdateHealth(character:GetHealth())
+end
 
-			-- Trigger Weapon Hints
-			AddNotification("AIM_DOWN_SIGHT", "you can use mouse wheel to aim down sight with your Weapon when you are in First Person Mode", 10000, 3000)
-			AddNotification("HEADSHOTS", "headshots can cause more damage", 10000, 15000)
-
-			-- Subscribes on the weapon when the Ammo changes
-			object:Subscribe("AmmoClipChange", OnAmmoClipChanged)
-			object:Subscribe("AmmoBagChange", OnAmmoBagChanged)
-		end
+-- Setups the Local Player events
+---@param local_player Player
+function SetupLocalPlayer(local_player)
+	local_player:Subscribe("Possess", function(player, character)
+		UpdateLocalCharacter(character)
 	end)
 
-	-- Sets on character an event to remove the ammo ui when he drops it's weapon
-	character:Subscribe("Drop", function(charac, object)
-		-- Unsubscribes from events
-		if (object:IsA(Weapon) and not object:IsA(ToolGun)) then
-			UpdateAmmo(false)
-			object:Unsubscribe("AmmoClipChange", OnAmmoClipChanged)
-			object:Unsubscribe("AmmoBagChange", OnAmmoBagChanged)
-		end
+	local_player:Subscribe("UnPossess", function(player, character)
+		-- Unsubscribe from all old Character events
+		character:Unsubscribe("HealthChange", OnCharacterHealthChange)
+		character:Unsubscribe("PickUp", OnCharacterPickup)
+		character:Unsubscribe("Drop", OnCharacterDrop)
 	end)
+end
+
+-- Handles Character picking up an object (weapon, melee)
+function OnCharacterPickup(character, object)
+	if (object:IsA(Weapon) and not object:IsA(ToolGun)) then
+		-- Immediately Updates the Ammo UI
+		UpdateAmmo(true, object:GetAmmoClip(), object:GetAmmoBag())
+
+		-- Trigger Weapon Hints
+		AddNotification("AIM_DOWN_SIGHT", "you can use mouse wheel to aim down sight with your Weapon when you are in First Person Mode", 10000, 3000)
+		AddNotification("HEADSHOTS", "headshots can cause more damage", 10000, 15000)
+
+		-- Subscribes on the weapon when the Ammo changes
+		object:Subscribe("AmmoClipChange", OnAmmoClipChanged)
+		object:Subscribe("AmmoBagChange", OnAmmoBagChanged)
+	end
+end
+
+-- Handles Character taking damage (health change)
+function OnCharacterHealthChange(character, old_health, new_health)
+	-- Plays a Hit Taken sound effect if took damage
+	if (new_health < old_health) then
+		SoundHitTakenFeedback:Play()
+	end
+
+	-- Immediately Updates the Health UI
+	UpdateHealth(new_health)
+end
+
+-- Handles Character Dropping an object (weapon, melee)
+function OnCharacterDrop(character, object)
+	-- Unsubscribes from events
+	if (object:IsA(Weapon) and not object:IsA(ToolGun)) then
+		UpdateAmmo(false)
+		object:Unsubscribe("AmmoClipChange", OnAmmoClipChanged)
+		object:Unsubscribe("AmmoBagChange", OnAmmoBagChanged)
+	end
 end
 
 -- Function to update the Ammo's UI

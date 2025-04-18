@@ -23,6 +23,7 @@ end
 
 -- Randomly walk a NPC to somwehere around within distance
 function NPC:MoveRandom(distance)
+	if (self:GetPlayer() ~= nil) then return end
 	local random_location = self:GetLocation() + Vector(math.random(distance) - distance / 2, math.random(distance) - distance / 2, 0)
 	self:MoveTo(random_location, 250)
 end
@@ -140,6 +141,7 @@ end
 
 -- Randomly walk a NPC to somwehere around within distance
 function StackOBot:MoveRandom(distance)
+	if (self:GetPlayer() ~= nil) then return end
 	local random_location = self:GetLocation() + Vector(math.random(distance) - distance / 2, math.random(distance) - distance / 2, 0)
 	self:MoveTo(random_location, 250)
 end

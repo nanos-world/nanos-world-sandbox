@@ -1,6 +1,10 @@
 Events.SubscribeRemote("SpawnDebris", function(prop, debris_offset, debris_rotation, mesh, lifespan)
-    local velocity = prop:GetVelocity()
 	local parent_location = prop:GetLocation()-- + velocity / 30
+
+	-- Avoiding spawning debris if it's too far
+	if (parent_location:Distance(Client.GetLocalPlayer():GetCameraLocation()) > 8000) then return end
+
+    local velocity = prop:GetVelocity()
 	local parent_rotation = prop:GetRotation()
 
     -- Spawn the Debris
@@ -10,8 +14,8 @@ Events.SubscribeRemote("SpawnDebris", function(prop, debris_offset, debris_rotat
         mesh,
         CollisionType.StaticOnly,
         true,
-        false,
-        true
+        GrabMode.Disabled,
+        CCDMode.Disabled
     )
 
     -- Copy parent scale
