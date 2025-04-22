@@ -202,38 +202,33 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	const body = document.querySelector(`body`);
 
 	body.insertAdjacentHTML("afterbegin", `
-        <div id="spawn_menu">
-            <div id="label">Label Description</div>
-            <div id="tabs">
-                <!-- <span id="props" class="tab active">
-                    <img src="./images/tabs/chair.png"/>
-                    <span class="tab_name">props</span>
-                </span> -->
-            </div>
-            <div id="spawn_categories">
-                <!-- <span class="spawn_category active" style="background-image: url('./images/categories/tools-disabled.png')"></span> -->
-            </div>
-            <div id="spawn_list">
-                <!-- <span class="spawn_item">
-                    <span class="spawn_item_image" style="background-image: url('./images/nanosworld_empty.webp')"></span>
-                    <span class="spawn_item_name">Name</span>
-                </span> -->
-            </div>
-            <div id="spawn_options">
-                <span class="spawn_option">
-                    <span class="spawn_option_label">Pattern</span>
-                    <span class="spawn_option_checkbox">
-                        <!-- <span class="spawn_option_checkbox_item" style="background-image: url('T_Stripes_Pattern.jpg')"></span> -->
-                    </span>
-                </span>
-            </div>
-        </div>
+		<div id="spawn_menu">
+			<div id="label">Label Description</div>
+			<div id="tabs">
+				<!-- <span id="props" class="tab active">
+					<img src="./images/tabs/chair.png"/>
+					<span class="tab_name">props</span>
+				</span> -->
+			</div>
+			<div id="spawn_categories">
+				<!-- <span class="spawn_category active" style="background-image: url('./images/categories/tools-disabled.png')"></span> -->
+			</div>
+			<div id="spawn_list">
+				<!-- <span class="spawn_item">
+					<span class="spawn_item_image" style="background-image: url('./images/nanosworld_empty.webp')"></span>
+					<span class="spawn_item_name">Name</span>
+				</span> -->
+			</div>
+			<div id="spawn_options">
+				<span class="spawn_option">
+					<span class="spawn_option_label">Pattern</span>
+					<span class="spawn_option_checkbox">
+						<!-- <span class="spawn_option_checkbox_item" style="background-image: url('T_Stripes_Pattern.jpg')"></span> -->
+					</span>
+				</span>
+			</div>
+		</div>
 	`);
-
-    // Selects the first tab after 1 second
-	setTimeout(function() {
-		TabClick(document.querySelectorAll(".tab")[0]);
-	}, 1000);
 
 	// Configure options - WORKAROUND FOR NOW
 	AddOption("None", "");
@@ -289,8 +284,13 @@ function AddSpawnMenuItem(tab_id, item) {
 Events.Subscribe("ToggleSpawnMenuVisibility", function(is_visible) {
 	const spawn_menu = document.getElementById("spawn_menu");
 
-	if (is_visible)
+	if (is_visible) {
+		// If there's no tab selected, select the first one
+		if (!current_tab)
+			TabClick(document.querySelectorAll(".tab")[0]);
+
 		spawn_menu.style.display = "block";
+	}
 	else
 		spawn_menu.style.display = "none";
 });
