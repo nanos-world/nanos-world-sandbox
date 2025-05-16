@@ -24,9 +24,9 @@ function RopeLight:Constructor(spawn_location, direction, attach_to_entity, dist
 
 	-- Configures the cable
 	local cable_length = 100
-	cable:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, cable_length)
+	cable:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, cable_length, 0, true, 10000, 100)
 	cable:SetRenderingSettings(3, 4, 1)
-	cable:SetCableSettings(cable_length / 4, 10, 1)
+	cable:SetCableSettings(cable_length / 4, 10, 2)
 
 	-- Destroy PropLight when cable is destroyed
 	cable:SetValue("PropLight", self)

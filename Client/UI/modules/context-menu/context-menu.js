@@ -1,5 +1,5 @@
 // Aux for debouncing
-let DebounceRange = true;
+let DebounceTimeout = null;
 
 
 document.addEventListener("DOMContentLoaded", function(event) {
@@ -106,22 +106,16 @@ function AddContextMenuItems(id, title, items) {
 				input.value = item.value;
 				input.addEventListener("input", function(e) {
 					// Debounce
-					if (!DebounceRange)
-						return;
-
-					DebounceRange = false;
+					clearTimeout(DebounceTimeout);
 
 					// After some time, apply the setting
-					setTimeout(function() {
+					DebounceTimeout = setTimeout(function() {
 						if (item.auto_update_label) {
 							label.innerText = `${item.label}\n(${e.target.value})`;
 						}
 
 						Events.Call(item.callback_event, parseInt(e.target.value));
-
-						// Enables it again
-						DebounceRange = true;
-					}, 33);
+					}, 100);
 				});
 
 				context_menu_item.classList.add("context_menu_item_range");

@@ -7,13 +7,16 @@ function NPC:Constructor(location, rotation, mesh)
 
 	Timer.Bind(
 		-- After 5-10 seconds, move again
-		Timer.SetInterval(function(chara)
+		Timer.SetInterval(function(bound_character)
+			-- Does not move it already moving or dead or in ragdoll
+			if (bound_character:GetMovingTo() ~= Vector() or bound_character:GetHealth() == 0 or bound_character:IsInRagdollMode()) then return end
+
 			-- Make him walk
-			chara:SetGaitMode(GaitMode.Walking)
+			bound_character:SetGaitMode(GaitMode.Walking)
 
 			-- Walk 30 meters away max
-			chara:MoveRandom(3000)
-		end, math.random(5000) + 5000, self),
+			bound_character:MoveRandom(3000)
+		end, 1000, self),
 		self
 	)
 
@@ -21,7 +24,7 @@ function NPC:Constructor(location, rotation, mesh)
 	self:MoveRandom(2000)
 end
 
--- Randomly walk a NPC to somwehere around within distance
+-- Randomly walk a NPC to somewhere around within distance
 function NPC:MoveRandom(distance)
 	if (self:GetPlayer() ~= nil) then return end
 	local random_location = self:GetLocation() + Vector(math.random(distance) - distance / 2, math.random(distance) - distance / 2, 0)
@@ -30,6 +33,9 @@ end
 
 -- When take damage
 function NPC:OnTakeDamage(damage, bone, type, from_direction, instigator, causer)
+	-- Avoid those damage types
+	if (type == DamageType.RunOverVehicle or type == DamageType.RunOverProp or type == DamageType.Fall) then return end
+
 	-- Make him run
 	self:SetGaitMode(GaitMode.Sprinting)
 
@@ -50,8 +56,13 @@ function NPC:OnRagdollModeChange(was_in_ragdoll, is_in_ragdoll)
 	if (not is_in_ragdoll) then return end
 
 	Timer.Bind(
-		Timer.SetTimeout(function(chara)
-			chara:Jump()
+		Timer.SetTimeout(function(bound_character)
+			-- If dead or not in ragdoll, do nothing
+			if (bound_character:GetHealth() == 0 or not bound_character:IsInRagdollMode()) then return end
+
+			bound_character:SetRagdollMode(false)
+			bound_character:SetGaitMode(GaitMode.Sprinting)
+			bound_character:MoveRandom(2000)
 		end, 3000, self),
 		self
 	)

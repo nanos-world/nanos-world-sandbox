@@ -59,6 +59,11 @@ function PhysicsGun:OnPickUpObject(player, object, is_grabbing, picking_object_r
 	-- Disables/Enables the gravity of the object so he can 'fly' freely
 	object:SetGravityEnabled(not freeze and not is_grabbing)
 
+	-- Disables/Enables the ability to players to grab it
+	if (object:IsA(Prop)) then
+		object:SetGrabMode(freeze and GrabMode.Disabled or GrabMode.Auto)
+	end
+
 	if (freeze) then
 		Particle(object:GetLocation(), Rotator(), "nanos-world::P_OmnidirectionalBurst")
 	end

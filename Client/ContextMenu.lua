@@ -70,11 +70,12 @@ MainHUD:Subscribe("CloseContextMenu", function()
 	PlayClickSound(0.9)
 end)
 
-
--- Common
-ContextMenu.AddItems("common", "common", {
-	{ id = "respawn_button", type = "button", label = "respawn", callback_event = "ContextMenu_Respawn" },
-})
+MainHUD:Subscribe("Ready", function()
+	-- Common
+	ContextMenu.AddItems("common", "common", {
+		{ id = "respawn_button", type = "button", label = "respawn", callback_event = "ContextMenu_Respawn" },
+	})
+end)
 
 MainHUD:Subscribe("ContextMenu_Respawn", function()
 	Events.CallRemote("RespawnCharacter")

@@ -97,6 +97,8 @@ function PhysicsGun:OnLocalPlayerDrop(character)
 end
 
 function PhysicsGun:OnToggleTargetParticles(enable)
+	self.target_particle_enabled = enable
+
 	if (enable) then
 		self.target_particle:Activate(true)
 	else
@@ -371,7 +373,7 @@ Client.Subscribe("Tick", function(delta_time)
 
 				-- TODO move target particle to a new Physics Gun beam particle asset
 				local target_particle = physics_gun.target_particle
-				if (target_particle and target_particle:IsValid()) then
+				if (physics_gun.target_particle_enabled and target_particle and target_particle:IsValid()) then
 					target_particle:SetLocation(end_location)
 					target_particle:SetRotation(trace_result.Normal:Rotation() - Rotator(90, 0, 0))
 				end

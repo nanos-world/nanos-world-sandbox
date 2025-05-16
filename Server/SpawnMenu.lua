@@ -30,7 +30,11 @@ SpawnMenu.SpawnItem = function(player, tab, id, spawn_location, spawn_rotation, 
 
 	-- If spawning a Prop
 	if (tab == "props") then
-		item = Prop(spawn_location + Vector(0, 0, 50), Rotator(0, spawn_rotation.Yaw + 180, 0), id)
+		-- Rotates the Prop 180 degrees to make it face the player and normalize it to be in range [0-360]
+		spawn_rotation.Yaw = spawn_rotation.Yaw + 180
+		spawn_rotation:Normalize()
+
+		item = Prop(spawn_location + Vector(0, 0, 50), Rotator(0, spawn_rotation.Yaw, 0), id)
 
 		-- If this Prop is a Breakable Prop, setup it (we only configure Props from Spawn Menu to break*)
 		if (BreakableProps[id]) then
@@ -44,6 +48,9 @@ SpawnMenu.SpawnItem = function(player, tab, id, spawn_location, spawn_rotation, 
 
 		-- Calls the spawn function
 		item = SpawnMenu.items[tab][id].spawn_function(spawn_location, spawn_rotation, tab, id)
+
+		-- Forces the Network Authority to the player who spawned it
+		item:SetNetworkAuthority(player)
 
 		if (character) then
 			local is_weapon = item:IsA(Weapon)

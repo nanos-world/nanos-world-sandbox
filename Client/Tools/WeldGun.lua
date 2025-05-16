@@ -20,48 +20,48 @@ WeldGun.crosshair_trace = {
 }
 
 -- WeldGun Configurations
-WeldGun.welding_start_to = nil
+WeldGun.welding_end_to = nil
 
 
 -- Overrides ToolGun method
 function WeldGun:OnLocalPlayerFire(shooter)
 	-- Makes a trace 10000 units ahead to spawn the balloon
-	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
+	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle)
 
 	-- If hit something
 	if (trace_result.Success) then
-		-- If is already attaching the start, then tries to attach the end
-		if (WeldGun.welding_start_to) then
+		-- If is already attaching the end, then tries to attach the start
+		if (WeldGun.welding_end_to) then
 			-- Do not allow attaching to itself
-			if (WeldGun.welding_start_to == trace_result.Entity) then
+			if (WeldGun.welding_end_to == trace_result.Entity) then
 				SoundInvalidAction:Play()
 				return
 			end
 
-			local welding_end_to = trace_result.Entity
-			local welding_end_location = trace_result.Location
+			local welding_start_to = trace_result.Entity
+			local welding_start_location = nil
 
-			if (welding_end_to) then
-				welding_end_location = welding_end_to:GetLocation()
+			-- If we have an entity, then get the relative instead because it can change the location when data reaching the server
+			if (not welding_start_to) then
+				welding_start_location = trace_result.Location
 			end
 
-			self:CallRemoteEvent("Weld", WeldGun.welding_start_to, welding_end_to, welding_end_location)
+			self:CallRemoteEvent("Weld", WeldGun.welding_end_to, welding_start_to, welding_start_location)
 
-			-- Cleans up the highlights and variables
-			WeldGun.welding_start_to:SetHighlightEnabled(false)
-			WeldGun.welding_start_to = nil
+			-- Cleans up the variables and the object highlight
+			WeldGun.welding_end_to:SetHighlightEnabled(false)
+			WeldGun.welding_end_to = nil
 
-			-- Spawns positive sounds and particles
-			Particle(trace_result.Location, trace_result.Normal:Rotation(), "nanos-world::P_DirectionalBurst", true, true)
+			-- Spawns a "positive" sound for attaching
 			Sound(trace_result.Location, "nanos-world::A_VR_Confirm", false, true, SoundType.SFX, 0.15, 0.85)
 			return
 
-		-- If is not yet attached to start
+		-- If is not yet attached to end
 		elseif (trace_result.Entity and not trace_result.Entity:HasAuthority()) then
-			WeldGun.welding_start_to = trace_result.Entity
+			WeldGun.welding_end_to = trace_result.Entity
 
 			-- Enable Highlighting on index 0
-			WeldGun.welding_start_to:SetHighlightEnabled(true, 0)
+			WeldGun.welding_end_to:SetHighlightEnabled(true, 0)
 
 			-- Spawns a "positive" sound for attaching
 			Sound(trace_result.Location, "nanos-world::A_VR_Click_03", false, true, SoundType.SFX, 0.15, 0.85)
@@ -75,8 +75,8 @@ end
 
 -- Overrides ToolGun method
 function WeldGun:OnLocalPlayerDrop(character)
-	if (WeldGun.welding_start_to) then
-		WeldGun.welding_start_to:SetHighlightEnabled(false)
-		WeldGun.welding_start_to = nil
+	if (WeldGun.welding_end_to) then
+		WeldGun.welding_end_to:SetHighlightEnabled(false)
+		WeldGun.welding_end_to = nil
 	end
 end

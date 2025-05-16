@@ -20,8 +20,8 @@ RopeGun.crosshair_trace = {
 }
 
 -- RopeGun Configurations
-RopeGun.attaching_start_to = nil
-RopeGun.attaching_start_relative_location = Vector()
+RopeGun.attaching_end_to = nil
+RopeGun.attaching_end_relative_location = Vector()
 
 
 -- Overrides ToolGun method
@@ -31,42 +31,42 @@ function RopeGun:OnLocalPlayerFire(shooter)
 
 	-- If hit something
 	if (trace_result.Success) then
-		-- If is already attaching the start, then tries to attach the end
-		if (RopeGun.attaching_start_to) then
+		-- If is already attaching the end, then tries to attach the start
+		if (RopeGun.attaching_end_to) then
 			-- Do not allow attaching to itself
-			if (RopeGun.attaching_start_to == trace_result.Entity) then
+			if (RopeGun.attaching_end_to == trace_result.Entity) then
 				SoundInvalidAction:Play()
 				return
 			end
 
-			local attaching_end_to = trace_result.Entity
-			local attaching_end_location = nil
+			local attaching_start_to = trace_result.Entity
+			local attaching_start_location = nil
 
 			-- If we have an entity, then get the relative instead because it can change the location when data reaching the server
-			if (attaching_end_to) then
-				attaching_end_location = trace_result.Entity:GetRotation():RotateVector(trace_result.Location - trace_result.Entity:GetLocation()) / trace_result.Entity:GetScale()
+			if (attaching_start_to) then
+				attaching_start_location = trace_result.Entity:GetRotation():RotateVector(trace_result.Location - trace_result.Entity:GetLocation()) / trace_result.Entity:GetScale()
 			else
-				attaching_end_location = trace_result.Location
+				attaching_start_location = trace_result.Location
 			end
 
-			self:CallRemoteEvent("RopeAttach", RopeGun.attaching_start_to, RopeGun.attaching_start_relative_location, attaching_end_to, attaching_end_location)
+			self:CallRemoteEvent("RopeAttach", RopeGun.attaching_end_to, RopeGun.attaching_end_relative_location, attaching_start_to, attaching_start_location)
 
 			-- Cleans up the variables and the object highlight
-			RopeGun.attaching_start_to:SetHighlightEnabled(false)
-			RopeGun.attaching_start_to = nil
-			RopeGun.attaching_start_relative_location = Vector()
+			RopeGun.attaching_end_to:SetHighlightEnabled(false)
+			RopeGun.attaching_end_to = nil
+			RopeGun.attaching_end_relative_location = Vector()
 
 			-- Spawns a "positive" sound for attaching
 			Sound(trace_result.Location, "nanos-world::A_VR_Confirm", false, true, SoundType.SFX, 0.15, 0.85)
 			return
 
-		-- If is not yet attached to start
+		-- If is not yet attached to end
 		elseif (trace_result.Entity and not trace_result.Entity:HasAuthority()) then
-			RopeGun.attaching_start_to = trace_result.Entity
-			RopeGun.attaching_start_relative_location = trace_result.Entity:GetRotation():RotateVector(trace_result.Location - trace_result.Entity:GetLocation()) / trace_result.Entity:GetScale()
+			RopeGun.attaching_end_to = trace_result.Entity
+			RopeGun.attaching_end_relative_location = trace_result.Entity:GetRotation():RotateVector(trace_result.Location - trace_result.Entity:GetLocation()) / trace_result.Entity:GetScale()
 
 			-- Enable Highlighting on index 0
-			RopeGun.attaching_start_to:SetHighlightEnabled(true, 0)
+			RopeGun.attaching_end_to:SetHighlightEnabled(true, 0)
 
 			-- Spawns a "positive" sound for attaching
 			Sound(trace_result.Location, "nanos-world::A_VR_Click_03", false, true, SoundType.SFX, 0.15, 0.85)
@@ -80,9 +80,9 @@ end
 
 -- Overrides ToolGun method
 function RopeGun:OnLocalPlayerDrop(character)
-	if (RopeGun.attaching_start_to) then
-		RopeGun.attaching_start_to:SetHighlightEnabled(false)
-		RopeGun.attaching_start_to = nil
-		RopeGun.attaching_start_relative_location = Vector()
+	if (RopeGun.attaching_end_to) then
+		RopeGun.attaching_end_to:SetHighlightEnabled(false)
+		RopeGun.attaching_end_to = nil
+		RopeGun.attaching_end_relative_location = Vector()
 	end
 end

@@ -128,7 +128,7 @@ function ExplodeProp(location, explosive_data, scale)
 	-- Spawns a Grenade to explode it immediately
 	local grenade = Grenade(location, Rotator(), "nanos-world::SM_None", "nanos-world::P_Grenade_Special", "nanos-world::A_Explosion_Large", CollisionType.StaticOnly, false)
 
-	-- Configures the Damge
+	-- Configures the Damage
 	grenade:SetDamage(
 		(explosive_data.base_damage or 50) * (scale or 1),
 		explosive_data.minimum_damage or 0,
