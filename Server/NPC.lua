@@ -16,7 +16,7 @@ function NPC:Constructor(location, rotation, mesh)
 
 			-- Walk 30 meters away max
 			bound_character:MoveRandom(3000)
-		end, 1000, self),
+		end, math.random(5000) + 5000, self),
 		self
 	)
 
