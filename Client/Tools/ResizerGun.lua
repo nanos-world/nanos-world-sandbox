@@ -30,7 +30,7 @@ end
 -- Overrides Tool Gun's OnLocalPlayerFire
 function ResizerGun:OnLocalPlayerFire(character)
 	-- Makes a trace 10000 units ahead
-	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
+	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle)
 
 	-- If hit an object, then sets this object to be the "resized" one
 	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then

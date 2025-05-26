@@ -243,68 +243,66 @@ end
 -- Adds a new tab to the Spawn Menu
 ---@param id string				Unique ID used to identify this tab
 ---@param label string			Display text
----@param image_active string	Image path when tab is selected
----@param image_inactive string	Image path when tab is not selected
-SpawnMenu.AddTab = function(id, label, image_active, image_inactive)
+---@param image string			Image path of the tab
+SpawnMenu.AddTab = function(id, label, image)
 	SpawnMenu.items[id] = {}
-	MainHUD:CallEvent("AddTab", id, label, image_active, image_inactive)
+	MainHUD:CallEvent("AddTab", id, label, image)
 end
 
 -- Adds a new category to a tab in the Spawn Menu
 ---@param tab_id string			Tab id
 ---@param id string				Unique ID used to identify this category
 ---@param label string			Display text
----@param image_active string	Image path when tab is selected
----@param image_inactive string	Image path when tab is not selected
-SpawnMenu.AddCategory = function(tab_id, id, label, image_active, image_inactive)
+---@param image string			Image path of the category
+SpawnMenu.AddCategory = function(tab_id, id, label, image)
 	if (not SpawnMenu.items[tab_id]) then
 		Console.Warn("Invalid tab when trying to add a new Spawn Menu category: '%s'.", tab_id)
 	end
 
-	MainHUD:CallEvent("AddCategory", tab_id, id, label, image_active, image_inactive)
+	MainHUD:CallEvent("AddCategory", tab_id, id, label, image)
 end
 
 -- Exposes SpawnMenu to other packages
 Package.Export("SpawnMenu", SpawnMenu)
 
 -- Configures Tabs
-SpawnMenu.AddTab("props", "props", "tabs/chair.webp", "tabs/chair-disabled.webp")
-SpawnMenu.AddTab("entities", "entities", "tabs/rocket.webp", "tabs/rocket-disabled.webp")
-SpawnMenu.AddTab("weapons", "weapons", "tabs/gun.webp", "tabs/gun-disabled.webp")
-SpawnMenu.AddTab("vehicles", "vehicles", "tabs/car.webp", "tabs/car-disabled.webp")
-SpawnMenu.AddTab("tools", "tools", "tabs/paint-spray.webp", "tabs/paint-spray-disabled.webp")
-SpawnMenu.AddTab("npcs", "npcs", "tabs/robot.webp", "tabs/robot-disabled.webp")
+SpawnMenu.AddTab("props", "props", "tabs/chair.webp")
+SpawnMenu.AddTab("entities", "entities", "tabs/rocket.webp")
+SpawnMenu.AddTab("weapons", "weapons", "tabs/gun.webp")
+SpawnMenu.AddTab("vehicles", "vehicles", "tabs/car.webp")
+SpawnMenu.AddTab("tools", "tools", "tabs/paint-spray.webp")
+SpawnMenu.AddTab("npcs", "npcs", "tabs/robot.webp")
 
 -- Configures Categories
-SpawnMenu.AddCategory("props", "basic", "Basic", "categories/shapes.webp", "categories/shapes-disabled.webp")
-SpawnMenu.AddCategory("props", "appliances", "Appliances", "categories/appliances.webp", "categories/appliances-disabled.webp")
-SpawnMenu.AddCategory("props", "construction", "Construction", "categories/construction.webp", "categories/construction-disabled.webp")
-SpawnMenu.AddCategory("props", "furniture", "Furniture", "categories/lamp.webp", "categories/lamp-disabled.webp")
-SpawnMenu.AddCategory("props", "funny", "Funny", "categories/joker-hat.webp", "categories/joker-hat-disabled.webp")
-SpawnMenu.AddCategory("props", "tools", "Tools", "categories/tools.webp", "categories/tools-disabled.webp")
-SpawnMenu.AddCategory("props", "food", "Food", "categories/hot-dog.webp", "categories/hot-dog-disabled.webp")
-SpawnMenu.AddCategory("props", "street", "Street", "categories/street-lamp.webp", "categories/street-lamp-disabled.webp")
-SpawnMenu.AddCategory("props", "nature", "Nature", "categories/tree.webp", "categories/tree-disabled.webp")
-SpawnMenu.AddCategory("props", "uncategorized", "Uncategorized", "categories/menu.webp", "categories/menu-disabled.webp")
+SpawnMenu.AddCategory("props", "basic", "Basic", "categories/shapes.webp")
+SpawnMenu.AddCategory("props", "appliances", "Appliances", "categories/appliances.webp")
+SpawnMenu.AddCategory("props", "construction", "Construction", "categories/construction.webp")
+SpawnMenu.AddCategory("props", "furniture", "Furniture", "categories/lamp.webp")
+SpawnMenu.AddCategory("props", "funny", "Funny", "categories/joker-hat.webp")
+SpawnMenu.AddCategory("props", "tools", "Tools", "categories/tools.webp")
+SpawnMenu.AddCategory("props", "food", "Food", "categories/hot-dog.webp")
+SpawnMenu.AddCategory("props", "street", "Street", "categories/street-lamp.webp")
+SpawnMenu.AddCategory("props", "nature", "Nature", "categories/tree.webp")
+SpawnMenu.AddCategory("props", "uncategorized", "Uncategorized", "categories/menu.webp")
 
-SpawnMenu.AddCategory("weapons", "rifles", "Rifles", "categories/rifle.webp", "categories/rifle-disabled.webp")
-SpawnMenu.AddCategory("weapons", "smgs", "SMGs", "categories/smg.webp", "categories/smg-disabled.webp")
-SpawnMenu.AddCategory("weapons", "pistols", "Pistols", "categories/revolver.webp", "categories/revolver-disabled.webp")
-SpawnMenu.AddCategory("weapons", "shotguns", "Shotguns", "categories/shotgun.webp", "categories/shotgun-disabled.webp")
-SpawnMenu.AddCategory("weapons", "sniper-rifles", "Sniper Rifles", "categories/sniper-rifle.webp", "categories/sniper-rifle-disabled.webp")
-SpawnMenu.AddCategory("weapons", "special", "Special", "categories/laser-gun.webp", "categories/laser-gun-disabled.webp")
-SpawnMenu.AddCategory("weapons", "grenades", "Grenade", "categories/grenade.webp", "categories/grenade-disabled.webp")
-SpawnMenu.AddCategory("weapons", "melee", "Melee", "categories/knife.webp", "categories/knife-disabled.webp")
+SpawnMenu.AddCategory("weapons", "rifles", "Rifles", "categories/rifle.webp")
+SpawnMenu.AddCategory("weapons", "smgs", "SMGs", "categories/smg.webp")
+SpawnMenu.AddCategory("weapons", "pistols", "Pistols", "categories/revolver.webp")
+SpawnMenu.AddCategory("weapons", "shotguns", "Shotguns", "categories/shotgun.webp")
+SpawnMenu.AddCategory("weapons", "sniper-rifles", "Sniper Rifles", "categories/sniper-rifle.webp")
+SpawnMenu.AddCategory("weapons", "special", "Special", "categories/laser-gun.webp")
+SpawnMenu.AddCategory("weapons", "grenades", "Grenade", "categories/grenade.webp")
+SpawnMenu.AddCategory("weapons", "melee", "Melee", "categories/knife.webp")
 
-SpawnMenu.AddCategory("entities", "uncategorized", "Uncategorized", "categories/menu.webp", "categories/menu-disabled.webp")
-SpawnMenu.AddCategory("entities", "destructables", "Destructables", "categories/destructable.webp", "categories/destructable-disabled.webp")
+SpawnMenu.AddCategory("entities", "uncategorized", "Uncategorized", "categories/menu.webp")
+SpawnMenu.AddCategory("entities", "destructables", "Destructables", "categories/destructable.webp")
 
 -- Defines some Spawn Menu Hints
-local spawn_menu_keybind = Input.GetMappedKeys("SpawnMenu")[1] or "not set"
-local undo_keybind = Input.GetMappedKeys("Undo")[1] or "not set"
+local spawn_menu_keybinding = Input.GetMappedKeys("SpawnMenu")[1] or "not set"
+local undo_keybinding = Input.GetMappedKeys("Undo")[1] or "not set"
 
-AddNotification("SPAWN_MENU", "you can press " .. spawn_menu_keybind .. " to open the Spawn Menu", 10000, 30000)
-AddNotification("SPAWN_MENU_DESTROY_ITEM", "you can press " .. undo_keybind .. " to delete your last spawned item", 10000, 90000)
+AddNotification("SPAWN_MENU", "you can press " .. spawn_menu_keybinding .. " to open the Spawn Menu", 10000, 30000)
+AddNotification("SPAWN_MENU_DESTROY_ITEM", "you can press " .. undo_keybinding .. " to delete your last spawned item", 10000, 90000)
 
 
 function RequireAllLuaFilesInFolder(folder)

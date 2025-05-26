@@ -36,7 +36,6 @@ Package.Subscribe("Load", function()
 		if (SANDBOX_CUSTOM_SETTINGS.enable_auto_weather) then
 			Timer.SetInterval(function()
 				-- At each 'weather_change_interval' seconds, we have 'probability_change_weather' of chance of changing the weather
-				math.randomseed(os.time())
 				if (math.random(0, 100) / 100 >= SandboxSky.probability_change_weather) then return end
 
 				local new_weather = SandboxSky.ChooseRandomWeather()

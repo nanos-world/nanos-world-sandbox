@@ -125,19 +125,25 @@ function StackOBot:Constructor(location, rotation)
 
 	Timer.Bind(
 		Timer.SetInterval(function(stack_o_bot)
-			self:SetMood(math.random(0, 15))
+			if (stack_o_bot:GetHealth() == 0) then return end
+
+			stack_o_bot:SetMood(math.random(0, 14))
 		end, 15000, self),
 		self
 	)
 
-	self:SetMood(math.random(0, 15))
+	-- Sets a Mood
+	self:SetMood(math.random(0, 14))
 
 	-- TODO duplicated bad code
 	Timer.Bind(
 		-- After 5-10 seconds, move again
-		Timer.SetInterval(function(chara)
+		Timer.SetInterval(function(bound_character)
+			-- Does not move it already moving or dead or in ragdoll
+			if (bound_character:GetMovingTo() ~= Vector() or bound_character:GetHealth() == 0) then return end
+
 			-- Walk 30 meters away max
-			chara:MoveRandom(3000)
+			bound_character:MoveRandom(3000)
 		end, math.random(5000) + 5000, self),
 		self
 	)
@@ -157,9 +163,23 @@ function StackOBot:MoveRandom(distance)
 	self:MoveTo(random_location, 250)
 end
 
+-- When take damage
+function StackOBot:OnTakeDamage(damage, bone, type, from_direction, instigator, causer)
+	-- Avoid those damage types
+	if (type == DamageType.RunOverVehicle or type == DamageType.RunOverProp or type == DamageType.Fall) then return end
+
+	local current_location = self:GetLocation()
+	local run_to_location = current_location + from_direction * 3000
+
+	-- Run 30 meters away max in the opposite direction
+	self:MoveTo(Vector(run_to_location.X, run_to_location.Y, current_location.Z), 1000)
+end
+
 -- After dying, destroys the Character after 10 seconds
 function StackOBot:OnDeath()
+	self:SetMood(15)
 	self:SetLifeSpan(10)
 end
 
+StackOBot.Subscribe("TakeDamage", StackOBot.OnTakeDamage)
 StackOBot.Subscribe("Death", StackOBot.OnDeath)

@@ -81,11 +81,15 @@
 	background-size: 100%;
 	background-repeat: no-repeat;
 	background-position: 50%;
+	filter: grayscale(100%);
+	opacity: 0.8;
 }
 
 .spawn_category.active {
 	cursor: default;
 	pointer-events: none;
+	filter: none;
+	opacity: 1.0;
 }
 
 #spawn_options {
@@ -149,12 +153,16 @@
 	height: 100%;
 	padding: 0px 20px;
 	line-height: 60px;
+	filter: grayscale(100%);
+	opacity: 0.8;
 }
 
 .tab.active {
 	color: #e8b656;
 	cursor: default;
 	pointer-events: none;
+	filter: none;
+	opacity: 1.0;
 }
 
 .tab.disabled {

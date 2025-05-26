@@ -40,7 +40,7 @@ function TabClick(tab_element) {
 	if (tabs[current_tab]) {
 		for (let category in tabs[current_tab].categories) {
 			const category_data = tabs[current_tab].categories[category];
-			DisplayCategory(category_data.id, category_data.label, category_data.image_active, category_data.image_inactive);
+			DisplayCategory(category_data.id, category_data.label, category_data.image);
 		}
 	}
 
@@ -51,16 +51,10 @@ function TabClick(tab_element) {
 	CategoryClick(document.querySelectorAll(".spawn_category")[0]);
 
 	const old_tab_active = document.querySelector(".tab.active");
-	if (old_tab_active) {
+	if (old_tab_active)
 		old_tab_active.classList.remove("active");
-		const old_tab_image = old_tab_active.querySelector("img");
-		old_tab_image.src = old_tab_active.dataset.image_inactive;
-	}
 
 	tab_element.classList.add("active");
-
-	const tab_image = tab_element.querySelector("img");
-	tab_image.src = tab_element.dataset.image_active;
 }
 
 function CategoryClick(category_item) {
@@ -71,30 +65,26 @@ function CategoryClick(category_item) {
 	RefreshSpawnMenu();
 
 	const old_category_active = document.querySelector(".spawn_category.active");
-	if (old_category_active) {
+	if (old_category_active)
 		old_category_active.classList.remove("active");
-		old_category_active.style["background-image"] = `url('${old_category_active.dataset.image_inactive}')`;
-	}
 
 	category_item.classList.add("active");
-	category_item.style["background-image"] = `url('${category_item.dataset.image_active}')`;
 
 	Events.Call("ClickSound");
 }
 
-function AddCategory(tab_id, id, label, image_active, image_inactive) {
+function AddCategory(tab_id, id, label, image) {
 	if (!tabs[tab_id])
 		tabs[tab_id] = { categories: [] };
 
 	tabs[tab_id].categories.push({
 		id: id,
 		label: label,
-		image_active: `modules/spawn-menu/images/${image_active}`,
-		image_inactive: `modules/spawn-menu/images/${image_inactive}`,
+		image: `modules/spawn-menu/images/${image}`,
 	});
 }
 
-function DisplayCategory(id, name, image_active, image_inactive) {
+function DisplayCategory(id, name, image) {
 	const category = document.createElement("span");
 	category.classList.add("spawn_category");
 	category.addEventListener("click", e => CategoryClick(e.target));
@@ -103,15 +93,14 @@ function DisplayCategory(id, name, image_active, image_inactive) {
 
 	category.dataset.category_id = id;
 	category.dataset.category_name = name;
-	category.dataset.image_active = image_active;
-	category.dataset.image_inactive = image_inactive;
+	category.dataset.image = image;
 
-	category.style["background-image"] = `url('${image_inactive}')`;
+	category.style["background-image"] = `url('${image}')`;
 
 	document.getElementById("spawn_categories").appendChild(category);
 }
 
-function AddTab(id, name, image_active, image_inactive) {
+function AddTab(id, name, image) {
 	const tab = document.createElement("span");
 	tab.classList.add("tab");
 	tab.addEventListener("click", e => TabClick(e.target));
@@ -119,7 +108,7 @@ function AddTab(id, name, image_active, image_inactive) {
 	tab.addEventListener("mouseleave", e => ItemHover(false, false));
 
 	const tab_image = document.createElement("img");
-	tab_image.src = `modules/spawn-menu/images/${image_inactive}`;
+	tab_image.src = `modules/spawn-menu/images/${image}`;
 
 	const tab_name = document.createElement("span");
 	tab_name.classList.add("tab_name");
@@ -130,8 +119,7 @@ function AddTab(id, name, image_active, image_inactive) {
 
 	tab.dataset.tab_id = id;
 	tab.dataset.tab_name = name;
-	tab.dataset.image_active = `modules/spawn-menu/images/${image_active}`;
-	tab.dataset.image_inactive = `modules/spawn-menu/images/${image_inactive}`;
+	tab.dataset.image = `modules/spawn-menu/images/${image}`;
 
 	document.getElementById("tabs").appendChild(tab);
 }
@@ -211,7 +199,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				</span> -->
 			</div>
 			<div id="spawn_categories">
-				<!-- <span class="spawn_category active" style="background-image: url('./images/categories/tools-disabled.png')"></span> -->
+				<!-- <span class="spawn_category active" style="background-image: url('./images/categories/tools.webp')"></span> -->
 			</div>
 			<div id="spawn_list">
 				<!-- <span class="spawn_item">
