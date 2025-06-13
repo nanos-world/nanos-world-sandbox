@@ -56,18 +56,20 @@ function UpdateLocalCharacter(character)
 	-- Sets on character an event to update the health's UI after it takes damage
 	character:Subscribe("HealthChange", OnCharacterHealthChange)
 
-	-- Sets on character an event to update his grabbing weapon (to show ammo on UI)
-	character:Subscribe("PickUp", OnCharacterPickup)
+	if (character:IsA(Character)) then
+		-- Sets on character an event to update his grabbing weapon (to show ammo on UI)
+		character:Subscribe("PickUp", OnCharacterPickup)
 
-	-- Sets on character an event to remove the ammo ui when he drops it's weapon
-	character:Subscribe("Drop", OnCharacterDrop)
+		-- Sets on character an event to remove the ammo ui when he drops it's weapon
+		character:Subscribe("Drop", OnCharacterDrop)
 
-	-- Try to get if the character is holding any weapon
-	local current_picked_item = character:GetPicked()
+		-- Try to get if the character is holding any weapon
+		local current_picked_item = character:GetPicked()
 
-	-- If so, update the UI
-	if (current_picked_item and current_picked_item:IsA(Weapon) and not current_picked_item:IsA(ToolGun)) then
-		UpdateAmmo(true, current_picked_item:GetAmmoClip(), current_picked_item:GetAmmoBag())
+		-- If so, update the UI
+		if (current_picked_item and current_picked_item:IsA(Weapon) and not current_picked_item:IsA(ToolGun)) then
+			UpdateAmmo(true, current_picked_item:GetAmmoClip(), current_picked_item:GetAmmoBag())
+		end
 	end
 
 	-- Updates the UI with the current character's health
@@ -173,6 +175,14 @@ Events.SubscribeRemote("SpawnSoundAttached", function(object, sound_asset, is_2D
 	sound:AttachTo(object, AttachmentRule.SnapToTarget, "", 0)
 end)
 
+Input.Subscribe("KeyPress", function(key_name, delta)
+	if (key_name == "Escape") then
+		if (ContextMenu.is_opened) then
+			ContextMenu.Close()
+			return false
+		end
+	end
+end)
 
 -- Exposes this to other packages
 Package.Export("UpdateLocalCharacter", UpdateLocalCharacter)

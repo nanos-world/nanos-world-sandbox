@@ -34,7 +34,6 @@ PhysicsGun.quaternion_rotate_right = Rotator(0, -45, 0):Quaternion() -- Cache it
 PhysicsGun.quaternion_rotate_left = Rotator(0, 45, 0):Quaternion() -- Cache it for performance
 PhysicsGun.quaternion_mouse_move_x = Quat(0, 0, 0, -1) -- Cache it for performance
 PhysicsGun.quaternion_mouse_move_y = Quat(0, 0, 0, 1) -- Cache it for performance
-PhysicsGun.tick_timer = nil
 
 
 function PhysicsGun:OnSpawn()
@@ -70,8 +69,6 @@ function PhysicsGun:OnLocalPlayerPickUp(character)
 	Input.Subscribe("MouseScroll", PhysicsGunMouseScroll)
 	Input.Subscribe("MouseMove", PhysicsGunMouseMove)
 
-	PhysicsGun.tick_timer = Timer.SetInterval(PhysicsGunTick, 0.033)
-
 	-- Sets some notification when grabbing the Light Tool
 	AddNotification("PHYSICS_GUN_FREEZE", "while using a Physics Gun, press with the Right Click to freeze the object", 8000, 10000)
 	AddNotification("PHYSICS_GUN_ROTATE", "you can rotate the object you are moving while holding E key and Mouse Wheel", 8000, 25000)
@@ -90,8 +87,6 @@ function PhysicsGun:OnLocalPlayerDrop(character)
 	Input.Unsubscribe("MouseDown", PhysicsGunMouseDown)
 	Input.Unsubscribe("MouseScroll", PhysicsGunMouseScroll)
 	Input.Unsubscribe("MouseMove", PhysicsGunMouseMove)
-
-	Timer.ClearInterval(PhysicsGun.tick_timer)
 
 	TogglePhysicsGunLocal(false)
 end
@@ -190,7 +185,7 @@ function TryPickUpObject()
 	local collision_trace = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle
 
 	-- Do the Trace
-	local trace_result = Trace.LineSingle(start_location, end_location, collision_trace, TraceMode.ReturnEntity)
+	local trace_result = Trace.LineSingle(start_location, end_location, collision_trace, TraceMode.ReturnEntity | TraceMode.TraceOnlyVisibility)
 
 	-- If hit something and hit an Entity
 	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
@@ -336,6 +331,9 @@ function PhysicsGunMouseMove(delta_x, delta_y, mouse_x, mouse_y)
 end
 
 Client.Subscribe("Tick", function(delta_time)
+	-- Updates the Physics Gun every frame
+	PhysicsGunTick()
+
 	-- Every Frame, updates all PhysicsGun's Beam Particles
 	-- This particle has a special Vector parameter 'BeamEnd' which defines where the Beam will end
 	for k, physics_gun in pairs(PhysicsGun.GetAll()) do
@@ -356,13 +354,24 @@ Client.Subscribe("Tick", function(delta_time)
 				-- If there is no object being gravitated, then points the BeamEnd to very far
 				-- Gets where the particle is pointing (as it is attached to the weapon, it will point where the weapon is pointing as well)
 				-- And traces in the front of it, to hit and stop at any wall if existed
-				local direction = beam_particle:GetRotation():GetForwardVector()
-				local start_location = beam_particle:GetLocation()
+				local direction = nil
+				local start_location = nil
+
+				-- If I'm the local handler, make more precise calculations
+				if (PhysicsGun.weapon == physics_gun) then
+					local local_player = Client.GetLocalPlayer()
+					local camera_rotation = local_player:GetCameraRotation()
+					direction =  camera_rotation:GetForwardVector()
+					start_location = local_player:GetCameraLocation()
+				else
+					direction = beam_particle:GetRotation():GetForwardVector()
+					start_location = beam_particle:GetLocation()
+				end
 
 				-- Traces 20000 units in front
 				local end_location = start_location + direction * 20000
 				local collision_trace = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle
-				local trace_result = Trace.LineSingle(start_location, end_location, collision_trace)
+				local trace_result = Trace.LineSingle(start_location, end_location, collision_trace, TraceMode.TraceOnlyVisibility)
 
 				-- If hit something
 				if (trace_result.Success) then
@@ -412,20 +421,18 @@ function PhysicsGunTick()
 			return
 		end
 
-		-- Otherwise, if I'm grabbing something, tells the server to update it's location
-
+		-- Otherwise, if I'm grabbing something, update it's location
 		-- Get the camera location in 3D World Space
-		local viewport_2D_center = Viewport.GetViewportSize() / 2
-		local viewport_3D = Viewport.DeprojectScreenToWorld(viewport_2D_center)
-		local start_location = viewport_3D.Position
-		local camera_direction = viewport_3D.Direction
+		local local_player = Client.GetLocalPlayer()
+		local camera_location = local_player:GetCameraLocation()
+		local camera_rotation = local_player:GetCameraRotation()
+		local camera_direction = camera_rotation:GetForwardVector()
 
 		-- Gets the new object location using some Math, first gets the overall location: start_location + camera_direction * the distance
 		-- Then adds the offset of the object when it was grabbed, rotating it with the object rotation
-		local end_location = (start_location + camera_direction * (PhysicsGun.picking_object_distance + Client.GetLocalPlayer():GetCameraArmLength())) + PhysicsGun.picking_object:GetRotation():UnrotateVector(PhysicsGun.picking_object_relative_location)
+		local end_location = (camera_location + camera_direction * (PhysicsGun.picking_object_distance + local_player:GetCameraArmLength())) + PhysicsGun.picking_object:GetRotation():UnrotateVector(PhysicsGun.picking_object_relative_location)
 
 		-- The new object rotation will be the initial rotation + the camera rotation
-		local camera_rotation = Client.GetLocalPlayer():GetCameraRotation()
 		camera_rotation.Pitch = 0
 		local rotation = camera_rotation + PhysicsGun.picking_object_initial_rotation
 

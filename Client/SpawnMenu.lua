@@ -172,7 +172,7 @@ MainHUD:Subscribe("SpawnItem", function(category, asset_id)
 	local end_location = viewport_3D.Position + viewport_3D.Direction * trace_max_distance
 
 	-- Traces for world things
-    local trace_result = Trace.LineSingle(start_location, end_location, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.Water)
+    local trace_result = Trace.LineSingle(start_location, end_location, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.Water, TraceMode.TraceOnlyVisibility)
 
 	local spawn_location = end_location
 

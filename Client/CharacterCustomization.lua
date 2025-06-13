@@ -47,6 +47,7 @@ Package.Subscribe("Load", function()
 end)
 
 function CharacterCustomization.LocalPlayerPossess(player, character)
+	if (not character:IsA(Character)) then return end
 	local current_mesh = character:GetMesh()
 
 	-- Adds an entry to Context Menu
