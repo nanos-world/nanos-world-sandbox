@@ -116,6 +116,41 @@ function NPC_Female:Constructor(location, rotation)
 end
 
 
+NPC_Adventure_01 = NPC.Inherit("NPC_Adventure_01")
+
+function NPC_Adventure_01:Constructor(location, rotation)
+	NPC.Constructor(self, location or Vector(), rotation or Rotator(), "nanos-world::SK_Adventure_01_Full_02")
+end
+
+
+NPC_Adventure_02 = NPC.Inherit("NPC_Adventure_02")
+
+function NPC_Adventure_02:Constructor(location, rotation)
+	NPC.Constructor(self, location or Vector(), rotation or Rotator(), "nanos-world::SK_Adventure_02_Full_03")
+end
+
+
+NPC_Adventure_03 = NPC.Inherit("NPC_Adventure_03")
+
+function NPC_Adventure_03:Constructor(location, rotation)
+	NPC.Constructor(self, location or Vector(), rotation or Rotator(), "nanos-world::SK_Adventure_03_Full_02")
+end
+
+
+NPC_Adventure_04 = NPC.Inherit("NPC_Adventure_04")
+
+function NPC_Adventure_04:Constructor(location, rotation)
+	NPC.Constructor(self, location or Vector(), rotation or Rotator(), "nanos-world::SK_Adventure_04_Full_02")
+end
+
+
+NPC_Adventure_05 = NPC.Inherit("NPC_Adventure_05")
+
+function NPC_Adventure_05:Constructor(location, rotation)
+	NPC.Constructor(self, location or Vector(), rotation or Rotator(), "nanos-world::SK_Adventure_05_Full_02")
+end
+
+
 StackOBot = CharacterSimple.Inherit("StackOBot")
 
 function StackOBot:Constructor(location, rotation)

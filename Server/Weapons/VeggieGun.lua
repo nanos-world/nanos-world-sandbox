@@ -109,8 +109,7 @@ end
 function VeggieGun:OnFire(character)
 	local control_rotation = character:GetControlRotation()
 	local forward_vector = control_rotation:GetForwardVector()
-	local capsule_size = character:GetCapsuleSize()
-	local spawn_location = self:GetLocation() + Vector(0, 0, capsule_size.HalfHeight / 2) + forward_vector * 100
+	local spawn_location = self:GetLocation() + Vector(0, 0, 25) + forward_vector * 50
 
 	-- local veggie_mesh = VeggieGun.veggies[math.random(#VeggieGun.veggies)]
 	-- local veggie_mesh = "nanos-world::SM_Fruit_Banana_01"

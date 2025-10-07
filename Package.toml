@@ -3,9 +3,9 @@
     # friendly name
     title =                 "Sandbox"
     # contributors
-    author =                "nanos™"
+    author =                "nanos world™"
     # version
-    version =               "3.12.0"
+    version =               "3.13.0"
 
 # game-mode configurations
 [game_mode]

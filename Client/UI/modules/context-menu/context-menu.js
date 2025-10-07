@@ -271,7 +271,7 @@ function ToggleContextMenuSelectorVisibility(is_visible, item) {
 
 			const context_menu_selector_item_image = document.createElement("span");
 			context_menu_selector_item_image.classList.add("context_menu_selector_item_image");
-			context_menu_selector_item_image.style["background-image"] = `url('${option.image}'), url('./images/nanosworld_empty.webp')`;
+			context_menu_selector_item_image.style["background-image"] = `url('${option.image}'), url('./modules/context-menu/images/nanosworld_empty.webp')`;
 
 			const context_menu_selector_item_name = document.createElement("span");
 			context_menu_selector_item_name.classList.add("context_menu_selector_item_name");

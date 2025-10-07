@@ -1,21 +1,11 @@
 -- Character Customization data
 CharacterCustomization = {
-	-- All meshes available
-	meshes = {
-		{ id = "nanos-world::SK_Male", name = "Male", image = "assets://nanos-world/Thumbnails/SK_Male.jpg" },
-		{ id = "nanos-world::SK_Female", name = "Female", image = "assets://nanos-world/Thumbnails/SK_Female.jpg" },
-		{ id = "nanos-world::SK_Mannequin", name = "Mannequin", image = "assets://nanos-world/Thumbnails/SK_Mannequin.jpg" },
-		{ id = "nanos-world::SK_Mannequin_Female", name = "Mannequin Female", image = "assets://nanos-world/Thumbnails/SK_Mannequin_Female.jpg" },
-		{ id = "nanos-world::SK_ClassicMale", name = "Classic Male", image = "assets://nanos-world/Thumbnails/SK_ClassicMale.jpg" },
-		{ id = "nanos-world::SK_PostApocalyptic", name = "Post Apocalyptic", image = "assets://nanos-world/Thumbnails/SK_PostApocalyptic.jpg" },
-	},
-
 	-- If it's currently possessed (i.e. meshes visible on ContextMenu)
 	is_possessed = false
 }
 
 CharacterCustomization.AddMesh = function(id, name, image)
-	table.insert(CharacterCustomization.meshes, { id = id, name = name, image = image })
+	CHARACTER_MESHES[id] = { name = name, image = image }
 
 	-- Updates screen dynamically
 	if (CharacterCustomization.is_possessed) then
@@ -50,9 +40,18 @@ function CharacterCustomization.LocalPlayerPossess(player, character)
 	if (not character:IsA(Character)) then return end
 	local current_mesh = character:GetMesh()
 
+	local meshes = {}
+	for k, v in pairs(CHARACTER_MESHES) do
+		table.insert(meshes, {
+			id = k,
+			name = v.name,
+			image = v.image
+		})
+	end
+
 	-- Adds an entry to Context Menu
 	ContextMenu.AddItems("character_customization", "character customization", {
-		{ id = "character_mesh", type = "select_image", label = "mesh", callback_event = "SelectCharacterMesh", selected = current_mesh, options = CharacterCustomization.meshes},
+		{ id = "character_mesh", type = "select_image", label = "mesh", callback_event = "SelectCharacterMesh", selected = current_mesh, options = meshes},
 	})
 
 	CharacterCustomization.is_possessed = true

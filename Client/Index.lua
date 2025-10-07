@@ -4,15 +4,6 @@ PERSISTENT_DATA_NOTIFICATIONS = PERSISTENT_DATA_NOTIFICATIONS or {}
 -- Spawns Sandbox HUD
 MainHUD = MainHUD or WebUI("Sandbox HUD", "file:///UI/index.html")
 
-
-Package.Require("Config.lua")
-Package.Require("Notifications.lua")
-Package.Require("ContextMenu.lua")
-Package.Require("SpawnMenu.lua")
-Package.Require("Scoreboard.lua")
-Package.Require("Sky.lua")
-Package.Require("CharacterCustomization.lua")
-
 -- Configures Keybindings Inputs
 Input.Register("NoClip", "B", "Toggles the No Clip mode")
 Input.Register("Scoreboard", "Tab", "Toggles the Scoreboard")
@@ -20,6 +11,15 @@ Input.Register("Ragdoll", "J", "Enters Ragdoll Mode")
 Input.Register("SpawnMenu", "Q", "Toggles the Spawn Menu")
 Input.Register("ContextMenu", "C", "Toggles the Context Menu")
 Input.Register("Undo", "X", "Destroy last spawned Item")
+
+-- Loads Package Files
+Package.Require("Config.lua")
+Package.Require("Notifications.lua")
+Package.Require("ContextMenu.lua")
+Package.Require("SpawnMenu.lua")
+Package.Require("Scoreboard.lua")
+Package.Require("Sky.lua")
+Package.Require("CharacterCustomization.lua")
 
 -- Hit Taken Feedback Sound Cached
 SoundHitTakenFeedback = Sound(Vector(), "nanos-world::A_HitTaken_Feedback", true, false, SoundType.SFX, 1, 1, 400, 3600, 0, false, 0, false)
@@ -159,6 +159,20 @@ end)
 -- VOIP UI
 Player.Subscribe("VOIP", function(player, is_talking)
 	MainHUD:CallEvent("ToggleVoice", player:GetID(), is_talking, player:GetName(), player:GetAccountIconURL())
+
+	-- Apply speaking animation
+	local character = player:GetControlledCharacter()
+	if (character) then
+		local character_mesh = character:GetMesh()
+		local character_mesh_data = CHARACTER_MESHES[character_mesh]
+		if (character_mesh_data and character_mesh_data.speak_animation) then
+			if (is_talking and character:GetLocation():IsNear(Client.GetLocalPlayer():GetCameraLocation(), 1000)) then
+				character:PlayAnimation(character_mesh_data.speak_animation, AnimationSlotType.Head, true)
+			else
+				character:StopAnimation(character_mesh_data.speak_animation)
+			end
+		end
+	end
 end)
 
 Player.Subscribe("Destroy", function(player)

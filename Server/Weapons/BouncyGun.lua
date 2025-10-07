@@ -23,7 +23,7 @@ end
 function BouncyGun:OnFire(character)
 	local control_rotation = character:GetControlRotation()
 	local forward_vector = control_rotation:GetForwardVector()
-	local spawn_location = self:GetLocation() + Vector(0, 0, 50) + forward_vector * 150
+	local spawn_location = self:GetLocation() + Vector(0, 0, 25) + forward_vector * 50
 
 	local prop = BouncyBall(spawn_location, Rotator.Random(true))
 	prop:SetLifeSpan(10)

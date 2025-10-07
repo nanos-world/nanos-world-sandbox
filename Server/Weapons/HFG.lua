@@ -24,8 +24,7 @@ end
 function HFG:OnFire(character)
 	local control_rotation = character:GetControlRotation()
 	local forward_vector = control_rotation:GetForwardVector()
-	local capsule_size = character:GetCapsuleSize()
-	local spawn_location = self:GetLocation() + Vector(0, 0, capsule_size.HalfHeight / 2) + forward_vector * 100
+	local spawn_location = self:GetLocation() + Vector(0, 0, 25) + forward_vector * 50
 
 	local grenade = Grenade(spawn_location, Rotator(), "nanos-world::SM_Grenade_G67", "nanos-world::P_Explosion_Dirt", "nanos-world::A_Explosion_Large")
 	grenade:SetScale(Vector(3, 3, 3))

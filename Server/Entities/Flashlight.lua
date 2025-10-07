@@ -5,7 +5,7 @@ function Flashlight:Constructor(location, rotation)
 
 	-- Spawns a Point Light, with the color
 	self.color = Color(1, 0.6, 0.4)
-	self.light = Light(Vector(), Rotator(), self.color, LightType.Spot, 20, 1000, 25, 0.975, 2000, false)
+	self.light = Light(Vector(), Rotator(), self.color, LightType.Spot, 1, 3000, 25, 0.975, 4000, false)
 	self.light:SetTextureLightProfile(LightProfile.Shattered_02)
 
 	-- Turns on by default
@@ -22,7 +22,7 @@ function Flashlight:SetLightEnabled(is_on)
 	if (is_on) then
 		-- Sets the prop mesh emissive color to this color
 		self:SetMaterialColorParameter("Emissive", self.color * 100)
-		self.light:SetIntensity(25)
+		self.light:SetIntensity(1)
 
 	else
 		self:SetMaterialColorParameter("Emissive", Color.BLACK)
