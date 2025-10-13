@@ -1,0 +1,11 @@
+#name_tag {
+	display: none;
+	background-color: #0000001a;
+	border-radius: 5px;
+	font-size: 12px;
+	padding: 2px 5px;
+	position: absolute;
+	top: 55%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}

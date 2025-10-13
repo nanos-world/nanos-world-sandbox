@@ -28,12 +28,12 @@ function CustomizeCharacter(character, mesh)
 	local selected_death_sound = ""
 	local selected_pain_sound = ""
 
-	if (custom_config.is_female) then
-		selected_death_sound = FEMALE_DEATH_SOUNDS[math.random(#FEMALE_DEATH_SOUNDS)]
-		selected_pain_sound = FEMALE_PAIN_SOUNDS[math.random(#FEMALE_PAIN_SOUNDS)]
-	else
+	if (custom_config.is_male) then
 		selected_death_sound = MALE_DEATH_SOUNDS[math.random(#MALE_DEATH_SOUNDS)]
 		selected_pain_sound = MALE_PAIN_SOUNDS[math.random(#MALE_PAIN_SOUNDS)]
+	else
+		selected_death_sound = FEMALE_DEATH_SOUNDS[math.random(#FEMALE_DEATH_SOUNDS)]
+		selected_pain_sound = FEMALE_PAIN_SOUNDS[math.random(#FEMALE_PAIN_SOUNDS)]
 	end
 
 	character:SetDeathSound(selected_death_sound)

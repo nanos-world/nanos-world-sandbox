@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function(event) {
-	// Inserts the scoreboard
+	// Inserts the ammo
 	const body = document.querySelector(`body`);
 
 	body.insertAdjacentHTML("afterbegin", `
