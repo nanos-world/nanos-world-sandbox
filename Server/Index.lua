@@ -123,7 +123,7 @@ function OnPlayerCharacterDeath(chara, last_damage_taken, last_bone_damaged, dam
 	Timer.Bind(
 		Timer.SetTimeout(function(character)
 			-- If he is not dead anymore after 5 seconds, ignores it
-			if (character:GetHealth() ~= 0) then return end
+			if (not character:IsDead()) then return end
 
 			-- Respawns the Character at a random point
 			local spawn_point = GetRandomSpawnPoint()
@@ -267,33 +267,22 @@ end, "teleports a player to another", { "player1", "player2" })
 
 
 Package.Subscribe("Unload", function()
-	local character_locations = {}
-
 	-- When Package unloads, stores the characters locations to respawn them at the same position if the package is being reloaded
 	for k, p in pairs(Player.GetAll()) do
 		local cha = p:GetControlledCharacter()
 		if (cha) then
-			table.insert(character_locations, { player = p, location = cha:GetLocation(), rotation = Rotator(0, cha:GetRotation().Yaw, 0) })
+			p:SetValue("last_position", { location = cha:GetLocation(), rotation = Rotator(0, cha:GetRotation().Yaw, 0) })
 		end
 	end
-
-	Server.SetValue("character_locations", character_locations)
 end)
 
 Package.Subscribe("Load", function()
-	local character_locations = Server.GetValue("character_locations") or {}
-
-	-- When Package loads, restores if existing, the latest player`s character positions
-	if (#character_locations == 0) then
-		-- If there is not stored locations, just spawn everyone randomly
-		for k, player in pairs(Player.GetAll()) do
+	for k, player in pairs(Player.GetAll()) do
+		local last_position = player:GetValue("last_position")
+		if (last_position) then
+			SpawnPlayer(player, last_position.location, last_position.rotation)
+		else
 			SpawnPlayer(player)
-		end
-	else
-		for k, p in pairs(character_locations) do
-			if (p.player and p.player:IsValid()) then
-				SpawnPlayer(p.player, p.location, p.rotation)
-			end
 		end
 	end
 

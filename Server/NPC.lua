@@ -9,7 +9,7 @@ function NPC:Constructor(location, rotation, mesh)
 		-- After 5-10 seconds, move again
 		Timer.SetInterval(function(bound_character)
 			-- Does not move it already moving or dead or in ragdoll
-			if (bound_character:GetMovingTo() ~= Vector() or bound_character:GetHealth() == 0 or bound_character:IsInRagdollMode()) then return end
+			if (bound_character:GetMovingTo() ~= Vector() or bound_character:IsDead() or bound_character:IsInRagdollMode()) then return end
 
 			-- Make him walk
 			bound_character:SetGaitMode(GaitMode.Walking)
@@ -33,6 +33,8 @@ end
 
 -- When take damage
 function NPC:OnTakeDamage(damage, bone, type, from_direction, instigator, causer)
+	if (self:IsDead()) then return end
+
 	-- Avoid those damage types
 	if (type == DamageType.RunOverVehicle or type == DamageType.RunOverProp or type == DamageType.Fall) then return end
 
@@ -58,7 +60,7 @@ function NPC:OnRagdollModeChange(was_in_ragdoll, is_in_ragdoll)
 	Timer.Bind(
 		Timer.SetTimeout(function(bound_character)
 			-- If dead or not in ragdoll, do nothing
-			if (bound_character:GetHealth() == 0 or not bound_character:IsInRagdollMode()) then return end
+			if (bound_character:IsDead() or not bound_character:IsInRagdollMode()) then return end
 
 			bound_character:SetRagdollMode(false)
 			bound_character:SetGaitMode(GaitMode.Sprinting)
@@ -160,7 +162,7 @@ function StackOBot:Constructor(location, rotation)
 
 	Timer.Bind(
 		Timer.SetInterval(function(stack_o_bot)
-			if (stack_o_bot:GetHealth() == 0) then return end
+			if (stack_o_bot:IsDead()) then return end
 
 			stack_o_bot:SetMood(math.random(0, 14))
 		end, 15000, self),
@@ -175,7 +177,7 @@ function StackOBot:Constructor(location, rotation)
 		-- After 5-10 seconds, move again
 		Timer.SetInterval(function(bound_character)
 			-- Does not move it already moving or dead or in ragdoll
-			if (bound_character:GetMovingTo() ~= Vector() or bound_character:GetHealth() == 0) then return end
+			if (bound_character:GetMovingTo() ~= Vector() or bound_character:IsDead()) then return end
 
 			-- Walk 30 meters away max
 			bound_character:MoveRandom(3000)
@@ -200,6 +202,8 @@ end
 
 -- When take damage
 function StackOBot:OnTakeDamage(damage, bone, type, from_direction, instigator, causer)
+	if (self:IsDead()) then return end
+
 	-- Avoid those damage types
 	if (type == DamageType.RunOverVehicle or type == DamageType.RunOverProp or type == DamageType.Fall) then return end
 

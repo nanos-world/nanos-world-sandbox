@@ -8,7 +8,7 @@ function Torch:Constructor(location, rotation)
 	self:SetCooldown(1.5)
 	self:SetBaseDamage(25)
 
-	local light = Light(Vector(), Rotator(), Color(1, 0.7, 0.4), LightType.Point, 100, 1000)
+	local light = Light(Vector(), Rotator(), Color(1, 0.7, 0.4), LightType.Point, 1, 1000)
 	light:AttachTo(self, AttachmentRule.SnapToTarget, "", 0)
 	light:SetRelativeLocation(Vector(0, 0, 75))
 

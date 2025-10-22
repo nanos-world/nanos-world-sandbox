@@ -5,6 +5,8 @@ NameTags = {
 Timer.SetInterval(function()
 	-- Gets the local player
 	local local_player = Client.GetLocalPlayer()
+	if (not local_player) then return end
+
 	local local_character = local_player:GetControlledCharacter()
 
 	-- Gets the camera rotation and location
