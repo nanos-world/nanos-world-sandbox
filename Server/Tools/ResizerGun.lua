@@ -7,6 +7,15 @@ end
 
 function ResizerGun:OnResizeObject(player, object, scale, up)
 	if (not object or object:IsA(Character)) then return end
+
+	-- Cannot resize too big or too small
+	if (scale:SizeSquared() > 1200) then
+		scale = Vector(20)
+	elseif (scale:SizeSquared() < 0.03) then
+		scale = Vector(0.1)
+	end
+
+	-- Play invalid action sound if scale hasn't changed
 	if (object:GetScale():Equals(scale, 0.001)) then
 		Events.BroadcastRemote("SpawnSound", object:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return

@@ -33,7 +33,7 @@ function ResizerGun:OnLocalPlayerFire(character)
 	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle)
 
 	-- If hit an object, then sets this object to be the "resized" one
-	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:IsA(Character) and not trace_result.Entity:HasAuthority()) then
+	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
 		ResizerGun.resizing_object = trace_result.Entity
 		ResizerGun.current_scale = ResizerGun.resizing_object:GetScale()
 		ResizerGun.resizing_object:SetHighlightEnabled(true, 0)
@@ -84,19 +84,8 @@ end
 function ResizerGunMouseScroll(mouse_x, mouse_y, delta)
 	if (not ResizerGun.weapon or not ResizerGun.resizing_object) then return end
 
-	-- Scrolls up to increase the scale
+	-- Scroll up/down to increase/decrease the scale; clamped on server-side
 	ResizerGun.current_scale = ResizerGun.current_scale + ResizerGun.current_scale * 0.1 * delta
-
-	-- Cannot resize too big or too small
-	if (delta > 0) then
-		if (ResizerGun.current_scale.X > 20) then
-			ResizerGun.current_scale = Vector(20)
-		end
-	elseif (delta < 0) then
-		if (ResizerGun.current_scale.X < 0.1) then
-			ResizerGun.current_scale = Vector(0.1)
-		end
-	end
 
 	ResizerGun.weapon:CallRemoteEvent("ResizeObject", ResizerGun.resizing_object, ResizerGun.current_scale, true)
 end
@@ -105,7 +94,7 @@ function ResizerGunKeyPress(key_name)
 	if (not ResizerGun.weapon or not ResizerGun.resizing_object) then return end
 
 	if (key_name == "R") then
-		ResizerGun.current_scale = Vector(1, 1, 1)
-		ResizerGun.weapon:CallRemoteEvent("ResizeObject", ResizerGun.resizing_object, Vector(1, 1, 1), true)
+		ResizerGun.current_scale = Vector(1)
+		ResizerGun.weapon:CallRemoteEvent("ResizeObject", ResizerGun.resizing_object, Vector(1), true)
 	end
 end

@@ -6,8 +6,6 @@ function BalloonGun:Constructor(location, rotation)
 end
 
 function BalloonGun:OnSpawnBalloon(player, spawn_location, rotation, force, max_length, entity, distance_trace_object, asset)
-	if (entity and entity:IsA(Character)) then return end
-
 	-- TODO use relative instead
 	local balloon = Balloon(spawn_location, Rotator(0, math.random() * 360, 0), force, max_length, entity, distance_trace_object, asset)
 

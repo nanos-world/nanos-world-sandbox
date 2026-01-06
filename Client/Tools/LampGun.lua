@@ -14,7 +14,7 @@ LampGun.tutorials = {
 
 -- Tool Crosshair Trace Debug Settings
 LampGun.crosshair_trace = {
-	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
+	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn,
 	color_entity = Color.GREEN,
 	color_no_entity = Color.RED,
 }
@@ -22,7 +22,7 @@ LampGun.crosshair_trace = {
 
 -- Overrides ToolGun method
 function LampGun:OnLocalPlayerFire(shooter)
-	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
+	local trace_result = TraceFor(10000, LampGun.crosshair_trace.collision_channel)
 
 	if (trace_result.Success) then
 		local relative_location = nil

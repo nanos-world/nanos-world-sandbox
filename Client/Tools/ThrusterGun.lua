@@ -23,10 +23,10 @@ ThrusterGun.crosshair_trace = {
 -- Overrides ToolGun method
 function ThrusterGun:OnLocalPlayerFire(shooter)
 	-- Makes a trace 10000 units ahead to spawn the balloon
-	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle)
+	local trace_result = TraceFor(10000, ThrusterGun.crosshair_trace.collision_channel)
 
 	-- If hit some object, then spawns a thruster on attached it
-	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:IsA(Character) and not trace_result.Entity:HasAuthority()) then
+	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
 		local thruster_rotation = (trace_result.Normal * -1):Rotation()
 		local relative_location, relative_rotation = NanosMath.RelativeTo(trace_result.Location, thruster_rotation, trace_result.Entity)
 

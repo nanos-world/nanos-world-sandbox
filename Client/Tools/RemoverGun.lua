@@ -22,10 +22,10 @@ RemoverGun.crosshair_trace = {
 -- Overrides ToolGun method
 function RemoverGun:OnLocalPlayerFire(shooter)
 	-- Makes a trace 10000 units ahead
-	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle)
+	local trace_result = TraceFor(10000, RemoverGun.crosshair_trace.collision_channel)
 
 	-- If hit an object, calls the server to destroy it
-	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:IsA(Character) and not trace_result.Entity:HasAuthority()) then
+	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
 		Events.CallRemote("DestroyItem", trace_result.Entity)
 	else
 		-- If didn't hit anything, plays a negative sound

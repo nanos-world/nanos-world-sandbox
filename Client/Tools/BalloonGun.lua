@@ -15,7 +15,7 @@ BalloonGun.tutorials = {
 
 -- Tool Crosshair Trace Debug Settings
 BalloonGun.crosshair_trace = {
-	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
+	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn,
 	color_entity = Color.GREEN,
 	color_no_entity = Color.RED,
 }
@@ -29,7 +29,7 @@ BalloonGun.randomness = 0.15
 
 -- Overrides ToolGun method
 function BalloonGun:OnLocalPlayerFire(shooter)
-	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle)
+	local trace_result = TraceFor(10000, BalloonGun.crosshair_trace.collision_channel)
 
 	if (trace_result.Success) then
 		local distance_trace_object = Vector()
