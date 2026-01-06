@@ -26,7 +26,7 @@ function TrailGun:OnLocalPlayerFire(shooter)
 	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
 
 	-- If hit some object, then spawns a trail on attached it
-	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
+	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:IsA(Character) and not trace_result.Entity:HasAuthority()) then
 		local trail_rotation = (trace_result.Normal * -1):Rotation() + Rotator(90, 0, 0)
 		local relative_location, relative_rotation = NanosMath.RelativeTo(trace_result.Location, trail_rotation, trace_result.Entity)
 

@@ -6,6 +6,8 @@ function TrailGun:Constructor(location, rotation)
 end
 
 function TrailGun:OnSpawnTrail(player, hit_location, relative_location, relative_rotation, direction, entity)
+	if (entity and entity:IsA(Character)) then return end
+
 	local trail = Trail(hit_location, relative_location, relative_rotation, direction, entity)
 
 	-- Updates the client's spawn history

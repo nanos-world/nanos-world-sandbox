@@ -6,6 +6,8 @@ function ThrusterGun:Constructor(location, rotation)
 end
 
 function ThrusterGun:OnSpawnThruster(player, hit_location, relative_location, relative_rotation, direction, entity)
+	if (entity and entity:IsA(Character)) then return end
+
 	local rotation = (direction * -1):Rotation()
 	local thruster = Thruster(hit_location, rotation)
 

@@ -6,6 +6,7 @@ function ColorGun:Constructor(location, rotation)
 end
 
 function ColorGun:OnColorObject(player, entity, hit_location, direction, color)
+	if (not entity or entity:IsA(Character)) then return end
 	entity:SetMaterialColorParameter("Tint", color)
 	Particle(hit_location, direction:Rotation(), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", color)
 end

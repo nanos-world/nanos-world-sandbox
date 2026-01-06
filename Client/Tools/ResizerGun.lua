@@ -33,7 +33,7 @@ function ResizerGun:OnLocalPlayerFire(character)
 	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle)
 
 	-- If hit an object, then sets this object to be the "resized" one
-	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
+	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:IsA(Character) and not trace_result.Entity:HasAuthority()) then
 		ResizerGun.resizing_object = trace_result.Entity
 		ResizerGun.current_scale = ResizerGun.resizing_object:GetScale()
 		ResizerGun.resizing_object:SetHighlightEnabled(true, 0)

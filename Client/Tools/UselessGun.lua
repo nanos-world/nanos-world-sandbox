@@ -25,7 +25,7 @@ function UselessGun:OnLocalPlayerFire(shooter)
 	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
 
 	-- If hit an object, then get a random Useless and call server to update the Useless for everyone
-	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
+	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:IsA(Character) and not trace_result.Entity:HasAuthority()) then
 		self:CallRemoteEvent("UselessObject", trace_result.Entity, trace_result.Location, trace_result.Normal)
 	else
 		-- If didn't hit anything, plays a negative sound

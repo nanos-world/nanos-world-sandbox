@@ -6,6 +6,7 @@ function ResizerGun:Constructor(location, rotation)
 end
 
 function ResizerGun:OnResizeObject(player, object, scale, up)
+	if (not object or object:IsA(Character)) then return end
 	if (object:GetScale():Equals(scale, 0.001)) then
 		Events.BroadcastRemote("SpawnSound", object:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
