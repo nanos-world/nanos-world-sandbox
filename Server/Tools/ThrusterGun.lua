@@ -6,7 +6,11 @@ function ThrusterGun:Constructor(location, rotation)
 end
 
 function ThrusterGun:OnSpawnThruster(player, hit_location, relative_location, relative_rotation, direction, entity)
-	if (entity and entity:IsA(Character)) then return end
+	-- Refuse to attach a thruster to a character
+	if (not entity or entity:IsA(Character)) then
+		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
+		return
+	end
 
 	local rotation = (direction * -1):Rotation()
 	local thruster = Thruster(hit_location, rotation)

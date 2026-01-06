@@ -7,7 +7,7 @@ SpawnMenu = {
 		vehicles = {},
 		tools = {},
 		npcs = {},
-	}
+	},
 }
 
 -- Handles a Spawn Item event called by client
@@ -90,8 +90,11 @@ end
 ---@param player Player				The player who triggered it
 ---@param item any					The item to be destroyed
 SpawnMenu.DestroyItem = function(player, item)
-	-- Prevent destroying players
-	if (not item or (item:IsA(Character) and item:GetPlayer())) then return end
+	-- Prevent destroying a player character
+	if (not item or (item:IsA(Character) and item:GetPlayer())) then
+		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
+		return
+	end
 
 	-- Spawns some sounds and particles
 	Events.BroadcastRemote("SpawnSound", item:GetLocation(), "nanos-world::A_Player_Eject", false, 0.3, 1)
@@ -129,7 +132,7 @@ SpawnMenu.AddItem = function(tab_id, id, spawn_function)
 	end
 
 	SpawnMenu.items[tab_id][id] = {
-		spawn_function = spawn_function
+		spawn_function = spawn_function,
 	}
 end
 

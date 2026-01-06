@@ -6,7 +6,11 @@ function ResizerGun:Constructor(location, rotation)
 end
 
 function ResizerGun:OnResizeObject(player, object, scale, up)
-	if (not object or object:IsA(Character)) then return end
+	-- Refuse to resize a character
+	if (not object or object:IsA(Character)) then
+		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
+		return
+	end
 
 	-- Cannot resize too big or too small
 	if (scale:SizeSquared() > 1200) then
@@ -26,7 +30,7 @@ function ResizerGun:OnResizeObject(player, object, scale, up)
 end
 
 Events.SubscribeRemote("ToggleResizing", function(player, is_resizing)
-    player:GetControlledCharacter():SetCanAim(not is_resizing)
+	player:GetControlledCharacter():SetCanAim(not is_resizing)
 end)
 
 ResizerGun.SubscribeRemote("ResizeObject", ResizerGun.OnResizeObject)

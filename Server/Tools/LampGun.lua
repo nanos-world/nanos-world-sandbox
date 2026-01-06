@@ -9,8 +9,8 @@ function LampGun:OnSpawnLamp(player, spawn_location, relative_location, relative
 	local rotation = direction:Rotation()
 	local lamp = Flashlight(spawn_location, rotation)
 
-	-- If to attach to an entity
-	if (entity) then
+	-- If to attach to a non-player entity
+	if (entity and (not entity:IsA(Character) or not entity:GetPlayer())) then
 		lamp:AttachTo(entity, AttachmentRule.KeepWorld, "", 0)
 		lamp:SetRelativeLocation(relative_location)
 		lamp:SetRelativeRotation(relative_rotation)

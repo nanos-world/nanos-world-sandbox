@@ -78,7 +78,11 @@ function UselessGun:Constructor(location, rotation)
 end
 
 function UselessGun:OnUselessObject(player, entity, hit_location, direction)
-	if (entity and entity:IsA(Character)) then return end
+	-- Refuse to make a WebUI on a character
+	if (not entity or entity:IsA(Character)) then
+		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
+		return
+	end
 
 	-- Picks up a random website
 	local website = UselessGun.useless_websites[math.random(#UselessGun.useless_websites)]

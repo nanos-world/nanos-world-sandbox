@@ -6,7 +6,9 @@ function RopeGun:Constructor(location, rotation)
 end
 
 function RopeGun:OnRopeAttach(player, attaching_end_to, attaching_end_relative_location, attaching_start_to, attaching_start_location)
+	-- Refuse attaching rope from/to a character
 	if ((attaching_end_to and attaching_end_to:IsA(Character)) or (attaching_start_to and attaching_start_to:IsA(Character))) then
+		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
 	end
 
