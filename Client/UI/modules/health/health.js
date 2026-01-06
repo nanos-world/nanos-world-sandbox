@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 // Register for UpdateHealth custom event (from Lua)
 function UpdateHealth(health) {
 	// Overrides the HTML content of the SPAN with the new health value
-	document.getElementById("health_current").innerHTML = health;
+	document.getElementById("health_current").textContent = health;
 
 	// Bonus: make the background red when health below 25
 	document.getElementById("health_container").style.backgroundColor = health <= 25 ? "#ff05053d" : "#0000003d";

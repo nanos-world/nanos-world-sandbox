@@ -23,7 +23,7 @@ function ToggleTutorial(is_visible, title, tutorial_list) {
 		tutorial_body.innerHTML = "";
 
 		const tutorial_title = document.getElementById("tutorial_title");
-		tutorial_title.innerHTML = title;
+		tutorial_title.textContent = title;
 
 		for (let tutorial in tutorial_list) {
 			let image = tutorial_list[tutorial].image;
@@ -36,7 +36,7 @@ function ToggleTutorial(is_visible, title, tutorial_list) {
 			const tutorial_item = document.createElement("span");
 			tutorial_item.classList.add("tutorial");
 			tutorial_item.appendChild(tutorial_item_image);
-			tutorial_item.innerHTML += text;
+			tutorial_item.textContent += text;
 
 			tutorial_body.appendChild(tutorial_item);
 		}

@@ -14,7 +14,7 @@ function ShowNameTag(enable, player_name) {
 	if (enable)
 	{
 		document.getElementById("name_tag").style.display = "block";
-		document.getElementById("name_tag").innerHTML = player_name;
+		document.getElementById("name_tag").textContent = player_name;
 	}
 	else
 		document.getElementById("name_tag").style.display = "none";
