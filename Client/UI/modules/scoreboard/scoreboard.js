@@ -43,7 +43,7 @@ function UpdatePlayer(id, active, image, name, ping) {
 	if (active) {
 		if (existing_scoreboard_entry) {
 			const scoreboard_ping = existing_scoreboard_entry.querySelector("td.scoreboard_ping");
-			scoreboard_ping.innerHTML = ping;
+			scoreboard_ping.textContent = ping;
 			return;
 		}
 
@@ -51,7 +51,7 @@ function UpdatePlayer(id, active, image, name, ping) {
 		scoreboard_entry_tr.id = `scoreboard_entry_id${id}`;
 
 		const scoreboard_entry_td_id = document.createElement("td");
-		scoreboard_entry_td_id.innerHTML = id;
+		scoreboard_entry_td_id.textContent = id;
 		scoreboard_entry_tr.appendChild(scoreboard_entry_td_id);
 
 		const scoreboard_image = document.createElement("span");
@@ -60,7 +60,7 @@ function UpdatePlayer(id, active, image, name, ping) {
 
 		const scoreboard_name = document.createElement("span");
 		scoreboard_name.className = "player_name";
-		scoreboard_name.innerHTML = name;
+		scoreboard_name.textContent = name;
 
 		const scoreboard_entry_td_player = document.createElement("td");
 		scoreboard_entry_td_player.appendChild(scoreboard_image);
@@ -70,7 +70,7 @@ function UpdatePlayer(id, active, image, name, ping) {
 
 		const scoreboard_entry_td_ping = document.createElement("td");
 		scoreboard_entry_td_ping.className = "scoreboard_ping";
-		scoreboard_entry_td_ping.innerHTML = ping;
+		scoreboard_entry_td_ping.textContent = ping;
 		scoreboard_entry_tr.appendChild(scoreboard_entry_td_ping);
 
 		document.querySelector("#scoreboard_tbody").prepend(scoreboard_entry_tr);

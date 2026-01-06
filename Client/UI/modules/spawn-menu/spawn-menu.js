@@ -16,7 +16,7 @@ function ItemHover(label, enter, is_spawn_item) {
 
 	if (enter) {
 		label_element.style.opacity = 1;
-		label_element.innerHTML = label;
+		label_element.textContent = label;
 		Events.Call("HoverSound", is_spawn_item ? 1 : 0.9);
 	} else {
 		label_element.style.opacity = 0;
@@ -112,7 +112,7 @@ function AddTab(id, name, image) {
 
 	const tab_name = document.createElement("span");
 	tab_name.classList.add("tab_name");
-	tab_name.innerHTML = name;
+	tab_name.textContent = name;
 
 	tab.appendChild(tab_image);
 	tab.appendChild(tab_name);
@@ -249,7 +249,7 @@ function AddItem(item_id, item_name, image) {
 
 	const spawn_item_name = document.createElement("span");
 	spawn_item_name.classList.add("spawn_item_name");
-	spawn_item_name.innerHTML = item_name;
+	spawn_item_name.textContent = item_name;
 
 	spawn_item.appendChild(spawn_item_image);
 	spawn_item.appendChild(spawn_item_name);

@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 function AddNotification(message, time) {
 	const span = document.createElement("span");
 	span.classList.add("notification");
-	span.innerHTML = message;
+	span.textContent = message;
 
 	document.getElementById("notifications").prepend(span);
 

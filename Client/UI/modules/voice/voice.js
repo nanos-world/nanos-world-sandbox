@@ -25,7 +25,7 @@ function ToggleVoice(id, enable, name, image_url) {
 
 		const span_name = document.createElement("span");
 		span_name.classList.add("voice_chat_name");
-		span_name.innerHTML = name;
+		span_name.textContent = name;
 
 		const img = document.createElement("img");
 		img.classList.add("voice_chat_image");

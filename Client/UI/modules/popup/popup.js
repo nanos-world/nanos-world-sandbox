@@ -46,7 +46,7 @@ function ClosePopUpPrompt() {
 
 function ShowPopUpPrompt(text, callback_event) {
 	const popup_text = document.getElementById("popup_text");
-	popup_text.innerHTML = text;
+	popup_text.textContent = text;
 
 	const popup_prompt = document.getElementById("popup_prompt");
 	popup_prompt.style.display = "block";
