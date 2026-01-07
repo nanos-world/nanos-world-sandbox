@@ -6,8 +6,11 @@ function WeldGun:Constructor(location, rotation)
 end
 
 function WeldGun:OnWeld(player, welding_end_to, welding_start_to, welding_start_location)
-	-- Refuse attaching weld from/to a character
-	if ((welding_end_to and welding_end_to:IsA(Character)) or (welding_start_to and welding_start_to:IsA(Character))) then
+	-- Refuse attaching weld from/to a character, also refuse attaching to itself
+	if ((welding_end_to and welding_end_to:IsA(Character)) or
+			(welding_start_to and welding_start_to:IsA(Character)) or
+			(welding_end_to == welding_start_to)
+		) then
 		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
 	end
