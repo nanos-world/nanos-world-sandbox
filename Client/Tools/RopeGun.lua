@@ -27,7 +27,7 @@ RopeGun.attaching_end_relative_location = Vector()
 -- Overrides ToolGun method
 function RopeGun:OnLocalPlayerFire(shooter)
 	-- Makes a trace 10000 units ahead to spawn the balloon
-	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle)
+	local trace_result = TraceFor(10000, RopeGun.crosshair_trace.collision_channel)
 
 	-- If hit something
 	if (trace_result.Success) then

@@ -6,6 +6,11 @@ function LightGun:Constructor(location, rotation)
 end
 
 function LightGun:OnSpawnLight(player, spawn_location, direction, entity, distance_trace_object)
+	-- Refuse to attach a light to a player
+	if (entity and entity:IsA(Character) and entity:GetPlayer()) then
+		return
+	end
+
 	local light = RopeLight(spawn_location, direction, entity, distance_trace_object)
 
 	-- Calls the client to add it to his spawn history

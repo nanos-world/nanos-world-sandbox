@@ -78,6 +78,11 @@ function UselessGun:Constructor(location, rotation)
 end
 
 function UselessGun:OnUselessObject(player, entity, hit_location, direction)
+	-- Refuse to make a WebUI on a character
+	if (not entity or entity:IsA(Character)) then
+		return
+	end
+
 	-- Picks up a random website
 	local website = UselessGun.useless_websites[math.random(#UselessGun.useless_websites)]
 

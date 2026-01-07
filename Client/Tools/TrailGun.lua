@@ -23,7 +23,7 @@ TrailGun.crosshair_trace = {
 -- Overrides ToolGun method
 function TrailGun:OnLocalPlayerFire(shooter)
 	-- Makes a trace 10000 units ahead to spawn the balloon
-	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
+	local trace_result = TraceFor(10000, TrailGun.crosshair_trace.collision_channel)
 
 	-- If hit some object, then spawns a trail on attached it
 	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then

@@ -84,7 +84,7 @@ end
 function ResizerGunMouseScroll(mouse_x, mouse_y, delta)
 	if (not ResizerGun.weapon or not ResizerGun.resizing_object) then return end
 
-	-- Scrolls up to increase the scale
+	-- Scroll up/down to increase/decrease the scale; clamped on server-side
 	ResizerGun.current_scale = ResizerGun.current_scale + ResizerGun.current_scale * 0.1 * delta
 
 	-- Cannot resize too big or too small
@@ -97,7 +97,6 @@ function ResizerGunMouseScroll(mouse_x, mouse_y, delta)
 			ResizerGun.current_scale = Vector(0.1)
 		end
 	end
-
 	ResizerGun.weapon:CallRemoteEvent("ResizeObject", ResizerGun.resizing_object, ResizerGun.current_scale, true)
 end
 

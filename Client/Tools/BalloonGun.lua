@@ -29,7 +29,7 @@ BalloonGun.randomness = 0.15
 
 -- Overrides ToolGun method
 function BalloonGun:OnLocalPlayerFire(shooter)
-	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle)
+	local trace_result = TraceFor(10000, BalloonGun.crosshair_trace.collision_channel)
 
 	if (trace_result.Success) then
 		local distance_trace_object = Vector()

@@ -24,7 +24,7 @@ ColorGun.crosshair_trace = {
 
 -- Overrides ToolGun method
 function ColorGun:OnLocalPlayerFire(shooter)
-	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
+	local trace_result = TraceFor(10000, ColorGun.crosshair_trace.collision_channel)
 
 	-- If hit an object, then get a random Color and call server to update the color for everyone
 	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then

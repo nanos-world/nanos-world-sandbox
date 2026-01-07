@@ -86,10 +86,15 @@ SpawnMenu.SpawnItem = function(player, tab, id, spawn_location, spawn_rotation, 
 	Events.CallRemote("SpawnedItem", player, item)
 end
 
--- Handles a Spawn Item event called by client
+-- Handles a Destroy Item event called by client
 ---@param player Player				The player who triggered it
 ---@param item any					The item to be destroyed
 SpawnMenu.DestroyItem = function(player, item)
+	-- Prevent destroying a player character
+	if (not item or (item:IsA(Character) and item:GetPlayer())) then
+		return
+	end
+
 	-- Spawns some sounds and particles
 	Events.BroadcastRemote("SpawnSound", item:GetLocation(), "nanos-world::A_Player_Eject", false, 0.3, 1)
 	Particle(item:GetLocation() + Vector(0, 0, 30), Rotator(), "nanos-world::P_OmnidirectionalBurst")

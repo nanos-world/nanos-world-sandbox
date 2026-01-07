@@ -22,7 +22,7 @@ UselessGun.crosshair_trace = {
 -- Overrides ToolGun method
 function UselessGun:OnLocalPlayerFire(shooter)
 	-- Makes a trace 10000 units ahead
-	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn)
+	local trace_result = TraceFor(10000, UselessGun.crosshair_trace.collision_channel)
 
 	-- If hit an object, then get a random Useless and call server to update the Useless for everyone
 	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then

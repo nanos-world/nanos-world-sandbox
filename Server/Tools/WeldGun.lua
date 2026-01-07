@@ -6,6 +6,14 @@ function WeldGun:Constructor(location, rotation)
 end
 
 function WeldGun:OnWeld(player, welding_end_to, welding_start_to, welding_start_location)
+	-- Refuse attaching weld from/to a character, also refuse attaching to itself
+	if ((welding_end_to and welding_end_to:IsA(Character)) or
+			(welding_start_to and welding_start_to:IsA(Character)) or
+			(welding_end_to == welding_start_to)
+		) then
+		return
+	end
+
 	local welding_end_world_location = welding_end_to:GetLocation()
 	local welding_start_world_location = nil
 

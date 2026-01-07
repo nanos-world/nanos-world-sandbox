@@ -18,7 +18,14 @@ function PhysicsGun:Constructor(location, rotation)
 end
 
 function PhysicsGun:OnPickUpObject(player, object, is_grabbing, picking_object_relative_location, freeze)
+	-- Make sure that object is a valid entity
+	if (not NanosUtils.IsEntityValid(object)) then return end
+
 	if (is_grabbing) then
+		-- Cannot grab Characters (yet?), cannot grab attached entities or entities which are being grabbed
+		if (object:IsA(Character) or object:GetAttachedTo() or object:GetValue("IsBeingGrabbed")) then
+			return
+		end
 
 		-- Only updates the Network Authority if this entity is network distributed
 		if (object:IsNetworkDistributed()) then

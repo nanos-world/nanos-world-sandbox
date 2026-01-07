@@ -6,6 +6,14 @@ function ThrusterGun:Constructor(location, rotation)
 end
 
 function ThrusterGun:OnSpawnThruster(player, hit_location, relative_location, relative_rotation, direction, entity)
+	-- Make sure that entity is valid
+	if (not NanosUtils.IsEntityValid(entity)) then return end
+
+	-- Refuse to attach a thruster to a character
+	if (entity:IsA(Character)) then
+		return
+	end
+
 	local rotation = (direction * -1):Rotation()
 	local thruster = Thruster(hit_location, rotation)
 

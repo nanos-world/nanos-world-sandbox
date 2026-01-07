@@ -6,6 +6,14 @@ function RopeGun:Constructor(location, rotation)
 end
 
 function RopeGun:OnRopeAttach(player, attaching_end_to, attaching_end_relative_location, attaching_start_to, attaching_start_location)
+	-- Refuse attaching rope from/to a character, also refuse attaching to itself
+	if ((attaching_end_to and attaching_end_to:IsA(Character)) or
+			(attaching_start_to and attaching_start_to:IsA(Character)) or
+			(attaching_end_to == attaching_start_to)
+		) then
+		return
+	end
+
 	local attaching_end_world_location = attaching_end_to:GetLocation() + attaching_end_to:GetRotation():UnrotateVector(attaching_end_relative_location)
 	local attaching_start_world_location = nil
 
