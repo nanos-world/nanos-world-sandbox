@@ -11,7 +11,6 @@ function RopeGun:OnRopeAttach(player, attaching_end_to, attaching_end_relative_l
 			(attaching_start_to and attaching_start_to:IsA(Character)) or
 			(attaching_end_to == attaching_start_to)
 		) then
-		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
 	end
 

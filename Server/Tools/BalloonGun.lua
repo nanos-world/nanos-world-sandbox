@@ -6,9 +6,8 @@ function BalloonGun:Constructor(location, rotation)
 end
 
 function BalloonGun:OnSpawnBalloon(player, spawn_location, rotation, force, max_length, entity, distance_trace_object, asset)
-	-- Refuse to attach a balloon to a player
+	-- Refuse to attach a balloon to a Character
 	if (entity and entity:IsA(Character) and entity:GetPlayer()) then
-		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
 	end
 

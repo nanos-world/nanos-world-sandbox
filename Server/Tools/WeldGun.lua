@@ -11,7 +11,6 @@ function WeldGun:OnWeld(player, welding_end_to, welding_start_to, welding_start_
 			(welding_start_to and welding_start_to:IsA(Character)) or
 			(welding_end_to == welding_start_to)
 		) then
-		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
 	end
 

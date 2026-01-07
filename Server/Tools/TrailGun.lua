@@ -8,7 +8,6 @@ end
 function TrailGun:OnSpawnTrail(player, hit_location, relative_location, relative_rotation, direction, entity)
 	-- Refuse to attach a trail to a player
 	if (entity and entity:IsA(Character) and entity:GetPlayer()) then
-		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
 	end
 

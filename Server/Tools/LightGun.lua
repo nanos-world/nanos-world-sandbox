@@ -8,7 +8,6 @@ end
 function LightGun:OnSpawnLight(player, spawn_location, direction, entity, distance_trace_object)
 	-- Refuse to attach a light to a player
 	if (entity and entity:IsA(Character) and entity:GetPlayer()) then
-		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
 	end
 

@@ -11,7 +11,6 @@ function ThrusterGun:OnSpawnThruster(player, hit_location, relative_location, re
 
 	-- Refuse to attach a thruster to a character
 	if (entity:IsA(Character)) then
-		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
 	end
 

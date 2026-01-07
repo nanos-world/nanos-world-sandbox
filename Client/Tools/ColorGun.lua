@@ -17,7 +17,7 @@ ColorGun.color = Color.RED
 
 -- Tool Crosshair Trace Debug Settings
 ColorGun.crosshair_trace = {
-	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn,
+	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
 	color_entity = Color.GREEN,
 	color_no_entity = Color.RED,
 }

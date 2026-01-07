@@ -16,7 +16,6 @@ function ResizerGun:OnResizeObject(player, object, scale, up)
 
 	-- Refuse to resize a character
 	if (object:IsA(Character)) then
-		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
 	end
 

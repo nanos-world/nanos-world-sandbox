@@ -92,7 +92,6 @@ end
 SpawnMenu.DestroyItem = function(player, item)
 	-- Prevent destroying a player character
 	if (not item or (item:IsA(Character) and item:GetPlayer())) then
-		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
 	end
 

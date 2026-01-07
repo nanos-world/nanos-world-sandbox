@@ -35,9 +35,6 @@ end
 
 
 Events.SubscribeRemote("MakeObjectUseless", function(entity, website)
-	-- Refuse to make a WebUI on a character
-	--if (not entity or entity:IsA(Character)) then return end
-
 	-- Checks if the WebUI already exists
 	local website_webui_value = entity:GetValue("MaterialWebUI")
 

@@ -9,9 +9,8 @@ function ColorGun:OnColorObject(player, entity, hit_location, direction, color)
 	-- Make sure that entity is valid
 	if (not NanosUtils.IsEntityValid(entity)) then return end
 
-	-- Refuse changing color of a player
+	-- Refuse changing color of a Character
 	if (entity:IsA(Character) and entity:GetPlayer()) then
-		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
 	end
 
