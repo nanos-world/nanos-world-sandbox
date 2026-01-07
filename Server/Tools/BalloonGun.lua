@@ -11,6 +11,10 @@ function BalloonGun:OnSpawnBalloon(player, spawn_location, rotation, force, max_
 		return
 	end
 
+	if (not ValidateSpawnLimits(player, "Balloon")) then
+		return
+	end
+
 	-- TODO use relative instead
 	local balloon = Balloon(spawn_location, Rotator(0, math.random() * 360, 0), force, max_length, entity, distance_trace_object, asset)
 

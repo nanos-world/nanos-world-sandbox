@@ -1,5 +1,7 @@
 Balloon = Prop.Inherit("Balloon")
 
+ConfigureSpawnLimits("Balloon", "Balloons", Balloon.GetCount, "max_balloons")
+
 -- todo move the cable stuff to balloon gun instead
 function Balloon:Constructor(location, rotation, force, max_length, entity, distance_trace_object, asset)
 	-- Spawns a Balloon Prop (not allowing characters to pickup it and with CCD disabled)

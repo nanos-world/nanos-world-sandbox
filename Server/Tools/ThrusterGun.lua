@@ -14,6 +14,10 @@ function ThrusterGun:OnSpawnThruster(player, hit_location, relative_location, re
 		return
 	end
 
+	if (not ValidateSpawnLimits(player, "Thruster")) then
+		return
+	end
+
 	local rotation = (direction * -1):Rotation()
 	local thruster = Thruster(hit_location, rotation)
 

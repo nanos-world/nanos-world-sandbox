@@ -1,7 +1,8 @@
 BouncyBall = Prop.Inherit("BouncyBall")
 
+ConfigureSpawnLimits("BouncyBall", "Bouncy Balls", BouncyBall.GetCount, "max_bouncy_balls")
+
 function BouncyBall:Constructor(location, rotation)
-	-- CHAMAR SUPER COM . CRASHA KAKAKA
 	self.Super:Constructor(location or Vector(), (rotation or Rotator()) + Rotator(0, 90, 0), "nanos-world::SM_Sphere")
 
 	self:SetPhysicalMaterial("nanos-world::PM_RubberBouncy")

@@ -1,5 +1,17 @@
 ToolGun = Weapon.Inherit("ToolGun")
 
+function ToolGun.GetTotalCount()
+	local count = 0
+
+	local inherited_tool_guns = ToolGun.GetInheritedClasses(true)
+	for k, v in pairs(inherited_tool_guns) do
+		count = count + v.GetCount()
+	end
+
+	return count
+end
+
+
 function ToolGun:Constructor(location, rotation, color)
 	self.Super:Constructor(location, rotation, "nanos-world::SK_Blaster")
 

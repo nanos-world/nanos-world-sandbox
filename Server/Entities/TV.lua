@@ -1,5 +1,7 @@
 TV = Prop.Inherit("TV")
 
+ConfigureSpawnLimits("TV", "TVs", TV.GetCount, "max_tvs")
+
 function TV:Constructor(location, rotation)
 	-- Default Values
 	location = location or Vector()

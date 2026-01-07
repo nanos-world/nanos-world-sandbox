@@ -102,7 +102,7 @@ end)
 -- Function to delete the last item spawned
 function DeleteItemFromHistory()
 	if (#SpawnMenu.history == 0) then
-		AddNotification("NO_ITEM_TO_DELETE", "there are no items in your History to destroy!", 3000, 0, true)
+		AddNotification(NotificationType.Warning, "NO_ITEM_TO_DELETE", "there are no items in your History to destroy!", 3, 0, true)
 		return
 	end
 
@@ -301,8 +301,8 @@ SpawnMenu.AddCategory("entities", "destructables", "Destructables", "categories/
 local spawn_menu_keybinding = Input.GetMappedKeys("SpawnMenu")[1] or "not set"
 local undo_keybinding = Input.GetMappedKeys("Undo")[1] or "not set"
 
-AddNotification("SPAWN_MENU", "you can press " .. spawn_menu_keybinding .. " to open the Spawn Menu", 10000, 30000)
-AddNotification("SPAWN_MENU_DESTROY_ITEM", "you can press " .. undo_keybinding .. " to delete your last spawned item", 10000, 90000)
+AddNotification(NotificationType.Info, "SPAWN_MENU", "you can press " .. spawn_menu_keybinding .. " to open the Spawn Menu", 10, 30)
+AddNotification(NotificationType.Info, "SPAWN_MENU_DESTROY_ITEM", "you can press " .. undo_keybinding .. " to delete your last spawned item", 10, 90)
 
 
 function RequireAllLuaFilesInFolder(folder)

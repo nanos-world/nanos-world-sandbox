@@ -56,7 +56,7 @@ end
 -- Overrides ToolGun method
 function BalloonGun:OnLocalPlayerPickUp(character)
 	-- Sets some notification when grabbing the Balloon Tool
-	AddNotification("BALLOONS_POP", "balloons will start to pop if they reach a very high height", 5000, 5000)
+	AddNotification(NotificationType.Info, "BALLOONS_POP", "balloons will start to pop if they reach a very high height", 10, 5)
 
 	-- Adds an entry to Context Menu
 	ContextMenu.AddItems("balloon_tool", "balloon gun", {

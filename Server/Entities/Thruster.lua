@@ -1,5 +1,7 @@
 Thruster = Prop.Inherit("Thruster")
 
+ConfigureSpawnLimits("Truster", "Thrusters", Thruster.GetCount, "max_thrusters")
+
 function Thruster:Constructor(location, rotation)
 	self.Super:Constructor(location, rotation, "nanos-world::SM_Jet_Thruster", CollisionType.StaticOnly, true, GrabMode.Disabled)
 

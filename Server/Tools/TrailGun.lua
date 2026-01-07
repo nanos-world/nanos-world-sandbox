@@ -11,6 +11,10 @@ function TrailGun:OnSpawnTrail(player, hit_location, relative_location, relative
 		return
 	end
 
+	if (not ValidateSpawnLimits(player, "Trail")) then
+		return
+	end
+
 	local trail = Trail(hit_location, relative_location, relative_rotation, direction, entity)
 
 	-- Updates the client's spawn history

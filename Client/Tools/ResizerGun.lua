@@ -56,7 +56,7 @@ function ResizerGun:OnLocalPlayerPickUp(character)
 	Input.Subscribe("KeyPress", ResizerGunKeyPress)
 
 	-- Sets some notification when grabbing the Tool
-	AddNotification("RESIZER_GUIDE", "hold down Left Mouse to select an object, then use mouse wheel to size it up or down", 10000, 5000)
+	AddNotification(NotificationType.Info, "RESIZER_GUIDE", "hold down Left Mouse to select an object, then use mouse wheel to size it up or down", 10, 5)
 end
 
 -- Overrides Tool Gun's OnLocalPlayerDrop

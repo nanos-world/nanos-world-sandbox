@@ -99,8 +99,8 @@ function OnCharacterPickup(character, object)
 		UpdateAmmo(true, object:GetAmmoClip(), object:GetAmmoBag())
 
 		-- Trigger Weapon Hints
-		AddNotification("AIM_DOWN_SIGHT", "you can use mouse wheel to aim down sight with your Weapon when you are in First Person Mode", 10000, 3000)
-		AddNotification("HEADSHOTS", "headshots can cause more damage", 10000, 15000)
+		AddNotification(NotificationType.Info, "AIM_DOWN_SIGHT", "you can use mouse wheel to aim down sight with your Weapon when you are in First Person Mode", 10, 3)
+		AddNotification(NotificationType.Info, "HEADSHOTS", "headshots can cause more damage", 10, 15)
 
 		-- Subscribes on the weapon when the Ammo changes
 		object:Subscribe("AmmoClipChange", OnAmmoClipChanged)
@@ -201,3 +201,4 @@ end)
 
 -- Exposes this to other packages
 Package.Export("UpdateLocalCharacter", UpdateLocalCharacter)
+Package.Export("SandboxHUD", MainHUD)

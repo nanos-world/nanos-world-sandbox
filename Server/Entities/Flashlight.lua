@@ -1,5 +1,7 @@
 Flashlight = Prop.Inherit("Flashlight")
 
+ConfigureSpawnLimits("Flashlight", "Flashlights", Flashlight.GetCount, "max_flashlights")
+
 function Flashlight:Constructor(location, rotation)
 	self.Super:Constructor(location, rotation, "nanos-world::SM_Flashlight", CollisionType.StaticOnly)
 

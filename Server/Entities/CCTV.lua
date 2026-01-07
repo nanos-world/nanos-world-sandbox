@@ -1,5 +1,7 @@
 CCTV = Prop.Inherit("CCTV")
 
+ConfigureSpawnLimits("CCTV", "CCTVs", CCTV.GetCount, "max_cctvs")
+
 function CCTV:Constructor(location, rotation)
 	-- Spawns a TV prop
 	self.Super:Constructor(location, rotation + Rotator(0, 90, 0), "nanos-world::SM_TV")

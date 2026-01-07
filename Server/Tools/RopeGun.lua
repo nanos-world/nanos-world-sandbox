@@ -14,6 +14,10 @@ function RopeGun:OnRopeAttach(player, attaching_end_to, attaching_end_relative_l
 		return
 	end
 
+	if (not ValidateSpawnLimits(player, "Rope")) then
+		return
+	end
+
 	local attaching_end_world_location = attaching_end_to:GetLocation() + attaching_end_to:GetRotation():UnrotateVector(attaching_end_relative_location)
 	local attaching_start_world_location = nil
 

@@ -1,5 +1,7 @@
 Trail = Prop.Inherit("Trail")
 
+ConfigureSpawnLimits("Trail", "Trails", Trail.GetCount, "max_trails")
+
 function Trail:Constructor(hit_location, relative_location, relative_rotation, direction, entity)
 	-- Calculates the Trail Rotation to spawn it
 	local rotation = (direction * -1):Rotation() + Rotator(90, 0, 0)

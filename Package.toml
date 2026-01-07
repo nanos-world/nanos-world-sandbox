@@ -5,7 +5,7 @@
     # contributors
     author =                "nanos world™"
     # version
-    version =               "3.13.2"
+    version =               "3.14.0"
 
 # game-mode configurations
 [game_mode]
@@ -39,3 +39,16 @@
     enable_default_sky = { label = "spawn default sun & sky", type = "boolean", description = "enable overriding map lights with Ultra Dynamic Sky", default = true }
     enable_noclip = { label = "noclip", type = "boolean", description = "enable players to noclip", default = true }
     enable_pvp = { label = "pvp", type = "boolean", description = "enable players to shoot themselves", default = true }
+    max_balloons = { label = "max balloons", type = "integer", description = "maximum number of balloons allowed to spawn", default = 100 }
+    max_bouncy_balls = { label = "max bouncy balls", type = "integer", description = "maximum number of bouncy balls allowed to spawn", default = 100 }
+    max_cctvs = { label = "max cctvs", type = "integer", description = "maximum number of cctvs allowed to spawn", default = 20 }
+    max_flashlights = { label = "max flashlights", type = "integer", description = "maximum number of flashlights allowed to spawn", default = 20 }
+    max_npcs = { label = "max npcs", type = "integer", description = "maximum number of npcs allowed to spawn", default = 50 }
+    max_props = { label = "max props", type = "integer", description = "maximum number of props allowed to spawn", default = 1000 }
+    max_rope_lights = { label = "max ropelights", type = "integer", description = "maximum number of ropelights allowed to spawn", default = 20 }
+    max_thrusters = { label = "max thrusters", type = "integer", description = "maximum number of thrusters allowed to spawn", default = 30 }
+    max_tools = { label = "max tools", type = "integer", description = "maximum number of tools allowed to spawn", default = 50 }
+    max_trails = { label = "max trails", type = "integer", description = "maximum number of trails allowed to spawn", default = 100 }
+    max_tvs = { label = "max tvs", type = "integer", description = "maximum number of tvs allowed to spawn", default = 100 }
+    max_vehicles = { label = "max vehicles", type = "integer", description = "maximum number of vehicles allowed to spawn", default = 50 }
+    max_weapons = { label = "max weapons", type = "integer", description = "maximum number of weapons allowed to spawn", default = 100 }

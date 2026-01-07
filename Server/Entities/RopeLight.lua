@@ -1,5 +1,7 @@
 RopeLight = Prop.Inherit("RopeLight")
 
+ConfigureSpawnLimits("RopeLight", "Rope Lights", RopeLight.GetCount, "max_rope_lights")
+
 function RopeLight:Constructor(spawn_location, direction, attach_to_entity, distance_trace_object)
 	local rotation = direction:Rotation() + Rotator(90, 0, 0)
 

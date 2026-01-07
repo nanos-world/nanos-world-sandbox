@@ -17,19 +17,20 @@ The Sandbox game-mode exports the following functions to the global scope:
 
 ```lua
 -- Adds a Notification in the screen
----@param id string         Unique ID used to store if the notification was already displayed to the player
----@param message string    The message to display
----@param time number       Duration of the notification
----@param delay number      Time to wait until display the notification
----@param force? boolean    To force it to be displayed regardless if it was already displayed before
-function AddNotification(id, message, time, delay, force)
+---@param type NotificationType		Type of the notification to display
+---@param id string         		Unique ID used to store if the notification was already displayed to the player
+---@param message string    		The message to display
+---@param duration number			Duration in seconds of the notification
+---@param delay number      		Time in seconds to wait until display the notification
+---@param force? boolean    		To force it to be displayed regardless if it was already displayed before
+function AddNotification(type, id, message, delay, force)
 ```
 
 Example:
 
 ```lua
 -- Displays the message 'playing with friends is much more fun!' after 10 seconds, for 5 seconds
-AddNotification("FRIENDS", "playing with friends is much more fun!", 5000, 10000)
+AddNotification(NotificationType.Info, "FRIENDS", "playing with friends is much more fun!", 5, 10)
 ```
 
 

@@ -70,10 +70,10 @@ function PhysicsGun:OnLocalPlayerPickUp(character)
 	Input.Subscribe("MouseMove", PhysicsGunMouseMove)
 
 	-- Sets some notification when grabbing the Light Tool
-	AddNotification("PHYSICS_GUN_FREEZE", "while using a Physics Gun, press with the Right Click to freeze the object", 8000, 10000)
-	AddNotification("PHYSICS_GUN_ROTATE", "you can rotate the object you are moving while holding E key and Mouse Wheel", 8000, 25000)
-	AddNotification("PHYSICS_GUN_ROTATE_ANOTHER", "you can rotate the object you are moving in another direction while holding Alt+E key and Mouse Wheel", 8000, 35000)
-	AddNotification("PHYSICS_GUN_ROTATE_DISTANCE", "you can approximate the object you are moving with Mouse Wheel", 8000, 50000)
+	AddNotification(NotificationType.Info, "PHYSICS_GUN_FREEZE", "while using a Physics Gun, press with the Right Click to freeze the object", 10, 10)
+	AddNotification(NotificationType.Info, "PHYSICS_GUN_ROTATE", "you can rotate the object you are moving while holding E key and Mouse Wheel", 10, 25)
+	AddNotification(NotificationType.Info, "PHYSICS_GUN_ROTATE_ANOTHER", "you can rotate the object you are moving in another direction while holding Alt+E key and Mouse Wheel", 10, 35)
+	AddNotification(NotificationType.Info, "PHYSICS_GUN_ROTATE_DISTANCE", "you can approximate the object you are moving with Mouse Wheel", 10, 50)
 end
 
 function PhysicsGun:OnLocalPlayerDrop(character)
@@ -152,7 +152,7 @@ function TogglePhysicsGunLocal(is_using, freeze)
 			PhysicsGun.picking_object:SetOutlineEnabled(false)
 			PhysicsGun.picking_object = nil
 
-			-- Stops the "graviting" sound
+			-- Stops the "gravitating" sound
 			if (PhysicsGun.grabbed_sound) then
 				PhysicsGun.grabbed_sound:Destroy()
 				PhysicsGun.grabbed_sound = nil

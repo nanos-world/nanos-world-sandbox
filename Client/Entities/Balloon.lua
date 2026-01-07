@@ -12,7 +12,7 @@ function Balloon:OnDestroy()
 	local balloon_location = self:GetLocation()
 
 	Sound(balloon_location, "nanos-world::A_Balloon_Pop", false, true, SoundType.SFX, 1, 1)
-	Particle(balloon_location + Vector(0, 0, 30), Rotator(), "nanos-world::P_OmnidirectionalBurst", true, true):SetParameterColor("Color", self:GetValue("Color"))
+	Particle(balloon_location + Vector(0, 0, 30), Rotator(), "nanos-world::P_OmnidirectionalBurst", true, true, 5000):SetParameterColor("Color", self:GetValue("Color"))
 end
 
 Balloon.Subscribe("Destroy", Balloon.OnDestroy)

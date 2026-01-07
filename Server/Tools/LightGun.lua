@@ -11,6 +11,10 @@ function LightGun:OnSpawnLight(player, spawn_location, direction, entity, distan
 		return
 	end
 
+	if (not ValidateSpawnLimits(player, "Light")) then
+		return
+	end
+
 	local light = RopeLight(spawn_location, direction, entity, distance_trace_object)
 
 	-- Calls the client to add it to his spawn history

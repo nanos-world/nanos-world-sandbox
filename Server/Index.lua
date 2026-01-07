@@ -1,12 +1,52 @@
 Package.Require("Config.lua")
-Package.Require("SpawnMenu.lua")
-Package.Require("Sky.lua")
 
 -- List of Spawn Locations
 SPAWN_POINTS = Server.GetMapSpawnPoints()
 
 -- Custom Settings
 SANDBOX_CUSTOM_SETTINGS = Server.GetCustomSettings()
+
+-- Configured limits for spawned items per player
+SANDBOX_LIMITS = {
+	-- ["ID"] = { max_count = 0, label = "Label", func_check = function() }
+}
+
+-- TODO store limits per player?
+--	 weak table k, store per [player][id] = { item, item } (weak v)
+function ConfigureSpawnLimits(ID, label, func_check, setting_override)
+	local max_count = SANDBOX_CUSTOM_SETTINGS[setting_override]
+
+	if (not max_count) then
+		Console.Warn("No setting found to configure '%s' (%s) limits as '%s'", ID, label, setting_override)
+		return
+	end
+
+	Console.Debug("Configuring '%s' (%s) limits: %d", ID, label, max_count)
+
+	SANDBOX_LIMITS[ID] = { max_count = max_count, label = label, func_check = func_check }
+end
+
+-- Validates if a player can spawn an item
+function ValidateSpawnLimits(player, ID)
+	local limit_data = SANDBOX_LIMITS[ID]
+
+	-- No limits for this item
+	if (not limit_data or limit_data.max_count == 0 or not limit_data.func_check) then
+		return true
+	end
+
+	local current_count = limit_data.func_check()
+
+	-- Under limits
+	if (current_count < limit_data.max_count) then
+		return true
+	end
+
+	-- Can't spawn
+	Events.CallRemote("AddNotification", player, NotificationType.Warning, "SPAWN_LIMIT_" .. ID, "The server have reached the configured limit of " .. limit_data.max_count .. " " .. limit_data.label .. ".", 3, 0, true)
+
+	return false
+end
 
 function GetRandomSpawnPoint()
 	return #SPAWN_POINTS > 0 and SPAWN_POINTS[math.random(#SPAWN_POINTS)] or { location = Vector(), rotation = Rotator() }
@@ -291,3 +331,6 @@ end)
 
 -- Exposes this to other packages
 Package.Export("SpawnPlayer", SpawnPlayer)
+
+Package.Require("SpawnMenu.lua")
+Package.Require("Sky.lua")

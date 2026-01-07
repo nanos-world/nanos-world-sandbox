@@ -1,5 +1,23 @@
 NPC = Character.Inherit("NPC")
 
+function NPC.GetTotalCount()
+	local count = 0
+
+	local inherited_npcs = NPC.GetInheritedClasses(true)
+	for k, v in pairs(inherited_npcs) do
+		count = count + v.GetCount()
+	end
+
+	local inherited_character_simple = CharacterSimple.GetInheritedClasses(true)
+	for k, v in pairs(inherited_character_simple) do
+		count = count + v.GetCount()
+	end
+
+	return count
+end
+
+ConfigureSpawnLimits("npcs", "NPCs", NPC.GetTotalCount, "max_npcs")
+
 function NPC:Constructor(location, rotation, mesh)
 	self.Super:Constructor(location or Vector(), (rotation or Rotator()) + Rotator(0, math.random(0, 360), 0), mesh)
 

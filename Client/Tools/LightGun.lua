@@ -42,5 +42,5 @@ end
 -- Overrides ToolGun method
 function LightGun:OnLocalPlayerPickUp(character)
 	-- Sets some notification when grabbing the Light Tool
-	AddNotification("LIGHTS_PERFORMANCE", "too many lights can cause severe lag", 5000, 5000)
+	AddNotification(NotificationType.Info, "LIGHTS_PERFORMANCE", "too many lights can cause severe lag", 10, 5)
 end

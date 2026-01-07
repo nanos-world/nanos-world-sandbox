@@ -6,6 +6,10 @@ function LampGun:Constructor(location, rotation)
 end
 
 function LampGun:OnSpawnLamp(player, spawn_location, relative_location, relative_rotation, direction, entity)
+	if (not ValidateSpawnLimits(player, "Lamp")) then
+		return
+	end
+
 	local rotation = direction:Rotation()
 	local lamp = Flashlight(spawn_location, rotation)
 

@@ -18,6 +18,11 @@ SpawnMenu = {
 ---@param spawn_rotation Rotator	The spawn rotation passed by the client
 ---@param selected_option string	Temp custom hack parameter to set weapon patterns
 SpawnMenu.SpawnItem = function(player, tab, id, spawn_location, spawn_rotation, selected_option)
+
+	-- Checks for limits (each entity has it own limit)
+	local id_to_validate_limits = tab == "entities" and id or tab
+	if (not ValidateSpawnLimits(player, id_to_validate_limits)) then return end
+
 	local character = player:GetControlledCharacter()
 
 	if (tab == "vehicles") then
@@ -199,3 +204,9 @@ RequireAllLuaFilesInFolder("Server/Entities")
 
 -- Extra
 Package.Require("NPC.lua")
+
+-- Configure Limits
+ConfigureSpawnLimits("props", "Props", Prop.GetCount, "max_props")
+ConfigureSpawnLimits("weapons", "Weapons", function() return Weapon.GetCount() + Melee.GetCount() + Grenade.GetCount() end, "max_weapons")
+ConfigureSpawnLimits("tools", "Tools", ToolGun.GetTotalCount, "max_tools")
+ConfigureSpawnLimits("vehicles", "Vehicles", function() return VehicleWheeled.GetCount() + VehicleWater.GetCount() end, "max_vehicles")
