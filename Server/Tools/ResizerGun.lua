@@ -1,8 +1,8 @@
 ResizerGun = ToolGun.Inherit("ResizerGun")
 
--- ResizeGun Configurations
-ResizerGun.min_object_scale = Vector(0.1)
-ResizerGun.max_object_scale = Vector(20)
+-- ResizeGun Configurations (Note: also configured in Client/Tools/ResizerGun.lua)
+ResizerGun.min_object_scale = 0.1
+ResizerGun.max_object_scale = 20
 
 
 function ResizerGun:Constructor(location, rotation)
@@ -20,20 +20,17 @@ function ResizerGun:OnResizeObject(player, object, scale, up)
 	end
 
 	-- Cannot resize too big or too small
-	local size = scale:SizeSquared() -- This is cheaper operation than Size()
-	if (size > ResizerGun.max_object_scale:SizeSquared()) then
-		scale = ResizerGun.max_object_scale
-	elseif (size < ResizerGun.min_object_scale:SizeSquared()) then
-		scale = ResizerGun.min_object_scale
-	end
+	scale = NanosMath.Clamp(scale, ResizerGun.min_object_scale, ResizerGun.max_object_scale)
+
+	local scale_vector = Vector(scale, scale, scale)
 
 	-- Play invalid action sound if scale hasn't changed
-	if (object:GetScale():Equals(scale, 0.001)) then
+	if (object:GetScale():Equals(scale_vector, 0.001)) then
 		Events.BroadcastRemote("SpawnSound", object:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
 	end
 
-	object:SetScale(scale)
+	object:SetScale(scale_vector)
 	Events.BroadcastRemote("SpawnSound", object:GetLocation(), "nanos-world::A_Object_Snaps_To_Grid", false, 1, up and 0.9 or 0.8)
 end
 

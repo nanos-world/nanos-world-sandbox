@@ -16,7 +16,9 @@ ResizerGun.tutorials = {
 -- ResizerGun Configuration
 ResizerGun.resizing_object = nil
 ResizerGun.weapon = nil
-ResizerGun.current_scale = Vector(1)
+ResizerGun.current_scale = 1
+ResizerGun.min_object_scale = 0.1 -- (Note: also configured in Server/Tools/ResizerGun.lua)
+ResizerGun.max_object_scale = 20 -- (Note: also configured in Server/Tools/ResizerGun.lua)
 
 
 function ResizerGun:OnReleaseUse(character)
@@ -35,7 +37,7 @@ function ResizerGun:OnLocalPlayerFire(character)
 	-- If hit an object, then sets this object to be the "resized" one
 	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
 		ResizerGun.resizing_object = trace_result.Entity
-		ResizerGun.current_scale = ResizerGun.resizing_object:GetScale()
+		ResizerGun.current_scale = ResizerGun.resizing_object:GetScale().X
 		ResizerGun.resizing_object:SetHighlightEnabled(true, 0)
 		Events.CallRemote("ToggleResizing", true)
 	else
@@ -88,15 +90,8 @@ function ResizerGunMouseScroll(mouse_x, mouse_y, delta)
 	ResizerGun.current_scale = ResizerGun.current_scale + ResizerGun.current_scale * 0.1 * delta
 
 	-- Cannot resize too big or too small
-	if (delta > 0) then
-		if (ResizerGun.current_scale.X > 20) then
-			ResizerGun.current_scale = Vector(20)
-		end
-	elseif (delta < 0) then
-		if (ResizerGun.current_scale.X < 0.1) then
-			ResizerGun.current_scale = Vector(0.1)
-		end
-	end
+	ResizerGun.current_scale = NanosMath.Clamp(ResizerGun.current_scale, ResizerGun.min_object_scale, ResizerGun.max_object_scale)
+
 	ResizerGun.weapon:CallRemoteEvent("ResizeObject", ResizerGun.resizing_object, ResizerGun.current_scale, true)
 end
 
@@ -104,7 +99,7 @@ function ResizerGunKeyPress(key_name)
 	if (not ResizerGun.weapon or not ResizerGun.resizing_object) then return end
 
 	if (key_name == "R") then
-		ResizerGun.current_scale = Vector(1, 1, 1)
-		ResizerGun.weapon:CallRemoteEvent("ResizeObject", ResizerGun.resizing_object, Vector(1, 1, 1), true)
+		ResizerGun.current_scale = 1
+		ResizerGun.weapon:CallRemoteEvent("ResizeObject", ResizerGun.resizing_object, 1, true)
 	end
 end
