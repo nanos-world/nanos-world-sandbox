@@ -36,6 +36,7 @@
 # and can be accessed through Server.GetCustomSettings() method from any package
 [custom_settings]
     enable_auto_weather = { label = "auto change weather", type = "boolean", description = "enable weather to change automatically", default = true }
+    enable_cslua = { label = "client-side lua", type = "boolean", description = "enable players to run Lua on client-side", default = false }
     enable_default_sky = { label = "spawn default sun & sky", type = "boolean", description = "enable overriding map lights with Ultra Dynamic Sky", default = true }
     enable_noclip = { label = "noclip", type = "boolean", description = "enable players to noclip", default = true }
     enable_pvp = { label = "pvp", type = "boolean", description = "enable players to shoot themselves", default = true }
