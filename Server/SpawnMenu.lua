@@ -7,7 +7,7 @@ SpawnMenu = {
 		vehicles = {},
 		tools = {},
 		npcs = {},
-	},
+	}
 }
 
 -- Handles a Spawn Item event called by client
@@ -132,7 +132,7 @@ SpawnMenu.AddItem = function(tab_id, id, spawn_function)
 	end
 
 	SpawnMenu.items[tab_id][id] = {
-		spawn_function = spawn_function,
+		spawn_function = spawn_function
 	}
 end
 

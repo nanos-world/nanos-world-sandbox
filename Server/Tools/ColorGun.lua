@@ -8,7 +8,7 @@ end
 function ColorGun:OnColorObject(player, entity, hit_location, direction, color)
 	if (not entity) then return end
 
-	-- Refuse applying color to a player
+	-- Refuse changing color of a player
 	if (entity:IsA(Character) and entity:GetPlayer()) then
 		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
