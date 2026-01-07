@@ -6,7 +6,8 @@ function ColorGun:Constructor(location, rotation)
 end
 
 function ColorGun:OnColorObject(player, entity, hit_location, direction, color)
-	if (not entity) then return end
+	-- Make sure that entity is valid
+	if (not NanosUtils.IsEntityValid(entity)) then return end
 
 	-- Refuse changing color of a player
 	if (entity:IsA(Character) and entity:GetPlayer()) then

@@ -6,8 +6,11 @@ function ResizerGun:Constructor(location, rotation)
 end
 
 function ResizerGun:OnResizeObject(player, object, scale, up)
+	-- Make sure that object is a valid entity
+	if (not NanosUtils.IsEntityValid(object)) then return end
+
 	-- Refuse to resize a character
-	if (not object or object:IsA(Character)) then
+	if (object:IsA(Character)) then
 		--Events.BroadcastRemote("SpawnSound", player:GetLocation(), "nanos-world::A_Invalid_Action", false, 1, 1)
 		return
 	end
