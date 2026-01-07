@@ -1,5 +1,10 @@
 ResizerGun = ToolGun.Inherit("ResizerGun")
 
+-- ResizeGun Configurations
+ResizerGun.min_object_scale = Vector(0.1)
+ResizerGun.max_object_scale = Vector(20)
+
+
 function ResizerGun:Constructor(location, rotation)
 	-- Calls parent ToolGun constructor
 	ToolGun.Constructor(self, location, rotation, Color.VIOLET)
@@ -16,10 +21,11 @@ function ResizerGun:OnResizeObject(player, object, scale, up)
 	end
 
 	-- Cannot resize too big or too small
-	if (scale:SizeSquared() > 1200) then
-		scale = Vector(20)
-	elseif (scale:SizeSquared() < 0.03) then
-		scale = Vector(0.1)
+	local size = scale:SizeSquared() -- This is cheaper operation than Size()
+	if (size > ResizerGun.max_object_scale:SizeSquared()) then
+		scale = ResizerGun.max_object_scale
+	elseif (size < ResizerGun.min_object_scale:SizeSquared()) then
+		scale = ResizerGun.min_object_scale
 	end
 
 	-- Play invalid action sound if scale hasn't changed
