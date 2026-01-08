@@ -1,6 +1,20 @@
 local ID = "sv_allowcslua"
 local Enabled = false -- disabled by default
 
+local function RunLua(...)
+	if select("#", ...) == 0 then return end
+	local code = table.concat({ ... }, " ")
+	local fn, err = load(code, nil, "t")
+	if type(fn) == "function" then
+		local ok, res = pcall(fn)
+		if res ~= nil then
+			Console.Log("[lua] %s", res)
+		end
+	else
+		Console.Log("[lua] %s", err)
+	end
+end
+
 if Server then
 	Enabled = Server.GetCustomSettings().enable_cslua or Enabled
 
@@ -37,6 +51,8 @@ if Server then
 			Chat.BroadcastMessage("Client-side Lua has been " .. (Enabled and "<green>enabled</>" or "<red>disabled</>"))
 		end
 	end, "enable players to run Lua on client-side", { "0/1" })
+
+	Console.RegisterCommand("lua", RunLua, "run Lua", { "code" })
 else
 	Enabled = Client.GetValue(ID, Enabled)
 
@@ -54,16 +70,8 @@ else
 
 	Console.RegisterCommand("lua", function(...)
 		--Enabled = Client.GetValue(ID, false) -- new approach
-		if not Enabled or select("#", ...) == 0 then return end
-		local code = table.concat({ ... }, " ")
-		local fn, err = load(code, nil, "t")
-		if type(fn) == "function" then
-			local ok, res = pcall(fn)
-			if res ~= nil then
-				Console.Log("[lua] %s", res)
-			end
-		else
-			Console.Log("[lua] %s", err)
+		if Enabled then
+			RunLua(...)
 		end
 	end, "run Lua (" .. ID .. " must be enabled on server-side)", { "code" })
 end
