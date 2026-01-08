@@ -1,19 +1,20 @@
-local BROADCASTLUA = "BroadcastLua"
+local ID = "BroadcastLua"
 
 if Server then
 	function BroadcastLua(code)
-		return Events.BroadcastRemote(BROADCASTLUA, code)
+		return Events.BroadcastRemote(ID, code)
 	end
 
-	function Player.SendLua(player, code)
-		return Events.CallRemote(BROADCASTLUA, player, code)
+	function SendLua(player, code)
+		return Events.CallRemote(ID, player, code)
 	end
 
-	Package.Export(BROADCASTLUA, BroadcastLua)
+	Package.Export(ID, BroadcastLua)
+	Package.Export("SendLua", SendLua)
 else
 	-- Client-side
-	Events.SubscribeRemote(BROADCASTLUA, function(code)
-		local fn = load(code, BROADCASTLUA, "t")
+	Events.SubscribeRemote(ID, function(code)
+		local fn = load(code, ID, "t")
 		if type(fn) == "function" then
 			pcall(fn)
 		end
