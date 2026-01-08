@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 function ToggleTutorial(is_visible, title, tutorial_list) {
 	const tutorials = document.getElementById("tutorials");
-	
+
 	if (is_visible) {
 		const tutorial_body = document.getElementById("tutorial_body");
 		tutorial_body.innerHTML = "";
@@ -33,10 +33,13 @@ function ToggleTutorial(is_visible, title, tutorial_list) {
 			tutorial_item_image.classList.add("tutorial_key");
 			tutorial_item_image.src = image;
 
+			const tutorial_item_text = document.createElement("span");
+			tutorial_item_text.textContent = text;
+
 			const tutorial_item = document.createElement("span");
 			tutorial_item.classList.add("tutorial");
 			tutorial_item.appendChild(tutorial_item_image);
-			tutorial_item.textContent += text;
+			tutorial_item.appendChild(tutorial_item_text);
 
 			tutorial_body.appendChild(tutorial_item);
 		}
