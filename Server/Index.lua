@@ -1,5 +1,3 @@
-Package.Require("Config.lua")
-
 -- List of Spawn Locations
 SPAWN_POINTS = Server.GetMapSpawnPoints()
 
