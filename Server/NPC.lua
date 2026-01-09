@@ -205,6 +205,9 @@ function StackOBot:Constructor(location, rotation)
 
 	-- Immediately walks after spawning
 	self:MoveRandom(2000)
+
+	-- Plays "spawn" sound
+	self:BroadcastRemoteEvent("PlaySound", "nanos-world::A_Robot_Reaction")
 end
 
 function StackOBot:SetMood(value)
@@ -236,6 +239,9 @@ end
 function StackOBot:OnDeath()
 	self:SetMood(15)
 	self:SetLifeSpan(10)
+
+	-- Plays "death" sound
+	self:BroadcastRemoteEvent("PlaySound", "nanos-world::A_Robot_Shutdown")
 end
 
 StackOBot.Subscribe("TakeDamage", StackOBot.OnTakeDamage)

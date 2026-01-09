@@ -59,3 +59,27 @@ StackOBot = CharacterSimple.Inherit("StackOBot", {
 	name = "Stack-O-Bot",
 	image = "assets://nanos-world/Thumbnails/SK_StackOBot.jpg",
 })
+
+-- When spawns
+function StackOBot:OnSpawn()
+	Timer.Bind(
+		-- After 10-20 seconds, plays sound
+		Timer.SetInterval(function(bound_character)
+			-- Skips if dead
+			if (bound_character:IsDead()) then return end
+
+			-- Plays "happy" sound
+			self:OnPlaySound("nanos-world::A_Robot_Beep_Whistle")
+
+		end, math.random(10000) + 10000, self),
+		self
+	)
+end
+
+function StackOBot:OnPlaySound(sound_asset)
+	local sound = Sound(self:GetLocation(), sound_asset, false, true, SoundType.SFX, 0.3, 1, 400, 3600, AttenuationFunction.NaturalSound)
+	sound:AttachTo(self)
+end
+
+StackOBot.SubscribeRemote("PlaySound", StackOBot.OnPlaySound)
+StackOBot.Subscribe("Spawn", StackOBot.OnSpawn)

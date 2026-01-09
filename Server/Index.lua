@@ -43,7 +43,7 @@ function ValidateSpawnLimits(player, ID)
 	end
 
 	-- Can't spawn
-	Events.CallRemote("AddNotification", player, NotificationType.Warning, "SPAWN_LIMIT_" .. ID, "The server have reached the configured limit of " .. limit_data.max_count .. " " .. limit_data.label .. ".", 3, 0, true)
+	Events.CallRemote("AddNotification", player, NotificationType.Warning, "SPAWN_LIMIT_" .. ID, "the server have reached the configured limit of " .. limit_data.max_count .. " " .. limit_data.label .. ".", 3, 0, true)
 
 	return false
 end
@@ -305,6 +305,20 @@ Console.RegisterCommand("tp", function(player1, player2)
 	Console.Log("Teleporting '%s (Player#%d)' to '%s (Player#%d)'.", p1:GetName(), p1:GetID(), p2:GetName(), p2:GetID())
 end, "teleports a player to another", { "player1", "player2" })
 
+-- Client Commands
+Events.SubscribeRemote("ClientCommand", function(player, command)
+	if (command == "reset") then
+		Console.Log("The Player '%s' has requested to reset the package.", player:GetName())
+
+		if (Player.GetCount() > 1) then
+			Events.CallRemote("AddNotification", player, NotificationType.Error, "CANT_RESET", "you cannot reset the package while other players are connected", 3, 0, true)
+			return
+		end
+
+		Server.ReloadPackage("sandbox")
+		return
+	end
+end)
 
 Package.Subscribe("Unload", function()
 	-- When Package unloads, stores the characters locations to respawn them at the same position if the package is being reloaded

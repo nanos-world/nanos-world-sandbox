@@ -102,7 +102,7 @@ end)
 -- Function to delete the last item spawned
 function DeleteItemFromHistory()
 	if (#SpawnMenu.history == 0) then
-		AddNotification(NotificationType.Warning, "NO_ITEM_TO_DELETE", "there are no items in your History to destroy!", 3, 0, true)
+		AddNotification(NotificationType.Warning, "NO_ITEM_TO_DELETE", "there are no items in your history to destroy!", 3, 0, true)
 		return
 	end
 

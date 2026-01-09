@@ -57,7 +57,7 @@ SpawnMenu.SpawnItem = function(player, tab, id, spawn_location, spawn_rotation, 
 		-- Forces the Network Authority to the player who spawned it
 		item:SetNetworkAuthority(player)
 
-		if (character) then
+		if (character and character:IsA(Character)) then
 			local is_weapon = item:IsA(Weapon)
 			local is_melee = item:IsA(Melee)
 			local is_grenade = item:IsA(Grenade)
@@ -166,10 +166,14 @@ end)
 
 -- Function to apply a Texture Pattern in a Weapon (currently only work on default nanos world Weapons as their materials are prepared beforehand)
 function ApplyWeaponPattern(weapon, pattern_texture)
-	weapon:SetMaterialTextureParameter("PatternTexture", pattern_texture)
-	weapon:SetMaterialScalarParameter("PatternBlend", pattern_texture ~= "" and 1 or 0)
-	weapon:SetMaterialScalarParameter("PatternTiling", 2)
-	weapon:SetMaterialScalarParameter("PatternRoughness", 0.3)
+	if (pattern_texture ~= "") then
+		weapon:SetMaterialTextureParameter("PatternTexture", pattern_texture)
+		weapon:SetMaterialScalarParameter("PatternBlend", 1)
+		weapon:SetMaterialScalarParameter("PatternTiling", 2)
+		weapon:SetMaterialScalarParameter("PatternRoughness", 0.3)
+	else
+		weapon:SetMaterialScalarParameter("PatternBlend", 0)
+	end
 end
 
 Events.SubscribeRemote("ApplyWeaponPattern", function(player, weapon, pattern_texture)

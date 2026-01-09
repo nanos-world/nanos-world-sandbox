@@ -199,6 +199,12 @@ Input.Subscribe("KeyPress", function(key_name, delta)
 	end
 end)
 
+-- Client Console Commands
+Console.RegisterCommand("reset", function()
+	Events.CallRemote("ClientCommand", "reset")
+end, "resets the server if you are the only player")
+
+
 -- Exposes this to other packages
 Package.Export("UpdateLocalCharacter", UpdateLocalCharacter)
 Package.Export("SandboxHUD", MainHUD)
