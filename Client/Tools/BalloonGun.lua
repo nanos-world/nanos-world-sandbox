@@ -53,14 +53,32 @@ function BalloonGun:OnLocalPlayerFire(shooter)
 	end
 end
 
+-- Context Menu Callbacks
+function BalloonGun.SetAsset(asset)
+	BalloonGun.asset = asset
+end
+
+function BalloonGun.SetForce(force)
+	BalloonGun.force = force
+end
+
+function BalloonGun.SetMaxLength(max_length)
+	BalloonGun.max_length = max_length
+end
+
+function BalloonGun.SetRandomness(randomness)
+	BalloonGun.randomness = randomness / 100
+end
+
 -- Overrides ToolGun method
 function BalloonGun:OnLocalPlayerPickUp(character)
 	-- Sets some notification when grabbing the Balloon Tool
-	AddNotification(NotificationType.Info, "BALLOONS_POP", "balloons will start to pop if they reach a very high height", 10, 5)
+	AddNotification(NotificationType.Info, "BALLOONS_CUSTOM", "you can change the balloons mesh and color in the Context Menu", 10, 5)
+	AddNotification(NotificationType.Info, "BALLOONS_POP", "balloons will start to pop if they reach a very high height", 10, 60)
 
 	-- Adds an entry to Context Menu
 	ContextMenu.AddItems("balloon_tool", "balloon gun", {
-		{ id = "baloon_asset", type = "select_image", label = "Asset", callback_event = "SelectBalloonAsset", selected = BalloonGun.asset, options = {
+		{ id = "balloon_asset", type = "select_image", label = "Asset", callback = BalloonGun.SetAsset, selected = BalloonGun.asset, options = {
 			{ id = "nanos-world::SM_Balloon_01", name = "SM_Balloon_01", image = "assets://nanos-world/Thumbnails/SM_Balloon_01.jpg" },
 			{ id = "nanos-world::SM_Balloon_02", name = "SM_Balloon_02", image = "assets://nanos-world/Thumbnails/SM_Balloon_02.jpg" },
 			{ id = "nanos-world::SM_Balloon_03", name = "SM_Balloon_03", image = "assets://nanos-world/Thumbnails/SM_Balloon_03.jpg" },
@@ -76,9 +94,9 @@ function BalloonGun:OnLocalPlayerPickUp(character)
 			{ id = "nanos-world::SM_Emoji_03", name = "SM_Emoji_03", image = "assets://nanos-world/Thumbnails/SM_Emoji_03.jpg" },
 			{ id = "nanos-world::SM_Emoji_04", name = "SM_Emoji_04", image = "assets://nanos-world/Thumbnails/SM_Emoji_04.jpg" },
 		}},
-		{ id = "baloon_force", type = "range", label = "Force", callback_event = "SetBalloonForce", min = -100000, max = 200000, value = BalloonGun.force, auto_update_label = true },
-		{ id = "baloon_max_length", type = "range", label = "Length", callback_event = "SetBalloonMaxLength", min = 0, max = 1000, value = BalloonGun.max_length, auto_update_label = true },
-		{ id = "baloon_randomness", type = "range", label = "Randomness", callback_event = "SetBalloonRandomness", min = 0, max = 100, value = BalloonGun.randomness * 100, auto_update_label = true },
+		{ id = "balloon_force", type = "range", label = "Force", callback = BalloonGun.SetForce, min = -100000, max = 200000, value = BalloonGun.force, auto_update_label = true },
+		{ id = "balloon_max_length", type = "range", label = "Length", callback = BalloonGun.SetMaxLength, min = 0, max = 1000, value = BalloonGun.max_length, auto_update_label = true },
+		{ id = "balloon_randomness", type = "range", label = "Randomness", callback = BalloonGun.SetRandomness, min = 0, max = 100, value = BalloonGun.randomness * 100, auto_update_label = true },
 	})
 end
 
@@ -86,23 +104,3 @@ end
 function BalloonGun:OnLocalPlayerDrop(character)
 	ContextMenu.RemoveItems("balloon_tool")
 end
-
--- Subscribes for ContextMenu changes
-MainHUD:Subscribe("SelectBalloonAsset", function(asset)
-	BalloonGun.asset = asset
-end)
-
--- Subscribes for ContextMenu changes
-MainHUD:Subscribe("SetBalloonForce", function(force)
-	BalloonGun.force = force
-end)
-
--- Subscribes for ContextMenu changes
-MainHUD:Subscribe("SetBalloonMaxLength", function(max_length)
-	BalloonGun.max_length = max_length
-end)
-
--- Subscribes for ContextMenu changes
-MainHUD:Subscribe("SetBalloonRandomness", function(randomness)
-	BalloonGun.randomness = randomness / 100
-end)

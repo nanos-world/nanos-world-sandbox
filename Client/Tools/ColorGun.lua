@@ -36,11 +36,16 @@ function ColorGun:OnLocalPlayerFire(shooter)
 	end
 end
 
+-- Context Menu Callbacks
+function ColorGun.SetColor(color)
+	ColorGun.color = Color.FromHEX(color)
+end
+
 -- Overrides ToolGun method
 function ColorGun:OnLocalPlayerPickUp(character)
 	-- Adds an entry to Context Menu
 	ContextMenu.AddItems("color_gun", "color gun", {
-		{ id = "color_gun_color", type = "color", label = "color", callback_event = "SetColorGunColor", value = ColorGun.color:ToHex(false) },
+		{ id = "color_gun_color", type = "color", label = "color", callback = ColorGun.SetColor, value = ColorGun.color:ToHex(false) },
 	})
 end
 
@@ -48,8 +53,3 @@ end
 function ColorGun:OnLocalPlayerDrop(character)
 	ContextMenu.RemoveItems("color_gun")
 end
-
--- Subscribes for ContextMenu changes
-MainHUD:Subscribe("SetColorGunColor", function(color)
-	ColorGun.color = Color.FromHEX(color)
-end)

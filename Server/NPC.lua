@@ -214,7 +214,7 @@ function StackOBot:SetMood(value)
 	self:SetMaterialScalarParameter("Mood", value)
 end
 
--- Randomly walk a NPC to somwehere around within distance
+-- Randomly walk a NPC to somewhere around within distance
 function StackOBot:MoveRandom(distance)
 	if (self:GetPlayer() ~= nil) then return end
 	local random_location = self:GetLocation() + Vector(math.random(distance) - distance / 2, math.random(distance) - distance / 2, 0)

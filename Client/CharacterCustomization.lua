@@ -36,6 +36,11 @@ Package.Subscribe("Load", function()
 	end
 end)
 
+-- Context Menu Callbacks
+function CharacterCustomization.SelectCharacterMesh(value)
+	Events.CallRemote("SelectCharacterMesh", value)
+end
+
 function CharacterCustomization.LocalPlayerPossess(player, character)
 	if (not character:IsA(Character)) then return end
 	local current_mesh = character:GetMesh()
@@ -51,7 +56,7 @@ function CharacterCustomization.LocalPlayerPossess(player, character)
 
 	-- Adds an entry to Context Menu
 	ContextMenu.AddItems("character_customization", "character customization", {
-		{ id = "character_mesh", type = "select_image", label = "mesh", callback_event = "SelectCharacterMesh", selected = current_mesh, options = meshes},
+		{ id = "character_mesh", type = "select_image", label = "mesh", callback = CharacterCustomization.SelectCharacterMesh, selected = current_mesh, options = meshes},
 	})
 
 	CharacterCustomization.is_possessed = true
@@ -62,7 +67,3 @@ function CharacterCustomization.LocalPlayerUnPossess(player, character)
 
 	CharacterCustomization.is_possessed = false
 end
-
-MainHUD:Subscribe("SelectCharacterMesh", function(value)
-	Events.CallRemote("SelectCharacterMesh", value)
-end)

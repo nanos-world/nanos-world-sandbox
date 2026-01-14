@@ -38,12 +38,28 @@ Events.SubscribeRemote("SpawnSky", function(current_weather, time_of_day, day_le
 	Sky.ChangeWeather(current_weather, 0)
 end)
 
+-- Context Menu callbacks
+function SandboxSky.SetTimeOfDay(time_of_day)
+	Events.CallRemote("ChangeTime", time_of_day)
+end
+
+function SandboxSky.LockTimeOfDay(enabled)
+	if (enabled) then
+		Sky.SetAnimateTimeOfDay(false)
+	else
+		Sky.SetAnimateTimeOfDay(true, SandboxSky.day_length, SandboxSky.night_length)
+	end
+end
+
+function SandboxSky.ChangeWeather(value)
+	Events.CallRemote("ChangeWeather", tonumber(value))
+end
 
 -- Context Menu Configuration for Sky & Time
 ContextMenu.AddItems("sky", "sky", {
-	{ id = "time_of_day", type = "range", label = "time of day (00:00)", min = 0, max = 2400, value = 960, callback_event = "ContextMenu_SetTimeOfDay", auto_update_label = false },
-	{ id = "lock_time_of_day", type = "checkbox", label = "lock time of the day", callback_event = "ContextMenu_LockTimeOfDay" },
-	{ id = "weather", type = "select", label = "weather", selected = 5, callback_event = "ContextMenu_ChangeWeather", options = {
+	{ id = "time_of_day", type = "range", label = "time of day (00:00)", min = 0, max = 2400, value = 960, callback = SandboxSky.SetTimeOfDay, auto_update_label = false },
+	{ id = "lock_time_of_day", type = "checkbox", label = "lock time of the day", callback = SandboxSky.LockTimeOfDay },
+	{ id = "weather", type = "select", label = "weather", selected = 5, callback = SandboxSky.ChangeWeather, options = {
 		{ id = 1, name = "ClearSkies" },
 		{ id = 2, name = "Cloudy" },
 		{ id = 3, name = "Foggy" },
@@ -59,22 +75,6 @@ ContextMenu.AddItems("sky", "sky", {
 		{ id = 13, name = "SnowLight" }
 	}},
 })
-
-MainHUD:Subscribe("ContextMenu_SetTimeOfDay", function(time_of_day)
-	Events.CallRemote("ChangeTime", time_of_day)
-end)
-
-MainHUD:Subscribe("ContextMenu_LockTimeOfDay", function(enabled)
-	if (enabled) then
-		Sky.SetAnimateTimeOfDay(false)
-	else
-		Sky.SetAnimateTimeOfDay(true, SandboxSky.day_length, SandboxSky.night_length)
-	end
-end)
-
-MainHUD:Subscribe("ContextMenu_ChangeWeather", function(value)
-	Events.CallRemote("ChangeWeather", tonumber(value))
-end)
 
 function UpdateContextMenuValues()
 	if (not Sky.IsSpawned(true)) then return end

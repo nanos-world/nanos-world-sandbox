@@ -31,10 +31,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	});
 
 	// AddContextMenuItems("cu", "lambe", [
-	// 	{ id: "ae1", type: "checkbox", label: "my label", callback_event: "MyEvent" },
+	// 	{ id: "ae1", type: "checkbox", label: "my label" },
 	// 	{ id: "ae2", type: "button", label: "press me" },
 	// 	{ id: "ae3", type: "range", label: "slide me", min: 0, max: 1440, value: 720, auto_update_label: true },
-	// 	{ id: "ae4", type: "select_image", label: "Balloon", callback_event: "MyEvent", selected: "opt1", options: [
+	// 	{ id: "ae4", type: "select_image", label: "Balloon", selected: "opt1", options: [
 	// 		{ id: "opt1", name: "option 1", image: "./images/nanosworld_empty.webp" },
 	// 		{ id: "opt2", name: "option 2", image: "./images/nanosworld_empty.webp" },
 	// 		{ id: "opt3", name: "option 3", image: "./images/nanosworld_empty.webp" },
@@ -70,7 +70,7 @@ function AddContextMenuItems(id, title, items) {
 				button.innerText = item.label;
 				button.addEventListener("click", function() {
 					Events.Call("ClickSound");
-					Events.Call(item.callback_event);
+					Events.Call("ContextMenu_Callback", item.id);
 				});
 
 				context_menu_item.classList.add("context_menu_item_button");
@@ -83,7 +83,7 @@ function AddContextMenuItems(id, title, items) {
 				input.type = "checkbox";
 				input.addEventListener("change", function(e) {
 					Events.Call("ClickSound");
-					Events.Call(item.callback_event, e.target.checked);
+					Events.Call("ContextMenu_Callback", item.id, e.target.checked);
 				});
 
 				const label = document.createElement("label");
@@ -114,7 +114,7 @@ function AddContextMenuItems(id, title, items) {
 							label.innerText = `${item.label}\n(${e.target.value})`;
 						}
 
-						Events.Call(item.callback_event, parseInt(e.target.value));
+						Events.Call("ContextMenu_Callback", item.id, parseInt(e.target.value));
 					}, 100);
 				});
 
@@ -149,7 +149,7 @@ function AddContextMenuItems(id, title, items) {
 				input.value = item.value;
 				input.addEventListener("change", function(e) {
 					Events.Call("ClickSound");
-					Events.Call(item.callback_event, e.target.value);
+					Events.Call("ContextMenu_Callback", item.id, e.target.value);
 				});
 
 				const label = document.createElement("label");
@@ -165,7 +165,7 @@ function AddContextMenuItems(id, title, items) {
 				const select = document.createElement("select");
 				select.addEventListener("change", function(e) {
 					Events.Call("ClickSound");
-					Events.Call(item.callback_event, e.target.value);
+					Events.Call("ContextMenu_Callback", item.id, e.target.value);
 				});
 
 				item.options.forEach(option => {
@@ -246,7 +246,7 @@ function ContextMenuSelectorItemClick(e) {
 
 	Events.Call("ClickSound");
 	ToggleContextMenuSelectorVisibility(false);
-	Events.Call(context_menu_selector.dataset.callback_event, option_data.id);
+	Events.Call("ContextMenu_Callback", context_menu_selector.dataset.id, option_data.id);
 }
 
 // Toggles Context Menu Selector Visibility
@@ -255,7 +255,6 @@ function ToggleContextMenuSelectorVisibility(is_visible, item) {
 	context_menu_selector.style.display = is_visible ? "block" : "none";
 
 	if (is_visible) {
-		context_menu_selector.dataset.callback_event = item.callback_event;
 		context_menu_selector.dataset.id = item.id;
 		context_menu_selector.dataset.label = item.label;
 

@@ -4,13 +4,28 @@ ContextMenu = {
 	is_opened = false,
 
 	-- List of functions called when ContextMenu is opened, to update their current value/label
-	update_functions = {}
+	update_functions = {},
+
+	-- List of all callbacks registered
+	items_callbacks = {}
 }
 
 -- Exposes ContextMenu to other packages
 Package.Export("ContextMenu", ContextMenu)
 
 ContextMenu.AddItems = function(id, title, items)
+	for _, item in pairs(items) do
+		if (item.callback) then
+			-- Stores the callbacks
+			ContextMenu.items_callbacks[item.id] = item.callback
+
+			-- Clears it so it can be sent through WebUI event
+			item.callback = nil
+		else
+			Console.Error("ContextMenu AddItems: Item " .. item.id .. " has no callback assigned.")
+		end
+	end
+
 	MainHUD:CallEvent("AddContextMenuItems", id, title, items)
 end
 
@@ -72,6 +87,17 @@ Input.Bind("ContextMenu", InputEvent.Pressed, function()
 	end
 end)
 
+MainHUD:Subscribe("ContextMenu_Callback", function(id, value)
+	local callback = ContextMenu.items_callbacks[id]
+
+	if (not callback) then
+		Console.Error("Context Menu Callback: '" .. id .. "' has no registered callback.")
+		return
+	end
+
+	callback(value)
+end)
+
 -- Called from Context Menu when pressing X
 MainHUD:Subscribe("CloseContextMenu", function()
 	ContextMenu.Close(true)
@@ -80,11 +106,10 @@ end)
 MainHUD:Subscribe("Ready", function()
 	-- Common
 	ContextMenu.AddItems("common", "common", {
-		{ id = "respawn_button", type = "button", label = "respawn", callback_event = "ContextMenu_Respawn" },
+		{ id = "respawn_button", type = "button", label = "respawn",
+			callback = function()
+				Events.CallRemote("RespawnCharacter")
+			end
+		},
 	})
 end)
-
-MainHUD:Subscribe("ContextMenu_Respawn", function()
-	Events.CallRemote("RespawnCharacter")
-end)
--- Common
