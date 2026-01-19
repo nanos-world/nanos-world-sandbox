@@ -22,6 +22,7 @@ function AddNotification(type, id, message, duration, delay, force)
 end
 
 Events.SubscribeRemote("AddNotification", AddNotification)
+MainHUD:Subscribe("AddNotification", AddNotification)
 
 -- Subscribes so other Packages can add and set notifications as well
 Package.Export("AddNotification", AddNotification)

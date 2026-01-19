@@ -18,23 +18,23 @@ function SetupBreakableProp(prop)
 
 	-- Subscribes when it hits
 	prop:Subscribe("Hit", function(breakable, intensity, normal_impulse, impact_location, velocity)
-		BreakProp(breakable, intensity, velocity)
+		BreakProp(breakable, intensity)
 	end)
 
 	-- Subscribes when it takes damage
-	if (breakable_data.explosive and breakable_data.explosive.inflamable) then
+	if (breakable_data.explosive and breakable_data.explosive.inflammable) then
 		-- If it's explosive, then first ignites, then explodes
 		prop:Subscribe("TakeDamage", function(self, damage, bone_name, damage_type, hit_from_direction, instigator, causer)
 			InflameProp(self)
 		end)
 	else
 		prop:Subscribe("TakeDamage", function(breakable, damage, bone_name, damage_type, hit_from_direction, instigator, causer)
-			BreakProp(breakable, damage * 50, Vector())
+			BreakProp(breakable, damage * 50)
 		end)
 	end
 end
 
--- This will trigger "Inflame" in a Inflamable Prop - I.e. make it fire for some seconds then explode
+-- This will trigger "Inflame" in a inflammable Prop - I.e. make it fire for some seconds then explode
 function InflameProp(prop)
 	local breakable_data = BreakableProps[prop:GetMesh()]
 
@@ -53,7 +53,7 @@ function InflameProp(prop)
 	end
 
 	prop:SetValue("IsLeaking", true)
-	prop:SetForce(Vector(0, 0, breakable_data.explosive.inflamable.force or -100000), true)
+	prop:SetForce(Vector(0, 0, breakable_data.explosive.inflammable.force or -100000), true)
 
 	local gas_leak_sounds = {
 		"nanos-world::A_Gas_Leak_Loop_01",
@@ -65,7 +65,7 @@ function InflameProp(prop)
 
 	local particle = Particle(prop:GetLocation(), Rotator(), "nanos-world::P_LeadersRing", false, true)
 	particle:AttachTo(prop, AttachmentRule.SnapToTarget, "", 0.05)
-	particle:SetRelativeLocation(breakable_data.explosive.inflamable.relative_particle or Vector())
+	particle:SetRelativeLocation(breakable_data.explosive.inflammable.relative_particle or Vector())
 	particle:SetRelativeRotation(Rotator(90, 0, 0))
 	particle:SetScale(Vector(0.25))
 
@@ -75,7 +75,7 @@ function InflameProp(prop)
 		explosible:Destroy()
 
 		ExplodeProp(location, breakable_data.explosive, scale.X)
-	end, (breakable_data.explosive.inflamable.duration or 5000) * math.random(75, 125) / 100, prop), prop)
+	end, (breakable_data.explosive.inflammable.duration or 5000) * math.random(75, 125) / 100, prop), prop)
 end
 
 -- This will "Break" a breakable prop into several Debris
@@ -163,7 +163,7 @@ BreakableProps = {}
 -- 				damage_inner_radius,
 -- 				damage_outer_radius,
 -- 				damage_falloff,
---				inflamable = { duration, force, relative_particle }
+--				inflammable = { duration, force, relative_particle }
 --			}
 --		}
 -- }
@@ -329,7 +329,7 @@ SetBreakableProp("nanos-world::SM_Trash_01", 600, {
 
 -- Explosives (last parameter as table enables it explosive)
 SetBreakableProp("nanos-world::SM_PropaneTank_01", 700, {}, {
-	inflamable = {
+	inflammable = {
 		duration = 5000,
 		force = -15000,
 		relative_particle = Vector(0, 0, 40)
@@ -337,7 +337,7 @@ SetBreakableProp("nanos-world::SM_PropaneTank_01", 700, {}, {
 })
 
 SetBreakableProp("nanos-world::SM_PropaneTank_02", 700, {}, {
-	inflamable = {
+	inflammable = {
 		duration = 5000,
 		force = -15000,
 		relative_particle = Vector(0, 0, 40)
@@ -346,7 +346,7 @@ SetBreakableProp("nanos-world::SM_PropaneTank_02", 700, {}, {
 
 SetBreakableProp("nanos-world::SM_TallGasCanister_01", 700, {}, {
 	damage_outer_radius = 1250,
-	inflamable = {
+	inflammable = {
 		duration = 5000,
 		force = -115000,
 		relative_particle = Vector(0, 0, 160)

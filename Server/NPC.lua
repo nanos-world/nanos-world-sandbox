@@ -190,6 +190,8 @@ function StackOBot:Constructor(location, rotation)
 	-- Sets a Mood
 	self:SetMood(math.random(0, 14))
 
+	self:SetMaterialColorParameter("Tint", Color.RandomPalette())
+
 	-- TODO duplicated bad code
 	Timer.Bind(
 		-- After 5-10 seconds, move again

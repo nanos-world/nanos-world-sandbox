@@ -8,9 +8,9 @@ ResizerGun.image = "package://sandbox/Client/Tools/ResizerGun.webp"
 
 -- Tool Tutorials
 ResizerGun.tutorials = {
-	{ key = "LeftClick", text = "select object" },
-	{ key = "R", text = "reset scale" },
-	{ key = "MouseScrollUp", text = "scale" },
+	{ key = "LeftClick",	text = "select object" },
+	{ key = "R",			text = "reset scale" },
+	{ key = "MouseScrollU",	text = "scale" },
 }
 
 -- ResizerGun Configuration

@@ -8,11 +8,18 @@ PhysicsGun.image = "package://sandbox/Client/Tools/PhysicsGun.webp"
 
 -- Tool Tutorials
 PhysicsGun.tutorials = {
-	{ key = "LeftClick", text = "grab object" },
+	{ key = "LeftClick", 		text = "grab object" },
 	{ key = "RightMouseButton", text = "freeze object" },
-	{ key = "MouseScrollUp", text = "increase/decrease beam size" },
-	{ key = "E", text = "rotate object" },
-	{ key = "LeftShift", text = "snap to grid" },
+	{ key = "MouseScrollUp", 	text = "increase/decrease beam size" },
+	{ key = "E", 				text = "rotate object" },
+	{ key = "LeftShift", 		text = "snap to grid" },
+}
+
+-- Tool Tips
+PhysicsGun.tips = {
+	"while using a Physics Gun, press with the Right Click to freeze the object",
+	"you can rotate the object you are moving while holding E key and Mouse Wheel",
+	"you can approximate the object you are moving with Mouse Wheel",
 }
 
 -- PhysicsGun variables
@@ -68,12 +75,6 @@ function PhysicsGun:OnLocalPlayerPickUp(character)
 	Input.Subscribe("MouseDown", PhysicsGunMouseDown)
 	Input.Subscribe("MouseScroll", PhysicsGunMouseScroll)
 	Input.Subscribe("MouseMove", PhysicsGunMouseMove)
-
-	-- Sets some notification when grabbing the Light Tool
-	AddNotification(NotificationType.Info, "PHYSICS_GUN_FREEZE", "while using a Physics Gun, press with the Right Click to freeze the object", 10, 10)
-	AddNotification(NotificationType.Info, "PHYSICS_GUN_ROTATE", "you can rotate the object you are moving while holding E key and Mouse Wheel", 10, 25)
-	AddNotification(NotificationType.Info, "PHYSICS_GUN_ROTATE_ANOTHER", "you can rotate the object you are moving in another direction while holding Alt+E key and Mouse Wheel", 10, 35)
-	AddNotification(NotificationType.Info, "PHYSICS_GUN_ROTATE_DISTANCE", "you can approximate the object you are moving with Mouse Wheel", 10, 50)
 end
 
 function PhysicsGun:OnLocalPlayerDrop(character)

@@ -8,8 +8,8 @@ RopeGun.image = "package://sandbox/Client/Tools/RopeGun.webp"
 
 -- Tool Tutorials
 RopeGun.tutorials = {
-	{ key = "LeftClick", text = "attach rope" },
-	{ key = "Undo", text = "undo rope" },
+	{ key = "LeftClick",	text = "attach rope" },
+	{ key = "Undo",			text = "undo rope" },
 }
 
 -- Tool Crosshair Trace Debug Settings

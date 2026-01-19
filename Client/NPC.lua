@@ -1,4 +1,5 @@
 NPC = Character.Inherit("NPC")
+NPC.category = "npcs"
 
 NPC_MannequinMale = NPC.Inherit("NPC_MannequinMale", {
 	name = "Mannequin Male",
@@ -58,6 +59,7 @@ NPC_Adventure_05 = NPC.Inherit("NPC_Adventure_05", {
 StackOBot = CharacterSimple.Inherit("StackOBot", {
 	name = "Stack-O-Bot",
 	image = "assets://nanos-world/Thumbnails/SK_StackOBot.jpg",
+	category = "npcs",
 })
 
 -- When spawns

@@ -1,16 +1,16 @@
 BalloonGun = ToolGun.Inherit("BalloonGun")
 
 -- Tool Name
-BalloonGun.name = "Balloon"
+BalloonGun.name = "Balloon Gun"
 
 -- Tool Image
 BalloonGun.image = "package://sandbox/Client/Tools/BalloonGun.webp"
 
 -- Tool Tutorials
 BalloonGun.tutorials = {
-	{ key = "LeftClick", text = "spawn balloon" },
-	{ key = "Undo", text = "undo spawn" },
-	{ key = "ContextMenu", text = "balloon settings" },
+	{ key = "LeftClick",	text = "spawn balloon" },
+	{ key = "Undo",			text = "undo spawn" },
+	{ key = "ContextMenu",	text = "balloon settings" },
 }
 
 -- Tool Crosshair Trace Debug Settings
@@ -20,11 +20,75 @@ BalloonGun.crosshair_trace = {
 	color_no_entity = Color.RED,
 }
 
+-- Tool Tips
+BalloonGun.tips = {
+	"you can change the balloons mesh and color in the Context Menu",
+	"balloons will start to pop if they reach a very high height",
+}
+
 -- Balloon Configuration
-BalloonGun.asset = "nanos-world::SM_Balloon_01"
+BalloonGun.asset = Balloon.assets[math.random(#Balloon.assets)]
 BalloonGun.force = 100000
 BalloonGun.max_length = 100
 BalloonGun.randomness = 0.15
+
+-- Context Menu Items when picking up this Tool
+BalloonGun.picked_context_menu_items = {
+	{
+		id = "balloon_gun_asset",
+		type = "select_image",
+		label = "mesh",
+		options = Balloon.assets,
+		callback = function(value)
+			BalloonGun.asset = value
+		end,
+		value = function()
+			return BalloonGun.asset
+		end,
+	},
+	{
+		id = "balloon_gun_force",
+		type = "range",
+		label = "force",
+		min = -100000,
+		max = 200000,
+		auto_update_label = true,
+		callback = function(value)
+			BalloonGun.force = value
+		end,
+		value = function()
+			return BalloonGun.force
+		end,
+	},
+	{
+		id = "balloon_gun_max_length",
+		type = "range",
+		label = "length",
+		min = 0,
+		max = 1000,
+		auto_update_label = true,
+		callback = function(value)
+			BalloonGun.max_length = value
+		end,
+		value = function()
+			return BalloonGun.max_length
+		end,
+	},
+	{
+		id = "balloon_gun_randomness",
+		type = "range",
+		label = "randomness",
+		min = 0,
+		max = 100,
+		auto_update_label = true,
+		callback = function(value)
+			BalloonGun.randomness = value / 100
+		end,
+		value = function()
+			return BalloonGun.randomness * 100
+		end,
+	},
+}
 
 
 -- Overrides ToolGun method
@@ -51,56 +115,4 @@ function BalloonGun:OnLocalPlayerFire(shooter)
 		-- If didn't hit anything, plays a negative sound
 		SoundInvalidAction:Play()
 	end
-end
-
--- Context Menu Callbacks
-function BalloonGun.SetAsset(asset)
-	BalloonGun.asset = asset
-end
-
-function BalloonGun.SetForce(force)
-	BalloonGun.force = force
-end
-
-function BalloonGun.SetMaxLength(max_length)
-	BalloonGun.max_length = max_length
-end
-
-function BalloonGun.SetRandomness(randomness)
-	BalloonGun.randomness = randomness / 100
-end
-
--- Overrides ToolGun method
-function BalloonGun:OnLocalPlayerPickUp(character)
-	-- Sets some notification when grabbing the Balloon Tool
-	AddNotification(NotificationType.Info, "BALLOONS_CUSTOM", "you can change the balloons mesh and color in the Context Menu", 10, 5)
-	AddNotification(NotificationType.Info, "BALLOONS_POP", "balloons will start to pop if they reach a very high height", 10, 60)
-
-	-- Adds an entry to Context Menu
-	ContextMenu.AddItems("balloon_tool", "balloon gun", {
-		{ id = "balloon_asset", type = "select_image", label = "Asset", callback = BalloonGun.SetAsset, selected = BalloonGun.asset, options = {
-			{ id = "nanos-world::SM_Balloon_01", name = "SM_Balloon_01", image = "assets://nanos-world/Thumbnails/SM_Balloon_01.jpg" },
-			{ id = "nanos-world::SM_Balloon_02", name = "SM_Balloon_02", image = "assets://nanos-world/Thumbnails/SM_Balloon_02.jpg" },
-			{ id = "nanos-world::SM_Balloon_03", name = "SM_Balloon_03", image = "assets://nanos-world/Thumbnails/SM_Balloon_03.jpg" },
-			{ id = "nanos-world::SM_Balloon_04", name = "SM_Balloon_04", image = "assets://nanos-world/Thumbnails/SM_Balloon_04.jpg" },
-			{ id = "nanos-world::SM_Balloon_05", name = "SM_Balloon_05", image = "assets://nanos-world/Thumbnails/SM_Balloon_05.jpg" },
-			{ id = "nanos-world::SM_Balloon_06", name = "SM_Balloon_06", image = "assets://nanos-world/Thumbnails/SM_Balloon_06.jpg" },
-			{ id = "nanos-world::SM_Balloon_07", name = "SM_Balloon_07", image = "assets://nanos-world/Thumbnails/SM_Balloon_07.jpg" },
-			{ id = "nanos-world::SM_Balloon_Trump", name = "SM_Balloon_Trump", image = "assets://nanos-world/Thumbnails/SM_Balloon_Trump.jpg" },
-			{ id = "nanos-world::SM_Balloon_Dog", name = "SM_Balloon_Dog", image = "assets://nanos-world/Thumbnails/SM_Balloon_Dog.jpg" },
-			{ id = "nanos-world::SM_Poop", name = "SM_Poop", image = "assets://nanos-world/Thumbnails/SM_Poop.jpg" },
-			{ id = "nanos-world::SM_Emoji_01", name = "SM_Emoji_01", image = "assets://nanos-world/Thumbnails/SM_Emoji_01.jpg" },
-			{ id = "nanos-world::SM_Emoji_02", name = "SM_Emoji_02", image = "assets://nanos-world/Thumbnails/SM_Emoji_02.jpg" },
-			{ id = "nanos-world::SM_Emoji_03", name = "SM_Emoji_03", image = "assets://nanos-world/Thumbnails/SM_Emoji_03.jpg" },
-			{ id = "nanos-world::SM_Emoji_04", name = "SM_Emoji_04", image = "assets://nanos-world/Thumbnails/SM_Emoji_04.jpg" },
-		}},
-		{ id = "balloon_force", type = "range", label = "Force", callback = BalloonGun.SetForce, min = -100000, max = 200000, value = BalloonGun.force, auto_update_label = true },
-		{ id = "balloon_max_length", type = "range", label = "Length", callback = BalloonGun.SetMaxLength, min = 0, max = 1000, value = BalloonGun.max_length, auto_update_label = true },
-		{ id = "balloon_randomness", type = "range", label = "Randomness", callback = BalloonGun.SetRandomness, min = 0, max = 100, value = BalloonGun.randomness * 100, auto_update_label = true },
-	})
-end
-
--- Overrides ToolGun method
-function BalloonGun:OnLocalPlayerDrop(character)
-	ContextMenu.RemoveItems("balloon_tool")
 end

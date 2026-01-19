@@ -11,6 +11,6 @@ function BouncyBall:Constructor(location, rotation)
 	self:SetScale(Vector(scale, scale, scale) /10)
 
 	local color = Color.RandomPalette()
-	self:SetMaterialColorParameter("Tint", color * 1000)
+	self:SetMaterialColorParameter("Tint", color)
 	self:SetMaterialScalarParameter("Roughness", 0)
 end

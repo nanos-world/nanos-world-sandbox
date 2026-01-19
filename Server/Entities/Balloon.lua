@@ -16,8 +16,8 @@ function Balloon:Constructor(location, rotation, force, max_length, entity, dist
 	self:SetPhysicsDamping(5, 10)
 
 	-- Sets a random color for the balloon
-	self.color = Color.RandomPalette()
-	self:SetMaterialColorParameter("Tint", self.color)
+	local color = Color.RandomPalette()
+	self:SetMaterialColorParameter("Tint", color)
 
 	max_length = tonumber(max_length)
 
@@ -44,15 +44,22 @@ function Balloon:Constructor(location, rotation, force, max_length, entity, dist
 		cable:AttachEndTo(self)
 	end
 
-	-- Sets some values to be used later on (such as Balloon color to be used on popping Particles and the Cable itself to be able to destroy it properly)
-	self:SetValue("Color", self.color, true)
-	self:SetValue("Balloon", true)
-
 	-- Stores the actual Z location so we can destroy it after it raised +6000
 	self.spawn_z_location = location.Z
 
-	-- Calls the Client to spawn ballons spawning sounds
+	-- Calls the Client to spawn balloons spawning sounds
 	Events.BroadcastRemote("SpawnSound", location, "nanos-world::A_Balloon_Inflate", false, 0.75, 1)
+end
+
+function Balloon:SetCustomForce(player, force)
+	self:SetForce(Vector(0, 0, tonumber(force)), false)
+end
+
+function Balloon:SetCustomMesh(player, mesh)
+	local old_color = self:GetMaterialColorParameter("Tint")
+	self:SetMesh(mesh)
+	self:ResetMaterial()
+	self:SetMaterialColorParameter("Tint", old_color)
 end
 
 -- Subscribes for popping when balloon takes damage
@@ -61,6 +68,8 @@ function Balloon:OnTakeDamage(damage, bone_name, damage_type, hit_from_direction
 end
 
 Balloon.Subscribe("TakeDamage", Balloon.OnTakeDamage)
+Balloon.SubscribeRemote("SetCustomForce", Balloon.SetCustomForce)
+Balloon.SubscribeRemote("SetCustomMesh", Balloon.SetCustomMesh)
 
 
 -- Timer for destroying balloons when they gets too high

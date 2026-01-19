@@ -1,16 +1,23 @@
 #context_menu {
-	background-color: #0000005e;
 	position: absolute;
 	right: 30px;
-	width: 300px;
+	width: 350px;
 	display: none;
+	/* display: flex; */
 	border-radius: 5px;
-	transform: translate(0, -50%);
-	top: 50%;
+	bottom: 30px;
+	top: 30px;
+}
+
+#context_menu_inner {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
 }
 
 #context_menu_header {
-	background-color: #00000086;
+	background-color: #000000a2;
 	font-family: 'Righteous', sans-serif;
 	height: 50px;
 	text-align: center;
@@ -25,13 +32,24 @@
 	right: 15px;
 	color: #ff2626;
 	border: 1px solid;
-	padding: 0;
+	border-radius: 5px;
 	height: 30px;
 	width: 30px;
-	top: 10px;
+	margin: 10px 0;
 	line-height: 32px;
 	font-size: 20px;
 	cursor: pointer;
+}
+
+#context_menu #context_menu_items {
+	overflow-y: auto;
+	scrollbar-gutter: stable;
+	background-color: #0000005e;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+    border-radius: 0 0 5px 5px;
 }
 
 #context_menu_close:hover {
@@ -39,7 +57,7 @@
 }
 
 #context_menu .context_menu_item {
-	padding: 10px;
+	padding: 5px 0;
 }
 
 #context_menu .context_menu_item_button button {
@@ -72,7 +90,7 @@
 #context_menu .context_menu_item_select select,
 #context_menu .context_menu_item_select_image img {
 	flex-grow: 1;
-	margin-right: 10px;
+	margin-left: 15px;
 	cursor: pointer;
 }
 
@@ -82,7 +100,7 @@
 #context_menu .context_menu_item_select_image img:hover,
 #context_menu .context_menu_item_select select:hover,
 #context_menu .context_menu_item_button button:hover {
-	opacity: 0.9;
+	filter: brightness(0.9)
 }
 
 #context_menu .context_menu_item_range label,
@@ -92,12 +110,22 @@
 #context_menu .context_menu_item_color label {
 	text-align: center;
 	flex-basis: 30%;
+	color: #f0f0f0;
 }
 
 #context_menu .context_menu_item_checkbox input {
 	flex-grow: 0;
 	width: 35px;
 	height: 35px;
+}
+
+#context_menu .context_menu_item_select select {
+	height: 35px;
+}
+
+#context_menu .context_menu_item_checkbox input,
+#context_menu .context_menu_item_select_image img {
+	border-radius: 5px;
 }
 
 #context_menu .context_menu_item_select_image img {
@@ -110,20 +138,24 @@
 	display: flex;
 	align-items: center;
 	text-align: center;
-	margin: 10px 0 5px 0;
+	margin-bottom: 20px;
+	font-size: 16px;
+    font-family: 'Righteous', sans-serif;
 }
 
 #context_menu .divider::after,
 #context_menu .divider::before {
 	content: "";
-	border: 1px solid #ffffffbd;
+	border: 1px solid #ffffff7e;
 	flex: 1;
-	margin: 10px;
 }
 
-#context_menu #context_menu_items {
-	max-height: 600px;
-	overflow-y: scroll;
+#context_menu .divider::before {
+	margin-right: 15px;
+}
+
+#context_menu .divider::after {
+	margin-left: 15px;
 }
 
 #context_menu_selector {
@@ -133,6 +165,12 @@
 	background-color: #0000006e;
 	display: none;
 	z-index: 1;
+}
+
+.context_menu_category {
+    background-color: rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+	padding: 20px;
 }
 
 #context_menu_selector_background {

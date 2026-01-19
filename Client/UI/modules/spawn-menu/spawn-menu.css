@@ -1,3 +1,7 @@
+:root {
+	--spawn_menu_item_width: 120px;
+}
+
 #spawn_menu {
 	display: none;
 	position: absolute;
@@ -9,27 +13,32 @@
 	border-radius: 5px 5px 0 5px;
 }
 
-#spawn_list {
-	padding: 5px 20px 5px 10px;
-	overflow-y: overlay;
-	overflow-x: hidden;
+.spawn_menu_list {
 	position: absolute;
 	bottom: 0;
 	top: 60px;
 	left: 60px;
 	right: 0;
-	grid-template-columns: repeat(auto-fill, 100px);
+	overflow-y: overlay;
+	overflow-x: hidden;
+	margin: 20px 10px 20px 20px;
+	padding-right: 10px;
+}
+
+.spawn_menu_content_category {
+	grid-template-columns: repeat(auto-fill, var(--spawn_menu_item_width));
 	grid-template-rows: auto auto 1fr;
 	justify-content: space-between;
 	display: grid;
-	grid-gap: 5px;
+	margin-bottom: 20px;
+	background-color: rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+	padding: 20px;
 }
 
 .spawn_item {
 	cursor: pointer;
-	width: 100px;
-    height: 140px;
-	padding: 5px;
+	height: calc(var(--spawn_menu_item_width) + 30px);
 	text-align: center;
 	display: inline-block;
 	border-radius: 5px;
@@ -41,27 +50,31 @@
 
 .spawn_item_image {
 	display: inline-block;
-	width: 100%;
-	height: 100px;
+	width: calc(var(--spawn_menu_item_width) - 10px);
+	height: calc(var(--spawn_menu_item_width) - 10px);
 	background-size: 100% auto;
 	background-position: 50%;
 	pointer-events: none;
 	background-repeat: no-repeat;
-	border-radius: 1px;
+	border-radius: 5px;
+	margin: 5px 0;
 }
 
 .spawn_item_name {
 	text-align: center;
 	display: inline-block;
 	font-size: 12px;
-	margin-top: 5px;
 	overflow: hidden;
 	height: 30px;
 	pointer-events: none;
 	word-wrap: break-word;
 }
 
-#spawn_categories {
+.spawn_menu_content_tab {
+	display: none;
+}
+
+.spawn_menu_categories {
 	background-color: rgba(0, 0, 0, 0.1);
 	width: 60px;
 	position: absolute;
@@ -73,69 +86,49 @@
 
 .spawn_category {
 	display: block;
-	margin: 14px;
 	cursor: pointer;
 	text-align: center;
-	background-image: url('./images/tabs/chair.png');
-	height: 40px;
-	background-size: 100%;
+	background-size: 30px;
 	background-repeat: no-repeat;
 	background-position: 50%;
 	filter: grayscale(100%);
-	opacity: 0.8;
+	opacity: 0.7;
+	width: 30px;
+	height: 30px;
+	padding: 10px 15px;
 }
 
 .spawn_category.active {
-	cursor: default;
-	pointer-events: none;
+	/* cursor: default;
+	pointer-events: none; */
 	filter: none;
 	opacity: 1.0;
 }
 
-#spawn_options {
+.spawn_menu_divider {
+	display: flex;
+	align-items: center;
+	text-align: center;
+	font-size: 20px;
+	font-family: 'Righteous', sans-serif;
 	background-color: rgba(0, 0, 0, 0.1);
-	width: 200px;
-	position: absolute;
-	bottom: 0;
-	top: 60px;
-	right: 0;
-	overflow-y: overlay;
-	overflow-x: hidden;
-	display: none;
+	padding: 20px 25px 0;
+	border-radius: 5px 5px 0 0;
 }
 
-.spawn_option {
-	padding: 15px;
-	display: block;
-	background-color: rgba(0, 0, 0, 0.25);
+.spawn_menu_divider::after,
+.spawn_menu_divider::before {
+	content: "";
+	border: 1px solid #ffffff7e;
+	flex: 1;
 }
 
-.spawn_option_label {
-	margin-bottom: 10px;
-	display: block;
+.spawn_menu_divider::before {
+	margin-right: 15px;
 }
 
-.spawn_option_checkbox {
-	display: block;
-	grid-template-columns: repeat(auto-fill, 40px);
-	justify-content: space-between;
-	display: grid;
-	grid-gap: 10px;
-	max-height: 300px;
-	overflow-y: overlay;
-	padding: 3px;
-}
-
-.spawn_option_checkbox_item {
-	width: 40px;
-	height: 40px;
-	display: inline-block;
-	cursor: pointer;
-	background-size: 100%;
-}
-
-.spawn_option_checkbox_item.selected {
-	outline: 3px solid #fff;
+.spawn_menu_divider::after {
+	margin-left: 15px;
 }
 
 #tabs {
@@ -188,7 +181,32 @@
 	bottom: -30px;
 	right: 0;
 	padding: 5px 10px;
-	opacity: 0;
+	display: none;
 	font-size: 14px;
 	height: 20px;
+	border-radius: 0 0 5px 5px;
+}
+
+#spawn_menu .divider {
+	display: flex;
+	align-items: center;
+	text-align: center;
+	margin-bottom: 20px;
+	font-size: 16px;
+	font-family: 'Righteous', sans-serif;
+}
+
+#spawn_menu .divider::after,
+#spawn_menu .divider::before {
+	content: "";
+	border: 1px solid #ffffff7e;
+	flex: 1;
+}
+
+#spawn_menu .divider::before {
+	margin-right: 15px;
+}
+
+#spawn_menu .divider::after {
+	margin-left: 15px;
 }

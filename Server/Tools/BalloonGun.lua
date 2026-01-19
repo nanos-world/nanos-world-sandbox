@@ -21,7 +21,7 @@ function BalloonGun:OnSpawnBalloon(player, spawn_location, rotation, force, max_
 	-- Updates the client's spawn history
 	Events.CallRemote("SpawnedItem", player, balloon)
 
-	Particle(spawn_location, rotation, "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", balloon.color)
+	Particle(spawn_location, rotation, "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", balloon:GetMaterialColorParameter("Tint"))
 end
 
 BalloonGun.SubscribeRemote("SpawnBalloon", BalloonGun.OnSpawnBalloon)

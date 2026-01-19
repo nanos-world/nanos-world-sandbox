@@ -1,5 +1,7 @@
 ToolGun = Weapon.Inherit("ToolGun")
 
+ToolGun.category = "tool-guns"
+
 -- Used on Tick to draw a Debug.Crosshair in the world to point where it's aiming
 ToolGun.draw_debug_toolgun = nil
 
@@ -96,6 +98,11 @@ end
 
 -- Called on Tick when possessing a ToolGun to draw a Crosshair in the world
 function OnToolGunDebugTick(delta_time)
+	-- Does not trace if ContextMenu or SpawnMenu are open
+	if (ContextMenu.is_opened or SpawnMenu.is_opened) then
+		return
+	end
+
 	local crosshair_trace = ToolGun.draw_debug_toolgun.crosshair_trace
 	local trace_result = TraceFor(2000, crosshair_trace.collision_channel)
 	if (not trace_result.Success) then return end
@@ -108,49 +115,3 @@ end
 
 ToolGun.SubscribeRemote("LocalPlayerPickUp", ToolGun.__OnLocalPlayerPickUp)
 ToolGun.SubscribeRemote("LocalPlayerDrop", ToolGun.__OnLocalPlayerDrop)
-
-
-
--- function ToggleToolGunAiming(weapon, tool, enable)
--- 	print("toggle", enable)
--- 	if (enable) then
--- 		if (
--- 			tool == "RopeTool" or
--- 			tool == "RemoverTool" or
--- 			tool == "ThrusterTool"
--- 		) then
--- 			DrawDebugToolGun.TraceCollisionChannel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle
--- 		else
--- 			DrawDebugToolGun.TraceCollisionChannel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Pawn
--- 		end
-
--- 		if (
--- 			tool == "BalloonTool" or
--- 			tool == "LightTool" or
--- 			tool == "LampTool"
--- 		) then
--- 			DrawDebugToolGun.Weapon = weapon
-
--- 			DrawDebugToolGun.ColorEntity = Color.GREEN
--- 			DrawDebugToolGun.ColorNoEntity = Color.BLUE
--- 			return
--- 		elseif (
--- 			tool == "ColorTool" or
--- 			tool == "ThrusterTool" or
--- 			tool == "UselessTool" or
--- 			tool == "WeldTool" or
--- 			tool == "TrailTool" or
--- 			tool == "ResizerTool" or
--- 			tool == "RopeTool" or
--- 			tool == "RemoverTool"
--- 		) then
--- 			DrawDebugToolGun.Weapon = weapon
-
--- 			DrawDebugToolGun.ColorEntity = Color.GREEN
--- 			DrawDebugToolGun.ColorNoEntity = Color.RED
--- 			return
--- 		end
--- 	end
-
--- 	DrawDebugToolGun.Weapon = nil
--- end

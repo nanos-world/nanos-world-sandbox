@@ -56,7 +56,14 @@ function CharacterCustomization.LocalPlayerPossess(player, character)
 
 	-- Adds an entry to Context Menu
 	ContextMenu.AddItems("character_customization", "character customization", {
-		{ id = "character_mesh", type = "select_image", label = "mesh", callback = CharacterCustomization.SelectCharacterMesh, selected = current_mesh, options = meshes},
+		{
+			id = "character_mesh",
+			type = "select_image",
+			label = "mesh",
+			options = meshes,
+			callback = CharacterCustomization.SelectCharacterMesh,
+			value = current_mesh,
+		},
 	})
 
 	CharacterCustomization.is_possessed = true

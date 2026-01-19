@@ -16,8 +16,7 @@ SpawnMenu = {
 ---@param id string					The id of the item
 ---@param spawn_location Vector		The spawn location passed by the client
 ---@param spawn_rotation Rotator	The spawn rotation passed by the client
----@param selected_option string	Temp custom hack parameter to set weapon patterns
-SpawnMenu.SpawnItem = function(player, tab, id, spawn_location, spawn_rotation, selected_option)
+SpawnMenu.SpawnItem = function(player, tab, id, spawn_location, spawn_rotation)
 
 	-- Checks for limits (each entity has it own limit)
 	local id_to_validate_limits = tab == "entities" and id or tab
@@ -76,11 +75,6 @@ SpawnMenu.SpawnItem = function(player, tab, id, spawn_location, spawn_rotation, 
 					-- If has previous Aim Mode, sets it again so the Character keeps aiming
 					if (current_aiming_mode == AimMode.ADS or current_aiming_mode == AimMode.Zoomed or current_aiming_mode == AimMode.ZoomedZoom) then
 						character:SetWeaponAimMode(current_aiming_mode)
-					end
-
-					-- workaround
-					if (selected_option ~= "") then
-						ApplyWeaponPattern(item, selected_option)
 					end
 				end
 			end
@@ -152,10 +146,21 @@ Events.SubscribeRemote("DestroyItem", function(...)
 	SpawnMenu.DestroyItem(...)
 end)
 
+Events.SubscribeRemote("SetGravityEnabled", function(player, item)
+	if (item and item:IsValid()) then
+		if (item:IsA(Character) and item:GetPlayer()) then
+			return
+		end
+
+		item:SetGravityEnabled(not item:IsGravityEnabled())
+	end
+end)
+
 Package.Subscribe("Load", function()
 	SpawnMenu.AddInheritedClasses("tools", ToolGun)
 	SpawnMenu.AddInheritedClasses("npcs", Character)
 	SpawnMenu.AddInheritedClasses("npcs", CharacterSimple)
+	SpawnMenu.AddInheritedClasses("npcs", CharacterGASP)
 	SpawnMenu.AddInheritedClasses("weapons", Melee)
 	SpawnMenu.AddInheritedClasses("entities", Prop) -- Inherited from Prop is Entity?
 	SpawnMenu.AddInheritedClasses("weapons", Grenade)
@@ -164,7 +169,7 @@ Package.Subscribe("Load", function()
 	SpawnMenu.AddInheritedClasses("vehicles", VehicleWater)
 end)
 
--- Function to apply a Texture Pattern in a Weapon (currently only work on default nanos world Weapons as their materials are prepared beforehand)
+-- Function to apply a Texture Pattern in a Weapon (currently only work on default nanos world Weapons as their materials have the proper material parameters)
 function ApplyWeaponPattern(weapon, pattern_texture)
 	if (pattern_texture ~= "") then
 		weapon:SetMaterialTextureParameter("PatternTexture", pattern_texture)
@@ -174,15 +179,13 @@ function ApplyWeaponPattern(weapon, pattern_texture)
 	else
 		weapon:SetMaterialScalarParameter("PatternBlend", 0)
 	end
+
+	-- Syncs it so Context Menu can get it
+	-- We could do GetMaterialTextureParameter("PatternTexture") but it currently doesn't allow cleaning the parameter
+	weapon:SetValue("PatternTexture", pattern_texture, true)
 end
 
 Events.SubscribeRemote("ApplyWeaponPattern", function(player, weapon, pattern_texture)
-	local char = player:GetControlledCharacter()
-	if not char then return end
-
-	local picked = char:GetPicked()
-	if not picked or (picked ~= weapon) then return end
-
 	ApplyWeaponPattern(weapon, pattern_texture)
 end)
 

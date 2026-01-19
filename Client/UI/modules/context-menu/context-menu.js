@@ -1,14 +1,31 @@
 // Aux for debouncing
-let DebounceTimeout = null;
+const DebounceHandler = {
+	Timeout: null,
+	Run: function(callback, delay) {
+		clearTimeout(this.Timeout);
+		this.Timeout = setTimeout(callback, delay);
+	}
+};
 
+const ContextMenu = {
+	is_visible: false,
+
+	// Helper to prevent input events when hovering the context menu elements
+	is_hovering_context_menu: false,
+	is_hovering_selector: false,
+	UpdateHovering: function() {
+		Events.Call("ContextMenu_SetHovering", this.is_hovering_context_menu || this.is_hovering_selector);
+	}
+}
 
 document.addEventListener("DOMContentLoaded", function(event) {
-	// Inserts the scoreboard
+	// Inserts the context menu
 	const body = document.querySelector(`body`);
 
 	body.insertAdjacentHTML("afterbegin", `
 		<div id="context_menu">
-			<div id="context_menu_header">context menu <span id="context_menu_close">X</span></div>
+			<div id="context_menu_inner">
+				<div id="context_menu_header">context menu <span id="context_menu_close">X</span></div>
 				<div id="context_menu_items">
 				</div>
 			</div>
@@ -21,20 +38,41 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	// Context Menu close button
 	document.getElementById("context_menu_close").addEventListener("click", function(e) {
-		ToggleContextMenuVisibility(false);
+		ContextMenu.ToggleContextMenuVisibility(false);
 		Events.Call("CloseContextMenu");
 	});
 
 	// Context Menu Selector Background
 	document.getElementById("context_menu_selector_background").addEventListener("click", function(e) {
-		ToggleContextMenuSelectorVisibility(false);
+		ContextMenu.ToggleContextMenuSelectorVisibility(false);
 	});
 
-	// AddContextMenuItems("cu", "lambe", [
+	// Context Menu Hovering events
+	document.getElementById("context_menu_inner").addEventListener("mouseenter", function(e) {
+		ContextMenu.is_hovering_context_menu = true;
+		ContextMenu.UpdateHovering();
+	});
+
+	document.getElementById("context_menu_inner").addEventListener("mouseleave", function(e) {
+		ContextMenu.is_hovering_context_menu = false;
+		ContextMenu.UpdateHovering();
+	});
+
+	document.getElementById("context_menu_selector").addEventListener("mouseenter", function(e) {
+		ContextMenu.is_hovering_selector = true;
+		ContextMenu.UpdateHovering();
+	});
+
+	document.getElementById("context_menu_selector").addEventListener("mouseleave", function(e) {
+		ContextMenu.is_hovering_selector = false;
+		ContextMenu.UpdateHovering();
+	});
+
+	// ContextMenu.AddContextMenuItems("id", "title", [
 	// 	{ id: "ae1", type: "checkbox", label: "my label" },
 	// 	{ id: "ae2", type: "button", label: "press me" },
 	// 	{ id: "ae3", type: "range", label: "slide me", min: 0, max: 1440, value: 720, auto_update_label: true },
-	// 	{ id: "ae4", type: "select_image", label: "Balloon", selected: "opt1", options: [
+	// 	{ id: "ae4", type: "select_image", label: "Balloon", value: "opt1", options: [
 	// 		{ id: "opt1", name: "option 1", image: "./images/nanosworld_empty.webp" },
 	// 		{ id: "opt2", name: "option 2", image: "./images/nanosworld_empty.webp" },
 	// 		{ id: "opt3", name: "option 3", image: "./images/nanosworld_empty.webp" },
@@ -42,21 +80,31 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	// ]);
 });
 
-function RemoveContextMenuItems(id) {
-	document.getElementById(`category_${id}`).remove();
+ContextMenu.RemoveContextMenuItems = function(id) {
+	const element = document.getElementById(`category_${id}`);
+	if (element)
+		element.remove();
 }
 
-function AddContextMenuItems(id, title, items) {
+ContextMenu.AddContextMenuItems = function(id, title, items) {
 	const context_menu_items = document.getElementById("context_menu_items");
 
-	const context_menu_category = document.createElement("div");
-	context_menu_category.classList.add("context_menu_category");
-	context_menu_category.id = `category_${id}`;
+	// Tries getting existing
+	let context_menu_category = context_menu_items.querySelector(`#category_${id}`);
 
-	const divider = document.createElement("span");
-	divider.classList.add("divider");
-	divider.innerText = title;
-	context_menu_category.append(divider);
+	if (!context_menu_category)
+	{
+		context_menu_category = document.createElement("div");
+		context_menu_category.classList.add("context_menu_category");
+		context_menu_category.id = `category_${id}`;
+
+		const divider = document.createElement("span");
+		divider.classList.add("divider");
+		divider.innerText = title;
+		context_menu_category.append(divider);
+
+		context_menu_items.prepend(context_menu_category);
+	}
 
 	items.forEach(item => {
 		const context_menu_item = document.createElement("div");
@@ -81,6 +129,7 @@ function AddContextMenuItems(id, title, items) {
 			{
 				const input = document.createElement("input");
 				input.type = "checkbox";
+				input.checked = item.value;
 				input.addEventListener("change", function(e) {
 					Events.Call("ClickSound");
 					Events.Call("ContextMenu_Callback", item.id, e.target.checked);
@@ -90,8 +139,8 @@ function AddContextMenuItems(id, title, items) {
 				label.innerText = item.label;
 
 				context_menu_item.classList.add("context_menu_item_checkbox");
-				context_menu_item.append(input);
 				context_menu_item.append(label);
+				context_menu_item.append(input);
 				break;
 			}
 			case "range":
@@ -105,11 +154,7 @@ function AddContextMenuItems(id, title, items) {
 				input.max = item.max;
 				input.value = item.value;
 				input.addEventListener("input", function(e) {
-					// Debounce
-					clearTimeout(DebounceTimeout);
-
-					// After some time, apply the setting
-					DebounceTimeout = setTimeout(function() {
+					DebounceHandler.Run(function() {
 						if (item.auto_update_label) {
 							label.innerText = `${item.label}\n(${e.target.value})`;
 						}
@@ -119,27 +164,27 @@ function AddContextMenuItems(id, title, items) {
 				});
 
 				context_menu_item.classList.add("context_menu_item_range");
-				context_menu_item.append(input);
 				context_menu_item.append(label);
+				context_menu_item.append(input);
 				break;
 			}
 			case "select_image":
 			{
-				const selected = item.options.find(element => element.id == item.selected);
+				const selected = item.options.find(element => element.id == item.value) || { id: "", name: "None", image: "modules/spawn-menu/images/nanosworld_empty.webp" };
 
 				const img = document.createElement("img");
 				img.src = selected.image;
 				img.addEventListener("click", function(e) {
 					Events.Call("ClickSound");
-					ToggleContextMenuSelectorVisibility(true, item);
+					ContextMenu.ToggleContextMenuSelectorVisibility(true, item);
 				});
 
 				const label = document.createElement("label");
 				label.innerText = `${item.label}\n(${selected.name})`;
 
 				context_menu_item.classList.add("context_menu_item_select_image");
-				context_menu_item.append(img);
 				context_menu_item.append(label);
+				context_menu_item.append(img);
 				break;
 			}
 			case "color":
@@ -147,17 +192,20 @@ function AddContextMenuItems(id, title, items) {
 				const input = document.createElement("input");
 				input.type = "color";
 				input.value = item.value;
-				input.addEventListener("change", function(e) {
-					Events.Call("ClickSound");
-					Events.Call("ContextMenu_Callback", item.id, e.target.value);
+
+				input.addEventListener("input", function(e) {
+					DebounceHandler.Run(function() {
+						Events.Call("ClickSound");
+						Events.Call("ContextMenu_Callback", item.id, e.target.value);
+					}, 100);
 				});
 
 				const label = document.createElement("label");
 				label.innerText = item.label;
 
 				context_menu_item.classList.add("context_menu_item_color");
-				context_menu_item.append(input);
 				context_menu_item.append(label);
+				context_menu_item.append(input);
 				break;
 			}
 			case "select":
@@ -173,7 +221,7 @@ function AddContextMenuItems(id, title, items) {
 					option_element.value = option.id;
 					option_element.text = option.name;
 
-					if (item.selected == option.id)
+					if (item.value == option.id)
 						option_element.selected = true;
 
 					select.append(option_element);
@@ -183,27 +231,27 @@ function AddContextMenuItems(id, title, items) {
 				label.innerText = item.label;
 
 				context_menu_item.classList.add("context_menu_item_select");
-				context_menu_item.append(select);
 				context_menu_item.append(label);
+				context_menu_item.append(select);
 				break;
 			}
+			default:
+				console.error(`Unknown Context Menu Item Type: ${item.type}`);
 		}
 
 		context_menu_category.append(context_menu_item);
 	});
-
-	context_menu_items.append(context_menu_category);
 }
 
 // Sets a Context Menu Item Label
-function SetContextMenuLabel(id, text) {
+ContextMenu.SetContextMenuLabel = function(id, text) {
 	const context_menu_item = document.getElementById(`item_${id}`);
 	const label = context_menu_item.getElementsByTagName("label")[0];
 	label.innerText = text;
 }
 
 // Sets a Context Menu Item Value into an input
-function SetContextMenuValue(id, value) {
+ContextMenu.SetContextMenuValue = function(id, value) {
 	const context_menu_item = document.getElementById(`item_${id}`);
 
 	const input = context_menu_item.getElementsByTagName("input")[0];
@@ -222,22 +270,37 @@ function SetContextMenuValue(id, value) {
 }
 
 // Toggles Context Menu Visibility
-function ToggleContextMenuVisibility(is_visible) {
+ContextMenu.ToggleContextMenuVisibility = function(is_visible) {
 	const context_menu = document.getElementById("context_menu");
-	context_menu.style.display = is_visible ? "block" : "none";
+	context_menu.style.display = is_visible ? "flex" : "none";
+
+	ContextMenu.is_visible = is_visible;
 
 	if (!is_visible) {
-		ToggleContextMenuSelectorVisibility(false);
+		ContextMenu.ToggleContextMenuSelectorVisibility(false);
 	}
+
+	// Show/Hide the Tutorials
+	if (Tutorials.has_tutorial)
+		Tutorials.SetVisibility(!is_visible);
 }
 
+// TODO: move context_menu_selector to inside the selector, so it handles it's lifespan
 // Handles Context Menu Selector Item click
-function ContextMenuSelectorItemClick(e) {
+ContextMenu.ContextMenuSelectorItemClick = function(e) {
 	const option_data = JSON.parse(e.target.dataset.option_data);
 
 	const context_menu_selector = document.getElementById("context_menu_selector");
 
 	const context_menu_item = document.getElementById(`item_${context_menu_selector.dataset.id}`);
+
+	if (!context_menu_item) {
+		// Note: this error will not show up if notifications/debug mode are disabled
+		console.error("No element found! Was it removed from context menu?");
+		ContextMenu.ToggleContextMenuSelectorVisibility(false);
+		return;
+	}
+
 	const img = context_menu_item.getElementsByTagName("img")[0];
 	const label = context_menu_item.getElementsByTagName("label")[0];
 
@@ -245,12 +308,12 @@ function ContextMenuSelectorItemClick(e) {
 	label.innerText = `${context_menu_selector.dataset.label}\n(${option_data.name})`;
 
 	Events.Call("ClickSound");
-	ToggleContextMenuSelectorVisibility(false);
+	ContextMenu.ToggleContextMenuSelectorVisibility(false);
 	Events.Call("ContextMenu_Callback", context_menu_selector.dataset.id, option_data.id);
 }
 
 // Toggles Context Menu Selector Visibility
-function ToggleContextMenuSelectorVisibility(is_visible, item) {
+ContextMenu.ToggleContextMenuSelectorVisibility = function(is_visible, item) {
 	const context_menu_selector = document.getElementById("context_menu_selector");
 	context_menu_selector.style.display = is_visible ? "block" : "none";
 
@@ -265,7 +328,7 @@ function ToggleContextMenuSelectorVisibility(is_visible, item) {
 			const context_menu_selector_item = document.createElement("span");
 			context_menu_selector_item.classList.add("context_menu_selector_item");
 			context_menu_selector_item.dataset.option_data = JSON.stringify(option);
-			context_menu_selector_item.addEventListener("click", ContextMenuSelectorItemClick);
+			context_menu_selector_item.addEventListener("click", ContextMenu.ContextMenuSelectorItemClick);
 			context_menu_selector_item.addEventListener("mouseenter", e => Events.Call("HoverSound", 1));
 
 			const context_menu_selector_item_image = document.createElement("span");
@@ -283,11 +346,11 @@ function ToggleContextMenuSelectorVisibility(is_visible, item) {
 	}
 }
 
-Events.Subscribe("ToggleContextMenuVisibility", ToggleContextMenuVisibility);
-Events.Subscribe("AddContextMenuItems", AddContextMenuItems);
-Events.Subscribe("RemoveContextMenuItems", RemoveContextMenuItems);
-Events.Subscribe("SetContextMenuLabel", SetContextMenuLabel);
-Events.Subscribe("SetContextMenuValue", SetContextMenuValue);
+Events.Subscribe("ToggleContextMenuVisibility", ContextMenu.ToggleContextMenuVisibility);
+Events.Subscribe("AddContextMenuItems", ContextMenu.AddContextMenuItems);
+Events.Subscribe("RemoveContextMenuItems", ContextMenu.RemoveContextMenuItems);
+Events.Subscribe("SetContextMenuLabel", ContextMenu.SetContextMenuLabel);
+Events.Subscribe("SetContextMenuValue", ContextMenu.SetContextMenuValue);
 
 
 

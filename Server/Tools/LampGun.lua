@@ -24,7 +24,7 @@ function LampGun:OnSpawnLamp(player, spawn_location, relative_location, relative
 	-- Updates the client's spawn history
 	Events.CallRemote("SpawnedItem", player, lamp)
 
-	Particle(spawn_location, rotation, "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", lamp.color)
+	Particle(spawn_location, rotation, "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", lamp.light:GetColor())
 end
 
 LampGun.SubscribeRemote("SpawnLamp", LampGun.OnSpawnLamp)

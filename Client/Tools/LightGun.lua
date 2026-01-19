@@ -12,6 +12,11 @@ LightGun.tutorials = {
 	{ key = "Undo", text = "undo spawn" },
 }
 
+-- Tool Tips
+LightGun.tips = {
+	"too many lights can cause severe lag"
+}
+
 -- Tool Crosshair Trace Debug Settings
 LightGun.crosshair_trace = {
 	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
@@ -37,10 +42,4 @@ function LightGun:OnLocalPlayerFire(shooter)
 		-- If didn't hit anything, plays a negative sound
 		SoundInvalidAction:Play()
 	end
-end
-
--- Overrides ToolGun method
-function LightGun:OnLocalPlayerPickUp(character)
-	-- Sets some notification when grabbing the Light Tool
-	AddNotification(NotificationType.Info, "LIGHTS_PERFORMANCE", "too many lights can cause severe lag", 10, 5)
 end

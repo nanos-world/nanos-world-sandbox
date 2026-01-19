@@ -8,17 +8,21 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				Tool
 			</div>
 			<div id="tutorial_body">
-				<!-- <span class="tutorial"><img src="..." class="tutorial-key"> Attach Something</span> -->
-				<!-- <span class="tutorial"><img src="..." class="tutorial-key"> Do Another Thing</span> -->
+				<!-- <span class="tutorial"><img src="..." class="tutorial_key"> Attach Something</span> -->
+				<!-- <span class="tutorial"><img src="..." class="tutorial_key"> Do Another Thing</span> -->
 			</div>
 		</div>
 	`);
 });
 
-function ToggleTutorial(is_visible, title, tutorial_list) {
-	const tutorials = document.getElementById("tutorials");
+const Tutorials = {
+	has_tutorial: false
+}
 
-	if (is_visible) {
+Tutorials.ToggleTutorial = function(has_tutorial, title, tutorial_list) {
+	Tutorials.has_tutorial = has_tutorial;
+
+	if (has_tutorial) {
 		const tutorial_body = document.getElementById("tutorial_body");
 		tutorial_body.innerHTML = "";
 
@@ -43,11 +47,18 @@ function ToggleTutorial(is_visible, title, tutorial_list) {
 
 			tutorial_body.appendChild(tutorial_item);
 		}
-
-		tutorials.style.display = "block";
-	} else {
-		tutorials.style.display = "none";
 	}
+
+	Tutorials.SetVisibility(has_tutorial);
 }
 
-Events.Subscribe("ToggleTutorial", ToggleTutorial);
+Tutorials.SetVisibility = function(is_visible) {
+	const tutorials = document.getElementById("tutorials");
+
+	if (is_visible && !ContextMenu.is_visible && !SpawnMenu.is_visible)
+		tutorials.style.display = "block";
+	else
+		tutorials.style.display = "none";
+}
+
+Events.Subscribe("ToggleTutorial", Tutorials.ToggleTutorial);

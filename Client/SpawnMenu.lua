@@ -8,9 +8,6 @@ SpawnMenu = SpawnMenu or {
 
 	-- List of all items
 	items = {},
-
-	-- WORKAROUND used for weapons Patterns
-	selected_option = "",
 }
 
 -- Configures the Highlight colors to be used
@@ -56,7 +53,7 @@ Package.Subscribe("Load", function()
 			SpawnMenu.AddItem(
 				"props",
 				asset_pack.Path .. "::" .. prop.key,
-				prop.key:gsub("SM_", " "):gsub("_", " "), -- Parses it to remove dirty names
+				prop.key:gsub("SM_", ""):gsub("_", " "), -- Parses it to remove dirty names
 				"assets://" .. asset_pack.Path .. "/" .. (prop.thumbnail or ("Thumbnails/" .. prop.key .. ".jpg")), -- Gets the Thumbnail path from conventional path "my-asset-pack/Thumbnails/"
 				prop.category or "uncategorized",
 				true
@@ -73,6 +70,8 @@ Package.Subscribe("Load", function()
 	SpawnMenu.AddInheritedClasses("weapons", Weapon, ToolGun)
 	SpawnMenu.AddInheritedClasses("vehicles", VehicleWheeled)
 	SpawnMenu.AddInheritedClasses("vehicles", VehicleWater)
+
+	-- Calls UI to add all items
 	MainHUD:CallEvent("SetSpawnMenuItems", SpawnMenu.items)
 end)
 
@@ -189,25 +188,10 @@ MainHUD:Subscribe("SpawnItem", function(category, asset_id)
 	end
 
 	-- Calls server to spawn it
-	Events.CallRemote("SpawnItem", category, asset_id, spawn_location, spawn_rotation, SpawnMenu.selected_option)
+	Events.CallRemote("SpawnItem", category, asset_id, spawn_location, spawn_rotation)
 
 	-- Spawns a sound for 'spawning an item'
 	SoundSpawnItem:Play()
-end)
-
--- Subscribes for when I select an Option
-MainHUD:Subscribe("SelectOption", function(texture_path)
-	SpawnMenu.selected_option = texture_path
-
-	local local_character = Client.GetLocalPlayer():GetControlledCharacter()
-
-	if (local_character) then
-		local current_picked_item = local_character:GetPicked()
-		if (current_picked_item) then
-			SoundSelectOption:Play()
-			Events.CallRemote("ApplyWeaponPattern", current_picked_item, texture_path)
-		end
-	end
 end)
 
 -- Subscribes for when I spawn an Item, do add it to my history
@@ -216,27 +200,40 @@ Events.SubscribeRemote("SpawnedItem", function(item, weld)
 end)
 
 -- Adds a new item to the Spawn Menu
----@param tab_id string			The tab to display this item - it must be 'props', 'weapons', 'tools', 'vehicles' or 'npcs'
----@param id string				Unique ID used to identify this item
----@param name string			Display name
----@param image string			Image path
+---@param tab_id string				The tab to display this item - it must be 'props', 'weapons', 'tools', 'vehicles' or 'npcs'
+---@param id string					Unique ID used to identify this item
+---@param name string				Display name
+---@param image string				Image path
 ---@param category_id? string		The category of this item, each tab has it's own set of categories (Prop: 'basic', 'appliances', 'construction', 'furniture', 'funny', 'tools', 'food', 'street', 'nature' or 'uncategorized'. Weapon: 'rifles', 'smgs', 'pistols', 'shotguns', 'sniper-rifles', 'special' or 'grenades')
 SpawnMenu.AddItem = function(tab_id, id, name, image, category_id, dont_add_to_spawn_menu)
 	if (not SpawnMenu.items[tab_id]) then
-		Console.Warn("Invalid tab when trying to add a new Spawn Menu item: '%s'.", tab_id)
+		Console.Error("Invalid tab '%s' when trying to add a new Spawn Menu item: '%s'.", tab_id, id)
+		return
+	end
+
+	if (category_id == "hidden") then
+		return
+	end
+
+	if (category_id == nil or category_id == "") then
+		category_id = "uncategorized"
+	end
+
+	-- Adds the category if it doesn't exist
+	if (not SpawnMenu.items[tab_id][category_id]) then
+		SpawnMenu.AddCategory(tab_id, category_id, category_id:gsub("^%l", string.upper), "modules/spawn-menu/images/categories/menu.webp")
 	end
 
 	local item = {
 		id = id,
 		name = name,
-		image = image,
-		category = category_id
+		image = image
 	}
 
-	table.insert(SpawnMenu.items[tab_id], item)
+	table.insert(SpawnMenu.items[tab_id][category_id], item)
 
 	if (not dont_add_to_spawn_menu) then
-		MainHUD:CallEvent("AddSpawnMenuItem", tab_id, item)
+		MainHUD:CallEvent("AddSpawnMenuItem", tab_id, category_id, item)
 	end
 end
 
@@ -245,7 +242,9 @@ end
 ---@param label string			Display text
 ---@param image string			Image path of the tab
 SpawnMenu.AddTab = function(id, label, image)
+	-- Adds the tab
 	SpawnMenu.items[id] = {}
+
 	MainHUD:CallEvent("AddTab", id, label, image)
 end
 
@@ -259,6 +258,9 @@ SpawnMenu.AddCategory = function(tab_id, id, label, image)
 		Console.Warn("Invalid tab when trying to add a new Spawn Menu category: '%s'.", tab_id)
 	end
 
+	-- Adds the category
+	SpawnMenu.items[tab_id][id] = {}
+
 	MainHUD:CallEvent("AddCategory", tab_id, id, label, image)
 end
 
@@ -266,36 +268,40 @@ end
 Package.Export("SpawnMenu", SpawnMenu)
 
 -- Configures Tabs
-SpawnMenu.AddTab("props", "props", "tabs/chair.webp")
-SpawnMenu.AddTab("entities", "entities", "tabs/rocket.webp")
-SpawnMenu.AddTab("weapons", "weapons", "tabs/gun.webp")
-SpawnMenu.AddTab("vehicles", "vehicles", "tabs/car.webp")
-SpawnMenu.AddTab("tools", "tools", "tabs/paint-spray.webp")
-SpawnMenu.AddTab("npcs", "npcs", "tabs/robot.webp")
+SpawnMenu.AddTab("props",		"props",		"modules/spawn-menu/images/tabs/chair.webp")
+SpawnMenu.AddTab("entities",	"entities",		"modules/spawn-menu/images/tabs/rocket.webp")
+SpawnMenu.AddTab("weapons",		"weapons",		"modules/spawn-menu/images/tabs/gun.webp")
+SpawnMenu.AddTab("vehicles",	"vehicles",		"modules/spawn-menu/images/tabs/car.webp")
+SpawnMenu.AddTab("tools",		"tools",		"modules/spawn-menu/images/tabs/paint-spray.webp")
+SpawnMenu.AddTab("npcs",		"npcs",			"modules/spawn-menu/images/tabs/robot.webp")
 
 -- Configures Categories
-SpawnMenu.AddCategory("props", "basic", "Basic", "categories/shapes.webp")
-SpawnMenu.AddCategory("props", "appliances", "Appliances", "categories/appliances.webp")
-SpawnMenu.AddCategory("props", "construction", "Construction", "categories/construction.webp")
-SpawnMenu.AddCategory("props", "furniture", "Furniture", "categories/lamp.webp")
-SpawnMenu.AddCategory("props", "funny", "Funny", "categories/joker-hat.webp")
-SpawnMenu.AddCategory("props", "tools", "Tools", "categories/tools.webp")
-SpawnMenu.AddCategory("props", "food", "Food", "categories/hot-dog.webp")
-SpawnMenu.AddCategory("props", "street", "Street", "categories/street-lamp.webp")
-SpawnMenu.AddCategory("props", "nature", "Nature", "categories/tree.webp")
-SpawnMenu.AddCategory("props", "uncategorized", "Uncategorized", "categories/menu.webp")
+SpawnMenu.AddCategory("props",		"basic",			"Basic",			"modules/spawn-menu/images/categories/shapes.webp")
+SpawnMenu.AddCategory("props",		"appliances",		"Appliances",		"modules/spawn-menu/images/categories/appliances.webp")
+SpawnMenu.AddCategory("props",		"construction",		"Construction",		"modules/spawn-menu/images/categories/construction.webp")
+SpawnMenu.AddCategory("props",		"furniture",		"Furniture",		"modules/spawn-menu/images/categories/lamp.webp")
+SpawnMenu.AddCategory("props",		"funny",			"Funny",			"modules/spawn-menu/images/categories/joker-hat.webp")
+SpawnMenu.AddCategory("props",		"tools",			"Tools",			"modules/spawn-menu/images/categories/tools.webp")
+SpawnMenu.AddCategory("props",		"food",				"Food",				"modules/spawn-menu/images/categories/hot-dog.webp")
+SpawnMenu.AddCategory("props",		"street",			"Street",			"modules/spawn-menu/images/categories/street-lamp.webp")
+SpawnMenu.AddCategory("props",		"nature",			"Nature",			"modules/spawn-menu/images/categories/tree.webp")
 
-SpawnMenu.AddCategory("weapons", "rifles", "Rifles", "categories/rifle.webp")
-SpawnMenu.AddCategory("weapons", "smgs", "SMGs", "categories/smg.webp")
-SpawnMenu.AddCategory("weapons", "pistols", "Pistols", "categories/revolver.webp")
-SpawnMenu.AddCategory("weapons", "shotguns", "Shotguns", "categories/shotgun.webp")
-SpawnMenu.AddCategory("weapons", "sniper-rifles", "Sniper Rifles", "categories/sniper-rifle.webp")
-SpawnMenu.AddCategory("weapons", "special", "Special", "categories/laser-gun.webp")
-SpawnMenu.AddCategory("weapons", "grenades", "Grenade", "categories/grenade.webp")
-SpawnMenu.AddCategory("weapons", "melee", "Melee", "categories/knife.webp")
+SpawnMenu.AddCategory("weapons",	"rifles",			"Rifles",			"modules/spawn-menu/images/categories/rifle.webp")
+SpawnMenu.AddCategory("weapons",	"smgs",				"SMGs",				"modules/spawn-menu/images/categories/smg.webp")
+SpawnMenu.AddCategory("weapons",	"pistols",			"Pistols",			"modules/spawn-menu/images/categories/revolver.webp")
+SpawnMenu.AddCategory("weapons",	"shotguns",			"Shotguns",			"modules/spawn-menu/images/categories/shotgun.webp")
+SpawnMenu.AddCategory("weapons",	"sniper-rifles",	"Sniper Rifles",	"modules/spawn-menu/images/categories/sniper-rifle.webp")
+SpawnMenu.AddCategory("weapons",	"special",			"Special",			"modules/spawn-menu/images/categories/laser-gun.webp")
+SpawnMenu.AddCategory("weapons",	"vintage",			"Vintage",			"modules/spawn-menu/images/categories/old-rifle.webp")
+SpawnMenu.AddCategory("weapons",	"grenades",			"Grenades",			"modules/spawn-menu/images/categories/grenade.webp")
+SpawnMenu.AddCategory("weapons",	"melee",			"Melee",			"modules/spawn-menu/images/categories/knife.webp")
 
-SpawnMenu.AddCategory("entities", "uncategorized", "Uncategorized", "categories/menu.webp")
-SpawnMenu.AddCategory("entities", "destructables", "Destructables", "categories/destructable.webp")
+SpawnMenu.AddCategory("vehicles",	"wheeled",			"Wheeled",			"modules/spawn-menu/images/categories/tire.webp")
+SpawnMenu.AddCategory("vehicles",	"water",			"Water",			"modules/spawn-menu/images/categories/boat.webp")
+
+SpawnMenu.AddCategory("tools",		"tool-guns",		"Tool Guns",		"modules/spawn-menu/images/tabs/paint-spray.webp")
+
+SpawnMenu.AddCategory("npcs",		"npcs",				"NPCs",				"modules/spawn-menu/images/tabs/robot.webp")
 
 -- Defines some Spawn Menu Hints
 local spawn_menu_keybinding = Input.GetMappedKeys("SpawnMenu")[1] or "not set"
@@ -312,15 +318,15 @@ function RequireAllLuaFilesInFolder(folder)
 	end
 end
 
--- Requires all the Tools
+-- Requires all the Entities
+RequireAllLuaFilesInFolder("Client/Entities")
+
+-- Tools
 Package.Require("Tools/BaseToolGun.lua")
 RequireAllLuaFilesInFolder("Client/Tools")
 
 -- Weapons
 RequireAllLuaFilesInFolder("Client/Weapons")
-
--- Entities
-RequireAllLuaFilesInFolder("Client/Entities")
 
 -- Extra
 Package.Require("NPC.lua")

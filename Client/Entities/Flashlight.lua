@@ -4,14 +4,44 @@ Flashlight.name = "Flashlight"
 Flashlight.image = "assets://nanos-world/Thumbnails/SM_Flashlight.jpg"
 Flashlight.category = "uncategorized"
 
-CURRENTLY_GRABBED_FLASHLIGHT = nil
+Flashlight.currently_grabbed = nil
 
-function Flashlight:OnToggle()
-	CURRENTLY_GRABBED_FLASHLIGHT:CallRemoteEvent("ToggleLight")
+-- Context Menu Items when selecting this Entity
+Flashlight.selected_context_menu_items = {
+	{
+		id = "flashlight_color",
+		type = "color",
+		label = "color",
+		callback = function(color)
+			ContextMenu.selected_entity:CallRemoteEvent("SetColor", Color.FromHEX(color))
+		end,
+		value = function()
+			return Color.ToHex(ContextMenu.selected_entity:GetValue("Light"):GetColor(), false)
+		end
+	},
+	{
+		id = "flashlight_intensity",
+		type = "range",
+		label = "intensity",
+		min = 0,
+		max = 1000,
+		auto_update_label = true,
+		callback = function(value)
+			ContextMenu.selected_entity:CallRemoteEvent("SetIntensity", value / 100)
+		end,
+		value = function()
+			return ContextMenu.selected_entity:GetValue("Light"):GetIntensity() * 100
+		end
+	},
+}
+
+
+function Flashlight.OnToggle()
+	Flashlight.currently_grabbed:CallRemoteEvent("ToggleLight")
 end
 
 function Flashlight:OnGrab(character)
-	CURRENTLY_GRABBED_FLASHLIGHT = self
+	Flashlight.currently_grabbed = self
 
 	-- Binds the Input
 	Input.Bind("Flashlight", InputEvent.Pressed, Flashlight.OnToggle)
@@ -23,7 +53,7 @@ function Flashlight:OnGrab(character)
 end
 
 function Flashlight:OnUnGrab(character)
-	CURRENTLY_GRABBED_FLASHLIGHT = nil
+	Flashlight.currently_grabbed = nil
 
 	-- Unbinds from Input
 	Input.Unbind("Flashlight", InputEvent.Pressed, Flashlight.OnToggle)

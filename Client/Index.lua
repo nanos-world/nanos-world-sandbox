@@ -106,6 +106,20 @@ function OnCharacterPickup(character, object)
 		object:Subscribe("AmmoClipChange", OnAmmoClipChanged)
 		object:Subscribe("AmmoBagChange", OnAmmoBagChanged)
 	end
+
+	local class = object:GetClass()
+
+	-- Sets the notification tips when grabbing the object, if any defined
+	local tool_gun_tips = class.tips
+	if (tool_gun_tips) then
+		for index, tip in pairs(tool_gun_tips) do
+			local delay = (index - 1) * 60 + 5
+			AddNotification(NotificationType.Info, class.name .. "_TIP_" .. tostring(index), tip, 10, delay)
+		end
+	end
+
+	-- Adds custom items for the class, defined in ContextMenuDefaults.lua
+	ContextMenu.AddPickedCustomItems(object)
 end
 
 -- Handles Character taking damage (health change)
@@ -124,9 +138,13 @@ function OnCharacterDrop(character, object)
 	-- Unsubscribes from events
 	if (object:IsA(Weapon) and not object:IsA(ToolGun)) then
 		UpdateAmmo(false)
+
 		object:Unsubscribe("AmmoClipChange", OnAmmoClipChanged)
 		object:Unsubscribe("AmmoBagChange", OnAmmoBagChanged)
 	end
+
+	-- Removes Custom Picked Item entries from Context Menu
+	ContextMenu.RemoveItems("picked_item")
 end
 
 -- Function to update the Ammo's UI

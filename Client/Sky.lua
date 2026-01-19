@@ -43,7 +43,7 @@ function SandboxSky.SetTimeOfDay(time_of_day)
 	Events.CallRemote("ChangeTime", time_of_day)
 end
 
-function SandboxSky.LockTimeOfDay(enabled)
+function SandboxSky.FreezeTime(enabled)
 	if (enabled) then
 		Sky.SetAnimateTimeOfDay(false)
 	else
@@ -57,23 +57,44 @@ end
 
 -- Context Menu Configuration for Sky & Time
 ContextMenu.AddItems("sky", "sky", {
-	{ id = "time_of_day", type = "range", label = "time of day (00:00)", min = 0, max = 2400, value = 960, callback = SandboxSky.SetTimeOfDay, auto_update_label = false },
-	{ id = "lock_time_of_day", type = "checkbox", label = "lock time of the day", callback = SandboxSky.LockTimeOfDay },
-	{ id = "weather", type = "select", label = "weather", selected = 5, callback = SandboxSky.ChangeWeather, options = {
-		{ id = 1, name = "ClearSkies" },
-		{ id = 2, name = "Cloudy" },
-		{ id = 3, name = "Foggy" },
-		{ id = 4, name = "Overcast" },
-		{ id = 5, name = "PartlyCloudy" },
-		{ id = 6, name = "Rain" },
-		{ id = 7, name = "RainLight" },
-		{ id = 8, name = "RainThunderstorm" },
-		{ id = 9, name = "SandDustCalm" },
-		{ id = 10, name = "SandDustStorm" },
-		{ id = 11, name = "Snow" },
-		{ id = 12, name = "SnowBlizzard" },
-		{ id = 13, name = "SnowLight" }
-	}},
+	{
+		id = "time_of_day",
+		type = "range",
+		label = "time of day (00:00)",
+		min = 0,
+		max = 2400,
+		value = 960,
+		auto_update_label = false,
+		callback = SandboxSky.SetTimeOfDay,
+	},
+	{
+		id = "freeze_time",
+		type = "checkbox",
+		label = "freeze time",
+		callback = SandboxSky.FreezeTime,
+	},
+	{
+		id = "weather",
+		type = "select",
+		label = "weather",
+		value = 5,
+		options = {
+			{ id = 1, name = "ClearSkies" },
+			{ id = 2, name = "Cloudy" },
+			{ id = 3, name = "Foggy" },
+			{ id = 4, name = "Overcast" },
+			{ id = 5, name = "PartlyCloudy" },
+			{ id = 6, name = "Rain" },
+			{ id = 7, name = "RainLight" },
+			{ id = 8, name = "RainThunderstorm" },
+			{ id = 9, name = "SandDustCalm" },
+			{ id = 10, name = "SandDustStorm" },
+			{ id = 11, name = "Snow" },
+			{ id = 12, name = "SnowBlizzard" },
+			{ id = 13, name = "SnowLight" }
+		},
+		callback = SandboxSky.ChangeWeather,
+	},
 })
 
 function UpdateContextMenuValues()

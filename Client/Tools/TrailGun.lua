@@ -8,8 +8,8 @@ TrailGun.image = "package://sandbox/Client/Tools/TrailGun.webp"
 
 -- Tool Tutorials
 TrailGun.tutorials = {
-	{ key = "LeftClick", text = "spawn trail" },
-	{ key = "Undo", text = "undo spawn" },
+	{ key = "LeftClick",	text = "spawn trail" },
+	{ key = "Undo",			text = "undo spawn" },
 }
 
 -- Tool Crosshair Trace Debug Settings

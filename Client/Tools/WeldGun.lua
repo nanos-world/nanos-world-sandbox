@@ -8,8 +8,8 @@ WeldGun.image = "package://sandbox/Client/Tools/WeldGun.webp"
 
 -- Tool Tutorials
 WeldGun.tutorials = {
-	{ key = "LeftClick", text = "weld object" },
-	{ key = "Undo", text = "undo weld" },
+	{ key = "LeftClick",	text = "weld object" },
+	{ key = "Undo",			text = "undo weld" },
 }
 
 -- Tool Crosshair Trace Debug Settings
