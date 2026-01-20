@@ -2,9 +2,18 @@ const SpawnMenu = {
 	is_visible: false,
 
 	observer_tabs: {},
+
+	// Aux for debouncing
+	search_debounce: {
+		timeout: null,
+		Run: function(callback, delay) {
+			clearTimeout(this.timeout);
+			this.timeout = setTimeout(callback, delay);
+		}
+	}
 }
 
-
+// TODO Close button
 document.addEventListener("DOMContentLoaded", function(event) {
 	// Inserts the spawn menu
 	const body = document.querySelector(`body`);
@@ -12,6 +21,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	body.insertAdjacentHTML("afterbegin", `
 		<div id="spawn_menu">
 			<div id="label">Label Description</div>
+			<div id="message"></div>
+			<div id="search">
+				<input type="search" id="search_input" placeholder="search..." spellcheck="false" />
+			</div>
 			<div id="tabs">
 				<!-- <span id="props" class="tab active">
 					<img src="./images/tabs/chair.webp"/>
@@ -19,21 +32,73 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				</span> -->
 			</div>
 			<div id="spawn_menu_content">
-			 	<!-- <div id="spawn_menu_content_tab_props">
+			 	<!-- <div id="spawn_menu_content_tab_props" class="spawn_menu_content_tab">
 					<div class="spawn_menu_categories">
 						<img class="spawn_category active" loading="lazy" src="./images/categories/tools.webp"></img>
 					</div>
 					<div class="spawn_menu_list">
-						<span class="spawn_item">
-							<img class="spawn_item_image" loading="lazy" src="./images/nanosworld_empty.webp"></img>
-							<span class="spawn_item_name">Name</span>
+						<span class="spawn_menu_content_category" id="spawn_menu_content_category_props_furniture">
+							<span class="spawn_menu_divider">Furniture</span>
+							<span class="spawn_item">
+								<img class="spawn_item_image" loading="lazy" src="./images/nanosworld_empty.webp"></img>
+								<span class="spawn_item_name">Name</span>
+							</span>
 						</span>
 					</div>
 				</div> -->
 			</div>
 		</div>
 	`);
+
+	const search_input = document.getElementById("search_input");
+	search_input.addEventListener("input", function(e) {
+		SpawnMenu.search_debounce.Run(() => SpawnMenu.OnSearch(e.target.value), 150);
+	});
 });
+
+SpawnMenu.OnSearch = function(value) {
+	// Gets current active tab
+	const active_tab = document.querySelector(".tab.active");
+	if (!active_tab) return;
+
+	// Gets current content tab items
+	const spawn_menu_content_tab = document.getElementById(`spawn_menu_content_tab_${active_tab.dataset.tab_id}`);
+	const spawn_menu_items = spawn_menu_content_tab.querySelectorAll(".spawn_item");
+
+	// Normalize search value
+	const search_value = value.toLowerCase().trim();
+
+	if (value && value.length > 0) {
+		let found_items = 0;
+
+		for (const item of spawn_menu_items) {
+			// Searches in name and id
+			const item_name = item.dataset.item_name.toLowerCase();
+			const item_id = item.dataset.item_id.toLowerCase();
+
+			// Marks as visible if matches
+			if (item_name.includes(search_value) || item_id.includes(search_value)) {
+				found_items++;
+				item.classList.add("spawn_item_visible");
+			} else {
+				item.classList.remove("spawn_item_visible");
+			}
+		}
+
+		// No items found
+		document.getElementById("message").textContent = found_items === 0 ? "No results found." : "";
+
+	} else {
+		// Marks all as visible
+		for (const item of spawn_menu_items) {
+			item.classList.add("spawn_item_visible");
+		}
+
+		document.getElementById("message").textContent = "";
+	}
+
+	Events.Call("ClickSound");
+}
 
 SpawnMenu.SpawnItemClick = function(e) {
 	const item_id = e.target.dataset.item_id;
@@ -57,20 +122,26 @@ SpawnMenu.ItemHover = function(label, enter, is_spawn_item) {
 SpawnMenu.TabClick = function(tab_element) {
 	const new_tab = tab_element.dataset.tab_id;
 
-	// Hides old tab content
-	const old_tab_content = document.querySelectorAll(".spawn_menu_content_tab");
-	old_tab_content.forEach(tab_content => tab_content.style.display = "none");
+	// Clear the search
+	document.getElementById("search_input").value = "";
+	SpawnMenu.OnSearch("");
+
+	// Hides previous tab content
+	const previous_tab_content = document.querySelectorAll(".spawn_menu_content_tab");
+	previous_tab_content.forEach(tab_content => tab_content.style.display = "none");
 
 	// Shows new tab content
 	const new_tab_content = document.getElementById(`spawn_menu_content_tab_${new_tab}`);
 	if (new_tab_content)
 		new_tab_content.style.display = "block";
 
-	const old_tab_active = document.querySelector(".tab.active");
-	if (old_tab_active)
-		old_tab_active.classList.remove("active");
+	const previous_tab_active = document.querySelector(".tab.active");
+	if (previous_tab_active)
+		previous_tab_active.classList.remove("active");
 
 	tab_element.classList.add("active");
+
+	Events.Call("ClickSound");
 }
 
 SpawnMenu.CategoryClick = function(category_item) {
@@ -78,7 +149,7 @@ SpawnMenu.CategoryClick = function(category_item) {
 	const tab_id = category_item.dataset.tab_id;
 
 	// Scrolls to divider
-	const spawn_menu_content_category = document.getElementById(`spawn_menu_divider_${tab_id}_${category_id}`);
+	const spawn_menu_content_category = document.getElementById(`spawn_menu_content_category_${tab_id}_${category_id}`);
 	spawn_menu_content_category.scrollIntoView({ behavior: "smooth", block: "start" });
 
 	Events.Call("ClickSound");
@@ -105,20 +176,24 @@ SpawnMenu.AddCategory = function(tab_id, id, label, image) {
 
 	spawn_menu_categories.appendChild(category);
 
-	// Add divisor
-	const divisor = document.createElement("div");
-	divisor.id = `spawn_menu_divider_${tab_id}_${id}`;
-	divisor.classList.add("spawn_menu_divider");
-	divisor.textContent = label;
-	spawn_menu_list.appendChild(divisor);
-
-	// Add content container
+	// Add category container
 	const spawn_menu_content_category = document.createElement("div");
 	spawn_menu_content_category.classList.add("spawn_menu_content_category");
 	spawn_menu_content_category.id = `spawn_menu_content_category_${tab_id}_${id}`;
 	spawn_menu_content_category.dataset.category = category;
 	spawn_menu_content_category.dataset.category_id = id;
 	spawn_menu_content_category.dataset.tab_id = tab_id;
+
+	// Add divisor
+	const divisor = document.createElement("div");
+	divisor.classList.add("spawn_menu_divider");
+	divisor.textContent = label.toLowerCase();
+	spawn_menu_content_category.appendChild(divisor);
+
+	// Add content container
+	const spawn_menu_items = document.createElement("div");
+	spawn_menu_items.classList.add("spawn_menu_items");
+	spawn_menu_content_category.appendChild(spawn_menu_items);
 
 	spawn_menu_list.appendChild(spawn_menu_content_category);
 
@@ -192,11 +267,12 @@ SpawnMenu.AddItem = function(tab_id, category_id, item) {
 	const image = item.image ? item.image : "modules/spawn-menu/images/nanosworld_empty.webp";
 
 	const spawn_item = document.createElement("span");
-	spawn_item.classList.add("spawn_item");
+	spawn_item.classList.add("spawn_item", "spawn_item_visible");
 	spawn_item.addEventListener("click", SpawnMenu.SpawnItemClick);
 	spawn_item.addEventListener("mouseenter", e => SpawnMenu.ItemHover(e.target.dataset.item_id, true, true));
 	spawn_item.addEventListener("mouseleave", e => SpawnMenu.ItemHover(false, false, true));
 	spawn_item.dataset.item_id = item.id;
+	spawn_item.dataset.item_name = item.name;
 	spawn_item.dataset.category_id = category_id;
 	spawn_item.dataset.tab_id = tab_id;
 
@@ -212,7 +288,9 @@ SpawnMenu.AddItem = function(tab_id, category_id, item) {
 	spawn_item.appendChild(spawn_item_image);
 	spawn_item.appendChild(spawn_item_name);
 
-	document.getElementById(`spawn_menu_content_category_${tab_id}_${category_id}`).appendChild(spawn_item);
+	const spawn_menu_content_category = document.getElementById(`spawn_menu_content_category_${tab_id}_${category_id}`);
+	const spawn_menu_items = spawn_menu_content_category.querySelector(".spawn_menu_items");
+	spawn_menu_items.appendChild(spawn_item);
 }
 
 SpawnMenu.SetSpawnMenuItems = function(items) {

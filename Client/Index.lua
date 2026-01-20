@@ -209,9 +209,15 @@ Events.SubscribeRemote("SpawnSoundAttached", function(object, sound_asset, is_2D
 end)
 
 Input.Subscribe("KeyPress", function(key_name, delta)
+	-- Closes Spawn Menu or Context Menu if opened when Escape is pressed
 	if (key_name == "Escape") then
 		if (ContextMenu.is_opened) then
 			ContextMenu.Close()
+			return false
+		end
+
+		if (SpawnMenu.is_opened) then
+			SpawnMenu.Close()
 			return false
 		end
 	end

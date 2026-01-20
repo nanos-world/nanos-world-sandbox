@@ -35,7 +35,7 @@ SpawnMenu.SpawnItem = function(player, tab, id, spawn_location, spawn_rotation)
 	-- If spawning a Prop
 	if (tab == "props") then
 		-- Rotates the Prop 180 degrees to make it face the player and normalize it to be in range [0-360]
-		spawn_rotation.Yaw = spawn_rotation.Yaw + 180
+		spawn_rotation.Yaw = spawn_rotation.Yaw + 90
 		spawn_rotation:Normalize()
 
 		item = Prop(spawn_location + Vector(0, 0, 50), Rotator(0, spawn_rotation.Yaw, 0), id)

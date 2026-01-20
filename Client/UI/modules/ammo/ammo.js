@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	body.insertAdjacentHTML("afterbegin", `
 		<!-- Weapon Ammo container (black background) -->
 		<div id="weapon_ammo_container">
+			<!-- Ammo Icon -->
+			<img src="modules/ammo/ammo.png">
 			<!-- Ammo Clip value -->
 			<span id="weapon_ammo_clip">30</span>
 			<span id="weapon_ammo_separator">/</span>

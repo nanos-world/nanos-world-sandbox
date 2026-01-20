@@ -75,27 +75,35 @@ Package.Subscribe("Load", function()
 	MainHUD:CallEvent("SetSpawnMenuItems", SpawnMenu.items)
 end)
 
-Input.Bind("SpawnMenu", InputEvent.Released, function()
-	if (ContextMenu.is_opened) then return end
+SpawnMenu.Close = function()
+	SpawnMenu.is_opened = false
 
 	MainHUD:CallEvent("ToggleSpawnMenuVisibility", false)
-	SpawnMenu.is_opened = false
 	Input.SetMouseEnabled(false)
 	Chat.SetVisibility(true)
 
 	PlayClickSound(0.9)
-end)
+end
 
-Input.Bind("SpawnMenu", InputEvent.Pressed, function()
+SpawnMenu.Open = function()
 	if (ContextMenu.is_opened) then return end
 
-	MainHUD:CallEvent("ToggleSpawnMenuVisibility", true)
 	SpawnMenu.is_opened = true
+
+	MainHUD:CallEvent("ToggleSpawnMenuVisibility", true)
 	Input.SetMouseEnabled(true)
 	Chat.SetVisibility(false)
 	MainHUD:BringToFront()
 
 	PlayClickSound(1.1)
+end
+
+Input.Bind("SpawnMenu", InputEvent.Released, function()
+	SpawnMenu.Close()
+end)
+
+Input.Bind("SpawnMenu", InputEvent.Pressed, function()
+	SpawnMenu.Open()
 end)
 
 -- Function to delete the last item spawned
