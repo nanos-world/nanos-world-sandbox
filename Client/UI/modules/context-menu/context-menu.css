@@ -77,39 +77,54 @@
 #context_menu .context_menu_item_range,
 #context_menu .context_menu_item_checkbox,
 #context_menu .context_menu_item_color,
+#context_menu .context_menu_item_text,
 #context_menu .context_menu_item_select,
 #context_menu .context_menu_item_select_image {
-	display: flex;
-	justify-content: space-between;
+	display: grid;
+	grid-template-columns: 3fr 7fr;
 	align-items: center;
+	gap: 15px;
 }
 
 #context_menu .context_menu_item_range input,
 #context_menu .context_menu_item_checkbox input,
 #context_menu .context_menu_item_color input,
+#context_menu .context_menu_item_text input,
+#context_menu .context_menu_item_text textarea,
 #context_menu .context_menu_item_select select,
 #context_menu .context_menu_item_select_image img {
-	flex-grow: 1;
-	margin-left: 15px;
 	cursor: pointer;
+	justify-self: end;
+	width: 100%;
+}
+
+#context_menu .context_menu_item_text input,
+#context_menu .context_menu_item_text textarea {
+	cursor: text;
+}
+
+#context_menu .context_menu_item_range input {
+	cursor: ew-resize;
 }
 
 #context_menu .context_menu_item_range input:hover,
 #context_menu .context_menu_item_checkbox input:hover,
 #context_menu .context_menu_item_color input:hover,
-#context_menu .context_menu_item_select_image img:hover,
+#context_menu .context_menu_item_text input:hover,
+#context_menu .context_menu_item_text textarea:hover,
 #context_menu .context_menu_item_select select:hover,
+#context_menu .context_menu_item_select_image img:hover,
 #context_menu .context_menu_item_button button:hover {
 	filter: brightness(0.9)
 }
 
 #context_menu .context_menu_item_range label,
 #context_menu .context_menu_item_checkbox label,
+#context_menu .context_menu_item_text label,
 #context_menu .context_menu_item_select_image label,
 #context_menu .context_menu_item_select label,
 #context_menu .context_menu_item_color label {
 	text-align: center;
-	flex-basis: 30%;
 	color: #f0f0f0;
 }
 
@@ -119,11 +134,25 @@
 	height: 35px;
 }
 
+#context_menu .context_menu_item_text input,
+#context_menu .context_menu_item_text textarea {
+	border: none;
+	padding: 10px;
+}
+
+#context_menu .context_menu_item_text input,
 #context_menu .context_menu_item_select select {
 	height: 35px;
 }
 
+#context_menu .context_menu_item_text textarea {
+	height: 70px;
+	resize: none;
+}
+
 #context_menu .context_menu_item_checkbox input,
+#context_menu .context_menu_item_text input,
+#context_menu .context_menu_item_text textarea,
 #context_menu .context_menu_item_select_image img {
 	border-radius: 5px;
 }
@@ -233,7 +262,7 @@
 #context_menu .context_menu_item_color input {
 	-webkit-appearance: none;
 	appearance: none;
-	height: 40px;
+	height: 35px;
 	background-color: transparent;
 	border: none;
 }
@@ -241,6 +270,10 @@
 #context_menu .context_menu_item_color input::-webkit-color-swatch {
 	border: none;
 	border-radius: 5px;
+}
+
+#context_menu .context_menu_item_color input::-webkit-color-swatch-wrapper {
+	padding: 0;
 }
 
 #context_menu .context_menu_item_select select {

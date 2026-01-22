@@ -5,9 +5,7 @@ ConfigureSpawnLimits("RopeLight", "Rope Lights", RopeLight.GetCount, "max_rope_l
 function RopeLight:Constructor(spawn_location, direction, attach_to_entity, distance_trace_object)
 	local rotation = direction:Rotation() + Rotator(90, 0, 0)
 
-	self.Super:Constructor(spawn_location, rotation, "nanos-world::SM_Lamp", CollisionType.Auto, true, GrabMode.Disabled)
-
-	self:SetCollision(CollisionType.StaticOnly)
+	self.Super:Constructor(spawn_location, rotation, "nanos-world::SM_Lamp", CollisionType.StaticOnly, true, GrabMode.Disabled)
 
 	-- Sets the prop mesh emissive color to a random color
 	self.color = Color.RandomPalette(false)

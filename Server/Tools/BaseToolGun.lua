@@ -32,6 +32,12 @@ function ToolGun:Constructor(location, rotation, color)
 	self:SetUsageSettings(false, false)
 
 	self:SetMaterialColorParameter("Emissive", color * 100)
+
+	-- ToolGun label
+	self.text_render = TextRender(location, Rotator(), self:GetName(), 2, color, TextRenderHorizontalAlignment.Center, TextRenderVerticalAlignment.Center, false, "nanos-world::Font_LondrinaSolid_DistanceField")
+	self.text_render:AttachTo(self, AttachmentRule.SnapToTarget, "", 0)
+	self.text_render:SetRelativeLocation(Vector(-2.5, 0, 8.5))
+	self.text_render:SetRelativeRotation(Rotator(0, 180, 0))
 end
 
 function ToolGun:OnPickUp(character)

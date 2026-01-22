@@ -86,8 +86,6 @@ SpawnMenu.Close = function()
 end
 
 SpawnMenu.Open = function()
-	if (ContextMenu.is_opened) then return end
-
 	SpawnMenu.is_opened = true
 
 	MainHUD:CallEvent("ToggleSpawnMenuVisibility", true)
@@ -99,10 +97,14 @@ SpawnMenu.Open = function()
 end
 
 Input.Bind("SpawnMenu", InputEvent.Released, function()
+	if (ContextMenu.is_opened) then return end
+
 	SpawnMenu.Close()
 end)
 
 Input.Bind("SpawnMenu", InputEvent.Pressed, function()
+	if (ContextMenu.is_opened) then return end
+
 	SpawnMenu.Open()
 end)
 

@@ -235,6 +235,31 @@ ContextMenu.AddContextMenuItems = function(id, title, items) {
 				context_menu_item.append(select);
 				break;
 			}
+			case "text":
+			{
+				let input = null;
+				if (item.multiline) {
+					input = document.createElement("textarea");
+				} else {
+					input = document.createElement("input");
+					input.type = "text";
+				}
+
+				input.value = item.value;
+				input.placeholder = item.placeholder || "enter text...";
+				input.addEventListener("change", function(e) {
+					Events.Call("ClickSound");
+					Events.Call("ContextMenu_Callback", item.id, e.target.value);
+				});
+
+				const label = document.createElement("label");
+				label.innerText = item.label;
+
+				context_menu_item.classList.add("context_menu_item_text");
+				context_menu_item.append(label);
+				context_menu_item.append(input);
+				break;
+			}
 			default:
 				console.error(`Unknown Context Menu Item Type: ${item.type}`);
 		}

@@ -27,7 +27,7 @@ BalloonGun.tips = {
 }
 
 -- Balloon Configuration
-BalloonGun.asset = Balloon.assets[math.random(#Balloon.assets)]
+BalloonGun.asset = Balloon.assets[math.random(#Balloon.assets)].id
 BalloonGun.force = 100000
 BalloonGun.max_length = 100
 BalloonGun.randomness = 0.15
@@ -96,10 +96,11 @@ function BalloonGun:OnLocalPlayerFire(shooter)
 	local trace_result = TraceFor(10000, BalloonGun.crosshair_trace.collision_channel)
 
 	if (trace_result.Success) then
-		local distance_trace_object = Vector()
+		local relative_location = nil
+		local relative_rotation = nil
 		if (trace_result.Entity and not trace_result.Entity:HasAuthority()) then
 			-- If hit an entity, then calculates the offset distance from the Hit and the Object
-			distance_trace_object = (trace_result.Entity:GetLocation() - trace_result.Location) / trace_result.Entity:GetScale()
+			relative_location, relative_rotation = NanosMath.RelativeTo(trace_result.Location, trace_result.Normal:Rotation(), trace_result.Entity)
 		end
 
 		-- Calculate randomness
@@ -110,7 +111,7 @@ function BalloonGun:OnLocalPlayerFire(shooter)
 		local max_length = math.random() * max_length_randomness * 2 + (BalloonGun.max_length - max_length_randomness)
 
 		-- Calls remote to spawn the Balloon
-		self:CallRemoteEvent("SpawnBalloon", trace_result.Location, trace_result.Normal:Rotation(), force, max_length, trace_result.Entity, distance_trace_object, BalloonGun.asset)
+		self:CallRemoteEvent("SpawnBalloon", trace_result.Location, relative_location, relative_rotation, trace_result.Normal, trace_result.Entity, force, max_length, BalloonGun.asset)
 	else
 		-- If didn't hit anything, plays a negative sound
 		SoundInvalidAction:Play()

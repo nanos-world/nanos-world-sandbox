@@ -10,9 +10,11 @@ function ContextMenu.AddSelectedCustomItems(entity)
 		ContextMenu.AddItems("selected_item", category_name, entity_context_menu_items)
 	end
 
-	-- Basic Actor entries
-	ContextMenu.AddItems("selected_item", category_name, {
-		{
+	local items = {}
+
+	-- Basic Actor entries with tint/gravity
+	if (class == Prop or entity:IsA(Weapon) or entity:IsA(Melee) or entity:IsA(VehicleWheeled) or entity:IsA(VehicleWater)) then
+		table.insert(items, {
 			id = "tint",
 			type = "color",
 			label = "tint",
@@ -22,8 +24,9 @@ function ContextMenu.AddSelectedCustomItems(entity)
 			callback = function(color)
 				Events.CallRemote("ColorObject", ContextMenu.selected_entity, ContextMenu.selected_entity:GetLocation(), Vector(0, 0, 1), Color.FromHEX(color))
 			end
-		},
-		{
+		})
+
+		table.insert(items, {
 			id = "gravity_enabled",
 			type = "checkbox",
 			label = "gravity enabled",
@@ -33,35 +36,38 @@ function ContextMenu.AddSelectedCustomItems(entity)
 			callback = function()
 				Events.CallRemote("SetGravityEnabled", ContextMenu.selected_entity)
 			end
-		},
-		{
-			id = "destroy_button",
-			type = "button",
-			label = "destroy",
-			callback = function()
-				Events.CallRemote("DestroyItem", ContextMenu.selected_entity)
-				ContextMenu.SelectEntity(nil)
-			end
-		},
+		})
+	end
+
+	-- All entities
+	table.insert(items, {
+		id = "destroy_button",
+		type = "button",
+		label = "destroy",
+		callback = function()
+			Events.CallRemote("DestroyItem", ContextMenu.selected_entity)
+			ContextMenu.SelectEntity(nil)
+		end
 	})
 
 	-- Weapon specific entries
 	if (entity:IsA(Weapon) and not entity:IsA(ToolGun)) then
-		ContextMenu.AddItems("selected_item", category_name, {
-			{
-				id = "selected_weapon_pattern",
-				type = "select_image",
-				label = "pattern",
-				options = WEAPON_PATTERNS,
-				value = function()
-					return ContextMenu.selected_entity:GetValue("PatternTexture") or ""
-				end,
-				callback = function(value)
-					Events.CallRemote("ApplyWeaponPattern", ContextMenu.selected_entity, value)
-				end
-			},
+		table.insert(items, {
+			id = "selected_weapon_pattern",
+			type = "select_image",
+			label = "pattern",
+			options = WEAPON_PATTERNS,
+			value = function()
+				return ContextMenu.selected_entity:GetValue("PatternTexture") or ""
+			end,
+			callback = function(value)
+				Events.CallRemote("ApplyWeaponPattern", ContextMenu.selected_entity, value)
+			end
 		})
 	end
+
+	-- Inserts all items
+	ContextMenu.AddItems("selected_item", category_name, items)
 end
 
 -- Adds custom context menu items for picked entities through the Context Menu

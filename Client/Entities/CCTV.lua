@@ -1,7 +1,7 @@
 CCTV = Prop.Inherit("CCTV")
 
 CCTV.name = "CCTV"
-CCTV.image = "assets://nanos-world/Thumbnails/SM_Camera.jpg"
+CCTV.image = "package://sandbox/Client/Entities/CCTV.webp"
 CCTV.category = "uncategorized"
 
 function CCTV:OnSpawn()

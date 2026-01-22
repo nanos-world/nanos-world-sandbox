@@ -2,12 +2,21 @@ Balloon = Prop.Inherit("Balloon")
 
 ConfigureSpawnLimits("Balloon", "Balloons", Balloon.GetCount, "max_balloons")
 
--- todo move the cable stuff to balloon gun instead
-function Balloon:Constructor(location, rotation, force, max_length, entity, distance_trace_object, asset)
-	-- Spawns a Balloon Prop (not allowing characters to pickup it and with CCD disabled)
-	self.Super:Constructor(location + Vector(0, 0, 10), rotation, asset or "nanos-world::SM_Balloon_01", CollisionType.Normal, true, GrabMode.Disabled, CCDMode.Disabled)
 
+function Balloon:Constructor(location, rotation, relative_location, relative_rotation, direction, entity, force, max_length, asset)
+	-- Spawns a Balloon Prop (not allowing characters to pickup it and with CCD disabled)
+	local spawn_location = location
+	if (direction) then
+		spawn_location = location + direction * 50
+	end
+
+	self.Super:Constructor(spawn_location, rotation, asset or "nanos-world::SM_Balloon_01", CollisionType.Normal, true, GrabMode.Disabled, CCDMode.Disabled)
+
+	-- Sets Rubber Physical Material
 	self:SetPhysicalMaterial("nanos-world::PM_Rubber")
+
+	-- Normalize the Mass
+	self:SetMassOverride(50)
 
 	-- Adds a constant force upwards
 	self:SetForce(Vector(0, 0, tonumber(force) or 100000), false)
@@ -35,13 +44,18 @@ function Balloon:Constructor(location, rotation, force, max_length, entity, dist
 
 		-- If to attach to an entity, attaches the start to it
 		if (entity) then
-			-- Gets the relative location rotated to attach to the exact point the player aimed
-			local attach_location = entity:GetRotation():RotateVector(-distance_trace_object)
-			cable:AttachStartTo(entity, attach_location)
+			cable:AttachStartTo(entity, relative_location)
 		end
 
 		-- Attaches the Cable to the Balloon
-		cable:AttachEndTo(self)
+		local end_relative_location = Vector()
+
+		-- Emojis have their pivot point at wrong, so hacky fix it
+		if (asset:find("Emoji")) then
+			end_relative_location = Vector(0, -5, -35)
+		end
+
+		cable:AttachEndTo(self, end_relative_location)
 	end
 
 	-- Stores the actual Z location so we can destroy it after it raised +6000

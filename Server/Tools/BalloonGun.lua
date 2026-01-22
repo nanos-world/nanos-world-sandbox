@@ -5,7 +5,7 @@ function BalloonGun:Constructor(location, rotation)
 	ToolGun.Constructor(self, location, rotation, Color.VIOLET)
 end
 
-function BalloonGun:OnSpawnBalloon(player, spawn_location, rotation, force, max_length, entity, distance_trace_object, asset)
+function BalloonGun:OnSpawnBalloon(player, spawn_location, relative_location, relative_rotation, direction, entity, force, max_length, asset)
 	-- Refuse to attach a balloon to a Character
 	if (entity and entity:IsA(Character) and entity:GetPlayer()) then
 		return
@@ -15,13 +15,12 @@ function BalloonGun:OnSpawnBalloon(player, spawn_location, rotation, force, max_
 		return
 	end
 
-	-- TODO use relative instead
-	local balloon = Balloon(spawn_location, Rotator(0, math.random() * 360, 0), force, max_length, entity, distance_trace_object, asset)
+	local balloon = Balloon(spawn_location, Rotator(0, math.random() * 360, 0), relative_location, relative_rotation, direction, entity, force, max_length, asset)
 
 	-- Updates the client's spawn history
 	Events.CallRemote("SpawnedItem", player, balloon)
 
-	Particle(spawn_location, rotation, "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", balloon:GetMaterialColorParameter("Tint"))
+	Particle(spawn_location, direction:Rotation(), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", balloon:GetMaterialColorParameter("Tint"))
 end
 
 BalloonGun.SubscribeRemote("SpawnBalloon", BalloonGun.OnSpawnBalloon)

@@ -18,6 +18,9 @@ ContextMenu = {
 
 	-- Current hovering item
 	hovering_entity = nil,
+
+	-- Current hovering item text render
+	hovering_text_render = nil,
 }
 
 -- Exposes ContextMenu to other packages
@@ -156,6 +159,14 @@ function ContextMenu.OnTick(delta_time)
 			ContextMenu.HoverEntity(nil)
 		end
 	end
+
+	if (
+		ContextMenu.hovering_entity and ContextMenu.hovering_entity:IsValid() and
+		ContextMenu.hovering_text_render and ContextMenu.hovering_text_render:IsValid()
+	) then
+		local bounds = ContextMenu.hovering_entity:GetBounds()
+		ContextMenu.hovering_text_render:SetLocation(bounds.Origin + Vector(0, 0, bounds.BoxExtent.Z + 40))
+	end
 end
 
 function ContextMenu.HoverEntity(entity)
@@ -181,8 +192,22 @@ function ContextMenu.HoverEntity(entity)
 
 		Input.SetMouseCursor(CursorType.Hand)
 		PlayHoverSound()
+
+		-- Updates or Creates Text Render
+		local text_render_text = entity:GetClass():GetName() .. "#" .. tostring(entity:GetID())
+		if (ContextMenu.hovering_text_render and ContextMenu.hovering_text_render:IsValid()) then
+			ContextMenu.hovering_text_render:SetText(text_render_text)
+			ContextMenu.hovering_text_render:SetVisibility(true)
+		else
+			ContextMenu.hovering_text_render = TextRender(entity:GetLocation(), text_render_text, 30, Color.GREEN, TextRenderHorizontalAlignment.Center, TextRenderVerticalAlignment.Center, false, "nanos-world::Font_LondrinaSolid_DistanceField")
+		end
 	else
 		Input.SetMouseCursor(CursorType.Default)
+
+		-- Hides Text Render
+		if (ContextMenu.hovering_text_render and ContextMenu.hovering_text_render:IsValid()) then
+			ContextMenu.hovering_text_render:SetVisibility(false)
+		end
 	end
 end
 
