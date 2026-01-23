@@ -111,7 +111,7 @@ end)
 -- Function to delete the last item spawned
 function DeleteItemFromHistory()
 	if (#SpawnMenu.history == 0) then
-		AddNotification(NotificationType.Warning, "NO_ITEM_TO_DELETE", "there are no items in your history to destroy!", 3, 0, true)
+		Notifications.Add(NotificationType.Warning, "NO_ITEM_TO_DELETE", "there are no items in your history to destroy!", 3, 0, true)
 		return
 	end
 
@@ -296,6 +296,10 @@ SpawnMenu.AddCategory("props",		"food",				"Food",				"modules/spawn-menu/images
 SpawnMenu.AddCategory("props",		"street",			"Street",			"modules/spawn-menu/images/categories/street-lamp.webp")
 SpawnMenu.AddCategory("props",		"nature",			"Nature",			"modules/spawn-menu/images/categories/tree.webp")
 
+SpawnMenu.AddCategory("entities",	"devices",			"Devices",			"modules/spawn-menu/images/categories/tv.webp")
+SpawnMenu.AddCategory("entities",	"display",			"Display",			"modules/spawn-menu/images/categories/size.webp")
+SpawnMenu.AddCategory("entities",	"objects",			"Objects",			"modules/spawn-menu/images/categories/shapes.webp")
+
 SpawnMenu.AddCategory("weapons",	"rifles",			"Rifles",			"modules/spawn-menu/images/categories/rifle.webp")
 SpawnMenu.AddCategory("weapons",	"smgs",				"SMGs",				"modules/spawn-menu/images/categories/smg.webp")
 SpawnMenu.AddCategory("weapons",	"pistols",			"Pistols",			"modules/spawn-menu/images/categories/revolver.webp")
@@ -317,8 +321,8 @@ SpawnMenu.AddCategory("npcs",		"npcs",				"NPCs",				"modules/spawn-menu/images/
 local spawn_menu_keybinding = Input.GetMappedKeys("SpawnMenu")[1] or "not set"
 local undo_keybinding = Input.GetMappedKeys("Undo")[1] or "not set"
 
-AddNotification(NotificationType.Info, "SPAWN_MENU", "you can press " .. spawn_menu_keybinding .. " to open the Spawn Menu", 10, 30)
-AddNotification(NotificationType.Info, "SPAWN_MENU_DESTROY_ITEM", "you can press " .. undo_keybinding .. " to delete your last spawned item", 10, 90)
+Notifications.Add(NotificationType.Info, "SPAWN_MENU", "you can press " .. spawn_menu_keybinding .. " to open the Spawn Menu", 10, 30)
+Notifications.Add(NotificationType.Info, "SPAWN_MENU_DESTROY_ITEM", "you can press " .. undo_keybinding .. " to delete your last spawned item", 10, 90)
 
 
 function RequireAllLuaFilesInFolder(folder)

@@ -1,14 +1,14 @@
-Text = Prop.Inherit("Text")
+FloatingText = Prop.Inherit("FloatingText")
 
-Text.name = "Floating Text"
-Text.image = "package://sandbox/Client/Entities/Text.webp"
-Text.category = "uncategorized"
+FloatingText.name = "Floating Text"
+FloatingText.image = "package://sandbox/Client/Entities/FloatingText.webp"
+FloatingText.category = "display"
 
 
 -- Context Menu Items when selecting this Entity
-Text.selected_context_menu_items = {
+FloatingText.selected_context_menu_items = {
 	{
-		id = "text_text",
+		id = "floating_text_text",
 		type = "text",
 		multiline = true,
 		label = "text",
@@ -21,7 +21,7 @@ Text.selected_context_menu_items = {
 		end,
 	},
 	{
-		id = "text_color",
+		id = "floating_text_color",
 		type = "color",
 		label = "color",
 		callback = function(value)
@@ -32,7 +32,7 @@ Text.selected_context_menu_items = {
 		end,
 	},
 	{
-		id = "text_word_size",
+		id = "floating_text_word_size",
 		type = "range",
 		label = "word size",
 		min = 1,
@@ -46,3 +46,8 @@ Text.selected_context_menu_items = {
 		end,
 	},
 }
+
+
+FloatingText.Subscribe("Spawn", function()
+	Notifications.Add(NotificationType.Info, "FLOATING_TEXT_TUTORIAL", "you can change the Floating Text text by selecting it in the the Context Menu (with the " .. Notifications.common_keybindings.context_menu .. " key)", 10, 5)
+end)

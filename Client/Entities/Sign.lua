@@ -2,7 +2,7 @@ Sign = Prop.Inherit("Sign")
 
 Sign.name = "Sign"
 Sign.image = "package://sandbox/Client/Entities/Sign.webp"
-Sign.category = "uncategorized"
+Sign.category = "display"
 
 -- Context Menu Items when selecting this Entity
 Sign.selected_context_menu_items = {
@@ -20,3 +20,8 @@ Sign.selected_context_menu_items = {
 		end,
 	},
 }
+
+
+Sign.Subscribe("Spawn", function()
+	Notifications.Add(NotificationType.Info, "SIGN_TUTORIAL", "you can change the Sign text by selecting it in the Context Menu (with the " .. Notifications.common_keybindings.context_menu .. " key)", 10, 5)
+end)

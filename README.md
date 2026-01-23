@@ -13,7 +13,7 @@ Please refer to the [Official Sandbox Documentation Page](https://docs.nanos.wor
 The Sandbox game-mode exports the following functions to the global scope:
 
 
-### AddNotification (client side)
+### Notifications.Add (client side)
 
 ```lua
 -- Adds a Notification in the screen
@@ -23,14 +23,14 @@ The Sandbox game-mode exports the following functions to the global scope:
 ---@param duration number			Duration in seconds of the notification
 ---@param delay number      		Time in seconds to wait until display the notification
 ---@param force? boolean    		To force it to be displayed regardless if it was already displayed before
-function AddNotification(type, id, message, delay, force)
+function Notifications.Add(type, id, message, delay, force)
 ```
 
 Example:
 
 ```lua
 -- Displays the message 'playing with friends is much more fun!' after 10 seconds, for 5 seconds
-AddNotification(NotificationType.Info, "FRIENDS", "playing with friends is much more fun!", 5, 10)
+Notifications.Add(NotificationType.Info, "FRIENDS", "playing with friends is much more fun!", 5, 10)
 ```
 
 

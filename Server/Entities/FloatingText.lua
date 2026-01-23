@@ -1,12 +1,12 @@
-Text = Prop.Inherit("Text")
+FloatingText = Prop.Inherit("FloatingText")
 
-ConfigureSpawnLimits("Text", "Texts", Text.GetCount, "max_texts")
+ConfigureSpawnLimits("FloatingText", "Floating Texts", FloatingText.GetCount, "max_floating_texts")
 
-function Text:Constructor(location, rotation)
+function FloatingText:Constructor(location, rotation)
 	self.Super:Constructor(location, rotation + Rotator(0, 180, 0), "nanos-world::SM_Cube", CollisionType.StaticOnly, false)
 	self:SetMaterial("nanos-world::M_None")
 
-	self.text_render = TextRender(location, Rotator(), "nanos world!", 40, Color.WHITE, TextRenderHorizontalAlignment.Center, TextRenderVerticalAlignment.Center, false, "nanos-world::Font_LondrinaSolid_DistanceField")
+	self.text_render = TextRender(location, Rotator(), "nanos world!", 40, Color.WHITE, TextRenderRenderingType.Unlit, TextRenderHorizontalAlignment.Center, TextRenderVerticalAlignment.Center, "nanos-world::Font_LondrinaSolid_DistanceField", true)
 	self.text_render:AttachTo(self, AttachmentRule.SnapToTarget, "", 0)
 
 	self:UpdateScale()
@@ -14,7 +14,7 @@ function Text:Constructor(location, rotation)
 	self:SetValue("TextRender", self.text_render, true)
 end
 
-function Text:UpdateScale()
+function FloatingText:UpdateScale()
 	local text = self.text_render:GetText()
 
 	if (#text == 0) then
@@ -39,22 +39,22 @@ function Text:UpdateScale()
 	self:SetScale(Vector(0.1, max_line_chars * word_size * 0.004, lines * word_size * 0.011))
 end
 
-function Text:SetText(player, text)
+function FloatingText:SetText(player, text)
 	self.text_render:SetText(text)
 
 	self:UpdateScale()
 end
 
-function Text:SetColor(player, color)
+function FloatingText:SetColor(player, color)
 	self.text_render:SetColor(color)
 end
 
-function Text:SetWordSize(player, size)
+function FloatingText:SetWordSize(player, size)
 	self.text_render:SetWordSize(size)
 
 	self:UpdateScale()
 end
 
-Text.SubscribeRemote("SetText", Text.SetText)
-Text.SubscribeRemote("SetColor", Text.SetColor)
-Text.SubscribeRemote("SetWordSize", Text.SetWordSize)
+FloatingText.SubscribeRemote("SetText", FloatingText.SetText)
+FloatingText.SubscribeRemote("SetColor", FloatingText.SetColor)
+FloatingText.SubscribeRemote("SetWordSize", FloatingText.SetWordSize)

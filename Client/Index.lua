@@ -99,8 +99,8 @@ function OnCharacterPickup(character, object)
 		UpdateAmmo(true, object:GetAmmoClip(), object:GetAmmoBag())
 
 		-- Trigger Weapon Hints
-		AddNotification(NotificationType.Info, "AIM_DOWN_SIGHT", "you can use mouse wheel to aim down sight with your Weapon when you are in First Person Mode", 10, 3)
-		AddNotification(NotificationType.Info, "HEADSHOTS", "headshots can cause more damage", 10, 15)
+		Notifications.Add(NotificationType.Info, "AIM_DOWN_SIGHT", "you can use mouse wheel to aim down sight with your Weapon when you are in First Person Mode", 10, 3)
+		Notifications.Add(NotificationType.Info, "HEADSHOTS", "headshots can cause more damage", 10, 15)
 
 		-- Subscribes on the weapon when the Ammo changes
 		object:Subscribe("AmmoClipChange", OnAmmoClipChanged)
@@ -114,7 +114,7 @@ function OnCharacterPickup(character, object)
 	if (tool_gun_tips) then
 		for index, tip in pairs(tool_gun_tips) do
 			local delay = (index - 1) * 60 + 5
-			AddNotification(NotificationType.Info, class.name .. "_TIP_" .. tostring(index), tip, 10, delay)
+			Notifications.Add(NotificationType.Info, class.name .. "_TIP_" .. tostring(index), tip, 10, delay)
 		end
 	end
 

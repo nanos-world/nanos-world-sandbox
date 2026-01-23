@@ -5,7 +5,7 @@ ConfigureSpawnLimits("Sign", "Signs", Sign.GetCount, "max_signs")
 function Sign:Constructor(location, rotation)
 	self.Super:Constructor(location, rotation + Rotator(0, 90, 0), "nanos-world::SM_Sign")
 
-	self.text_render = TextRender(location, Rotator(), "nanos world!", 8, Color.WHITE, TextRenderHorizontalAlignment.Center, TextRenderVerticalAlignment.Center, true, "nanos-world::Font_BoldPixels_DistanceField")
+	self.text_render = TextRender(location, Rotator(), "nanos world!", 8, Color.WHITE, TextRenderRenderingType.Lit, TextRenderHorizontalAlignment.Center, TextRenderVerticalAlignment.Center, "nanos-world::Font_BoldPixels_DistanceField")
 	self.text_render:AttachTo(self, AttachmentRule.SnapToTarget, "", 0)
 	self.text_render:SetRelativeRotation(Rotator(0, 90, 0))
 	self.text_render:SetRelativeLocation(Vector(0, 7, 146))

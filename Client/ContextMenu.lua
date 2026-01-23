@@ -199,7 +199,7 @@ function ContextMenu.HoverEntity(entity)
 			ContextMenu.hovering_text_render:SetText(text_render_text)
 			ContextMenu.hovering_text_render:SetVisibility(true)
 		else
-			ContextMenu.hovering_text_render = TextRender(entity:GetLocation(), text_render_text, 30, Color.GREEN, TextRenderHorizontalAlignment.Center, TextRenderVerticalAlignment.Center, false, "nanos-world::Font_LondrinaSolid_DistanceField")
+			ContextMenu.hovering_text_render = TextRender(entity:GetLocation(), Rotator(), text_render_text, 30, Color.GREEN, TextRenderRenderingType.UnlitCameraAlignedDepth, TextRenderHorizontalAlignment.Center, TextRenderVerticalAlignment.Center, "nanos-world::Font_LondrinaSolid_DistanceField")
 		end
 	else
 		Input.SetMouseCursor(CursorType.Default)

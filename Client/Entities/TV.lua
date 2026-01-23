@@ -2,7 +2,7 @@ TV = Prop.Inherit("TV")
 
 TV.name = "TV"
 TV.image = "package://sandbox/Client/Entities/TV.webp"
-TV.category = "uncategorized"
+TV.category = "devices"
 
 
 -- When TV is spawned, check if it has a URL playing already

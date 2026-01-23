@@ -13,6 +13,10 @@ ResizerGun.tutorials = {
 	{ key = "MouseScrollU",	text = "scale" },
 }
 
+ResizerGun.tips = {
+	"hold down Left Mouse to select an object, then use mouse wheel to size it up or down",
+}
+
 -- ResizerGun Configuration
 ResizerGun.resizing_object = nil
 ResizerGun.weapon = nil
@@ -54,9 +58,6 @@ function ResizerGun:OnLocalPlayerPickUp(character)
 	character:Subscribe("WeaponAimModeChange", ResizerGunWeaponAimModeChanged)
 	Input.Subscribe("MouseScroll", ResizerGunMouseScroll)
 	Input.Subscribe("KeyPress", ResizerGunKeyPress)
-
-	-- Sets some notification when grabbing the Tool
-	AddNotification(NotificationType.Info, "RESIZER_GUIDE", "hold down Left Mouse to select an object, then use mouse wheel to size it up or down", 10, 5)
 end
 
 -- Overrides Tool Gun's OnLocalPlayerDrop
