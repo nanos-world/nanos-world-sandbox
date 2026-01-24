@@ -51,7 +51,7 @@ SpawnMenu.SpawnItem = function(player, tab, id, spawn_location, spawn_rotation)
 		end
 
 		-- Calls the spawn function
-		item = SpawnMenu.items[tab][id].spawn_function(spawn_location, spawn_rotation, tab, id)
+		item = SpawnMenu.items[tab][id].spawn_function(spawn_location, spawn_rotation, tab, id, player)
 
 		-- Forces the Network Authority to the player who spawned it
 		item:SetNetworkAuthority(player)

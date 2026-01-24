@@ -2,7 +2,7 @@ FloatingText = Prop.Inherit("FloatingText")
 
 ConfigureSpawnLimits("FloatingText", "Floating Texts", FloatingText.GetCount, "max_floating_texts")
 
-function FloatingText:Constructor(location, rotation)
+function FloatingText:Constructor(location, rotation, tab, id, player)
 	self.Super:Constructor(location, rotation + Rotator(0, 180, 0), "nanos-world::SM_Cube", CollisionType.StaticOnly, false)
 	self:SetMaterial("nanos-world::M_None")
 
@@ -12,6 +12,10 @@ function FloatingText:Constructor(location, rotation)
 	self:UpdateScale()
 
 	self:SetValue("TextRender", self.text_render, true)
+
+	if (player) then
+		Events.CallRemote("AddNotification", player, NotificationType.Info, "FLOATING_TEXT_TUTORIAL", "you can change the Floating Text text by selecting it in the the Context Menu", 10, 5)
+	end
 end
 
 function FloatingText:UpdateScale()

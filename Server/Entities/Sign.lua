@@ -2,7 +2,7 @@ Sign = Prop.Inherit("Sign")
 
 ConfigureSpawnLimits("Sign", "Signs", Sign.GetCount, "max_signs")
 
-function Sign:Constructor(location, rotation)
+function Sign:Constructor(location, rotation, tab, id, player)
 	self.Super:Constructor(location, rotation + Rotator(0, 90, 0), "nanos-world::SM_Sign")
 
 	self.text_render = TextRender(location, Rotator(), "nanos world!", 8, Color.WHITE, TextRenderRenderingType.Lit, TextRenderHorizontalAlignment.Center, TextRenderVerticalAlignment.Center, "nanos-world::Font_BoldPixels_DistanceField")
@@ -11,6 +11,10 @@ function Sign:Constructor(location, rotation)
 	self.text_render:SetRelativeLocation(Vector(0, 7, 146))
 
 	self:SetValue("TextRender", self.text_render, true)
+
+	if (player) then
+		Events.CallRemote("AddNotification", player, NotificationType.Info, "SIGN_TUTORIAL", "you can change the Sign text by selecting it in the Context Menu", 10, 5)
+	end
 end
 
 function Sign:SetText(player, text)

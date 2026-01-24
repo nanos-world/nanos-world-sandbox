@@ -46,8 +46,3 @@ FloatingText.selected_context_menu_items = {
 		end,
 	},
 }
-
-
-FloatingText.Subscribe("Spawn", function()
-	Notifications.Add(NotificationType.Info, "FLOATING_TEXT_TUTORIAL", "you can change the Floating Text text by selecting it in the the Context Menu (with the " .. Notifications.common_keybindings.context_menu .. " key)", 10, 5)
-end)

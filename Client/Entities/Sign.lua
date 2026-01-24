@@ -20,8 +20,3 @@ Sign.selected_context_menu_items = {
 		end,
 	},
 }
-
-
-Sign.Subscribe("Spawn", function()
-	Notifications.Add(NotificationType.Info, "SIGN_TUTORIAL", "you can change the Sign text by selecting it in the Context Menu (with the " .. Notifications.common_keybindings.context_menu .. " key)", 10, 5)
-end)
