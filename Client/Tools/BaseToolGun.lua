@@ -8,21 +8,10 @@ ToolGun.draw_debug_toolgun = nil
 -- Called when the Local Player picks up this ToolGun
 function ToolGun:__OnLocalPlayerPickUp(character)
 	local class = self:GetClass()
+
 	local tool_gun_tutorials = class.tutorials
 	if (tool_gun_tutorials) then
-		local tutorials_parsed = {}
-
-		for _, tutorial_data in pairs(tool_gun_tutorials) do
-			-- Get the mapped key or use it as Raw if didn't find (probably it's a raw key)
-			local mapped_key = Input.GetMappedKeys(tutorial_data.key)[1] or tutorial_data.key
-
-			-- Gets the image path
-			local key_icon = Input.GetKeyIcon(mapped_key)
-
-			table.insert(tutorials_parsed, { image = key_icon, text = tutorial_data.text })
-		end
-
-		MainHUD:CallEvent("ToggleTutorial", true, class.name, tutorials_parsed)
+		Tutorials.Show(class.name, tool_gun_tutorials)
 	end
 
 	-- Subscribes for LocalPlayer events
@@ -35,7 +24,7 @@ end
 
 -- Called when the Local Player drops this ToolGun
 function ToolGun:__OnLocalPlayerDrop(character)
-	MainHUD:CallEvent("ToggleTutorial", false)
+	Tutorials.Hide()
 	self:ToggleToolGunAiming(false)
 
 	-- Unsubscribes for LocalPlayer events

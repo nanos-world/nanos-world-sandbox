@@ -21,6 +21,7 @@ Package.Require("Scoreboard.lua")
 Package.Require("Sky.lua")
 Package.Require("CharacterCustomization.lua")
 Package.Require("Nametags.lua")
+Package.Require("Tutorials.lua")
 
 -- Hit Taken Feedback Sound Cached
 SoundHitTakenFeedback = Sound(Vector(), "nanos-world::A_HitTaken_Feedback", true, false, SoundType.SFX, 1, 1, 400, 3600, 0, false, 0, false)

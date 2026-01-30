@@ -47,8 +47,8 @@ function Flashlight:OnGrab(character)
 	Input.Bind("Flashlight", InputEvent.Pressed, Flashlight.OnToggle)
 
 	-- Adds tutorial on screen
-	MainHUD:CallEvent("ToggleTutorial", true, "Flashlight", {
-		{ image = Input.GetKeyIcon(Input.GetMappedKeys("Flashlight")[1]), text = "turns on/off the flashlight" }
+	Tutorials.Show("Flashlight", {
+		{ key = "Flashlight", text = "turns on/off the flashlight" }
 	})
 end
 
@@ -59,7 +59,7 @@ function Flashlight:OnUnGrab(character)
 	Input.Unbind("Flashlight", InputEvent.Pressed, Flashlight.OnToggle)
 
 	-- Removes tutorial from screen
-	MainHUD:CallEvent("ToggleTutorial", false)
+	Tutorials.Hide()
 end
 
 Flashlight.Subscribe("Grab", Flashlight.OnGrab)

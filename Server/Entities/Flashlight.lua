@@ -5,11 +5,8 @@ ConfigureSpawnLimits("Flashlight", "Flashlights", Flashlight.GetCount, "max_flas
 function Flashlight:Constructor(location, rotation)
 	self.Super:Constructor(location, rotation, "nanos-world::SM_Flashlight", CollisionType.StaticOnly)
 
-	-- Default values
-	self.intensity = 1
-
 	-- Spawns a Point Light, with the color
-	self.light = Light(Vector(), Rotator(), Color(1, 0.6, 0.4), LightType.Spot, self.intensity, 3000, 25, 0.975, 4000, false)
+	self.light = Light(Vector(), Rotator(), Color(1, 0.6, 0.4), LightType.Spot, 1, 3000, 25, 0.975, 4000, false)
 	self.light:SetTextureLightProfile(LightProfile.Shattered_02)
 
 	-- Sets light to sync
@@ -29,11 +26,11 @@ function Flashlight:SetLightEnabled(is_on)
 	if (is_on) then
 		-- Sets the prop mesh emissive color to this color
 		self:SetMaterialColorParameter("Emissive", self.light:GetColor() * 100)
-		self.light:SetIntensity(self.intensity)
+		self.light:SetVisibility(true)
 
 	else
 		self:SetMaterialColorParameter("Emissive", Color.BLACK)
-		self.light:SetIntensity(0) -- TODO actually disable the light
+		self.light:SetVisibility(false)
 	end
 end
 
@@ -46,7 +43,6 @@ function Flashlight:SetColor(player, color)
 end
 
 function Flashlight:SetIntensity(player, intensity)
-	self.intensity = intensity
 	self.light:SetIntensity(intensity)
 end
 
