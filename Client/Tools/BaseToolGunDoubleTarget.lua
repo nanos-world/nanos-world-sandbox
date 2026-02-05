@@ -5,10 +5,6 @@ ToolGunDoubleTarget.targeting_first_to = nil
 ToolGunDoubleTarget.targeting_first_relative_location = Vector()
 ToolGunDoubleTarget.targeting_first_relative_rotation = Rotator()
 
-
--- TODO is relative rotation useful?
-
-
 -- Overrides ToolGun method
 function ToolGunDoubleTarget:OnLocalPlayerFire(shooter)
 	-- Makes a trace 10000 units ahead to spawn the balloon
