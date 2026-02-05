@@ -39,16 +39,20 @@ function ContextMenu.AddSelectedCustomItems(entity)
 		})
 	end
 
-	-- All entities
-	table.insert(items, {
-		id = "destroy_button",
-		type = "button",
-		label = "destroy",
-		callback = function()
-			Events.CallRemote("DestroyItem", ContextMenu.selected_entity)
-			ContextMenu.SelectEntity(nil)
-		end
-	})
+	-- Prop specific entries
+	if (class == Prop) then
+		table.insert(items, {
+			id = "selected_prop_grabbable",
+			type = "checkbox",
+			label = "grabbable",
+			value = function()
+				return entity:GetGrabMode() ~= GrabMode.Disabled
+			end,
+			callback = function(value)
+				Events.CallRemote("SetPropGrabMode", entity, value)
+			end
+		})
+	end
 
 	-- Weapon specific entries
 	if (entity:IsA(Weapon) and not entity:IsA(ToolGun)) then
@@ -65,6 +69,17 @@ function ContextMenu.AddSelectedCustomItems(entity)
 			end
 		})
 	end
+
+	-- All entities
+	table.insert(items, {
+		id = "destroy_button",
+		type = "button",
+		label = "destroy",
+		callback = function()
+			Events.CallRemote("DestroyItem", ContextMenu.selected_entity)
+			ContextMenu.SelectEntity(nil)
+		end
+	})
 
 	-- Inserts all items
 	ContextMenu.AddItems("selected_item", category_name, items)

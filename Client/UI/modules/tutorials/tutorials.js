@@ -4,8 +4,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	body.insertAdjacentHTML("afterbegin", `
 		<div id="tutorials">
-			<div id="tutorial_title">
-				Tool
+			<div id="tutorial_header">
+				<div id="tutorial_header_content">
+					<div id="tutorial_title">
+						Tool
+					</div>
+					<div id="tutorial_description">
+						Description
+					</div>
+				</div>
 			</div>
 			<div id="tutorial_body">
 				<!-- <span class="tutorial"><img src="..." class="tutorial_key"> Attach Something</span> -->
@@ -19,7 +26,7 @@ const Tutorials = {
 	has_tutorial: false
 }
 
-Tutorials.ToggleTutorial = function(has_tutorial, title, tutorial_list) {
+Tutorials.ToggleTutorial = function(has_tutorial, title, description, tutorial_list) {
 	Tutorials.has_tutorial = has_tutorial;
 
 	if (has_tutorial) {
@@ -28,6 +35,9 @@ Tutorials.ToggleTutorial = function(has_tutorial, title, tutorial_list) {
 
 		const tutorial_title = document.getElementById("tutorial_title");
 		tutorial_title.textContent = title;
+
+		const tutorial_description = document.getElementById("tutorial_description");
+		tutorial_description.textContent = description;
 
 		for (let tutorial in tutorial_list) {
 			let image = tutorial_list[tutorial].image;

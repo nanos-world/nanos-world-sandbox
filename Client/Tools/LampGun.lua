@@ -1,9 +1,8 @@
-LampGun = ToolGun.Inherit("LampGun")
+LampGun = ToolGunSingleTarget.Inherit("LampGun")
 
--- Tool Name
+-- Tool Name, Category and Image
 LampGun.name = "Lamp"
-
--- Tool Image
+LampGun.category = "spawners"
 LampGun.image = "package://sandbox/Client/Tools/LampGun.webp"
 
 -- Tool Tutorials
@@ -12,30 +11,20 @@ LampGun.tutorials = {
 	{ key = "Undo", text = "undo spawn" },
 }
 
--- Tool Crosshair Trace Debug Settings
-LampGun.crosshair_trace = {
+-- Tool Trace Debug Settings
+LampGun.debug_trace = {
 	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
-	color_entity = Color.GREEN,
-	color_no_entity = Color.RED,
+	show_crosshair = false,
+	show_preview_mesh = true,
+	preview_mesh = "nanos-world::SM_Flashlight",
+	preview_mesh_scale = Vector(1, 1, 1),
+	preview_mesh_offset = Vector(0, 0, 0),
+	preview_mesh_rotation = Rotator(0, 0, 0),
 }
 
 
--- Overrides ToolGun method
-function LampGun:OnLocalPlayerFire(shooter)
-	local trace_result = TraceFor(10000, LampGun.crosshair_trace.collision_channel)
-
-	if (trace_result.Success) then
-		local relative_location = nil
-		local relative_rotation = nil
-
-		if (trace_result.Entity) then
-			relative_location, relative_rotation = NanosMath.RelativeTo(trace_result.Location, trace_result.Normal:Rotation(), trace_result.Entity)
-		end
-
-		-- Calls remote to spawn the Lamp
-		self:CallRemoteEvent("SpawnLamp", trace_result.Location, relative_location, relative_rotation, trace_result.Normal, trace_result.Entity)
-	else
-		-- If didn't hit anything, plays a negative sound
-		SoundInvalidAction:Play()
-	end
+-- Overrides ToolGunSingleTarget method
+function LampGun:OnLocalPlayerTarget(location, relative_location, relative_rotation, normal, entity)
+	-- Calls remote to spawn the Lamp
+	self:CallRemoteEvent("SpawnLamp", location, relative_location, relative_rotation, normal, entity)
 end

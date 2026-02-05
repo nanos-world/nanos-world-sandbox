@@ -36,8 +36,10 @@ function PhysicsGun:OnPickUpObject(player, object, is_grabbing, picking_object_r
 		object:SetNetworkAuthorityAutoDistributed(false)
 
 		object:SetValue("IsBeingGrabbed", true, true)
-		object:SetValue("PlayerGrabbing", player)
-		player:SetValue("ObjectGrabbing", object)
+		object:SetValue("PhysicsGunUsing", self)
+		player:SetValue("PhysicsGunUsing", self)
+		self.player_grabbing = player
+		self.object_grabbing = object
 
 		-- Sets the particle values so all Clients can set the correct position of them
 		self.beam_particle:SetValue("RelativeLocationObject", picking_object_relative_location, true)
@@ -51,8 +53,10 @@ function PhysicsGun:OnPickUpObject(player, object, is_grabbing, picking_object_r
 		object:SetNetworkAuthorityAutoDistributed(true)
 
 		object:SetValue("IsBeingGrabbed", false, true)
-		object:SetValue("PlayerGrabbing", nil)
-		player:SetValue("ObjectGrabbing", nil)
+		object:SetValue("PhysicsGunUsing", nil)
+		player:SetValue("PhysicsGunUsing", nil)
+		self.player_grabbing = nil
+		self.object_grabbing = nil
 
 		-- Resets particle values
 		self.beam_particle:SetValue("RelativeLocationObject", nil, true)
@@ -67,7 +71,7 @@ function PhysicsGun:OnPickUpObject(player, object, is_grabbing, picking_object_r
 	object:SetGravityEnabled(not freeze and not is_grabbing)
 
 	-- Disables/Enables the ability to players to grab it
-	if (object:IsA(Prop)) then
+	if (object:IsA(Prop) and not object:IsA(BaseButton)) then
 		object:SetGrabMode(freeze and GrabMode.Disabled or GrabMode.Auto)
 	end
 
@@ -97,24 +101,64 @@ function PhysicsGun:StopParticles()
 	self:BroadcastRemoteEvent("ToggleTargetParticles", false)
 end
 
--- Restores Player values if Object is destroyed
-function PhysicsGun.OnObjectDestroyed(object)
-	local player_grabbing = object:GetValue("PlayerGrabbing")
-	if (player_grabbing and player_grabbing:IsValid()) then
-		player_grabbing:GetControlledCharacter():SetCanAim(true)
-		player_grabbing:Unsubscribe("Destroy", PhysicsGun.OnPlayerDestroyed)
-	end
-end
-
--- Restores Object values if Player is destroyed
-function PhysicsGun.OnPlayerDestroyed(player)
-	local object_grabbing = player:GetValue("ObjectGrabbing")
+-- Restores Object values if Physics Gun is destroyed
+function PhysicsGun:OnDestroyed()
+	local object_grabbing = self.object_grabbing
 	if (object_grabbing and object_grabbing:IsValid()) then
 		object_grabbing:SetNetworkAuthorityAutoDistributed(true)
 		object_grabbing:SetGravityEnabled(true)
 		object_grabbing:Unsubscribe("Destroy", PhysicsGun.OnObjectDestroyed)
+
+		object_grabbing:SetValue("PhysicsGunUsing", nil)
+		object_grabbing:SetValue("IsBeingGrabbed", false, true)
+	end
+
+	local player_grabbing = self.player_grabbing
+	if (player_grabbing and player_grabbing:IsValid()) then
+		player_grabbing:GetControlledCharacter():SetCanAim(true)
+		player_grabbing:Unsubscribe("Destroy", PhysicsGun.OnPlayerDestroyed)
+
+		player_grabbing:SetValue("PhysicsGunUsing", nil)
 	end
 end
+
+-- Restores Player values if Object is destroyed
+function PhysicsGun.OnObjectDestroyed(object)
+	local physics_gun = object:GetValue("PhysicsGunUsing")
+	if (not physics_gun or not physics_gun:IsValid()) then return end
+
+	local player_grabbing = physics_gun.player_grabbing
+
+	if (player_grabbing and player_grabbing:IsValid()) then
+		player_grabbing:GetControlledCharacter():SetCanAim(true)
+		player_grabbing:Unsubscribe("Destroy", PhysicsGun.OnPlayerDestroyed)
+	end
+
+	physics_gun.object_grabbing = nil
+	physics_gun.player_grabbing = nil
+end
+
+-- Restores Object values if Player is destroyed
+function PhysicsGun.OnPlayerDestroyed(player)
+	local physics_gun = player:GetValue("PhysicsGunUsing")
+	if (not physics_gun or not physics_gun:IsValid()) then return end
+
+	local object_grabbing = physics_gun.object_grabbing
+
+	if (object_grabbing and object_grabbing:IsValid()) then
+		object_grabbing:SetNetworkAuthorityAutoDistributed(true)
+		object_grabbing:SetGravityEnabled(true)
+		object_grabbing:Unsubscribe("Destroy", PhysicsGun.OnObjectDestroyed)
+
+		object_grabbing:SetValue("PhysicsGunUsing", nil)
+		object_grabbing:SetValue("IsBeingGrabbed", false, true)
+	end
+
+	physics_gun.object_grabbing = nil
+	physics_gun.player_grabbing = nil
+end
+
+PhysicsGun.Subscribe("Destroy", PhysicsGun.OnDestroyed)
 
 -- TODO this broke if using 'PickUp' name
 PhysicsGun.SubscribeRemote("PickUpObject", PhysicsGun.OnPickUpObject)

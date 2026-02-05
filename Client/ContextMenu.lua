@@ -134,7 +134,7 @@ function ContextMenu.OnTick(delta_time)
 	local collision_trace = CollisionChannel.WorldStatic | CollisionChannel.PhysicsBody | CollisionChannel.Pawn | CollisionChannel.Vehicle
 
 	-- Sets the trace modes (we want it to return Entity)
-	local trace_mode = TraceMode.ReturnEntity
+	local trace_mode = TraceMode.ReturnEntity | TraceMode.TraceOnlyVisibility
 
 	-- Sets the ignored actors (the local player's character)
 	local ignored_actors = {}
@@ -155,9 +155,7 @@ function ContextMenu.OnTick(delta_time)
 			ContextMenu.HoverEntity(trace_result.Entity)
 		end
 	else
-		if (ContextMenu.hovering_entity and ContextMenu.hovering_entity:IsValid()) then
-			ContextMenu.HoverEntity(nil)
-		end
+		ContextMenu.HoverEntity(nil)
 	end
 
 	if (
@@ -218,6 +216,7 @@ function ContextMenu.SelectEntity(entity)
 			return
 		end
 
+		ContextMenu.selected_entity:Unsubscribe("Destroy", ContextMenu.OnSelectedEntityDestroy)
 		ContextMenu.selected_entity:SetOutlineEnabled(false)
 		ContextMenu.RemoveItems("selected_item")
 	end
@@ -225,6 +224,8 @@ function ContextMenu.SelectEntity(entity)
 	ContextMenu.selected_entity = entity
 
 	if (entity) then
+		entity:Subscribe("Destroy", ContextMenu.OnSelectedEntityDestroy)
+
 		entity:SetOutlineEnabled(true, 2)
 		PlayClickSound(1.2)
 
@@ -233,6 +234,10 @@ function ContextMenu.SelectEntity(entity)
 	else
 		PlayClickSound(0.8)
 	end
+end
+
+function ContextMenu.OnSelectedEntityDestroy(entity)
+	ContextMenu.SelectEntity(nil)
 end
 
 function ContextMenu.OnMouseUp(key_name)

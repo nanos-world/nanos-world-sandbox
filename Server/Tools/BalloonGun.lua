@@ -15,7 +15,7 @@ function BalloonGun:OnSpawnBalloon(player, spawn_location, relative_location, re
 		return
 	end
 
-	local balloon = Balloon(spawn_location, Rotator(0, math.random() * 360, 0), relative_location, relative_rotation, direction, entity, force, max_length, asset)
+	local balloon = Balloon(spawn_location, Rotator(0, math.random() * 360, 0), "", "", player, relative_location, relative_rotation, direction, entity, force, max_length, asset)
 
 	-- Updates the client's spawn history
 	Events.CallRemote("SpawnedItem", player, balloon)

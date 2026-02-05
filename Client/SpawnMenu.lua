@@ -314,6 +314,7 @@ SpawnMenu.AddCategory("vehicles",	"wheeled",			"Wheeled",			"modules/spawn-menu/
 SpawnMenu.AddCategory("vehicles",	"water",			"Water",			"modules/spawn-menu/images/categories/boat.webp")
 
 SpawnMenu.AddCategory("tools",		"tool-guns",		"Tool Guns",		"modules/spawn-menu/images/tabs/paint-spray.webp")
+SpawnMenu.AddCategory("tools",		"spawners",			"Spawners",			"modules/spawn-menu/images/tabs/paint-spray.webp")
 
 SpawnMenu.AddCategory("npcs",		"npcs",				"NPCs",				"modules/spawn-menu/images/tabs/robot.webp")
 

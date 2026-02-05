@@ -58,3 +58,7 @@ end
 
 ToolGun.Subscribe("PickUp", ToolGun.OnPickUp)
 ToolGun.Subscribe("Drop", ToolGun.OnDrop)
+
+
+ToolGunSingleTarget = ToolGun.Inherit("ToolGunSingleTarget")
+ToolGunDoubleTarget = ToolGun.Inherit("ToolGunDoubleTarget")

@@ -68,8 +68,19 @@ Thruster.selected_context_menu_items = {
 			ContextMenu.selected_entity:CallRemoteEvent("SetCustomForce", value)
 		end,
 		value = function()
-			return ContextMenu.selected_entity:GetForce().X
+			return ContextMenu.selected_entity:GetValue("Force")
 		end,
+	},
+	{
+		id = "thruster_active",
+		type = "checkbox",
+		label = "active",
+		callback = function(value)
+			ContextMenu.selected_entity:CallRemoteEvent("SetActive", value)
+		end,
+		value = function()
+			return ContextMenu.selected_entity:GetValue("Active")
+		end
 	},
 }
 
@@ -79,6 +90,16 @@ function Thruster:OnSpawn()
 	self:UpdateParticleAsset()
 end
 
+function Thruster:OnActivated()
+	self.particle:Activate(true)
+	self.sound:Play()
+end
+
+function Thruster:OnDeactivated()
+	self.particle:Deactivate()
+	self.sound:Stop()
+end
+
 function Thruster:UpdateSoundAsset()
 	if (self.sound) then
 		self.sound:Destroy()
@@ -86,7 +107,8 @@ function Thruster:UpdateSoundAsset()
 
 	-- Spawns the Sound and attaches it to the thruster
 	local sound_asset = self:GetValue("Sound")
-	self.sound = Sound(self:GetLocation(), sound_asset, false, false, SoundType.SFX, 0.25, math.random(10) / 100 + 1)
+	local is_active = self:GetValue("Active")
+	self.sound = Sound(self:GetLocation(), sound_asset, false, false, SoundType.SFX, 0.25, math.random(10) / 100 + 1, nil, nil, AttenuationFunction.NaturalSound, false, nil, is_active)
 	self.sound:AttachTo(self, AttachmentRule.SnapToTarget, "", 0)
 end
 
@@ -97,7 +119,8 @@ function Thruster:UpdateParticleAsset()
 
 	-- Spawns a Particle and attaches it to the thruster
 	local particle_asset = self:GetValue("Particle")
-	self.particle = Particle(self:GetLocation(), Rotator(), particle_asset, false, true)
+	local is_active = self:GetValue("Active")
+	self.particle = Particle(self:GetLocation(), Rotator(), particle_asset, false, is_active)
 	self.particle:SetScale(Vector(0.45, 0.45, 0.45))
 	self.particle:AttachTo(self, AttachmentRule.SnapToTarget, "", 0)
 	self.particle:SetRelativeLocation(Vector(-30, 0, 0))
@@ -107,3 +130,5 @@ end
 Thruster.Subscribe("Spawn", Thruster.OnSpawn)
 Thruster.SubscribeRemote("UpdateSoundAsset", Thruster.UpdateSoundAsset)
 Thruster.SubscribeRemote("UpdateParticleAsset", Thruster.UpdateParticleAsset)
+Thruster.SubscribeRemote("OnActivated", Thruster.OnActivated)
+Thruster.SubscribeRemote("OnDeactivated", Thruster.OnDeactivated)

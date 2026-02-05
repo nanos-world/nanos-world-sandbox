@@ -1,23 +1,15 @@
-BalloonGun = ToolGun.Inherit("BalloonGun")
+BalloonGun = ToolGunSingleTarget.Inherit("BalloonGun")
 
--- Tool Name
+-- Tool Name, Category and Image
 BalloonGun.name = "Balloon Gun"
-
--- Tool Image
+BalloonGun.category = "spawners"
 BalloonGun.image = "package://sandbox/Client/Tools/BalloonGun.webp"
 
 -- Tool Tutorials
 BalloonGun.tutorials = {
 	{ key = "LeftClick",	text = "spawn balloon" },
-	{ key = "Undo",			text = "undo spawn" },
+	{ key = "Undo",			text = "undo last spawn" },
 	{ key = "ContextMenu",	text = "balloon settings" },
-}
-
--- Tool Crosshair Trace Debug Settings
-BalloonGun.crosshair_trace = {
-	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
-	color_entity = Color.GREEN,
-	color_no_entity = Color.RED,
 }
 
 -- Tool Tips
@@ -30,7 +22,20 @@ BalloonGun.tips = {
 BalloonGun.asset = Balloon.assets[math.random(#Balloon.assets)].id
 BalloonGun.force = 100000
 BalloonGun.max_length = 100
-BalloonGun.randomness = 0.15
+BalloonGun.length_randomness = 0.15
+
+-- Tool Trace Debug Settings
+BalloonGun.debug_trace = {
+	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
+	show_crosshair = true,
+	show_preview_mesh = true,
+	preview_mesh = BalloonGun.asset,
+	preview_mesh_scale = Vector(1, 1, 1),
+	preview_mesh_offset = Vector(0, 0, -50),
+	preview_mesh_rotation = Rotator(),
+	preview_mesh_rotation_fixed = true
+}
+
 
 -- Context Menu Items when picking up this Tool
 BalloonGun.picked_context_menu_items = {
@@ -41,6 +46,7 @@ BalloonGun.picked_context_menu_items = {
 		options = Balloon.assets,
 		callback = function(value)
 			BalloonGun.asset = value
+			BalloonGun.debug_trace.preview_mesh = value
 		end,
 		value = function()
 			return BalloonGun.asset
@@ -75,45 +81,31 @@ BalloonGun.picked_context_menu_items = {
 		end,
 	},
 	{
-		id = "balloon_gun_randomness",
+		id = "balloon_gun_length_randomness",
 		type = "range",
-		label = "randomness",
+		label = "length randomness",
 		min = 0,
 		max = 100,
 		auto_update_label = true,
 		callback = function(value)
-			BalloonGun.randomness = value / 100
+			BalloonGun.length_randomness = value / 100
 		end,
 		value = function()
-			return BalloonGun.randomness * 100
+			return BalloonGun.length_randomness * 100
 		end,
 	},
 }
 
 
--- Overrides ToolGun method
-function BalloonGun:OnLocalPlayerFire(shooter)
-	local trace_result = TraceFor(10000, BalloonGun.crosshair_trace.collision_channel)
+-- Overrides ToolGunSingleTarget method
+function BalloonGun:OnLocalPlayerTarget(location, relative_location, relative_rotation, normal, entity)
+	-- Calculate randomness
+	local force_randomness = BalloonGun.force * BalloonGun.length_randomness
+	local max_length_randomness = BalloonGun.max_length * BalloonGun.length_randomness
 
-	if (trace_result.Success) then
-		local relative_location = nil
-		local relative_rotation = nil
-		if (trace_result.Entity and not trace_result.Entity:HasAuthority()) then
-			-- If hit an entity, then calculates the offset distance from the Hit and the Object
-			relative_location, relative_rotation = NanosMath.RelativeTo(trace_result.Location, trace_result.Normal:Rotation(), trace_result.Entity)
-		end
+	local force = math.random() * force_randomness * 2 + (BalloonGun.force - force_randomness)
+	local max_length = math.random() * max_length_randomness * 2 + (BalloonGun.max_length - max_length_randomness)
 
-		-- Calculate randomness
-		local force_randomness = BalloonGun.force * BalloonGun.randomness
-		local max_length_randomness = BalloonGun.max_length * BalloonGun.randomness
-
-		local force = math.random() * force_randomness * 2 + (BalloonGun.force - force_randomness)
-		local max_length = math.random() * max_length_randomness * 2 + (BalloonGun.max_length - max_length_randomness)
-
-		-- Calls remote to spawn the Balloon
-		self:CallRemoteEvent("SpawnBalloon", trace_result.Location, relative_location, relative_rotation, trace_result.Normal, trace_result.Entity, force, max_length, BalloonGun.asset)
-	else
-		-- If didn't hit anything, plays a negative sound
-		SoundInvalidAction:Play()
-	end
+	-- Calls remote to spawn the Balloon
+	self:CallRemoteEvent("SpawnBalloon", location, relative_location, relative_rotation, normal, entity, force, max_length, BalloonGun.asset)
 end

@@ -7,12 +7,26 @@
 	display: none;
 }
 
-#tutorial_title {
-	font-size: 4rem;
-	font-family: 'Righteous', sans-serif;
+#tutorial_header {
 	background-color: rgba(0, 0, 0, 0.4);
 	border-radius: 5px 5px 0 0;
 	padding: 20px;
+}
+
+#tutorial_header_content {
+	max-width: min-content;
+}
+
+#tutorial_title {
+	font-size: 4rem;
+	font-family: 'Righteous', sans-serif;
+	white-space: nowrap;
+}
+
+#tutorial_description {
+	padding: 0 5px;
+	font-size: 1rem;
+	color: #ededed;
 }
 
 #tutorial_body {

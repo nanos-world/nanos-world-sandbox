@@ -1,15 +1,14 @@
-LightGun = ToolGun.Inherit("LightGun")
+LightGun = ToolGunSingleTarget.Inherit("LightGun")
 
--- Tool Name
+-- Tool Name, Category and Image
 LightGun.name = "Light"
-
--- Tool Image
+LightGun.category = "spawners"
 LightGun.image = "package://sandbox/Client/Tools/LightGun.webp"
 
 -- Tool Tutorials
 LightGun.tutorials = {
-	{ key = "LeftClick", text = "spawn light" },
-	{ key = "Undo", text = "undo spawn" },
+	{ key = "LeftClick",	text = "spawn light" },
+	{ key = "Undo",			text = "undo last spawn" },
 }
 
 -- Tool Tips
@@ -17,29 +16,20 @@ LightGun.tips = {
 	"too many lights can cause severe lag"
 }
 
--- Tool Crosshair Trace Debug Settings
-LightGun.crosshair_trace = {
+-- Tool Trace Debug Settings
+LightGun.debug_trace = {
 	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
-	color_entity = Color.GREEN,
-	color_no_entity = Color.RED,
+	show_crosshair = false,
+	show_preview_mesh = true,
+	preview_mesh = "nanos-world::SM_Lamp",
+	preview_mesh_scale = Vector(1, 1, 1),
+	preview_mesh_offset = Vector(0, 0, 0),
+	preview_mesh_rotation = Rotator(90, 0, 0),
 }
 
 
--- Overrides ToolGun method
-function LightGun:OnLocalPlayerFire(shooter)
-	local trace_result = TraceFor(10000, LightGun.crosshair_trace.collision_channel)
-
-	if (trace_result.Success) then
-		local distance_trace_object = Vector()
-		if (trace_result.Entity) then
-			-- If hit an entity, then calculates the offset distance from the Hit and the Object
-			distance_trace_object = (trace_result.Entity:GetLocation() - trace_result.Location) / trace_result.Entity:GetScale()
-		end
-
-		-- Calls remote to spawn the Light
-		self:CallRemoteEvent("SpawnLight", trace_result.Location, trace_result.Normal, trace_result.Entity, distance_trace_object)
-	else
-		-- If didn't hit anything, plays a negative sound
-		SoundInvalidAction:Play()
-	end
+-- Overrides ToolGunSingleTarget method
+function LightGun:OnLocalPlayerTarget(location, relative_location, relative_rotation, normal, entity)
+	-- Calls remote to spawn the Light
+	self:CallRemoteEvent("SpawnLight", location, relative_location, relative_rotation, normal, entity)
 end

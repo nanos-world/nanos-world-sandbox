@@ -3,7 +3,7 @@ Balloon = Prop.Inherit("Balloon")
 ConfigureSpawnLimits("Balloon", "Balloons", Balloon.GetCount, "max_balloons")
 
 
-function Balloon:Constructor(location, rotation, relative_location, relative_rotation, direction, entity, force, max_length, asset)
+function Balloon:Constructor(location, rotation, tab, id, player, relative_location, relative_rotation, direction, entity, force, max_length, asset)
 	-- Spawns a Balloon Prop (not allowing characters to pickup it and with CCD disabled)
 	local spawn_location = location
 	if (direction) then
@@ -39,8 +39,8 @@ function Balloon:Constructor(location, rotation, relative_location, relative_rot
 		cable:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, max_length, 0, true, 10000, 100)
 
 		-- Sets cable rendering settings (width = 3, pieces = 4)
-		cable:SetRenderingSettings(3, 4, 1)
-		cable:SetCableSettings(max_length / 4, 10, 1)
+		cable:SetRenderingSettings(3, 5, 4)
+		cable:SetCableSettings(max_length, 1, 1, false)
 
 		-- If to attach to an entity, attaches the start to it
 		if (entity) then

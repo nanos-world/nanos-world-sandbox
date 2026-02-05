@@ -1,38 +1,30 @@
-TrailGun = ToolGun.Inherit("TrailGun")
+TrailGun = ToolGunSingleTarget.Inherit("TrailGun")
 
--- Tool Name
+-- Tool Name, Category and Image
 TrailGun.name = "Trail Gun"
-
--- Tool Image
+TrailGun.category = "spawners"
 TrailGun.image = "package://sandbox/Client/Tools/TrailGun.webp"
 
 -- Tool Tutorials
 TrailGun.tutorials = {
 	{ key = "LeftClick",	text = "spawn trail" },
-	{ key = "Undo",			text = "undo spawn" },
+	{ key = "Undo",			text = "undo last spawn" },
 }
 
--- Tool Crosshair Trace Debug Settings
-TrailGun.crosshair_trace = {
-	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
-	color_entity = Color.GREEN,
-	color_no_entity = Color.RED,
+-- Tool Trace Debug Settings
+TrailGun.debug_trace = {
+	collision_channel = CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
+	show_crosshair = false,
+	show_preview_mesh = true,
+	preview_mesh = "nanos-world::SM_Jet_Thruster",
+	preview_mesh_scale = Vector(0.3, 0.6, 0.6),
+	preview_mesh_offset = Vector(0, 0, 0),
+	preview_mesh_rotation = Rotator(180, 0, 0),
 }
 
 
--- Overrides ToolGun method
-function TrailGun:OnLocalPlayerFire(shooter)
-	-- Makes a trace 10000 units ahead to spawn the balloon
-	local trace_result = TraceFor(10000, TrailGun.crosshair_trace.collision_channel)
-
-	-- If hit some object, then spawns a trail on attached it
-	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
-		local trail_rotation = (trace_result.Normal * -1):Rotation() + Rotator(90, 0, 0)
-		local relative_location, relative_rotation = NanosMath.RelativeTo(trace_result.Location, trail_rotation, trace_result.Entity)
-
-		self:CallRemoteEvent("SpawnTrail", trace_result.Location, relative_location, relative_rotation, trace_result.Normal, trace_result.Entity)
-	else
-		-- If didn't hit anything, plays a negative sound
-		SoundInvalidAction:Play()
-	end
+-- Overrides ToolGunSingleTarget method
+function TrailGun:OnLocalPlayerTarget(location, relative_location, relative_rotation, normal, entity)
+	-- Calls remote to spawn the Trail
+	self:CallRemoteEvent("SpawnTrail", location, relative_location, relative_rotation, normal, entity)
 end

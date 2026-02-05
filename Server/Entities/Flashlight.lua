@@ -28,9 +28,13 @@ function Flashlight:SetLightEnabled(is_on)
 		self:SetMaterialColorParameter("Emissive", self.light:GetColor() * 100)
 		self.light:SetVisibility(true)
 
+		Events.BroadcastRemote("SpawnSound", self:GetLocation(), "nanos-world::A_Switch_Button_03", false, 0.5, 3)
+
 	else
 		self:SetMaterialColorParameter("Emissive", Color.BLACK)
 		self.light:SetVisibility(false)
+
+		Events.BroadcastRemote("SpawnSound", self:GetLocation(), "nanos-world::A_Switch_Button_03", false, 0.5, 2)
 	end
 end
 
@@ -50,6 +54,24 @@ function Flashlight:ToggleLight()
 	self:SetLightEnabled(not self.is_on)
 end
 
+function Flashlight:Activate()
+	self:SetLightEnabled(true)
+end
+
+function Flashlight:Deactivate()
+	self:SetLightEnabled(false)
+end
+
+function Flashlight:SetActive(player, active)
+	if (active) then
+		self:Activate()
+	else
+		self:Deactivate()
+	end
+end
+
+
+Flashlight.SubscribeRemote("SetActive", Flashlight.SetActive)
 Flashlight.SubscribeRemote("ToggleLight", Flashlight.ToggleLight)
 Flashlight.SubscribeRemote("SetColor", Flashlight.SetColor)
 Flashlight.SubscribeRemote("SetIntensity", Flashlight.SetIntensity)

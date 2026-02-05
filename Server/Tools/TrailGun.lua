@@ -15,12 +15,14 @@ function TrailGun:OnSpawnTrail(player, hit_location, relative_location, relative
 		return
 	end
 
-	local trail = Trail(hit_location, relative_location, relative_rotation, direction, entity)
+	-- Calculates the Trail Rotation to spawn it
+	local rotation = direction:Rotation()
+	local trail = Trail(hit_location, rotation, relative_location, relative_rotation, direction, entity)
 
 	-- Updates the client's spawn history
 	Events.CallRemote("SpawnedItem", player, trail)
 
-	Particle(hit_location, relative_rotation + Rotator(180, 0, 0), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", trail.color)
+	Particle(hit_location, rotation, "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", trail.color)
 end
 
 TrailGun.SubscribeRemote("SpawnTrail", TrailGun.OnSpawnTrail)

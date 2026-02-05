@@ -5,7 +5,7 @@ function LightGun:Constructor(location, rotation)
 	ToolGun.Constructor(self, location, rotation, Color.YELLOW)
 end
 
-function LightGun:OnSpawnLight(player, spawn_location, direction, entity, distance_trace_object)
+function LightGun:OnSpawnLight(player, spawn_location, relative_location, relative_rotation, direction, entity)
 	-- Refuse to attach a light to a player
 	if (entity and entity:IsA(Character) and entity:GetPlayer()) then
 		return
@@ -15,12 +15,12 @@ function LightGun:OnSpawnLight(player, spawn_location, direction, entity, distan
 		return
 	end
 
-	local light = RopeLight(spawn_location, direction, entity, distance_trace_object)
+	local rope_light = RopeLight(spawn_location, relative_location, relative_rotation, direction, entity)
 
 	-- Calls the client to add it to his spawn history
-	Events.CallRemote("SpawnedItem", player, light)
+	Events.CallRemote("SpawnedItem", player, rope_light)
 
-	Particle(spawn_location, direction:Rotation(), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", light.color)
+	Particle(spawn_location, direction:Rotation(), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", rope_light.light:GetColor())
 end
 
 LightGun.SubscribeRemote("SpawnLight", LightGun.OnSpawnLight)

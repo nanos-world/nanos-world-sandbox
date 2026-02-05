@@ -1,4 +1,4 @@
-ResizerGun = ToolGun.Inherit("ResizerGun")
+ResizerGun = ToolGunSingleTarget.Inherit("ResizerGun")
 
 -- Tool Name
 ResizerGun.name = "Resizer Gun"
@@ -10,7 +10,7 @@ ResizerGun.image = "package://sandbox/Client/Tools/ResizerGun.webp"
 ResizerGun.tutorials = {
 	{ key = "LeftClick",	text = "select object" },
 	{ key = "R",			text = "reset scale" },
-	{ key = "MouseScrollU",	text = "scale" },
+	{ key = "MouseScroll",	text = "scale" },
 }
 
 ResizerGun.tips = {
@@ -24,6 +24,11 @@ ResizerGun.current_scale = 1
 ResizerGun.min_object_scale = 0.1 -- (Note: also configured in Server/Tools/ResizerGun.lua)
 ResizerGun.max_object_scale = 20 -- (Note: also configured in Server/Tools/ResizerGun.lua)
 
+-- Tool Trace Debug Settings
+ResizerGun.debug_trace = {
+	collision_channel = CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
+	show_crosshair = true,
+}
 
 function ResizerGun:OnReleaseUse(character)
 	if (ResizerGun.resizing_object) then
@@ -33,21 +38,12 @@ function ResizerGun:OnReleaseUse(character)
 	end
 end
 
--- Overrides Tool Gun's OnLocalPlayerFire
-function ResizerGun:OnLocalPlayerFire(character)
-	-- Makes a trace 10000 units ahead
-	local trace_result = TraceFor(10000, CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle)
-
-	-- If hit an object, then sets this object to be the "resized" one
-	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
-		ResizerGun.resizing_object = trace_result.Entity
-		ResizerGun.current_scale = ResizerGun.resizing_object:GetScale().X
-		ResizerGun.resizing_object:SetHighlightEnabled(true, 0)
-		Events.CallRemote("ToggleResizing", true)
-	else
-		-- If didn't hit anything, plays a negative sound
-		SoundInvalidAction:Play()
-	end
+-- Overrides ToolGunSingleTarget method
+function ResizerGun:OnLocalPlayerTarget(location, relative_location, relative_rotation, normal, entity)
+	ResizerGun.resizing_object = entity
+	ResizerGun.current_scale = ResizerGun.resizing_object:GetScale().X
+	ResizerGun.resizing_object:SetHighlightEnabled(true, 0)
+	Events.CallRemote("ToggleResizing", true)
 end
 
 -- Overrides Tool Gun's OnLocalPlayerPickUp

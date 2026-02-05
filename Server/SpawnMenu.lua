@@ -189,6 +189,10 @@ Events.SubscribeRemote("ApplyWeaponPattern", function(player, weapon, pattern_te
 	ApplyWeaponPattern(weapon, pattern_texture)
 end)
 
+Events.SubscribeRemote("SetPropGrabMode", function(player, prop, grabbable)
+	prop:SetGrabMode(grabbable and GrabMode.Enabled or GrabMode.Disabled)
+end)
+
 -- Exposes SpawnMenu to other packages
 Package.Export("SpawnMenu", SpawnMenu)
 

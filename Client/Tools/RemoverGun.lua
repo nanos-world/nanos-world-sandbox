@@ -12,17 +12,16 @@ RemoverGun.tutorials = {
 }
 
 -- Tool Crosshair Trace Debug Settings
-RemoverGun.crosshair_trace = {
+RemoverGun.debug_trace = {
 	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
-	color_entity = Color.GREEN,
-	color_no_entity = Color.RED,
+	show_crosshair = true,
 }
 
 
 -- Overrides ToolGun method
 function RemoverGun:OnLocalPlayerFire(shooter)
 	-- Makes a trace 10000 units ahead
-	local trace_result = TraceFor(10000, RemoverGun.crosshair_trace.collision_channel)
+	local trace_result = TraceFor(10000, RemoverGun.debug_trace.collision_channel)
 
 	-- If hit an object, calls the server to destroy it
 	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then

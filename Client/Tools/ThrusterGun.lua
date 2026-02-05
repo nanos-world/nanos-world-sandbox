@@ -1,23 +1,26 @@
-ThrusterGun = ToolGun.Inherit("ThrusterGun")
+ThrusterGun = ToolGunSingleTarget.Inherit("ThrusterGun")
 
--- Tool Name
+-- Tool Name, Category and Image
 ThrusterGun.name = "Thruster Gun"
-
--- Tool Image
 ThrusterGun.image = "package://sandbox/Client/Tools/ThrusterGun.webp"
+ThrusterGun.category = "spawners"
 
 -- Tool Tutorials
 ThrusterGun.tutorials = {
 	{ key = "LeftClick",	text = "spawn thruster" },
-	{ key = "Undo",			text = "undo spawn" },
+	{ key = "Undo",			text = "undo last spawn" },
 	{ key = "ContextMenu",	text = "thruster settings" },
 }
 
--- Tool Crosshair Trace Debug Settings
-ThrusterGun.crosshair_trace = {
-	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
-	color_entity = Color.GREEN,
-	color_no_entity = Color.RED,
+-- Tool Trace Debug Settings
+ThrusterGun.debug_trace = {
+	collision_channel = CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
+	show_crosshair = false,
+	show_preview_mesh = true,
+	preview_mesh = "nanos-world::SM_Rocket_Thruster",
+	preview_mesh_scale = Vector(0.5, 0.5, 0.5),
+	preview_mesh_offset = Vector(0, 0, 0),
+	preview_mesh_rotation = Rotator(180, 0, 0),
 }
 
 -- Tool Tips
@@ -29,6 +32,7 @@ ThrusterGun.tips = {
 ThrusterGun.particle_asset = Thruster.assets_list[math.random(#Thruster.assets_list)].id
 ThrusterGun.sound_asset = Thruster.sounds_list[math.random(#Thruster.sounds_list)].id
 ThrusterGun.force = 100000
+ThrusterGun.active = true
 
 -- Context Menu Items when Picking Up this Tool
 ThrusterGun.picked_context_menu_items = {
@@ -69,21 +73,21 @@ ThrusterGun.picked_context_menu_items = {
 			return ThrusterGun.force
 		end,
 	},
+	{
+		id = "thruster_gun_active",
+		type = "checkbox",
+		label = "start activated",
+		callback = function(value)
+			ThrusterGun.active = value
+		end,
+		value = function()
+			return ThrusterGun.active
+		end,
+	},
 }
 
--- Overrides ToolGun methods
-function ThrusterGun:OnLocalPlayerFire(shooter)
-	-- Makes a trace 10000 units ahead to spawn the balloon
-	local trace_result = TraceFor(10000, ThrusterGun.crosshair_trace.collision_channel)
-
-	-- If hit some object, then spawns a thruster on attached it
-	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
-		local thruster_rotation = (trace_result.Normal * -1):Rotation()
-		local relative_location, relative_rotation = NanosMath.RelativeTo(trace_result.Location, thruster_rotation, trace_result.Entity)
-
-		self:CallRemoteEvent("SpawnThruster", trace_result.Location, relative_location, relative_rotation, trace_result.Normal, trace_result.Entity, ThrusterGun.particle_asset, ThrusterGun.sound_asset, ThrusterGun.force)
-	else
-		-- If didn't hit anything, plays a negative sound
-		SoundInvalidAction:Play()
-	end
+-- Overrides ToolGunSingleTarget method
+function ThrusterGun:OnLocalPlayerTarget(location, relative_location, relative_rotation, normal, entity)
+	-- Call remote event to spawn the thruster
+	self:CallRemoteEvent("SpawnThruster", location, relative_location, relative_rotation, normal, entity, ThrusterGun.particle_asset, ThrusterGun.sound_asset, ThrusterGun.force, ThrusterGun.active)
 end

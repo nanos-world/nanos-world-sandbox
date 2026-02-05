@@ -7,6 +7,8 @@ TV.category = "devices"
 
 -- When TV is spawned, check if it has a URL playing already
 function TV:OnSpawn()
+	self:SetInteractionToolTipText("set video url")
+
 	local website = self:GetValue("Website")
 
 	if (website) then
@@ -126,6 +128,7 @@ function TV:SetNoSignal()
 	end
 end
 
+TV.Subscribe("Spawn", TV.OnSpawn)
 TV.Subscribe("Destroy", TV.OnDestroy)
 TV.Subscribe("ValueChange", TV.OnValueChange)
 

@@ -6,23 +6,24 @@ UselessGun.name = "Useless Gun"
 -- Tool Image
 UselessGun.image = "package://sandbox/Client/Tools/UselessGun.webp"
 
+UselessGun.description = "Transforms objects into useless web browsers"
+
 -- Tool Tutorials
 UselessGun.tutorials = {
 	{ key = "LeftClick", text = "make object useless" }
 }
 
 -- Tool Crosshair Trace Debug Settings
-UselessGun.crosshair_trace = {
+UselessGun.debug_trace = {
 	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
-	color_entity = Color.GREEN,
-	color_no_entity = Color.RED,
+	show_crosshair = true,
 }
 
 
 -- Overrides ToolGun method
 function UselessGun:OnLocalPlayerFire(shooter)
 	-- Makes a trace 10000 units ahead
-	local trace_result = TraceFor(10000, UselessGun.crosshair_trace.collision_channel)
+	local trace_result = TraceFor(10000, UselessGun.debug_trace.collision_channel)
 
 	-- If hit an object, then get a random Useless and call server to update the Useless for everyone
 	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then

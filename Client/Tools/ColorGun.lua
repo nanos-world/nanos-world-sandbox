@@ -1,4 +1,4 @@
-ColorGun = ToolGun.Inherit("ColorGun")
+ColorGun = ToolGunSingleTarget.Inherit("ColorGun")
 
 -- Tool Name
 ColorGun.name = "Color"
@@ -15,11 +15,10 @@ ColorGun.tutorials = {
 -- Color Gun Configuration
 ColorGun.color = Color.RandomPalette()
 
--- Tool Crosshair Trace Debug Settings
-ColorGun.crosshair_trace = {
+-- Tool Trace Debug Settings
+ColorGun.debug_trace = {
 	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
-	color_entity = Color.GREEN,
-	color_no_entity = Color.RED,
+	show_crosshair = true,
 }
 
 -- Context Menu Items when picking up this Tool
@@ -38,15 +37,8 @@ ColorGun.picked_context_menu_items = {
 }
 
 
--- Overrides ToolGun method
-function ColorGun:OnLocalPlayerFire(shooter)
-	local trace_result = TraceFor(10000, ColorGun.crosshair_trace.collision_channel)
-
-	-- If hit an object, then get a random Color and call server to update the color for everyone
-	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
-		Events.CallRemote("ColorObject", trace_result.Entity, trace_result.Location, trace_result.Normal, ColorGun.color)
-	else
-		-- If didn't hit anything, plays a negative sound
-		SoundInvalidAction:Play()
-	end
+-- Overrides ToolGunSingleTarget method
+function ColorGun:OnLocalPlayerTarget(location, relative_location, relative_rotation, normal, entity)
+	-- Calls remote to spawn the Lamp
+	Events.CallRemote("ColorObject", entity, location, normal, ColorGun.color)
 end

@@ -33,10 +33,21 @@ Flashlight.selected_context_menu_items = {
 			return ContextMenu.selected_entity:GetValue("Light"):GetIntensity() * 100
 		end
 	},
+	{
+		id = "flashlight_active",
+		type = "checkbox",
+		label = "active",
+		callback = function(value)
+			ContextMenu.selected_entity:CallRemoteEvent("SetActive", value)
+		end,
+		value = function()
+			return ContextMenu.selected_entity:GetValue("Light"):IsVisible()
+		end
+	},
 }
 
 
-function Flashlight.OnToggle()
+function Flashlight.Toggle()
 	Flashlight.currently_grabbed:CallRemoteEvent("ToggleLight")
 end
 
@@ -44,10 +55,10 @@ function Flashlight:OnGrab(character)
 	Flashlight.currently_grabbed = self
 
 	-- Binds the Input
-	Input.Bind("Flashlight", InputEvent.Pressed, Flashlight.OnToggle)
+	Input.Bind("Flashlight", InputEvent.Pressed, Flashlight.Toggle)
 
 	-- Adds tutorial on screen
-	Tutorials.Show("Flashlight", {
+	Tutorials.Show("Flashlight", "", {
 		{ key = "Flashlight", text = "turns on/off the flashlight" }
 	})
 end
@@ -56,7 +67,7 @@ function Flashlight:OnUnGrab(character)
 	Flashlight.currently_grabbed = nil
 
 	-- Unbinds from Input
-	Input.Unbind("Flashlight", InputEvent.Pressed, Flashlight.OnToggle)
+	Input.Unbind("Flashlight", InputEvent.Pressed, Flashlight.Toggle)
 
 	-- Removes tutorial from screen
 	Tutorials.Hide()
