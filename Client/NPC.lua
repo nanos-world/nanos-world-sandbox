@@ -1,6 +1,33 @@
 NPC = Character.Inherit("NPC")
 NPC.category = "npcs"
 
+-- Context Menu Items when selecting NPCs
+NPC.selected_context_menu_items = {
+	{
+		id = "npc_auto_move",
+		type = "checkbox",
+		label = "auto walk",
+		callback = function(value)
+			ContextMenu.selected_entity:CallRemoteEvent("SetAutoWalk", value)
+		end,
+		value = function()
+			return ContextMenu.selected_entity:GetValue("AutoWalk")
+		end,
+	},
+	{
+		id = "npc_run_when_damage",
+		type = "checkbox",
+		label = "run when damaged",
+		callback = function(value)
+			ContextMenu.selected_entity:CallRemoteEvent("SetRunWhenDamaged", value)
+		end,
+		value = function()
+			return ContextMenu.selected_entity:GetValue("RunWhenDamaged")
+		end,
+	},
+}
+
+
 NPC_MannequinMale = NPC.Inherit("NPC_MannequinMale", {
 	name = "Mannequin Male",
 	image = "assets://nanos-world/Thumbnails/SK_Mannequin.jpg",
@@ -60,6 +87,7 @@ StackOBot = CharacterSimple.Inherit("StackOBot", {
 	name = "Stack-O-Bot",
 	image = "assets://nanos-world/Thumbnails/SK_StackOBot.jpg",
 	category = "npcs",
+	selected_context_menu_items = NPC.selected_context_menu_items
 })
 
 -- When spawns
@@ -73,7 +101,7 @@ function StackOBot:OnSpawn()
 			-- Plays "happy" sound
 			self:OnPlaySound("nanos-world::A_Robot_Beep_Whistle")
 
-		end, math.random(10000) + 10000, self),
+		end, math.random(10000) + 10000, self), -- TODO this is a fixed random
 		self
 	)
 end

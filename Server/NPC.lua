@@ -1,6 +1,7 @@
-NPC = Character.Inherit("NPC")
+-- Base functions to all NPC inherited classes
+NPCBase = {}
 
-function NPC.GetTotalCount()
+function NPCBase.GetTotalCount()
 	local count = 0
 
 	local inherited_npcs = NPC.GetInheritedClasses(true)
@@ -16,54 +17,90 @@ function NPC.GetTotalCount()
 	return count
 end
 
-ConfigureSpawnLimits("npcs", "NPCs", NPC.GetTotalCount, "max_npcs")
+function NPCBase:SetAutoWalk(player, auto_walk)
+	if (self.timer_walk and Timer.IsValid(self.timer_walk)) then
+		Timer.ClearInterval(self.timer_walk)
+	end
 
-function NPC:Constructor(location, rotation, mesh)
-	self.Super:Constructor(location or Vector(), (rotation or Rotator()) + Rotator(0, math.random(0, 360), 0), mesh)
+	if (auto_walk) then
+		self.timer_walk = Timer.SetInterval(
+			function(bound_character)
+				-- Does not move it already moving or dead or in ragdoll
+				if (bound_character:GetMovingTo() ~= Vector() or bound_character:IsDead()) then return end
 
-	CustomizeCharacter(self, mesh)
+				-- Character specific
+				if (bound_character:IsA(Character)) then
+					if (bound_character:IsInRagdollMode()) then return end
 
-	Timer.Bind(
-		-- After 5-10 seconds, move again
-		Timer.SetInterval(function(bound_character)
-			-- Does not move it already moving or dead or in ragdoll
-			if (bound_character:GetMovingTo() ~= Vector() or bound_character:IsDead() or bound_character:IsInRagdollMode()) then return end
+					-- Make him walk
+					bound_character:SetGaitMode(GaitMode.Walking)
+				end
 
-			-- Make him walk
-			bound_character:SetGaitMode(GaitMode.Walking)
+				-- Walk 30 meters away max
+				self:MoveRandom(3000)
+			end, math.random(5000) + 5000, self
+		)
 
-			-- Walk 30 meters away max
-			bound_character:MoveRandom(3000)
-		end, math.random(5000) + 5000, self),
-		self
-	)
+		Timer.Bind(self.timer_walk, self)
+	else
+		self:StopMovement()
+	end
 
-	-- Immediately walks after spawning
-	self:MoveRandom(2000)
+	self:SetValue("AutoWalk", auto_walk, true)
+end
+
+function NPCBase:SetRunWhenDamaged(player, run)
+	self:SetValue("RunWhenDamaged", run, true)
 end
 
 -- Randomly walk a NPC to somewhere around within distance
-function NPC:MoveRandom(distance)
+function NPCBase:MoveRandom(distance)
+	-- If it has a Player, do not move
 	if (self:GetPlayer() ~= nil) then return end
+
 	local random_location = self:GetLocation() + Vector(math.random(distance) - distance / 2, math.random(distance) - distance / 2, 0)
 	self:MoveTo(random_location, 250)
 end
 
--- When take damage
-function NPC:OnTakeDamage(damage, bone, type, from_direction, instigator, causer)
+-- Run away when taking damage
+function NPCBase:OnTakeDamage(damage, bone, type, from_direction, instigator, causer)
 	if (self:IsDead()) then return end
+
+	-- Does not run if set to do not
+	if (not self:GetValue("RunWhenDamaged")) then return end
 
 	-- Avoid those damage types
 	if (type == DamageType.RunOverVehicle or type == DamageType.RunOverProp or type == DamageType.Fall) then return end
 
 	-- Make him run
-	self:SetGaitMode(GaitMode.Sprinting)
+	if (self:IsA(Character)) then
+		self:SetGaitMode(GaitMode.Sprinting)
+	end
 
 	local current_location = self:GetLocation()
 	local run_to_location = current_location + from_direction * 3000
 
 	-- Run 30 meters away max in the opposite direction
 	self:MoveTo(Vector(run_to_location.X, run_to_location.Y, current_location.Z), 1000)
+end
+
+
+ConfigureSpawnLimits("npcs", "NPCs", NPCBase.GetTotalCount, "max_npcs")
+
+
+NPC = Character.Inherit("NPC", NPCBase)
+
+function NPC:Constructor(location, rotation, mesh)
+	self.Super:Constructor(location or Vector(), (rotation or Rotator()) + Rotator(0, math.random(0, 360), 0), mesh)
+
+	CustomizeCharacter(self, mesh)
+
+	-- Auto Walk and Run ON by default
+	self:SetAutoWalk(nil, true)
+	self:SetRunWhenDamaged(nil, true)
+
+	-- Immediately walks after spawning
+	self:MoveRandom(2000)
 end
 
 -- After dying, destroys the Character after 10 seconds
@@ -82,7 +119,6 @@ function NPC:OnRagdollModeChange(was_in_ragdoll, is_in_ragdoll)
 
 			bound_character:SetRagdollMode(false)
 			bound_character:SetGaitMode(GaitMode.Sprinting)
-			bound_character:MoveRandom(2000)
 		end, 3000, self),
 		self
 	)
@@ -91,6 +127,8 @@ end
 NPC.Subscribe("TakeDamage", NPC.OnTakeDamage)
 NPC.Subscribe("Death", NPC.OnDeath)
 NPC.Subscribe("RagdollModeChange", NPC.OnRagdollModeChange)
+NPC.SubscribeRemote("SetAutoWalk", NPC.SetAutoWalk)
+NPC.SubscribeRemote("SetRunWhenDamaged", NPC.SetRunWhenDamaged)
 
 
 
@@ -171,7 +209,7 @@ function NPC_Adventure_05:Constructor(location, rotation)
 end
 
 
-StackOBot = CharacterSimple.Inherit("StackOBot")
+StackOBot = CharacterSimple.Inherit("StackOBot", NPCBase)
 
 function StackOBot:Constructor(location, rotation)
 	self.Super:Constructor(location or Vector(), (rotation or Rotator()) + Rotator(0, math.random(0, 360), 0), "nanos-world::SK_StackOBot", "nanos-world::ABP_StackOBot")
@@ -192,18 +230,9 @@ function StackOBot:Constructor(location, rotation)
 
 	self:SetMaterialColorParameter("Tint", Color.RandomPalette())
 
-	-- TODO duplicated bad code
-	Timer.Bind(
-		-- After 5-10 seconds, move again
-		Timer.SetInterval(function(bound_character)
-			-- Does not move it already moving or dead or in ragdoll
-			if (bound_character:GetMovingTo() ~= Vector() or bound_character:IsDead()) then return end
-
-			-- Walk 30 meters away max
-			bound_character:MoveRandom(3000)
-		end, math.random(5000) + 5000, self),
-		self
-	)
+	-- Auto Walk and Run ON by default
+	self:SetAutoWalk(nil, true)
+	self:SetRunWhenDamaged(nil, true)
 
 	-- Immediately walks after spawning
 	self:MoveRandom(2000)
@@ -214,27 +243,6 @@ end
 
 function StackOBot:SetMood(value)
 	self:SetMaterialScalarParameter("Mood", value)
-end
-
--- Randomly walk a NPC to somewhere around within distance
-function StackOBot:MoveRandom(distance)
-	if (self:GetPlayer() ~= nil) then return end
-	local random_location = self:GetLocation() + Vector(math.random(distance) - distance / 2, math.random(distance) - distance / 2, 0)
-	self:MoveTo(random_location, 250)
-end
-
--- When take damage
-function StackOBot:OnTakeDamage(damage, bone, type, from_direction, instigator, causer)
-	if (self:IsDead()) then return end
-
-	-- Avoid those damage types
-	if (type == DamageType.RunOverVehicle or type == DamageType.RunOverProp or type == DamageType.Fall) then return end
-
-	local current_location = self:GetLocation()
-	local run_to_location = current_location + from_direction * 3000
-
-	-- Run 30 meters away max in the opposite direction
-	self:MoveTo(Vector(run_to_location.X, run_to_location.Y, current_location.Z), 1000)
 end
 
 -- After dying, destroys the Character after 10 seconds
@@ -248,3 +256,5 @@ end
 
 StackOBot.Subscribe("TakeDamage", StackOBot.OnTakeDamage)
 StackOBot.Subscribe("Death", StackOBot.OnDeath)
+StackOBot.SubscribeRemote("SetAutoWalk", StackOBot.SetAutoWalk)
+StackOBot.SubscribeRemote("SetRunWhenDamaged", StackOBot.SetRunWhenDamaged)

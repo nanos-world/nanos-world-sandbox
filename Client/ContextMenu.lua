@@ -130,8 +130,8 @@ function ContextMenu.OnTick(delta_time)
 	local trace_max_distance = 5000
 	local end_location = start_location + mouse_3D.Direction * trace_max_distance
 
-	-- Determine at which object we will be tracing for (WorldStatic = StaticMeshes - and PhysicsBody = Props)
-	local collision_trace = CollisionChannel.WorldStatic | CollisionChannel.PhysicsBody | CollisionChannel.Pawn | CollisionChannel.Vehicle
+	-- Determine at which object we will be tracing for (WorldStatic = StaticMeshes; PhysicsBody = Props; Mesh = Characters; Vehicle = Vehicles)
+	local collision_trace = CollisionChannel.WorldStatic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Mesh
 
 	-- Sets the trace modes (we want it to return Entity)
 	local trace_mode = TraceMode.ReturnEntity | TraceMode.TraceOnlyVisibility

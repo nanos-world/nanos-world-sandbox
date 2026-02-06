@@ -70,16 +70,20 @@ function ContextMenu.AddSelectedCustomItems(entity)
 		})
 	end
 
-	-- All entities
-	table.insert(items, {
-		id = "destroy_button",
-		type = "button",
-		label = "destroy",
-		callback = function()
-			Events.CallRemote("DestroyItem", ContextMenu.selected_entity)
-			ContextMenu.SelectEntity(nil)
-		end
-	})
+	local is_player = (entity:IsA(Character) or entity:IsA(CharacterSimple)) and entity:GetPlayer() ~= nil
+
+	if (not is_player) then
+		-- All entities
+		table.insert(items, {
+			id = "destroy_button",
+			type = "button",
+			label = "destroy",
+			callback = function()
+				Events.CallRemote("DestroyItem", ContextMenu.selected_entity)
+				ContextMenu.SelectEntity(nil)
+			end
+		})
+	end
 
 	-- Inserts all items
 	ContextMenu.AddItems("selected_item", category_name, items)
