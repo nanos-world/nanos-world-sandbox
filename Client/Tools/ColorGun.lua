@@ -1,10 +1,9 @@
 ColorGun = ToolGunSingleTarget.Inherit("ColorGun")
 
--- Tool Name
+-- Tool Info
 ColorGun.name = "Color"
-
--- Tool Image
 ColorGun.image = "package://sandbox/Client/Media/Tools/ColorGun.webp"
+ColorGun.description = "Paint props and objects with a selected color"
 
 -- Tool Tutorials
 ColorGun.tutorials = {

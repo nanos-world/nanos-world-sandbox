@@ -1,9 +1,10 @@
 LightGun = ToolGunSingleTarget.Inherit("LightGun")
 
--- Tool Name, Category and Image
+-- Tool Info
 LightGun.name = "Light"
 LightGun.category = "spawners"
 LightGun.image = "package://sandbox/Client/Media/Tools/LightGun.webp"
+LightGun.description = "Spawns a Light Bulb in a rope attached to a surface"
 
 -- Tool Tutorials
 LightGun.tutorials = {

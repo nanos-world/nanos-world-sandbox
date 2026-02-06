@@ -1,10 +1,9 @@
 ResizerGun = ToolGunSingleTarget.Inherit("ResizerGun")
 
--- Tool Name
+-- Tool Info
 ResizerGun.name = "Resizer Gun"
-
--- Tool Image
 ResizerGun.image = "package://sandbox/Client/Media/Tools/ResizerGun.webp"
+ResizerGun.description = "Select an object and resize it with the mouse wheel"
 
 -- Tool Tutorials
 ResizerGun.tutorials = {

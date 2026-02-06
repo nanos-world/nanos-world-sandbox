@@ -1,10 +1,9 @@
 ElasticGun = ToolGunDoubleTarget.Inherit("ElasticGun")
 
--- Tool Name
+-- Tool Info
 ElasticGun.name = "Elastic Gun"
-
--- Tool Image
 ElasticGun.image = "package://sandbox/Client/Media/Tools/ElasticGun.webp"
+ElasticGun.description = "Connect two objects with an elastic joint (spring). Tune stiffness, damping, and bounciness"
 
 -- Tool Tutorials
 ElasticGun.tutorials = {
@@ -70,7 +69,7 @@ ElasticGun.picked_context_menu_items = {
 }
 
 -- Overrides ToolGunSingleTarget method
-function ElasticGun:OnLocalPlayerTarget(targeting_first_to, targeting_first_relative_location, targeting_second_to, targeting_second_location)
+function ElasticGun:OnLocalPlayerTarget(targeting_first_to, targeting_first_relative_location, targeting_first_relative_rotation, targeting_second_to, targeting_second_location, targeting_second_rotation)
 	-- Calls remote to attach rope
 	self:CallRemoteEvent("ElasticAttach", targeting_first_to, targeting_first_relative_location, targeting_second_to, targeting_second_location, ElasticGun.restitution, ElasticGun.stiffness, ElasticGun.damping)
 end

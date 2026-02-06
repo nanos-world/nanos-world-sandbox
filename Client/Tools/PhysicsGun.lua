@@ -1,18 +1,17 @@
 PhysicsGun = ToolGun.Inherit("PhysicsGun")
 
--- Tool Name
+-- Tool Info
 PhysicsGun.name = "Physics Gun"
-
--- Tool Image
 PhysicsGun.image = "package://sandbox/Client/Media/Tools/PhysicsGun.webp"
+PhysicsGun.description = "Grab, move, rotate, and freeze physics objects from a distance"
 
 -- Tool Tutorials
 PhysicsGun.tutorials = {
 	{ key = "LeftClick", 		text = "grab object" },
-	{ key = "RightMouseButton", text = "freeze object" },
-	{ key = "MouseScrollUp", 	text = "increase/decrease beam size" },
-	{ key = "E", 				text = "rotate object" },
-	{ key = "LeftShift", 		text = "snap to grid" },
+	{ key = "RightMouseButton", text = "freeze object while grabbing" },
+	{ key = "MouseScrollUp", 	text = "increase/decrease beam size while grabbing" },
+	{ key = "E", 				text = "rotate object while grabbing" },
+	{ key = "LeftShift", 		text = "snap to grid while rotating" },
 }
 
 -- Tool Tips

@@ -1,9 +1,10 @@
 TrailGun = ToolGunSingleTarget.Inherit("TrailGun")
 
--- Tool Name, Category and Image
+-- Tool Info
 TrailGun.name = "Trail Gun"
 TrailGun.category = "spawners"
 TrailGun.image = "package://sandbox/Client/Media/Tools/TrailGun.webp"
+TrailGun.description = "Spawns a visual trail emitter attached to objects"
 
 -- Tool Tutorials
 TrailGun.tutorials = {

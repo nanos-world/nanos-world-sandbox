@@ -15,6 +15,7 @@
 
 #tutorial_header_content {
 	max-width: min-content;
+	min-width: 300px;
 }
 
 #tutorial_title {

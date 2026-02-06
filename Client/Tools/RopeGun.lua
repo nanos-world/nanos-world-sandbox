@@ -1,10 +1,9 @@
 RopeGun = ToolGunDoubleTarget.Inherit("RopeGun")
 
--- Tool Name
+-- Tool Info
 RopeGun.name = "Rope Gun"
-
--- Tool Image
 RopeGun.image = "package://sandbox/Client/Media/Tools/RopeGun.webp"
+RopeGun.description = "Tie two objects together with a rope constraint"
 
 -- Tool Tutorials
 RopeGun.tutorials = {

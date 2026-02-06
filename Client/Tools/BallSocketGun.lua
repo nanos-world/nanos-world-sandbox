@@ -1,10 +1,9 @@
 BallSocketGun = ToolGunDoubleTarget.Inherit("BallSocketGun")
 
--- Tool Name
+-- Tool Info
 BallSocketGun.name = "Ball Socket Gun"
-
--- Tool Image
 BallSocketGun.image = "package://sandbox/Client/Media/Tools/BallSocketGun.webp"
+BallSocketGun.description = "Creates a ball-and-socket joint between two objects, letting one side to rotate freely"
 
 -- Tool Tutorials
 BallSocketGun.tutorials = {
