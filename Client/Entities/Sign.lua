@@ -1,7 +1,7 @@
 Sign = Prop.Inherit("Sign")
 
 Sign.name = "Sign"
-Sign.image = "package://sandbox/Client/Entities/Sign.webp"
+Sign.image = "package://sandbox/Client/Media/Entities/Sign.webp"
 Sign.category = "display"
 
 -- Context Menu Items when selecting this Entity

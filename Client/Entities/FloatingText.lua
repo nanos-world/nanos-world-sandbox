@@ -1,7 +1,7 @@
 FloatingText = Prop.Inherit("FloatingText")
 
 FloatingText.name = "Floating Text"
-FloatingText.image = "package://sandbox/Client/Entities/FloatingText.webp"
+FloatingText.image = "package://sandbox/Client/Media/Entities/FloatingText.webp"
 FloatingText.category = "display"
 
 

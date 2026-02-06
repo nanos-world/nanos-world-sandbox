@@ -4,7 +4,7 @@ WeldGun = ToolGunDoubleTarget.Inherit("WeldGun")
 WeldGun.name = "Weld Gun"
 
 -- Tool Image
-WeldGun.image = "package://sandbox/Client/Tools/WeldGun.webp"
+WeldGun.image = "package://sandbox/Client/Media/Tools/WeldGun.webp"
 
 -- Tool Tutorials
 WeldGun.tutorials = {

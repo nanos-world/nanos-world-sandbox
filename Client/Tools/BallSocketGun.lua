@@ -4,7 +4,7 @@ BallSocketGun = ToolGunDoubleTarget.Inherit("BallSocketGun")
 BallSocketGun.name = "Ball Socket Gun"
 
 -- Tool Image
-BallSocketGun.image = "package://sandbox/Client/Tools/BallSocketGun.webp"
+BallSocketGun.image = "package://sandbox/Client/Media/Tools/BallSocketGun.webp"
 
 -- Tool Tutorials
 BallSocketGun.tutorials = {

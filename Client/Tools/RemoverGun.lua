@@ -4,7 +4,7 @@ RemoverGun = ToolGun.Inherit("RemoverGun")
 RemoverGun.name = "Remover Gun"
 
 -- Tool Image
-RemoverGun.image = "package://sandbox/Client/Tools/RemoverGun.webp"
+RemoverGun.image = "package://sandbox/Client/Media/Tools/RemoverGun.webp"
 
 -- Tool Tutorials
 RemoverGun.tutorials = {

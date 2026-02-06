@@ -3,7 +3,7 @@ LampGun = ToolGunSingleTarget.Inherit("LampGun")
 -- Tool Name, Category and Image
 LampGun.name = "Lamp"
 LampGun.category = "spawners"
-LampGun.image = "package://sandbox/Client/Tools/LampGun.webp"
+LampGun.image = "package://sandbox/Client/Media/Tools/LampGun.webp"
 
 -- Tool Tutorials
 LampGun.tutorials = {

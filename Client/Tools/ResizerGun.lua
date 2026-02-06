@@ -4,7 +4,7 @@ ResizerGun = ToolGunSingleTarget.Inherit("ResizerGun")
 ResizerGun.name = "Resizer Gun"
 
 -- Tool Image
-ResizerGun.image = "package://sandbox/Client/Tools/ResizerGun.webp"
+ResizerGun.image = "package://sandbox/Client/Media/Tools/ResizerGun.webp"
 
 -- Tool Tutorials
 ResizerGun.tutorials = {

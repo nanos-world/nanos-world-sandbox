@@ -3,7 +3,7 @@ Flashlight = Prop.Inherit("Flashlight")
 ConfigureSpawnLimits("Flashlight", "Flashlights", Flashlight.GetCount, "max_flashlights")
 
 function Flashlight:Constructor(location, rotation)
-	self.Super:Constructor(location, rotation, "nanos-world::SM_Flashlight", CollisionType.StaticOnly)
+	self.Super:Constructor(location, rotation, "nanos-world::SM_Flashlight")
 
 	-- Spawns a Point Light, with the color
 	self.light = Light(Vector(), Rotator(), Color(1, 0.6, 0.4), LightType.Spot, 1, 3000, 25, 0.975, 4000, false)

@@ -3,7 +3,7 @@ BalloonGun = ToolGunSingleTarget.Inherit("BalloonGun")
 -- Tool Name, Category and Image
 BalloonGun.name = "Balloon Gun"
 BalloonGun.category = "spawners"
-BalloonGun.image = "package://sandbox/Client/Tools/BalloonGun.webp"
+BalloonGun.image = "package://sandbox/Client/Media/Tools/BalloonGun.webp"
 
 -- Tool Tutorials
 BalloonGun.tutorials = {

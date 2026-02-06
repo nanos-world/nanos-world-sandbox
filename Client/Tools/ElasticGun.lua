@@ -4,7 +4,7 @@ ElasticGun = ToolGunDoubleTarget.Inherit("ElasticGun")
 ElasticGun.name = "Elastic Gun"
 
 -- Tool Image
-ElasticGun.image = "package://sandbox/Client/Tools/ElasticGun.webp"
+ElasticGun.image = "package://sandbox/Client/Media/Tools/ElasticGun.webp"
 
 -- Tool Tutorials
 ElasticGun.tutorials = {

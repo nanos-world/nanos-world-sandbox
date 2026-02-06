@@ -2,7 +2,7 @@ RetroCamera = Prop.Inherit("RetroCamera")
 
 RetroCamera.name = "Retro Camera"
 RetroCamera.category = "devices"
-RetroCamera.image = "package://sandbox/Client/Entities/RetroCamera.webp"
+RetroCamera.image = "package://sandbox/Client/Media/Entities/RetroCamera.webp"
 
 RetroCamera.currently_grabbed = nil
 RetroCamera.resolution = 256
@@ -34,7 +34,7 @@ function RetroCamera:OnSpawn()
 	self.light:SetRelativeLocation(Vector(0, 10, 10))
 	self.light:SetRelativeRotation(Rotator(0, 90, 0))
 
-	self.sound = Sound(self:GetLocation(), "package://sandbox/Client/Entities/CameraClick.ogg", false, false, SoundType.SFX, 1, 1, 400, 3600, AttenuationFunction.Logarithmic, false, SoundLoopMode.Never, false)
+	self.sound = Sound(self:GetLocation(), "package://sandbox/Client/Media/Entities/CameraClick.ogg", false, false, SoundType.SFX, 1, 1, 400, 3600, AttenuationFunction.Logarithmic, false, SoundLoopMode.Never, false)
 	self.sound:AttachTo(self, AttachmentRule.SnapToTarget, "", -1)
 
 	self.last_photo_time = 0

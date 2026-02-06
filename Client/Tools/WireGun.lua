@@ -2,7 +2,7 @@ WireGun = ToolGunDoubleTarget.Inherit("WireGun")
 
 -- Tool Name, Category and Image
 WireGun.name = "Wire Gun"
-WireGun.image = "package://sandbox/Client/Tools/WireGun.webp"
+WireGun.image = "package://sandbox/Client/Media/Tools/WireGun.webp"
 
 WireGun.description = "Connects two devices with a wire, to enable interactions between them"
 

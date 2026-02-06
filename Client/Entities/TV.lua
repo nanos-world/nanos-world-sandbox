@@ -1,7 +1,7 @@
 TV = Prop.Inherit("TV")
 
 TV.name = "TV"
-TV.image = "package://sandbox/Client/Entities/TV.webp"
+TV.image = "package://sandbox/Client/Media/Entities/TV.webp"
 TV.category = "devices"
 
 

@@ -4,7 +4,7 @@ ColorGun = ToolGunSingleTarget.Inherit("ColorGun")
 ColorGun.name = "Color"
 
 -- Tool Image
-ColorGun.image = "package://sandbox/Client/Tools/ColorGun.webp"
+ColorGun.image = "package://sandbox/Client/Media/Tools/ColorGun.webp"
 
 -- Tool Tutorials
 ColorGun.tutorials = {

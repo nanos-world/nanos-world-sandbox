@@ -4,7 +4,7 @@ PhysicsGun = ToolGun.Inherit("PhysicsGun")
 PhysicsGun.name = "Physics Gun"
 
 -- Tool Image
-PhysicsGun.image = "package://sandbox/Client/Tools/PhysicsGun.webp"
+PhysicsGun.image = "package://sandbox/Client/Media/Tools/PhysicsGun.webp"
 
 -- Tool Tutorials
 PhysicsGun.tutorials = {

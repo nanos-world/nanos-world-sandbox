@@ -4,7 +4,7 @@ RopeGun = ToolGunDoubleTarget.Inherit("RopeGun")
 RopeGun.name = "Rope Gun"
 
 -- Tool Image
-RopeGun.image = "package://sandbox/Client/Tools/RopeGun.webp"
+RopeGun.image = "package://sandbox/Client/Media/Tools/RopeGun.webp"
 
 -- Tool Tutorials
 RopeGun.tutorials = {

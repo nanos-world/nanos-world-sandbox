@@ -2,7 +2,7 @@ ThrusterGun = ToolGunSingleTarget.Inherit("ThrusterGun")
 
 -- Tool Name, Category and Image
 ThrusterGun.name = "Thruster Gun"
-ThrusterGun.image = "package://sandbox/Client/Tools/ThrusterGun.webp"
+ThrusterGun.image = "package://sandbox/Client/Media/Tools/ThrusterGun.webp"
 ThrusterGun.category = "spawners"
 
 -- Tool Tutorials

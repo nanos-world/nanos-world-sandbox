@@ -1,7 +1,7 @@
 PhotoFrame = Prop.Inherit("PhotoFrame")
 
 PhotoFrame.name = "Photo Frame"
-PhotoFrame.image = "package://sandbox/Client/Entities/PhotoFrame.webp"
+PhotoFrame.image = "package://sandbox/Client/Media/Entities/PhotoFrame.webp"
 PhotoFrame.category = "display"
 
 
