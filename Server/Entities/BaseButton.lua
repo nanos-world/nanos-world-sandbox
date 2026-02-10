@@ -16,9 +16,6 @@ function BaseButton:Constructor(location, rotation, tab, id, player, switchable)
 	-- Starts off by default
 	self.is_active = false
 
-	self:SetActivatedColor(nil, Color.GREEN)
-	self:SetDeactivatedColor(nil, Color.RED)
-
 	-- Linked entities (note that destroyed entities may still exist if they are not gced yet)
 	self.linked_entities = setmetatable({}, { __mode = "k" })
 
@@ -143,7 +140,7 @@ function BaseButton:Activate(player_instigator, causer, activated_entities)
 	-- Disables pressing and changes color if have cooldown
 	if (self.cooldown > 0) then
 		self:SetGrabMode(GrabMode.Disabled)
-		self:SetMaterialColorParameter("Tint", self.activated_color)
+		self:SetMaterialColorParameter("Tint", self.activated_color or Color.GREEN)
 
 		self.cooldown_timeout = Timer.SetTimeout(function()
 			self.cooldown_timeout = nil
@@ -188,7 +185,7 @@ function BaseButton:Deactivate(player_instigator, causer, deactivated_entities)
 	-- Disables pressing and changes color if have cooldown
 	if (self.cooldown > 0) then
 		self:SetGrabMode(GrabMode.Disabled)
-		self:SetMaterialColorParameter("Tint", self.deactivated_color)
+		self:SetMaterialColorParameter("Tint", self.deactivated_color or Color.RED)
 
 		-- Resets cooldown after the time
 		self.cooldown_timeout = Timer.SetTimeout(function()
@@ -225,18 +222,28 @@ function BaseButton:ResetCooldown()
 
 	-- If not switchable, then we turn the color back, otherwise don't do nothing and keep the existing color
 	if (not self.switchable) then
-		local color = self.is_active and self.deactivated_color or self.activated_color
+		local color = self.is_active and (self.deactivated_color or Color.RED) or (self.activated_color or Color.GREEN)
 		self:SetMaterialColorParameter("Tint", color)
 	end
 end
 
+function BaseButton:SetActivateLabel(player, label)
+	self:SetValue("ActivateLabel", label, true)
+	self:BroadcastRemoteEvent("UpdateLabel")
+end
+
+function BaseButton:SetDeactivateLabel(player, label)
+	self:SetValue("DeactivateLabel", label, true)
+	self:BroadcastRemoteEvent("UpdateLabel")
+end
 
 BaseButton.Subscribe("Interact", BaseButton.OnInteract)
 BaseButton.SubscribeRemote("Press", BaseButton.Press)
 BaseButton.SubscribeRemote("SetSwitchable", BaseButton.SetSwitchable)
 BaseButton.SubscribeRemote("SetActivatedColor", BaseButton.SetActivatedColor)
 BaseButton.SubscribeRemote("SetDeactivatedColor", BaseButton.SetDeactivatedColor)
+BaseButton.SubscribeRemote("SetActivateLabel", BaseButton.SetActivateLabel)
+BaseButton.SubscribeRemote("SetDeactivateLabel", BaseButton.SetDeactivateLabel)
 
 
 -- TODO Children Buttons with custom tint, custom model?
--- TODO detach wires

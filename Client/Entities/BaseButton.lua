@@ -25,7 +25,7 @@ BaseButton.selected_context_menu_items = {
 			ContextMenu.selected_entity:CallRemoteEvent("SetActivatedColor", Color.FromHEX(color))
 		end,
 		value = function()
-			return Color.ToHex(ContextMenu.selected_entity:GetValue("ActivatedColor"), false)
+			return Color.ToHex(ContextMenu.selected_entity:GetValue("ActivatedColor") or Color.GREEN, false)
 		end
 	},
 	{
@@ -33,14 +33,10 @@ BaseButton.selected_context_menu_items = {
 		type = "text",
 		label = "activate text",
 		callback = function(text)
-			ContextMenu.selected_entity.activate_label = text
-
-			if (not ContextMenu.selected_entity.is_active) then
-				ContextMenu.selected_entity:SetInteractionToolTipText(text)
-			end
+			ContextMenu.selected_entity:CallRemoteEvent("SetActivateLabel", text)
 		end,
 		value = function()
-			return ContextMenu.selected_entity.activate_label
+			return ContextMenu.selected_entity:GetValue("ActivateLabel") or "activate"
 		end
 	},
 	{
@@ -51,7 +47,7 @@ BaseButton.selected_context_menu_items = {
 			ContextMenu.selected_entity:CallRemoteEvent("SetDeactivatedColor", Color.FromHEX(color))
 		end,
 		value = function()
-			return Color.ToHex(ContextMenu.selected_entity:GetValue("DeactivatedColor"), false)
+			return Color.ToHex(ContextMenu.selected_entity:GetValue("DeactivatedColor") or Color.RED, false)
 		end
 	},
 	{
@@ -59,14 +55,14 @@ BaseButton.selected_context_menu_items = {
 		type = "text",
 		label = "deactivate text",
 		callback = function(text)
-			ContextMenu.selected_entity.deactivate_label = text
+			ContextMenu.selected_entity:CallRemoteEvent("SetDeactivateLabel", text)
 
 			if (ContextMenu.selected_entity.is_active) then
 				ContextMenu.selected_entity:SetInteractionToolTipText(text)
 			end
 		end,
 		value = function()
-			return ContextMenu.selected_entity.deactivate_label
+			return ContextMenu.selected_entity:GetValue("DeactivateLabel") or "deactivate"
 		end
 	},
 	{
@@ -82,15 +78,12 @@ BaseButton.selected_context_menu_items = {
 
 
 function BaseButton:OnSpawn()
-	self.activate_label = "activate"
-	self.deactivate_label = "deactivate"
-
-	self:SetInteractionToolTipText(self.activate_label)
+	self:SetInteractionToolTipText(self:GetValue("ActivateLabel") or "activate")
 end
 
 function BaseButton:OnActivated()
 	if (self:GetValue("Switchable")) then
-		self:SetInteractionToolTipText(self.deactivate_label)
+		self:SetInteractionToolTipText(self:GetValue("DeactivateLabel") or "deactivate")
 		self.is_active = true
 	end
 
@@ -98,13 +91,22 @@ function BaseButton:OnActivated()
 end
 
 function BaseButton:OnDeactivated()
-	self:SetInteractionToolTipText(self.activate_label)
+	self:SetInteractionToolTipText(self:GetValue("ActivateLabel") or "activate")
 
 	self.is_active = false
 
 	local sound = Sound(self:GetLocation(), "nanos-world::A_Switch_Button_01", false, true, SoundType.SFX, 1, 0.9, nil, nil, AttenuationFunction.NaturalSound)
 end
 
+function BaseButton:OnUpdateLabel()
+	if (self.is_active) then
+		self:SetInteractionToolTipText(self:GetValue("DeactivateLabel") or "activate")
+	else
+		self:SetInteractionToolTipText(self:GetValue("ActivateLabel") or "deactivate")
+	end
+end
+
 BaseButton.Subscribe("Spawn", BaseButton.OnSpawn)
 BaseButton.SubscribeRemote("OnActivated", BaseButton.OnActivated)
 BaseButton.SubscribeRemote("OnDeactivated", BaseButton.OnDeactivated)
+BaseButton.SubscribeRemote("UpdateLabel", BaseButton.OnUpdateLabel)
