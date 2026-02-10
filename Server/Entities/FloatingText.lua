@@ -44,9 +44,15 @@ function FloatingText:UpdateScale()
 end
 
 function FloatingText:SetText(player, text)
+	-- Limits the text length
+	text = text:sub(1, 512)
+
 	self.text_render:SetText(text)
 
 	self:UpdateScale()
+
+	-- Overrides the last owner
+	SpawnHistory.UpdateItemOwnership(player, self)
 end
 
 function FloatingText:SetColor(player, color)

@@ -285,3 +285,24 @@
 	line-height: 1.1;
 	background-color: #fff;
 }
+
+#context_menu_hovering_entity {
+	background-color: #00000056;
+	border-radius: 5px;
+	position: absolute;
+	top: 30px;
+	left: 30px;
+	display: none;
+	padding: 20px;
+}
+
+#context_menu_hovering_entity_label {
+	font-size: 2rem;
+	font-family: 'Righteous', sans-serif;
+	display: block;
+}
+
+#context_menu_hovering_entity_info {
+	font-size: 1rem;
+	color: #ffffffcc;
+}

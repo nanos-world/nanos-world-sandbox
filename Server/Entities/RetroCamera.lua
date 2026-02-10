@@ -29,9 +29,9 @@ function RetroCamera:OnTakePhoto(player, base64)
 		local photograph = Photograph(location, rotation, base64, retro_camera_scale)
 		photograph:AddImpulse(impulse, true)
 
-		-- Calls the client to update his history
+		-- Adds to player's history
 		if (player and player:IsValid()) then
-			Events.CallRemote("SpawnedItem", player, photograph)
+			SpawnHistory.AddItemToHistory(player, photograph)
 		end
 	end, 300)
 end

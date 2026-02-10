@@ -30,8 +30,8 @@ function BallSocketGun:OnBallSocketAttach(player, targeting_first_to, targeting_
 
 	cable:SetMaterialColorParameter("Tint", Color.BLACK)
 
-	-- Calls the client to update his history
-	Events.CallRemote("SpawnedItem", player, cable)
+	-- Updates the client's spawn history
+	SpawnHistory.AddItemToHistory(player, cable)
 end
 
 BallSocketGun.SubscribeRemote("BallSocketAttach", BallSocketGun.OnBallSocketAttach)

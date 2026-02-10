@@ -199,6 +199,17 @@ function ContextMenu.HoverEntity(entity)
 		else
 			ContextMenu.hovering_text_render = TextRender(entity:GetLocation(), Rotator(), text_render_text, 30, Color.GREEN, TextRenderRenderingType.UnlitCameraAlignedDepth, TextRenderHorizontalAlignment.Center, TextRenderVerticalAlignment.Center, "nanos-world::Font_LondrinaSolid_DistanceField")
 		end
+
+		local spawned_by = entity:GetValue("SpawnedBy")
+		local spawned_by_player = nil
+		local spawned_by_time = nil
+
+		if (spawned_by) then
+			spawned_by_player = spawned_by.player_name .. " (" .. spawned_by.player_steam_id .. ")"
+			spawned_by_time = spawned_by.time;
+		end
+
+		Sandbox.HUD:CallEvent("SetHoverEntity", true, text_render_text, spawned_by_player, spawned_by_time)
 	else
 		Input.SetMouseCursor(CursorType.Default)
 
@@ -206,6 +217,8 @@ function ContextMenu.HoverEntity(entity)
 		if (ContextMenu.hovering_text_render and ContextMenu.hovering_text_render:IsValid()) then
 			ContextMenu.hovering_text_render:SetVisibility(false)
 		end
+
+		Sandbox.HUD:CallEvent("SetHoverEntity", false)
 	end
 end
 

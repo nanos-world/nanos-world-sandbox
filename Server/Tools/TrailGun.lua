@@ -1,8 +1,8 @@
-TrailGun = ToolGun.Inherit("TrailGun")
+TrailGun = ToolGunSingleTarget.Inherit("TrailGun")
 
 function TrailGun:Constructor(location, rotation)
 	-- Calls parent ToolGun constructor
-	ToolGun.Constructor(self, location, rotation, Color.VIOLET)
+	ToolGunSingleTarget.Constructor(self, location, rotation, Color.VIOLET)
 end
 
 function TrailGun:OnSpawnTrail(player, hit_location, relative_location, relative_rotation, direction, entity)
@@ -20,7 +20,7 @@ function TrailGun:OnSpawnTrail(player, hit_location, relative_location, relative
 	local trail = Trail(hit_location, rotation, relative_location, relative_rotation, direction, entity)
 
 	-- Updates the client's spawn history
-	Events.CallRemote("SpawnedItem", player, trail)
+	SpawnHistory.AddItemToHistory(player, trail)
 
 	Particle(hit_location, rotation, "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", trail.color)
 end

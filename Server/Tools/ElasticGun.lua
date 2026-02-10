@@ -31,8 +31,8 @@ function ElasticGun:OnElasticAttach(player, targeting_first_to, targeting_first_
 	cable:SetMaterial("nanos-world::M_Default_Masked_Lit")
 	cable:SetMaterialColorParameter("Tint", Color.RandomPalette(false))
 
-	-- Calls the client to update his history
-	Events.CallRemote("SpawnedItem", player, cable)
+	-- Updates the client's spawn history
+	SpawnHistory.AddItemToHistory(player, cable)
 end
 
 ElasticGun.SubscribeRemote("ElasticAttach", ElasticGun.OnElasticAttach)

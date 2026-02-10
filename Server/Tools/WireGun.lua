@@ -30,11 +30,32 @@ function WireGun:OnWire(player, wire_start, wire_end, show_wire, wire_color)
 	-- If both returned false, it means they are already attached, then detaches
 	if (not linked_start and not linked_end) then
 		if (wire_start.UnlinkEntity) then
-			linked_start = wire_start:UnlinkEntity(wire_end)
+			wire_start:UnlinkEntity(wire_end)
 		end
 
 		if (wire_end.UnlinkEntity) then
-			linked_end = wire_end:UnlinkEntity(wire_start)
+			wire_end:UnlinkEntity(wire_start)
+		end
+	else
+		-- Adds custom history functions to be able to undo the wire with the undo button
+		if (linked_start) then
+			SpawnHistory.AddItemToHistory(player, function()
+				if (not wire_start or not wire_start:IsValid() or not wire_end or not wire_end:IsValid()) then return false end
+				if (not wire_start:UnlinkEntity(wire_end)) then return false end
+
+				Events.BroadcastRemote("DestroyedItem", wire_end:GetLocation())
+				return true
+			end)
+		end
+
+		if (linked_end) then
+			SpawnHistory.AddItemToHistory(player, function()
+				if (not wire_end or not wire_end:IsValid() or not wire_start or not wire_start:IsValid()) then return false end
+				if (not wire_end:UnlinkEntity(wire_start)) then return false end
+
+				Events.BroadcastRemote("DestroyedItem", wire_end:GetLocation())
+				return true
+			end)
 		end
 	end
 

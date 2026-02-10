@@ -1,8 +1,8 @@
-BalloonGun = ToolGun.Inherit("BalloonGun")
+BalloonGun = ToolGunSingleTarget.Inherit("BalloonGun")
 
 function BalloonGun:Constructor(location, rotation)
 	-- Calls parent ToolGun constructor
-	ToolGun.Constructor(self, location, rotation, Color.VIOLET)
+	ToolGunSingleTarget.Constructor(self, location, rotation, Color.VIOLET)
 end
 
 function BalloonGun:OnSpawnBalloon(player, spawn_location, relative_location, relative_rotation, direction, entity, force, max_length, asset)
@@ -18,7 +18,7 @@ function BalloonGun:OnSpawnBalloon(player, spawn_location, relative_location, re
 	local balloon = Balloon(spawn_location, Rotator(0, math.random() * 360, 0), "", "", player, relative_location, relative_rotation, direction, entity, force, max_length, asset)
 
 	-- Updates the client's spawn history
-	Events.CallRemote("SpawnedItem", player, balloon)
+	SpawnHistory.AddItemToHistory(player, balloon)
 
 	Particle(spawn_location, direction:Rotation(), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", balloon:GetMaterialColorParameter("Tint"))
 end

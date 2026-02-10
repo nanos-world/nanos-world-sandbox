@@ -18,7 +18,13 @@ function Sign:Constructor(location, rotation, tab, id, player)
 end
 
 function Sign:SetText(player, text)
+	-- Limits the text length
+	text = text:sub(1, 128)
+
 	self.text_render:SetText(text)
+
+	-- Overrides the last owner
+	SpawnHistory.UpdateItemOwnership(player, self)
 
 	-- TODO add line breaks automatically?
 end

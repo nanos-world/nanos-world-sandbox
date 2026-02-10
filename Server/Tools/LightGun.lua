@@ -1,8 +1,8 @@
-LightGun = ToolGun.Inherit("LightGun")
+LightGun = ToolGunSingleTarget.Inherit("LightGun")
 
 function LightGun:Constructor(location, rotation)
 	-- Calls parent ToolGun constructor
-	ToolGun.Constructor(self, location, rotation, Color.YELLOW)
+	ToolGunSingleTarget.Constructor(self, location, rotation, Color.YELLOW)
 end
 
 function LightGun:OnSpawnLight(player, spawn_location, relative_location, relative_rotation, direction, entity)
@@ -17,8 +17,8 @@ function LightGun:OnSpawnLight(player, spawn_location, relative_location, relati
 
 	local rope_light = RopeLight(spawn_location, relative_location, relative_rotation, direction, entity)
 
-	-- Calls the client to add it to his spawn history
-	Events.CallRemote("SpawnedItem", player, rope_light)
+	-- Updates the client's spawn history
+	SpawnHistory.AddItemToHistory(player, rope_light)
 
 	Particle(spawn_location, direction:Rotation(), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", rope_light.light:GetColor())
 end

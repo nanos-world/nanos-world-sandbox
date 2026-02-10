@@ -12,6 +12,9 @@ end
 
 function PhotoFrame:OnSetPhoto(player, image)
 	self:SetMaterialTextureParameter("Texture", image, 1)
+
+	-- Overrides the last owner
+	SpawnHistory.UpdateItemOwnership(player, self)
 end
 
 PhotoFrame.SubscribeRemote("SetPhoto", PhotoFrame.OnSetPhoto)

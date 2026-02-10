@@ -34,6 +34,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			<div id="context_menu_selector_background"></div>
 			<div id="context_menu_selector_list"></div>
 		</div>
+		<div id="context_menu_hovering_entity">
+			<span id="context_menu_hovering_entity_label"></span>
+			<span id="context_menu_hovering_entity_info"></span>
+		</div>
 	`);
 
 	// Context Menu close button
@@ -268,6 +272,22 @@ ContextMenu.AddContextMenuItems = function(id, title, items) {
 	});
 }
 
+// Sets the Hovering Entity info
+ContextMenu.SetHoverEntity = function(has_entity, label, spawned_by, spawned_by_time) {
+	const context_menu_hovering_entity = document.getElementById("context_menu_hovering_entity");
+	context_menu_hovering_entity.style.display = has_entity ? "block" : "none";
+
+	if (has_entity) {
+		const context_menu_hovering_entity_label = document.getElementById("context_menu_hovering_entity_label");
+		context_menu_hovering_entity_label.innerText = label;
+
+		if (spawned_by && spawned_by_time) {
+			const context_menu_hovering_entity_info = document.getElementById("context_menu_hovering_entity_info");
+			context_menu_hovering_entity_info.innerText = `${spawned_by}\n${new Date(spawned_by_time).toLocaleString("en-GB")}`;
+		}
+	}
+}
+
 // Sets a Context Menu Item Label
 ContextMenu.SetContextMenuLabel = function(id, text) {
 	const context_menu_item = document.getElementById(`item_${id}`);
@@ -376,6 +396,7 @@ Events.Subscribe("AddContextMenuItems", ContextMenu.AddContextMenuItems);
 Events.Subscribe("RemoveContextMenuItems", ContextMenu.RemoveContextMenuItems);
 Events.Subscribe("SetContextMenuLabel", ContextMenu.SetContextMenuLabel);
 Events.Subscribe("SetContextMenuValue", ContextMenu.SetContextMenuValue);
+Events.Subscribe("SetHoverEntity", ContextMenu.SetHoverEntity);
 
 
 

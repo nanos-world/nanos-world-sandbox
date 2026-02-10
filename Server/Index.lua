@@ -353,4 +353,5 @@ end)
 Package.Export("SpawnPlayer", SpawnPlayer)
 
 Package.Require("SpawnMenu.lua")
+Package.Require("SpawnHistory.lua")
 Package.Require("Sky.lua")

@@ -84,8 +84,8 @@ SpawnMenu.SpawnItem = function(player, tab, id, spawn_location, spawn_rotation)
 		end
 	end
 
-	-- Calls the client to update his history
-	Events.CallRemote("SpawnedItem", player, item)
+	-- Adds to player's history
+	SpawnHistory.AddItemToHistory(player, item)
 end
 
 -- Handles a Destroy Item event called by client

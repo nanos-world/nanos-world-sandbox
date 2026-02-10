@@ -59,6 +59,9 @@ function TV:SetWebsite(player, url)
 
 	-- Send to everyone
 	self:SetValue("Website", embed_url, true)
+
+	-- Overrides the last owner
+	SpawnHistory.UpdateItemOwnership(player, self)
 end
 
 function TV:OnDestroy()

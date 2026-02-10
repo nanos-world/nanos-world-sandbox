@@ -3,9 +3,6 @@ SpawnMenu = SpawnMenu or {
 	-- Whether the menu is opened
 	is_opened = false,
 
-	-- Stores all spawned Items by this client
-	history = setmetatable({}, { __mode = 'k' }),
-
 	-- List of all items
 	items = {},
 }
@@ -111,53 +108,6 @@ Input.Bind("SpawnMenu", InputEvent.Pressed, function()
 	SpawnMenu.Open()
 end)
 
--- Function to delete the last item spawned
-function DeleteItemFromHistory()
-	if (#SpawnMenu.history == 0) then
-		Notifications.Add(NotificationType.Warning, "NO_ITEM_TO_DELETE", "there are no items in your history to destroy!", 3, 0, true)
-		return
-	end
-
-	local data = table.remove(SpawnMenu.history)
-
-	-- If there is a item to destroy, otherwise tries the next from the list, recursively
-	if (data.item and data.item:IsValid()) then
-		Events.CallRemote("DestroyItem", data.item)
-		SoundDeleteItemFromHistory:Play()
-	else
-		DeleteItemFromHistory()
-	end
-end
-
-UndoDelay = 0
-
-function UndoTick(delta_time)
-	-- Don't spam the user with empty history messages
-	if (#SpawnMenu.history == 0) then
-		Client.Unsubscribe("Tick", UndoTick)
-	end
-
-	UndoDelay = UndoDelay - delta_time
-
-	if UndoDelay <= 0 then
-		DeleteItemFromHistory()
-		UndoDelay = 0.1
-	end
-end
-
-Input.Bind("Undo", InputEvent.Pressed, function()
-	-- Destroys the first Item
-	DeleteItemFromHistory()
-
-	-- Waits 1 seconds then keeps destroying
-	UndoDelay = 1
-	Client.Subscribe("Tick", UndoTick)
-end)
-
-Input.Bind("Undo", InputEvent.Released, function()
-	Client.Unsubscribe("Tick", UndoTick)
-end)
-
 -- Sound when hovering an Item in the SpawnMenu
 function PlayHoverSound(pitch)
 	SoundButtonHover:SetPitch(pitch or 1)
@@ -207,10 +157,6 @@ Sandbox.HUD:Subscribe("SpawnItem", function(category, asset_id)
 	SoundSpawnItem:Play()
 end)
 
--- Subscribes for when I spawn an Item, do add it to my history
-Events.SubscribeRemote("SpawnedItem", function(item, weld)
-	table.insert(SpawnMenu.history, { ["item"] = item, ["weld"] = weld })
-end)
 
 -- Adds a new item to the Spawn Menu
 ---@param tab_id string				The tab to display this item - it must be 'props', 'weapons', 'tools', 'vehicles' or 'npcs'

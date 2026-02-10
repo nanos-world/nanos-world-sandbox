@@ -30,8 +30,8 @@ function RopeGun:OnRopeAttach(player, targeting_first_to, targeting_first_relati
 		end
 	)
 
-	-- Calls the client to update his history
-	Events.CallRemote("SpawnedItem", player, cable)
+	-- Updates the client's spawn history
+	SpawnHistory.AddItemToHistory(player, cable)
 end
 
 RopeGun.SubscribeRemote("RopeAttach", RopeGun.OnRopeAttach)

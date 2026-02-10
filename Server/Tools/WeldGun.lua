@@ -43,8 +43,8 @@ function WeldGun:OnWeld(player, targeting_first_to, targeting_second_to, targeti
 	-- Attaches the cable to the end object
 	cable:AttachEndTo(targeting_first_to, nil, nil, constraint_offset)
 
-	-- Calls the client to update his history
-	Events.CallRemote("SpawnedItem", player, cable)
+	-- Updates the client's spawn history
+	SpawnHistory.AddItemToHistory(player, cable)
 
 	Particle(welding_end_world_location, Rotator(), "nanos-world::P_OmnidirectionalBurst")
 	Particle(welding_start_world_location, Rotator(), "nanos-world::P_OmnidirectionalBurst")
