@@ -1,18 +1,18 @@
 -- Toggles the Scoreboard
 Input.Bind("Scoreboard", InputEvent.Released, function()
-	if (not MainHUD or not MainHUD:IsValid()) then return end
-	MainHUD:CallEvent("ToggleScoreboard", false)
+	if (not Sandbox.HUD or not Sandbox.HUD:IsValid()) then return end
+	Sandbox.HUD:CallEvent("ToggleScoreboard", false)
 end)
 
 Input.Bind("Scoreboard", InputEvent.Pressed, function()
-	if (not MainHUD or not MainHUD:IsValid()) then return end
-	MainHUD:CallEvent("ToggleScoreboard", true)
+	if (not Sandbox.HUD or not Sandbox.HUD:IsValid()) then return end
+	Sandbox.HUD:CallEvent("ToggleScoreboard", true)
 end)
 
 -- Updates someone scoreboard data
 function UpdatePlayerScoreboard(player)
-	if (not MainHUD or not MainHUD:IsValid()) then return end
-	MainHUD:CallEvent("UpdatePlayer", player:GetID(), true, player:GetAccountIconURL(), player:GetName(), player:GetPing())
+	if (not Sandbox.HUD or not Sandbox.HUD:IsValid()) then return end
+	Sandbox.HUD:CallEvent("UpdatePlayer", player:GetID(), true, player:GetAccountIconURL(), player:GetName(), player:GetPing())
 end
 
 --  Adds someone to the scoreboard

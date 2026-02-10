@@ -10,6 +10,9 @@ SpawnMenu = {
 	}
 }
 
+-- Exposes SpawnMenu to other packages
+Sandbox.SpawnMenu = SpawnMenu
+
 -- Handles a Spawn Item event called by client
 ---@param player Player				The player who triggered it
 ---@param tab string				The tab of the item

@@ -136,7 +136,7 @@ TV.Subscribe("ValueChange", TV.OnValueChange)
 CURRENTLY_INTERACTING_TV = nil
 
 -- Subscribes from WebUI, to know when the PopUp has been submitted
-MainHUD:Subscribe("OnTVSetWebsite", function(submitted, text)
+Sandbox.HUD:Subscribe("OnTVSetWebsite", function(submitted, text)
 	Input.SetMouseEnabled(false)
 	Input.SetInputEnabled(true)
 
@@ -163,5 +163,5 @@ Events.SubscribeRemote("InteractTV", function(tv_prop)
 	Input.SetInputEnabled(false)
 
 	-- Opens PopUp to enter the TV URL
-	MainHUD:CallEvent("ShowPopUpPrompt", "enter a YouTube URL", "OnTVSetWebsite")
+	Sandbox.HUD:CallEvent("ShowPopUpPrompt", "enter a YouTube URL", "OnTVSetWebsite")
 end)

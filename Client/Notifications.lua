@@ -9,6 +9,9 @@ Notifications = {
 	}
 }
 
+-- Exposes Notifications to other packages
+Sandbox.Notifications = Notifications
+
 -- Adds the Notification on the Screen
 ---@param type NotificationType		Type of the notification to display
 ---@param id string					Unique ID used to store if the notification was already displayed to the player
@@ -33,10 +36,8 @@ function Notifications.Add(type, id, message, duration, delay, force)
 end
 
 Events.SubscribeRemote("AddNotification", Notifications.Add)
-MainHUD:Subscribe("AddNotification", Notifications.Add)
+Sandbox.HUD:Subscribe("AddNotification", Notifications.Add)
 
--- Exports so other packages can use it
-Package.Export("Notifications", Notifications)
 
 -- Setup some default notifications
 Notifications.Add(NotificationType.Info, "PARACHUTE", "you can press " .. Notifications.common_keybindings.jump .. " while falling to open your parachute", 10, 10)

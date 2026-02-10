@@ -1,8 +1,14 @@
+-- Global table to store Sandbox related functions and variables, exposed to other packages
+Sandbox = {}
+
 -- All notifications already sent
 PERSISTENT_DATA_NOTIFICATIONS = PERSISTENT_DATA_NOTIFICATIONS or {}
 
 -- Spawns Sandbox HUD
-MainHUD = MainHUD or WebUI("Sandbox HUD", "file:///UI/index.html")
+Sandbox.HUD = Sandbox.HUD or WebUI("Sandbox HUD", "file:///UI/index.html")
+
+-- Exposes Sandbox to other packages, this will contain all subsystems as well
+Package.Export("Sandbox", Sandbox)
 
 -- Configures Keybindings Inputs
 Input.Register("NoClip", "B", "Toggles the No Clip mode")
@@ -150,12 +156,12 @@ end
 
 -- Function to update the Ammo's UI
 function UpdateAmmo(enable_ui, ammo, ammo_bag)
-	MainHUD:CallEvent("UpdateWeaponAmmo", enable_ui, ammo, ammo_bag)
+	Sandbox.HUD:CallEvent("UpdateWeaponAmmo", enable_ui, ammo, ammo_bag)
 end
 
 -- Function to update the Health's UI
 function UpdateHealth(health)
-	MainHUD:CallEvent("UpdateHealth", health)
+	Sandbox.HUD:CallEvent("UpdateHealth", health)
 end
 
 -- Callback when Weapon Ammo Clip changes
@@ -178,7 +184,7 @@ end)
 
 -- VOIP UI
 Player.Subscribe("VOIP", function(player, is_talking)
-	MainHUD:CallEvent("ToggleVoice", player:GetID(), is_talking, player:GetName(), player:GetAccountIconURL())
+	Sandbox.HUD:CallEvent("ToggleVoice", player:GetID(), is_talking, player:GetName(), player:GetAccountIconURL())
 
 	-- Apply speaking animation
 	local character = player:GetControlledCharacter()
@@ -196,8 +202,8 @@ Player.Subscribe("VOIP", function(player, is_talking)
 end)
 
 Player.Subscribe("Destroy", function(player)
-	MainHUD:CallEvent("ToggleVoice", player:GetID(), false)
-	MainHUD:CallEvent("UpdatePlayer", player:GetID(), false)
+	Sandbox.HUD:CallEvent("ToggleVoice", player:GetID(), false)
+	Sandbox.HUD:CallEvent("UpdatePlayer", player:GetID(), false)
 end)
 
 Events.SubscribeRemote("SpawnSound", function(location, sound_asset, is_2D, volume, pitch)
@@ -228,8 +234,3 @@ end)
 Console.RegisterCommand("reset", function()
 	Events.CallRemote("ClientCommand", "reset")
 end, "resets the server if you are the only player")
-
-
--- Exposes this to other packages
-Package.Export("UpdateLocalCharacter", UpdateLocalCharacter)
-Package.Export("SandboxHUD", MainHUD)

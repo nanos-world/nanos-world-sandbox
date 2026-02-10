@@ -10,6 +10,9 @@ SpawnMenu = SpawnMenu or {
 	items = {},
 }
 
+-- Exposes SpawnMenu to other packages
+Sandbox.SpawnMenu = SpawnMenu
+
 -- Configures the Highlight colors to be used
 Client.SetHighlightColor(Color(0, 1, 0, 1.20), 0, HighlightMode.Always) -- Index 0
 Client.SetOutlineColor(Color(0, 0, 10), 2) -- Index 2
@@ -72,13 +75,13 @@ Package.Subscribe("Load", function()
 	SpawnMenu.AddInheritedClasses("vehicles", VehicleWater)
 
 	-- Calls UI to add all items
-	MainHUD:CallEvent("SetSpawnMenuItems", SpawnMenu.items)
+	Sandbox.HUD:CallEvent("SetSpawnMenuItems", SpawnMenu.items)
 end)
 
 SpawnMenu.Close = function()
 	SpawnMenu.is_opened = false
 
-	MainHUD:CallEvent("ToggleSpawnMenuVisibility", false)
+	Sandbox.HUD:CallEvent("ToggleSpawnMenuVisibility", false)
 	Input.SetMouseEnabled(false)
 	Chat.SetVisibility(true)
 
@@ -88,10 +91,10 @@ end
 SpawnMenu.Open = function()
 	SpawnMenu.is_opened = true
 
-	MainHUD:CallEvent("ToggleSpawnMenuVisibility", true)
+	Sandbox.HUD:CallEvent("ToggleSpawnMenuVisibility", true)
 	Input.SetMouseEnabled(true)
 	Chat.SetVisibility(false)
-	MainHUD:BringToFront()
+	Sandbox.HUD:BringToFront()
 
 	PlayClickSound(1.1)
 end
@@ -166,12 +169,12 @@ function PlayClickSound(pitch)
 	SoundButtonClick:Play()
 end
 
-MainHUD:Subscribe("HoverSound", PlayHoverSound)
-MainHUD:Subscribe("ClickSound", PlayClickSound)
+Sandbox.HUD:Subscribe("HoverSound", PlayHoverSound)
+Sandbox.HUD:Subscribe("ClickSound", PlayClickSound)
 
 
 -- Handle for selecting an Item from the SpawnMenu
-MainHUD:Subscribe("SpawnItem", function(category, asset_id)
+Sandbox.HUD:Subscribe("SpawnItem", function(category, asset_id)
 	-- Gets the world spawn location to spawn the Item
 	local viewport_2D_center = Viewport.GetViewportSize() / 2
 	local viewport_3D = Viewport.DeprojectScreenToWorld(viewport_2D_center)
@@ -243,7 +246,7 @@ SpawnMenu.AddItem = function(tab_id, id, name, image, category_id, dont_add_to_s
 	table.insert(SpawnMenu.items[tab_id][category_id], item)
 
 	if (not dont_add_to_spawn_menu) then
-		MainHUD:CallEvent("AddSpawnMenuItem", tab_id, category_id, item)
+		Sandbox.HUD:CallEvent("AddSpawnMenuItem", tab_id, category_id, item)
 	end
 end
 
@@ -255,7 +258,7 @@ SpawnMenu.AddTab = function(id, label, image)
 	-- Adds the tab
 	SpawnMenu.items[id] = {}
 
-	MainHUD:CallEvent("AddTab", id, label, image)
+	Sandbox.HUD:CallEvent("AddTab", id, label, image)
 end
 
 -- Adds a new category to a tab in the Spawn Menu
@@ -271,11 +274,8 @@ SpawnMenu.AddCategory = function(tab_id, id, label, image)
 	-- Adds the category
 	SpawnMenu.items[tab_id][id] = {}
 
-	MainHUD:CallEvent("AddCategory", tab_id, id, label, image)
+	Sandbox.HUD:CallEvent("AddCategory", tab_id, id, label, image)
 end
-
--- Exposes SpawnMenu to other packages
-Package.Export("SpawnMenu", SpawnMenu)
 
 -- Configures Tabs
 SpawnMenu.AddTab("props",		"props",		"modules/spawn-menu/images/tabs/chair.webp")

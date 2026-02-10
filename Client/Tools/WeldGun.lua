@@ -18,7 +18,7 @@ WeldGun.debug_trace = {
 }
 
 
--- Overrides ToolGunSingleTarget method
+-- Overrides ToolGunDoubleTarget method
 function WeldGun:OnLocalPlayerTarget(targeting_first_to, targeting_first_relative_location, targeting_first_relative_rotation, targeting_second_to, targeting_second_location, targeting_second_rotation)
 	-- Calls remote to weld
 	self:CallRemoteEvent("Weld", targeting_first_to, targeting_second_to, targeting_second_location)

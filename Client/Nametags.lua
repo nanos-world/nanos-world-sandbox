@@ -40,11 +40,11 @@ Timer.SetInterval(function()
 			local player_name = player:GetName()
 			if (NameTags.nametag_active ~= player_name) then
 				NameTags.nametag_active = player_name
-				MainHUD:CallEvent("ShowNameTag", true, player_name)
+				Sandbox.HUD:CallEvent("ShowNameTag", true, player_name)
 			end
 		end
 	elseif (NameTags.nametag_active ~= "") then
 		NameTags.nametag_active = ""
-		MainHUD:CallEvent("ShowNameTag", false)
+		Sandbox.HUD:CallEvent("ShowNameTag", false)
 	end
 end, 100)

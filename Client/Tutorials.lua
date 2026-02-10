@@ -1,6 +1,7 @@
-Tutorials = {
+Tutorials = {}
 
-}
+-- Exposes Tutorials to other packages
+Sandbox.Tutorials = Tutorials
 
 function Tutorials.Parse(keys_data)
 	local keys_parsed = {}
@@ -18,11 +19,17 @@ function Tutorials.Parse(keys_data)
 	return keys_parsed
 end
 
-function Tutorials.Show(name, description, keys_data)
+-- Shows the Tutorials UI
+---@param title string             Tutorials title
+---@param description string       Description
+---@param keys_data table          Table of keys in the format
+---@                               { { key = "KeyName", description = "What it does" }, ... }
+function Tutorials.Show(title, description, keys_data)
 	local keys_parsed = Tutorials.Parse(keys_data)
-	MainHUD:CallEvent("ToggleTutorial", true, name, description, keys_parsed)
+	Sandbox.HUD:CallEvent("ToggleTutorial", true, title, description, keys_parsed)
 end
 
+-- Hides the Tutorials UI
 function Tutorials.Hide()
-	MainHUD:CallEvent("ToggleTutorial", false)
+	Sandbox.HUD:CallEvent("ToggleTutorial", false)
 end

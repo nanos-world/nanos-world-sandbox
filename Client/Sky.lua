@@ -112,15 +112,15 @@ ContextMenu.AddUpdateFunction("sky", UpdateContextMenuValues)
 
 function UpdateTimeOfDayLabel(hours, minutes)
 	local label = string.format("time of day (%02d:%02d)", hours, minutes);
-	MainHUD:CallEvent("SetContextMenuLabel", "time_of_day", label)
+	Sandbox.HUD:CallEvent("SetContextMenuLabel", "time_of_day", label)
 end
 
 function UpdateTimeOfDayValue(hours, minutes)
 	local value = hours * 100 + minutes * 100 / 60
-	MainHUD:CallEvent("SetContextMenuValue", "time_of_day", value)
+	Sandbox.HUD:CallEvent("SetContextMenuValue", "time_of_day", value)
 	UpdateTimeOfDayLabel(hours, minutes)
 end
 
 function UpdateWeatherValue()
-	MainHUD:CallEvent("SetContextMenuValue", "weather", Sky.GetWeather())
+	Sandbox.HUD:CallEvent("SetContextMenuValue", "weather", Sky.GetWeather())
 end

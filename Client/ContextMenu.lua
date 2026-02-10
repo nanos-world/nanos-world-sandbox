@@ -24,7 +24,7 @@ ContextMenu = {
 }
 
 -- Exposes ContextMenu to other packages
-Package.Export("ContextMenu", ContextMenu)
+Sandbox.ContextMenu = ContextMenu
 
 
 -- TODO new section? Separate "selected" in another category?
@@ -56,11 +56,11 @@ ContextMenu.AddItems = function(id, title, items)
 		end
 	end
 
-	MainHUD:CallEvent("AddContextMenuItems", id, title, items_to_add)
+	Sandbox.HUD:CallEvent("AddContextMenuItems", id, title, items_to_add)
 end
 
 ContextMenu.RemoveItems = function(id)
-	MainHUD:CallEvent("RemoveContextMenuItems", id)
+	Sandbox.HUD:CallEvent("RemoveContextMenuItems", id)
 end
 
 ContextMenu.AddUpdateFunction = function(id, func)
@@ -79,7 +79,7 @@ end
 -- Closes context menu
 ContextMenu.Close = function(called_from_context_menu)
 	if (not called_from_context_menu) then
-		MainHUD:CallEvent("ToggleContextMenuVisibility", false)
+		Sandbox.HUD:CallEvent("ToggleContextMenuVisibility", false)
 	end
 
 	Input.SetMouseEnabled(false)
@@ -96,7 +96,7 @@ end
 
 -- Opens context menu
 ContextMenu.Open = function()
-	MainHUD:CallEvent("ToggleContextMenuVisibility", true)
+	Sandbox.HUD:CallEvent("ToggleContextMenuVisibility", true)
 
 	-- Calls all update functions
 	for _, func in pairs(ContextMenu.update_functions) do
@@ -106,7 +106,7 @@ ContextMenu.Open = function()
 	Input.SetMouseEnabled(true)
 	Chat.SetVisibility(false)
 
-	MainHUD:BringToFront()
+	Sandbox.HUD:BringToFront()
 
 	ContextMenu.is_opened = true
 	ContextMenu.is_hovering_context_menu = false
@@ -272,7 +272,7 @@ Input.Bind("ContextMenu", InputEvent.Pressed, function()
 	end
 end)
 
-MainHUD:Subscribe("ContextMenu_SetHovering", function(is_hovering_context_menu)
+Sandbox.HUD:Subscribe("ContextMenu_SetHovering", function(is_hovering_context_menu)
 	ContextMenu.is_hovering_context_menu = is_hovering_context_menu
 
 	-- If was hovering an entity, stops
@@ -281,7 +281,7 @@ MainHUD:Subscribe("ContextMenu_SetHovering", function(is_hovering_context_menu)
 	end
 end)
 
-MainHUD:Subscribe("ContextMenu_Callback", function(id, value)
+Sandbox.HUD:Subscribe("ContextMenu_Callback", function(id, value)
 	-- Skips if Context Menu was already closed
 	if (not ContextMenu.is_opened) then return end
 
@@ -296,11 +296,11 @@ MainHUD:Subscribe("ContextMenu_Callback", function(id, value)
 end)
 
 -- Called from Context Menu when pressing X
-MainHUD:Subscribe("CloseContextMenu", function()
+Sandbox.HUD:Subscribe("CloseContextMenu", function()
 	ContextMenu.Close(true)
 end)
 
-MainHUD:Subscribe("Ready", function()
+Sandbox.HUD:Subscribe("Ready", function()
 	-- Common
 	ContextMenu.AddItems("common", "common", {
 		{ id = "respawn_button", type = "button", label = "respawn",
