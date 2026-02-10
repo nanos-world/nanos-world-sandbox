@@ -182,15 +182,19 @@ function TryPickUpObject()
 	local end_location = viewport_3D.Position + viewport_3D.Direction * trace_max_distance
 
 	-- Determine at which object we will be tracing for (WorldStatic - StaticMeshes - PhysicsBody - Props)
-	local collision_trace = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle
+	local collision_trace = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle | CollisionChannel.Mesh
 
 	-- Do the Trace
 	local trace_result = Trace.LineSingle(start_location, end_location, collision_trace, TraceMode.ReturnEntity | TraceMode.TraceOnlyVisibility)
 
 	-- If hit something and hit an Entity
 	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
-		-- Cannot grab Characters (yet?), cannot grab attached entities or entities which are being grabbed
-		if (trace_result.Entity:IsA(Character) or trace_result.Entity:GetAttachedTo() or trace_result.Entity:GetValue("IsBeingGrabbed")) then
+		-- Cannot grab Player's Characters, cannot grab attached entities or entities which are being grabbed
+		if (
+			((trace_result.Entity:IsA(Character) or trace_result.Entity:IsA(CharacterSimple)) and trace_result.Entity:GetPlayer() ~= nil) or
+			trace_result.Entity:GetAttachedTo() or
+			trace_result.Entity:GetValue("IsBeingGrabbed")
+		) then
 			return end_location
 		end
 

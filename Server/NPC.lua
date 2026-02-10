@@ -30,7 +30,8 @@ function NPCBase:SetAutoWalk(player, auto_walk)
 
 				-- Character specific
 				if (bound_character:IsA(Character)) then
-					if (bound_character:IsInRagdollMode()) then return end
+					-- Does not move if in ragdoll or not on ground
+					if (bound_character:IsInRagdollMode() or bound_character:GetStanceMode() == StanceMode.None) then return end
 
 					-- Make him walk
 					bound_character:SetGaitMode(GaitMode.Walking)

@@ -21,15 +21,27 @@ function PhysicsGun:OnPickUpObject(player, object, is_grabbing, picking_object_r
 	-- Make sure that object is a valid entity
 	if (not NanosUtils.IsEntityValid(object)) then return end
 
+	local is_pawn = object:IsA(Character) or object:IsA(CharacterSimple)
+
 	if (is_grabbing) then
-		-- Cannot grab Characters (yet?), cannot grab attached entities or entities which are being grabbed
-		if (object:IsA(Character) or object:GetAttachedTo() or object:GetValue("IsBeingGrabbed")) then
+		-- Cannot grab Player's Characters, cannot grab attached entities or entities which are being grabbed
+		if (
+			(is_pawn and object:GetPlayer() ~= nil) or
+			object:GetAttachedTo() or
+			object:GetValue("IsBeingGrabbed")
+		) then
 			return
 		end
 
 		-- Only updates the Network Authority if this entity is network distributed
 		if (object:IsNetworkDistributed()) then
 			object:SetNetworkAuthority(player)
+		end
+
+		-- Enables flying mode for pawn
+		if (is_pawn) then
+			object:StopMovement()
+			object:SetFlyingMode(true)
 		end
 
 		-- Forces it not being network authority distributed while someone is grabbing it
@@ -49,6 +61,11 @@ function PhysicsGun:OnPickUpObject(player, object, is_grabbing, picking_object_r
 		object:Subscribe("Destroy", PhysicsGun.OnObjectDestroyed)
 		player:Subscribe("Destroy", PhysicsGun.OnPlayerDestroyed)
 	else
+		-- Restores flying mode
+		if (is_pawn) then
+			object:SetFlyingMode(false)
+		end
+
 		-- Restores auto network authority distribution of this object
 		object:SetNetworkAuthorityAutoDistributed(true)
 
@@ -80,7 +97,9 @@ function PhysicsGun:OnPickUpObject(player, object, is_grabbing, picking_object_r
 	end
 
 	-- Disables/Enables the character to Aim, so he can use the Mouse Wheel properly
-	player:GetControlledCharacter():SetCanAim(not is_grabbing)
+	local controlled_character = player:GetControlledCharacter()
+	controlled_character:SetCanAim(not is_grabbing)
+	controlled_character:SetCanGrabProps(not is_grabbing)
 
 	self:BroadcastRemoteEvent("PickUpObject", object, is_grabbing)
 end
@@ -115,7 +134,10 @@ function PhysicsGun:OnDestroyed()
 
 	local player_grabbing = self.player_grabbing
 	if (player_grabbing and player_grabbing:IsValid()) then
-		player_grabbing:GetControlledCharacter():SetCanAim(true)
+		local controlled_character = player_grabbing:GetControlledCharacter()
+		controlled_character:SetCanAim(true)
+		controlled_character:SetCanGrabProps(true)
+
 		player_grabbing:Unsubscribe("Destroy", PhysicsGun.OnPlayerDestroyed)
 
 		player_grabbing:SetValue("PhysicsGunUsing", nil)
@@ -130,9 +152,14 @@ function PhysicsGun.OnObjectDestroyed(object)
 	local player_grabbing = physics_gun.player_grabbing
 
 	if (player_grabbing and player_grabbing:IsValid()) then
-		player_grabbing:GetControlledCharacter():SetCanAim(true)
+		local controlled_character = player_grabbing:GetControlledCharacter()
+		controlled_character:SetCanAim(true)
+		controlled_character:SetCanGrabProps(true)
+
 		player_grabbing:Unsubscribe("Destroy", PhysicsGun.OnPlayerDestroyed)
 	end
+
+	physics_gun.beam_particle:SetValue("BeamEndObject", nil, true)
 
 	physics_gun.object_grabbing = nil
 	physics_gun.player_grabbing = nil
@@ -153,6 +180,8 @@ function PhysicsGun.OnPlayerDestroyed(player)
 		object_grabbing:SetValue("PhysicsGunUsing", nil)
 		object_grabbing:SetValue("IsBeingGrabbed", false, true)
 	end
+
+	physics_gun.beam_particle:SetValue("BeamEndObject", nil, true)
 
 	physics_gun.object_grabbing = nil
 	physics_gun.player_grabbing = nil
