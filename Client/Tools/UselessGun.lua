@@ -1,4 +1,4 @@
-UselessGun = ToolGun.Inherit("UselessGun")
+UselessGun = ToolGunSingleTarget.Inherit("UselessGun")
 
 -- Tool Info
 UselessGun.name = "Useless Gun"
@@ -17,18 +17,10 @@ UselessGun.debug_trace = {
 }
 
 
--- Overrides ToolGun method
-function UselessGun:OnLocalPlayerFire(shooter)
-	-- Makes a trace 10000 units ahead
-	local trace_result = TraceFor(10000, UselessGun.debug_trace.collision_channel)
-
+-- Overrides ToolGunSingleTarget method
+function UselessGun:OnLocalPlayerTarget(location, relative_location, relative_rotation, normal, entity)
 	-- If hit an object, then get a random Useless and call server to update the Useless for everyone
-	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
-		self:CallRemoteEvent("UselessObject", trace_result.Entity, trace_result.Location, trace_result.Normal)
-	else
-		-- If didn't hit anything, plays a negative sound
-		SoundInvalidAction:Play()
-	end
+	self:CallRemoteEvent("UselessObject", entity, location, normal)
 end
 
 

@@ -20,7 +20,7 @@ BalloonGun.tips = {
 }
 
 -- Balloon Configuration
-BalloonGun.asset = Balloon.assets[math.random(#Balloon.assets)].id
+BalloonGun.asset = Balloon.assets[math.random(9)].id -- Only the 9 first balloons
 BalloonGun.force = 100000
 BalloonGun.max_length = 100
 BalloonGun.length_randomness = 0.15

@@ -43,8 +43,7 @@ function WireGun:OnWire(player, wire_start, wire_end, show_wire, wire_color)
 				if (not wire_start or not wire_start:IsValid() or not wire_end or not wire_end:IsValid()) then return false end
 				if (not wire_start:UnlinkEntity(wire_end)) then return false end
 
-				Events.BroadcastRemote("DestroyedItem", wire_end:GetLocation())
-				return true
+				return true, wire_end:GetLocation(), "Wire"
 			end)
 		end
 
@@ -53,8 +52,7 @@ function WireGun:OnWire(player, wire_start, wire_end, show_wire, wire_color)
 				if (not wire_end or not wire_end:IsValid() or not wire_start or not wire_start:IsValid()) then return false end
 				if (not wire_end:UnlinkEntity(wire_start)) then return false end
 
-				Events.BroadcastRemote("DestroyedItem", wire_end:GetLocation())
-				return true
+				return true, wire_end:GetLocation(), "Wire"
 			end)
 		end
 	end

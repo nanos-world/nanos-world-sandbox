@@ -1,4 +1,4 @@
-UselessGun = ToolGun.Inherit("UselessGun")
+UselessGun = ToolGunSingleTarget.Inherit("UselessGun")
 
 UselessGun.useless_websites = {
 	"https://longdogechallenge.com/",

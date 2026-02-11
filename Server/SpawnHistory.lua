@@ -40,7 +40,6 @@ function SpawnHistory.DeleteItemFromHistory(player, index)
 
 	if (not index) then index = #player_data end
 
-	-- todo function
 	local history_item = player_data[index]
 
 	if (not history_item) then
@@ -53,8 +52,14 @@ function SpawnHistory.DeleteItemFromHistory(player, index)
 		-- Removes the function from history
 		table.remove(player_data, index)
 
-		-- If it returns false, it means it didn't succeed, so we try the next one in the list, recursively
-		if (not history_item()) then
+		local destroyed, location, what = history_item()
+
+		if (destroyed) then
+			if (location) then
+				SpawnHistory.OnDestroyedItem(player, location, what)
+			end
+		else
+			-- If it returns false, it means it didn't succeed, so we try the next one in the list, recursively
 			return SpawnHistory.DeleteItemFromHistory(player, index - 1)
 		end
 
@@ -81,12 +86,20 @@ function SpawnHistory.DeleteItemFromHistory(player, index)
 	end
 
 	-- Tell clients to spawns some sounds and particles
-	Events.BroadcastRemote("DestroyedItem", history_item:GetLocation())
+	SpawnHistory.OnDestroyedItem(player, history_item:GetLocation(), history_item:GetClass():GetName() .. "#" .. history_item:GetID())
 
 	-- Destroy the item
 	history_item:Destroy()
 
 	return true
+end
+
+function SpawnHistory.OnDestroyedItem(player, location, what)
+	Events.CallRemote("AddNotification", player, NotificationType.Info, "UNDO", "undo spawned " .. (what or "item"), 2, 0, true)
+
+	if (location) then
+		Events.BroadcastRemote("DestroyedItem", location)
+	end
 end
 
 Events.SubscribeRemote("DeleteItemFromHistory", SpawnHistory.DeleteItemFromHistory)
