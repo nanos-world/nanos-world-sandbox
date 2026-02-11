@@ -38,7 +38,7 @@ function WeldGun:OnWeld(player, targeting_first_to, targeting_second_to, targeti
 	end
 
 	-- Gets the relative location from the end object to the start location, this will be the physics constraint offset, to keep objects "in place"
-	local constraint_offset = targeting_first_to:GetRotation():RotateVector(welding_start_world_location - welding_end_world_location)
+	local constraint_offset = targeting_first_to:GetRotation():RotateVector(welding_start_world_location - welding_end_world_location) / targeting_first_to:GetScale()
 
 	-- Attaches the cable to the end object
 	cable:AttachEndTo(targeting_first_to, nil, nil, constraint_offset)

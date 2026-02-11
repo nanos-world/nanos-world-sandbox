@@ -24,6 +24,9 @@ function BallSocketGun:OnBallSocketAttach(player, targeting_first_to, targeting_
 			-- Configures the Cable Physics Limits to be rigid
 			cable:SetLinearLimits(ConstraintMotion.Locked, ConstraintMotion.Locked, ConstraintMotion.Locked)
 
+			-- Sets cable rendering settings (width = 5, sides = 4)
+			cable:SetRenderingSettings(5, 4, 1)
+
 			cable:SetCableSettings(distance * 0.75, 1, 1)
 		end
 	)

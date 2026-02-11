@@ -24,6 +24,9 @@ function ElasticGun:OnElasticAttach(player, targeting_first_to, targeting_first_
 			-- Configures the Cable Linear Physics Limit
 			cable:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, distance, restitution, true, stiffness, damping)
 
+			-- Sets cable rendering settings (width = 5, sides = 4)
+			cable:SetRenderingSettings(5, 4, 1)
+
 			cable:SetCableSettings(distance * 0.75, 10, 1)
 		end
 	)

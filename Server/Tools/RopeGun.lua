@@ -26,6 +26,9 @@ function RopeGun:OnRopeAttach(player, targeting_first_to, targeting_first_relati
 			-- Configures the Cable Linear Physics Limit
 			cable:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, distance, 0.25, true, 1000, 10)
 
+			-- Sets cable rendering settings (width = 5, sides = 4)
+			cable:SetRenderingSettings(5, 4, 1)
+
 			cable:SetCableSettings(distance * 0.75, 10, 1)
 		end
 	)

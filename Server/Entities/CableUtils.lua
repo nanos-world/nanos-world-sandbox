@@ -20,9 +20,6 @@ function CableUtils.SpawnCableAttached(targeting_first_to, targeting_first_relat
 	-- Spawns the cable
 	local cable = Cable(attaching_start_world_location)
 
-	-- Sets cable rendering settings (width = 5, sides = 4)
-	cable:SetRenderingSettings(5, 4, 1)
-
 	-- Calls the custom config, so it can apply Limits before attachments are made, for optimization
 	if (custom_config_func) then
 		custom_config_func(cable, distance)
@@ -36,7 +33,7 @@ function CableUtils.SpawnCableAttached(targeting_first_to, targeting_first_relat
 	local constraint_offset = Vector()
 	if (keep_offset) then
 		-- Gets the relative location from the end object to the start location, this will be the physics constraint offset, to keep objects "in place"
-		constraint_offset = targeting_first_to:GetRotation():RotateVector(attaching_start_world_location - attaching_end_world_location)
+		constraint_offset = targeting_first_to:GetRotation():RotateVector(attaching_start_world_location - attaching_end_world_location) / targeting_first_to:GetScale()
 	end
 
 	-- Attaches the cable to the end object
