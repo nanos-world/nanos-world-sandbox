@@ -264,13 +264,6 @@ SpawnMenu.AddCategory("tools",		"spawners",			"Spawners",			"modules/spawn-menu/
 
 SpawnMenu.AddCategory("npcs",		"npcs",				"NPCs",				"modules/spawn-menu/images/tabs/robot.webp")
 
--- Defines some Spawn Menu Hints
-local spawn_menu_keybinding = Input.GetMappedKeys("SpawnMenu")[1] or "not set"
-local undo_keybinding = Input.GetMappedKeys("Undo")[1] or "not set"
-
-Notifications.Add(NotificationType.Info, "SPAWN_MENU", "you can press " .. spawn_menu_keybinding .. " to open the Spawn Menu", 10, 30)
-Notifications.Add(NotificationType.Info, "SPAWN_MENU_DESTROY_ITEM", "you can press " .. undo_keybinding .. " to delete your last spawned item", 10, 90)
-
 
 function RequireAllLuaFilesInFolder(folder)
 	local files = Package.GetFiles(folder, ".lua")

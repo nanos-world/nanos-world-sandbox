@@ -6,6 +6,8 @@ Notifications = {
 		camera_switch = Input.GetMappedKeys("CameraSwitch")[1] or "(not set)",
 		camera_side = Input.GetMappedKeys("CameraSide")[1] or "(not set)",
 		context_menu = Input.GetMappedKeys("ContextMenu")[1] or "(not set)",
+		spawn_menu = Input.GetMappedKeys("SpawnMenu")[1] or "(not set)",
+		undo = Input.GetMappedKeys("Undo")[1] or "(not set)"
 	}
 }
 
@@ -40,7 +42,9 @@ Sandbox.HUD:Subscribe("AddNotification", Notifications.Add)
 
 
 -- Setup some default notifications
-Notifications.Add(NotificationType.Info, "PARACHUTE", "you can press " .. Notifications.common_keybindings.jump .. " while falling to open your parachute", 10, 10)
-Notifications.Add(NotificationType.Info, "VIEW_MODE", "you can press " .. Notifications.common_keybindings.camera_switch .. " to change the View Mode", 10, 50)
-Notifications.Add(NotificationType.Info, "CAMERA_SIDE", "you can press " .. Notifications.common_keybindings.camera_side .. " to change the Camera Side", 10, 70)
-Notifications.Add(NotificationType.Info, "CONTEXT_MENU", "you can press " .. Notifications.common_keybindings.context_menu .. " to open the Context Menu", 10, 100)
+Notifications.Add(NotificationType.Info, "SPAWN_MENU", "you can press " .. Notifications.common_keybindings.spawn_menu .. " to open the Spawn Menu", 10, 30)
+Notifications.Add(NotificationType.Info, "SPAWN_MENU_DESTROY_ITEM", "you can press " .. Notifications.common_keybindings.undo .. " to delete your last spawned item", 10, 90)
+Notifications.Add(NotificationType.Info, "CONTEXT_MENU", "you can press " .. Notifications.common_keybindings.context_menu .. " to open the Context Menu", 10, 150)
+Notifications.Add(NotificationType.Info, "VIEW_MODE", "you can press " .. Notifications.common_keybindings.camera_switch .. " to change the View Mode", 10, 210)
+Notifications.Add(NotificationType.Info, "CAMERA_SIDE", "you can press " .. Notifications.common_keybindings.camera_side .. " to change the Camera Side", 10, 270)
+Notifications.Add(NotificationType.Info, "PARACHUTE", "you can press " .. Notifications.common_keybindings.jump .. " while falling to open your parachute", 10, 330)
