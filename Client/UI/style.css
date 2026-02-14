@@ -5,19 +5,22 @@
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-    width: 6px;
+	width: 6px;
 }
 
 ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background-color: #494949;
+	border-radius: 10px;
+	background-color: #494949;
 }
 
 body {
-	font-family: 'Gothic A1', sans-serif;
 	font-size: 14px;
 	color: #ffffffe6;
 	user-select: none;
-    scrollbar-gutter: stable both-edges;
+	scrollbar-gutter: stable both-edges;
 	overflow: hidden;
+}
+
+* {
+	font-family: "Outfit", sans-serif;
 }

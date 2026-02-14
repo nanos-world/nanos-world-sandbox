@@ -1,3 +1,5 @@
+ContextMenu.selected_color = Color.AZURE
+ContextMenu.picked_color = Color.AQUAMARINE
 
 -- Adds custom context menu items for selected entities through the Context Menu
 function ContextMenu.AddSelectedCustomItems(entity)
@@ -7,7 +9,7 @@ function ContextMenu.AddSelectedCustomItems(entity)
 	-- If the class has custom context menu items when selected through context menu, adds them
 	local entity_context_menu_items = class.selected_context_menu_items
 	if (entity_context_menu_items) then
-		ContextMenu.AddItems("selected_item", category_name, entity_context_menu_items)
+		ContextMenu.AddItems("selected_item", category_name, entity_context_menu_items, ContextMenu.selected_color)
 	end
 
 	local items = {}
@@ -86,7 +88,7 @@ function ContextMenu.AddSelectedCustomItems(entity)
 	end
 
 	-- Inserts all items
-	ContextMenu.AddItems("selected_item", category_name, items)
+	ContextMenu.AddItems("selected_item", category_name, items, ContextMenu.selected_color)
 end
 
 -- Adds custom context menu items for picked entities through the Context Menu
@@ -97,7 +99,7 @@ function ContextMenu.AddPickedCustomItems(entity)
 	-- If the class has custom context menu items when picking up through context menu, adds them
 	local context_menu_items = class.picked_context_menu_items
 	if (context_menu_items) then
-		ContextMenu.AddItems("picked_item", category_name, context_menu_items)
+		ContextMenu.AddItems("picked_item", category_name, context_menu_items, ContextMenu.picked_color)
 	end
 
 	-- Adds Weapon Pattern Customization to Context Menu
@@ -115,6 +117,6 @@ function ContextMenu.AddPickedCustomItems(entity)
 					Events.CallRemote("ApplyWeaponPattern", entity, value)
 				end
 			},
-		})
+		}, ContextMenu.picked_color)
 	end
 end

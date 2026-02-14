@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	// ContextMenu.AddContextMenuItems("id", "title", [
 	// 	{ id: "ae1", type: "checkbox", label: "my label" },
 	// 	{ id: "ae2", type: "button", label: "press me" },
-	// 	{ id: "ae3", type: "range", label: "slide me", min: 0, max: 1440, value: 720, auto_update_label: true },
+	// 	{ id: "ae3", type: "range", label: "slide me", min: 0, max: 1440, value: 720, step: 1 },
 	// 	{ id: "ae4", type: "select_image", label: "Balloon", value: "opt1", options: [
 	// 		{ id: "opt1", name: "option 1", image: "./images/nanosworld_empty.webp" },
 	// 		{ id: "opt2", name: "option 2", image: "./images/nanosworld_empty.webp" },
@@ -90,7 +90,7 @@ ContextMenu.RemoveContextMenuItems = function(id) {
 		element.remove();
 }
 
-ContextMenu.AddContextMenuItems = function(id, title, items) {
+ContextMenu.AddContextMenuItems = function(id, title, items, color) {
 	const context_menu_items = document.getElementById("context_menu_items");
 
 	// Tries getting existing
@@ -108,6 +108,10 @@ ContextMenu.AddContextMenuItems = function(id, title, items) {
 		context_menu_category.append(divider);
 
 		context_menu_items.prepend(context_menu_category);
+	}
+
+	if (color) {
+		context_menu_category.style.border = `2px solid ${color}`;
 	}
 
 	items.forEach(item => {
@@ -131,6 +135,12 @@ ContextMenu.AddContextMenuItems = function(id, title, items) {
 			}
 			case "checkbox":
 			{
+				const switch_input = document.createElement("label");
+				switch_input.classList.add("switch");
+
+				const switch_slider = document.createElement("span");
+				switch_slider.classList.add("slider");
+
 				const input = document.createElement("input");
 				input.type = "checkbox";
 				input.checked = item.value;
@@ -139,77 +149,136 @@ ContextMenu.AddContextMenuItems = function(id, title, items) {
 					Events.Call("ContextMenu_Callback", item.id, e.target.checked);
 				});
 
+				switch_input.append(input);
+				switch_input.append(switch_slider);
+
 				const label = document.createElement("label");
 				label.innerText = item.label;
 
 				context_menu_item.classList.add("context_menu_item_checkbox");
 				context_menu_item.append(label);
-				context_menu_item.append(input);
+				context_menu_item.append(switch_input);
 				break;
 			}
 			case "range":
 			{
+				let min = item.min || 0;
+				let max = item.max || 1;
+				let step = item.step || 1;
+				let value = item.value || 0;
+
 				const label = document.createElement("label");
-				label.innerText = `${item.label}\n(${item.value})`;
+				label.innerText = item.label;
 
-				const input = document.createElement("input");
-				input.type = "range";
-				input.min = item.min;
-				input.max = item.max;
-				input.value = item.value;
-				input.addEventListener("input", function(e) {
+				const input_container = document.createElement("div");
+				input_container.classList.add("context_menu_item_container");
+
+				const range_input = document.createElement("input");
+				range_input.type = "range";
+				range_input.min = min;
+				range_input.max = max;
+				range_input.step = step;
+				range_input.value = value;
+
+				const text_input = document.createElement("input");
+				text_input.type = "number";
+				text_input.value = value;
+				text_input.min = min;
+				text_input.max = max;
+				text_input.step = step;
+				text_input.onwheel = function(e) {}; // So Mouse Wheel can be detected by the input
+
+				range_input.addEventListener("input", function(e) {
 					DebounceHandler.Run(function() {
-						if (item.auto_update_label) {
-							label.innerText = `${item.label}\n(${e.target.value})`;
-						}
+						// Updates text
+						text_input.value = e.target.value;
 
-						Events.Call("ContextMenu_Callback", item.id, parseInt(e.target.value));
+						// Calls callback
+						Events.Call("ContextMenu_Callback", item.id, parseFloat(e.target.value));
 					}, 100);
 				});
 
+				text_input.addEventListener("change", function(e) {
+					if (e.target.value < min) e.target.value = min;
+					if (e.target.value > max) e.target.value = max;
+
+					// Updates range
+					range_input.value = e.target.value;
+
+					// Calls callback
+					Events.Call("ContextMenu_Callback", item.id, parseFloat(e.target.value));
+				});
+
+				input_container.append(text_input);
+				input_container.append(range_input);
+
 				context_menu_item.classList.add("context_menu_item_range");
 				context_menu_item.append(label);
-				context_menu_item.append(input);
+				context_menu_item.append(input_container);
 				break;
 			}
 			case "select_image":
 			{
 				const selected = item.options.find(element => element.id == item.value) || { id: "", name: "None", image: "modules/spawn-menu/images/nanosworld_empty.webp" };
 
-				const img = document.createElement("img");
-				img.src = selected.image;
-				img.addEventListener("click", function(e) {
+				const input_container = document.createElement("div");
+				input_container.classList.add("context_menu_item_select_image_container");
+
+				input_container.addEventListener("click", function(e) {
 					Events.Call("ClickSound");
 					ContextMenu.ToggleContextMenuSelectorVisibility(true, item);
 				});
 
+				const img = document.createElement("img");
+				img.src = selected.image;
+
+				const img_label = document.createElement("span");
+				img_label.innerText = selected.name;
+
 				const label = document.createElement("label");
-				label.innerText = `${item.label}\n(${selected.name})`;
+				label.innerText = item.label;
+
+				input_container.append(img);
+				input_container.append(img_label);
 
 				context_menu_item.classList.add("context_menu_item_select_image");
 				context_menu_item.append(label);
-				context_menu_item.append(img);
+				context_menu_item.append(input_container);
 				break;
 			}
 			case "color":
 			{
-				const input = document.createElement("input");
-				input.type = "color";
-				input.value = item.value;
+				const input_container = document.createElement("div");
+				input_container.classList.add("context_menu_item_select_image_container");
 
-				input.addEventListener("input", function(e) {
+				const color_input = document.createElement("input");
+				color_input.type = "color";
+				color_input.value = item.value;
+
+				const color_label = document.createElement("span");
+				color_label.innerText = item.value.toUpperCase();
+
+				color_input.addEventListener("input", function(e) {
 					DebounceHandler.Run(function() {
 						Events.Call("ClickSound");
 						Events.Call("ContextMenu_Callback", item.id, e.target.value);
+						color_label.innerText = e.target.value.toUpperCase();
 					}, 100);
+				});
+
+				input_container.addEventListener("click", function(e) {
+					color_input.click();
 				});
 
 				const label = document.createElement("label");
 				label.innerText = item.label;
 
+				input_container.append(color_input);
+				input_container.append(color_label);
+
 				context_menu_item.classList.add("context_menu_item_color");
 				context_menu_item.append(label);
-				context_menu_item.append(input);
+				context_menu_item.append(input_container);
 				break;
 			}
 			case "select":
@@ -281,9 +350,11 @@ ContextMenu.SetHoverEntity = function(has_entity, label, spawned_by, spawned_by_
 		const context_menu_hovering_entity_label = document.getElementById("context_menu_hovering_entity_label");
 		context_menu_hovering_entity_label.innerText = label;
 
+		const context_menu_hovering_entity_info = document.getElementById("context_menu_hovering_entity_info");
 		if (spawned_by && spawned_by_time) {
-			const context_menu_hovering_entity_info = document.getElementById("context_menu_hovering_entity_info");
 			context_menu_hovering_entity_info.innerText = `${spawned_by}\n${new Date(spawned_by_time).toLocaleString("en-GB")}`;
+		} else {
+			context_menu_hovering_entity_info.innerText = "";
 		}
 	}
 }
@@ -299,11 +370,9 @@ ContextMenu.SetContextMenuLabel = function(id, text) {
 ContextMenu.SetContextMenuValue = function(id, value) {
 	const context_menu_item = document.getElementById(`item_${id}`);
 
-	const input = context_menu_item.getElementsByTagName("input")[0];
-	if (input) {
+	context_menu_item.querySelectorAll("input").forEach(input => {
 		input.value = value;
-		return;
-	}
+	});
 
 	const select = context_menu_item.getElementsByTagName("select")[0];
 	if (select) {
@@ -348,9 +417,11 @@ ContextMenu.ContextMenuSelectorItemClick = function(e) {
 
 	const img = context_menu_item.getElementsByTagName("img")[0];
 	const label = context_menu_item.getElementsByTagName("label")[0];
+	const span_label = context_menu_item.getElementsByTagName("span")[0];
 
 	img.src = option_data.image;
-	label.innerText = `${context_menu_selector.dataset.label}\n(${option_data.name})`;
+	label.innerText = context_menu_selector.dataset.label;
+	span_label.innerText = option_data.name;
 
 	Events.Call("ClickSound");
 	ContextMenu.ToggleContextMenuSelectorVisibility(false);

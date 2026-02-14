@@ -59,14 +59,13 @@ Balloon.selected_context_menu_items = {
 		id = "balloon_force",
 		type = "range",
 		label = "force",
-		min = -100000,
-		max = 200000,
-		auto_update_label = true,
+		min = -100,
+		max = 200,
 		callback = function(value)
-			ContextMenu.selected_entity:CallRemoteEvent("SetCustomForce", value)
+			ContextMenu.selected_entity:CallRemoteEvent("SetCustomForce", value * 1000)
 		end,
 		value = function()
-			return math.ceil(ContextMenu.selected_entity:GetForce().Z)
+			return math.ceil(ContextMenu.selected_entity:GetForce().Z / 1000)
 		end,
 	}
 }

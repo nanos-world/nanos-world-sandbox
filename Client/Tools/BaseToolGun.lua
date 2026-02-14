@@ -160,7 +160,7 @@ function ToolGun.OnDebugTick(delta_time)
 			preview_mesh_rotation = preview_mesh_rotation + trace_normal_rotation
 		end
 
-		local preview_mesh_location = trace_location - preview_mesh_rotation:UnrotateVector(ToolGun.draw_debug_toolgun.debug_trace.preview_mesh_offset)
+		local preview_mesh_location = trace_location - preview_mesh_rotation:UnrotateVector(ToolGun.draw_debug_toolgun.debug_trace.preview_mesh_offset * ToolGun.draw_debug_toolgun.debug_trace.preview_mesh_scale)
 
 		ToolGun.ToggleDrawDebugPreviewMesh(true, preview_mesh_location, preview_mesh_rotation)
 

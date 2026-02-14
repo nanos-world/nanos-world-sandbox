@@ -2,6 +2,7 @@ Thruster = Prop.Inherit("Thruster")
 
 -- Defines custom assets used in Context Menu
 Thruster.assets_list = {
+	{ id = "",												name = "None" },
 	{ id = "nanos-world::P_RocketExhaust_Realistic",		name = "Realistic" },
 	{ id = "nanos-world::P_RocketExhaust_Afterburn",		name = "Afterburn" },
 	{ id = "nanos-world::P_RocketExhaust_Afterburn_Jet",	name = "Afterburn Jet" },
@@ -23,6 +24,7 @@ Thruster.assets_list = {
 }
 
 Thruster.sounds_list = {
+	{ id = "",												name = "None" },
 	{ id = "nanos-world::A_Thruster_01",					name = "Thruster 01" },
 	{ id = "nanos-world::A_Thruster_02",					name = "Thruster 02" },
 	{ id = "nanos-world::A_Thruster_03",					name = "Thruster 03" },
@@ -62,13 +64,12 @@ Thruster.selected_context_menu_items = {
 		type = "range",
 		label = "force",
 		min = 0,
-		max = 1000000,
-		auto_update_label = true,
+		max = 1000,
 		callback = function(value)
-			ContextMenu.selected_entity:CallRemoteEvent("SetCustomForce", value)
+			ContextMenu.selected_entity:CallRemoteEvent("SetCustomForce", value * 1000)
 		end,
 		value = function()
-			return ContextMenu.selected_entity:GetValue("Force")
+			return ContextMenu.selected_entity:GetValue("Force") / 1000
 		end,
 	},
 	{
@@ -91,22 +92,35 @@ function Thruster:OnSpawn()
 end
 
 function Thruster:OnActivated()
-	self.particle:Activate(true)
-	self.sound:Play()
+	if (self.particle) then
+		self.particle:Activate(true)
+	end
+
+	if (self.sound) then
+		self.sound:Play()
+	end
 end
 
 function Thruster:OnDeactivated()
-	self.particle:Deactivate()
-	self.sound:Stop()
+	if (self.particle) then
+		self.particle:Deactivate()
+	end
+
+	if (self.sound) then
+		self.sound:Stop()
+	end
 end
 
 function Thruster:UpdateSoundAsset()
 	if (self.sound) then
 		self.sound:Destroy()
+		self.sound = nil
 	end
 
 	-- Spawns the Sound and attaches it to the thruster
 	local sound_asset = self:GetValue("Sound")
+	if (sound_asset == "") then return end
+
 	local is_active = self:GetValue("Active")
 	self.sound = Sound(self:GetLocation(), sound_asset, false, false, SoundType.SFX, 0.25, math.random(10) / 100 + 1, nil, nil, AttenuationFunction.NaturalSound, false, nil, is_active)
 	self.sound:AttachTo(self, AttachmentRule.SnapToTarget, "", 0)
@@ -115,10 +129,13 @@ end
 function Thruster:UpdateParticleAsset()
 	if (self.particle) then
 		self.particle:Destroy()
+		self.particle = nil
 	end
 
 	-- Spawns a Particle and attaches it to the thruster
 	local particle_asset = self:GetValue("Particle")
+	if (particle_asset == "") then return end
+
 	local is_active = self:GetValue("Active")
 	self.particle = Particle(self:GetLocation(), Rotator(), particle_asset, false, is_active)
 	self.particle:SetScale(Vector(0.45, 0.45, 0.45))

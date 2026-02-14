@@ -5,17 +5,16 @@
 	height: 55px;
 	background-color: #0000003d;
 	border-radius: 5px;
-	line-height: 60px;
 	padding: 0px 10px;
-	min-width: 90px;
+	min-width: 80px;
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	font-size: 36px;
+	font-weight: bold;
+	font-variant-numeric: tabular-nums;
 }
 
 #health_container img {
 	height: 25px;
-	margin-right: 5px;
-}
-
-#health_current {
-	font-size: 30px;
-	font-weight: bold;
 }

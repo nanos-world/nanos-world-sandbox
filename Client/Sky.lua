@@ -40,7 +40,7 @@ end)
 
 -- Context Menu callbacks
 function SandboxSky.SetTimeOfDay(time_of_day)
-	Events.CallRemote("ChangeTime", time_of_day)
+	Events.CallRemote("ChangeTime", time_of_day * 100)
 end
 
 function SandboxSky.FreezeTime(enabled)
@@ -60,11 +60,11 @@ ContextMenu.AddItems("sky", "sky", {
 	{
 		id = "time_of_day",
 		type = "range",
-		label = "time of day (00:00)",
+		label = "time of day",
 		min = 0,
-		max = 2400,
-		value = 960,
-		auto_update_label = false,
+		max = 24,
+		step = 0.1,
+		value = 9,
 		callback = SandboxSky.SetTimeOfDay,
 	},
 	{
@@ -110,15 +110,10 @@ end
 
 ContextMenu.AddUpdateFunction("sky", UpdateContextMenuValues)
 
-function UpdateTimeOfDayLabel(hours, minutes)
-	local label = string.format("time of day (%02d:%02d)", hours, minutes);
-	Sandbox.HUD:CallEvent("SetContextMenuLabel", "time_of_day", label)
-end
-
 function UpdateTimeOfDayValue(hours, minutes)
-	local value = hours * 100 + minutes * 100 / 60
+	-- 1 decimal place
+	local value = math.floor((hours + minutes / 60) * 10) / 10
 	Sandbox.HUD:CallEvent("SetContextMenuValue", "time_of_day", value)
-	UpdateTimeOfDayLabel(hours, minutes)
 end
 
 function UpdateWeatherValue()

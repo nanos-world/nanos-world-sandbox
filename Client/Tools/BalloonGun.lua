@@ -21,7 +21,7 @@ BalloonGun.tips = {
 
 -- Balloon Configuration
 BalloonGun.asset = Balloon.assets[math.random(9)].id -- Only the 9 first balloons
-BalloonGun.force = 100000
+BalloonGun.force = 100 -- (x1000)
 BalloonGun.max_length = 100
 BalloonGun.length_randomness = 0.15
 
@@ -57,9 +57,8 @@ BalloonGun.picked_context_menu_items = {
 		id = "balloon_gun_force",
 		type = "range",
 		label = "force",
-		min = -100000,
-		max = 200000,
-		auto_update_label = true,
+		min = -100,
+		max = 200,
 		callback = function(value)
 			BalloonGun.force = value
 		end,
@@ -73,7 +72,6 @@ BalloonGun.picked_context_menu_items = {
 		label = "length",
 		min = 0,
 		max = 1000,
-		auto_update_label = true,
 		callback = function(value)
 			BalloonGun.max_length = value
 		end,
@@ -87,7 +85,6 @@ BalloonGun.picked_context_menu_items = {
 		label = "length randomness",
 		min = 0,
 		max = 100,
-		auto_update_label = true,
 		callback = function(value)
 			BalloonGun.length_randomness = value / 100
 		end,
@@ -104,7 +101,7 @@ function BalloonGun:OnLocalPlayerTarget(location, relative_location, relative_ro
 	local force_randomness = BalloonGun.force * BalloonGun.length_randomness
 	local max_length_randomness = BalloonGun.max_length * BalloonGun.length_randomness
 
-	local force = math.random() * force_randomness * 2 + (BalloonGun.force - force_randomness)
+	local force = (math.random() * force_randomness * 2 + (BalloonGun.force - force_randomness)) * 1000
 	local max_length = math.random() * max_length_randomness * 2 + (BalloonGun.max_length - max_length_randomness)
 
 	-- Calls remote to spawn the Balloon

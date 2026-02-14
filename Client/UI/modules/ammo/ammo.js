@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 // Register for UpdateWeaponAmmo custom event (from Lua)
 function UpdateWeaponAmmo(enable, clip, bag) {
 	if (enable)
-		document.getElementById("weapon_ammo_container").style.display = "block";
+		document.getElementById("weapon_ammo_container").style.display = "flex";
 	else
 		document.getElementById("weapon_ammo_container").style.display = "none";
 

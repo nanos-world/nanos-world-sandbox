@@ -245,6 +245,7 @@ SpawnMenu.AddCategory("props",		"nature",			"Nature",			"modules/spawn-menu/imag
 SpawnMenu.AddCategory("entities",	"devices",			"Devices",			"modules/spawn-menu/images/categories/tv.webp")
 SpawnMenu.AddCategory("entities",	"display",			"Display",			"modules/spawn-menu/images/categories/size.webp")
 SpawnMenu.AddCategory("entities",	"objects",			"Objects",			"modules/spawn-menu/images/categories/shapes.webp")
+SpawnMenu.AddCategory("entities",	"logic",			"Logic",			"modules/spawn-menu/images/categories/wire.webp")
 
 SpawnMenu.AddCategory("weapons",	"rifles",			"Rifles",			"modules/spawn-menu/images/categories/rifle.webp")
 SpawnMenu.AddCategory("weapons",	"smgs",				"SMGs",				"modules/spawn-menu/images/categories/smg.webp")

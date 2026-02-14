@@ -37,7 +37,6 @@ FloatingText.selected_context_menu_items = {
 		label = "word size",
 		min = 1,
 		max = 1000,
-		auto_update_label = true,
 		callback = function(value)
 			ContextMenu.selected_entity:CallRemoteEvent("SetWordSize", value)
 		end,

@@ -38,6 +38,7 @@ function ToolGun:Constructor(location, rotation, color)
 	self.text_render:AttachTo(self, AttachmentRule.SnapToTarget, "", 0)
 	self.text_render:SetRelativeLocation(Vector(-2.5, 0, 8.5))
 	self.text_render:SetRelativeRotation(Rotator(0, 180, 0))
+	self.text_render:SetRenderCullDistance(1000)
 end
 
 function ToolGun:OnPickUp(character)

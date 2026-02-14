@@ -30,7 +30,6 @@ ElasticGun.picked_context_menu_items = {
 		label = "restitution",
 		min = 0,
 		max = 100,
-		auto_update_label = true,
 		callback = function(value)
 			ElasticGun.restitution = value / 100
 		end,
@@ -44,7 +43,6 @@ ElasticGun.picked_context_menu_items = {
 		label = "stiffness",
 		min = 0,
 		max = 1000,
-		auto_update_label = true,
 		callback = function(value)
 			ElasticGun.stiffness = value
 		end,
@@ -58,7 +56,6 @@ ElasticGun.picked_context_menu_items = {
 		label = "damping",
 		min = 0,
 		max = 100,
-		auto_update_label = true,
 		callback = function(value)
 			ElasticGun.damping = value
 		end,

@@ -21,6 +21,9 @@ ContextMenu = {
 
 	-- Current hovering item text render
 	hovering_text_render = nil,
+
+	-- For generating unique IDs for items
+	__last_item_id = 0
 }
 
 -- Exposes ContextMenu to other packages
@@ -28,12 +31,20 @@ Sandbox.ContextMenu = ContextMenu
 
 
 -- TODO new section? Separate "selected" in another category?
-ContextMenu.AddItems = function(id, title, items)
+ContextMenu.AddItems = function(id, title, items, color)
 	-- We generate another list so we can validate and strip out callback functions
 	local items_to_add = {}
 
 	for _, item in pairs(items) do
 		if (item.callback) then
+			-- Generates random ID if not passing one
+			if (not item.id) then
+				-- Increases ID global count
+				ContextMenu.__last_item_id = ContextMenu.__last_item_id + 1
+
+				item.id = id .. "_" .. tostring(ContextMenu.__last_item_id)
+			end
+
 			-- Stores the callbacks
 			ContextMenu.items_callbacks[item.id] = item.callback
 
@@ -56,7 +67,7 @@ ContextMenu.AddItems = function(id, title, items)
 		end
 	end
 
-	Sandbox.HUD:CallEvent("AddContextMenuItems", id, title, items_to_add)
+	Sandbox.HUD:CallEvent("AddContextMenuItems", id, title, items_to_add, color and color:ToHex(false))
 end
 
 ContextMenu.RemoveItems = function(id)

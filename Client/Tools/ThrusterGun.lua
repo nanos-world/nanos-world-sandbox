@@ -30,9 +30,9 @@ ThrusterGun.tips = {
 }
 
 -- ThrusterGun Configuration
-ThrusterGun.particle_asset = Thruster.assets_list[math.random(#Thruster.assets_list)].id
-ThrusterGun.sound_asset = Thruster.sounds_list[math.random(#Thruster.sounds_list)].id
-ThrusterGun.force = 100000
+ThrusterGun.particle_asset = Thruster.assets_list[math.random(#Thruster.assets_list - 1) + 1].id
+ThrusterGun.sound_asset = Thruster.sounds_list[math.random(#Thruster.sounds_list - 1) + 1].id
+ThrusterGun.force = 100
 ThrusterGun.active = true
 
 -- Context Menu Items when Picking Up this Tool
@@ -65,8 +65,7 @@ ThrusterGun.picked_context_menu_items = {
 		id = "thruster_gun_force",
 		type = "range",
 		label = "force",
-		min = 0, max = 1000000,
-		auto_update_label = true,
+		min = 0, max = 1000,
 		callback = function(value)
 			ThrusterGun.force = value
 		end,
@@ -90,5 +89,5 @@ ThrusterGun.picked_context_menu_items = {
 -- Overrides ToolGunSingleTarget method
 function ThrusterGun:OnLocalPlayerTarget(location, relative_location, relative_rotation, normal, entity)
 	-- Call remote event to spawn the thruster
-	self:CallRemoteEvent("SpawnThruster", location, relative_location, relative_rotation, normal, entity, ThrusterGun.particle_asset, ThrusterGun.sound_asset, ThrusterGun.force, ThrusterGun.active)
+	self:CallRemoteEvent("SpawnThruster", location, relative_location, relative_rotation, normal, entity, ThrusterGun.particle_asset, ThrusterGun.sound_asset, ThrusterGun.force * 1000, ThrusterGun.active)
 end

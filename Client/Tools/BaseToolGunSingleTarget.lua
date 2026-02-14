@@ -1,22 +1,5 @@
 ToolGunSingleTarget = ToolGun.Inherit("ToolGunSingleTarget")
 
-
-function NanosMath.RelativeTo(location, rotation, actor)
-	local actor_location = actor:GetLocation()
-	local actor_rotation = actor:GetRotation()
-	local relative_location = actor_rotation:RotateVector(location - actor_location) / actor:GetScale()
-
-	-- Converts the Rotations to Quaternions
-	local quaternion = rotation:Quaternion()
-	local quaternion_attached = actor_rotation:Quaternion()
-
-	-- Gets the Relative rotation
-	local inverse = quaternion_attached:Inverse()
-	local relative_rotation = (inverse * quaternion):Rotator()
-
-	return relative_location, relative_rotation
-end
-
 -- Overrides ToolGun method
 function ToolGunSingleTarget:OnLocalPlayerFire(shooter)
 	local trace_result = TraceFor(10000, self.debug_trace.collision_channel)

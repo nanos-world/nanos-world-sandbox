@@ -1,6 +1,6 @@
 SpawnHistory = {
 	-- Per client list of spawned items
-	player_history = setmetatable({}, { __mode = 'k' }),
+	player_history = {},
 }
 
 -- Exposes SpawnHistory to other packages
@@ -9,11 +9,12 @@ Sandbox.SpawnHistory = SpawnHistory
 
 -- Helper to add an item to the history of a player
 function SpawnHistory.AddItemToHistory(player, item)
-	if (not SpawnHistory.player_history[player]) then
-		SpawnHistory.player_history[player] = {}
+	local player_id = player:GetAccountID()
+	if (not SpawnHistory.player_history[player_id]) then
+		SpawnHistory.player_history[player_id] = {}
 	end
 
-	table.insert(SpawnHistory.player_history[player], item)
+	table.insert(SpawnHistory.player_history[player_id], item)
 
 	if (type(item) ~= "function") then
 		SpawnHistory.UpdateItemOwnership(player, item)
@@ -32,7 +33,8 @@ end
 
 -- Destroys the last item in the history of a player, if any, and returns true, otherwise returns false
 function SpawnHistory.DeleteItemFromHistory(player, index)
-	local player_data = SpawnHistory.player_history[player]
+	local player_id = player:GetAccountID()
+	local player_data = SpawnHistory.player_history[player_id]
 	if (not player_data) then
 		Events.CallRemote("NoItemToDestroy", player)
 		return false

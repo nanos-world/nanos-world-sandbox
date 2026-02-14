@@ -1,7 +1,7 @@
 #context_menu {
 	position: absolute;
 	right: 30px;
-	width: 350px;
+	width: 400px;
 	display: none;
 	/* display: flex; */
 	border-radius: 5px;
@@ -44,12 +44,12 @@
 #context_menu #context_menu_items {
 	overflow-y: auto;
 	scrollbar-gutter: stable;
-	background-color: #0000005e;
+	background-color: #00000066;
 	padding: 20px;
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-    border-radius: 0 0 5px 5px;
+	border-radius: 0 0 5px 5px;
 }
 
 #context_menu_close:hover {
@@ -74,6 +74,22 @@
 	height: 35px;
 }
 
+#context_menu .context_menu_item_container {
+	display: grid;
+	grid-template-columns: 4fr 6fr;
+	gap: 15px;
+}
+
+#context_menu .context_menu_item_select_image_container {
+	display: flex;
+	background: white;
+	border-radius: 5px;
+	color: black;
+	height: 35px;
+	cursor: pointer;
+	min-width: 1;
+}
+
 #context_menu .context_menu_item_range,
 #context_menu .context_menu_item_checkbox,
 #context_menu .context_menu_item_color,
@@ -81,20 +97,17 @@
 #context_menu .context_menu_item_select,
 #context_menu .context_menu_item_select_image {
 	display: grid;
-	grid-template-columns: 3fr 7fr;
+	grid-template-columns: 4fr 6fr;
 	align-items: center;
-	gap: 15px;
+	gap: 20px;
 }
 
 #context_menu .context_menu_item_range input,
 #context_menu .context_menu_item_checkbox input,
-#context_menu .context_menu_item_color input,
 #context_menu .context_menu_item_text input,
 #context_menu .context_menu_item_text textarea,
-#context_menu .context_menu_item_select select,
-#context_menu .context_menu_item_select_image img {
+#context_menu .context_menu_item_select select {
 	cursor: pointer;
-	justify-self: end;
 	width: 100%;
 }
 
@@ -103,17 +116,63 @@
 	cursor: text;
 }
 
-#context_menu .context_menu_item_range input {
+#context_menu .context_menu_item_select_image_container span {
+	align-self: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin: 10px;
+}
+
+#context_menu .context_menu_item_range input[type="number"] {
+	font-size: 13px;
+	color: #d8d8d8;
+}
+
+#context_menu .context_menu_item_range input[type="range"] {
 	cursor: ew-resize;
+	margin: auto 0;
+
+	-webkit-appearance: none;
+	height: 10px;
+	border-radius: 10px;
+	background: #ffffff49;
+	outline: none;
+}
+
+#context_menu .context_menu_item_range input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: white;
+}
+
+#context_menu .context_menu_item_range input[type="number"] {
+	cursor: text;
+	background: none;
+	border: none;
+	outline: none;
+	height: 35px;
+}
+
+#context_menu .context_menu_item_range input[type="number"]::-webkit-outer-spin-button {
+	border-radius: 5px;
+}
+
+#context_menu .context_menu_item_range input[type="number"]::-webkit-inner-spin-button {
+	width: 15px;
+	height: 25px;
+	cursor: pointer;
 }
 
 #context_menu .context_menu_item_range input:hover,
 #context_menu .context_menu_item_checkbox input:hover,
-#context_menu .context_menu_item_color input:hover,
+#context_menu .context_menu_item_color div:hover,
 #context_menu .context_menu_item_text input:hover,
 #context_menu .context_menu_item_text textarea:hover,
 #context_menu .context_menu_item_select select:hover,
-#context_menu .context_menu_item_select_image img:hover,
+#context_menu .context_menu_item_select_image div:hover,
 #context_menu .context_menu_item_button button:hover {
 	filter: brightness(0.9)
 }
@@ -124,13 +183,11 @@
 #context_menu .context_menu_item_select_image label,
 #context_menu .context_menu_item_select label,
 #context_menu .context_menu_item_color label {
-	text-align: center;
+	text-align: left;
 	color: #f0f0f0;
 }
 
-#context_menu .context_menu_item_checkbox input {
-	flex-grow: 0;
-	width: 35px;
+#context_menu .context_menu_item_checkbox {
 	height: 35px;
 }
 
@@ -158,9 +215,8 @@
 }
 
 #context_menu .context_menu_item_select_image img {
-	flex-grow: 0;
-	width: 75px;
-	height: 75px;
+	width: auto;
+	margin: 3px;
 }
 
 #context_menu .divider {
@@ -169,7 +225,7 @@
 	text-align: center;
 	margin-bottom: 20px;
 	font-size: 16px;
-    font-family: 'Righteous', sans-serif;
+	font-family: 'Righteous', sans-serif;
 }
 
 #context_menu .divider::after,
@@ -197,7 +253,7 @@
 }
 
 .context_menu_category {
-    background-color: rgba(0, 0, 0, 0.1);
+	background-color: #00000044;
 	border-radius: 5px;
 	padding: 20px;
 }
@@ -225,7 +281,7 @@
 #context_menu_selector .context_menu_selector_item {
 	cursor: pointer;
 	width: 100px;
-    height: 140px;
+	height: 140px;
 	padding: 5px;
 	text-align: center;
 	display: inline-block;
@@ -257,6 +313,7 @@
 	height: 30px;
 	pointer-events: none;
 	word-wrap: break-word;
+	width: 100%;
 }
 
 #context_menu .context_menu_item_color input {
@@ -265,6 +322,10 @@
 	height: 35px;
 	background-color: transparent;
 	border: none;
+	cursor: pointer;
+	height: 25px;
+	width: 25px;
+	margin: 5px;
 }
 
 #context_menu .context_menu_item_color input::-webkit-color-swatch {
@@ -277,13 +338,19 @@
 }
 
 #context_menu .context_menu_item_select select {
-	border: 1px solid var(--select-border);
+	border: none;
+	outline: none;
 	border-radius: 5px;
-	padding: 0.25em 0.5em;
-	font-size: 1rem;
+	padding: 5px 10px;
 	cursor: pointer;
-	line-height: 1.1;
 	background-color: #fff;
+
+	/* Custom arrow */
+	appearance: none;
+	background-image: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"/></svg>');
+	background-repeat: no-repeat;
+	background-position: right 10px center;
+	background-size: 18px;
 }
 
 #context_menu_hovering_entity {
@@ -305,4 +372,52 @@
 #context_menu_hovering_entity_info {
 	font-size: 1rem;
 	color: #ffffffcc;
+}
+
+
+/* Switch */
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 50px;
+	height: 16px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+/* The slider */
+.slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: #ffffff49;
+	transition: .4s;
+	border-radius: 34px;
+}
+
+.slider:before {
+	position: absolute;
+	content: "";
+	height: 24px;
+	width: 24px;
+	bottom: -4px;
+	background-color: white;
+	transition: .4s;
+	border-radius: 50%;
+}
+
+input:checked + .slider {
+	background-color: #e2e2e2;
+}
+
+input:checked + .slider:before {
+	transform: translateX(26px);
 }

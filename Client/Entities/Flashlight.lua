@@ -25,7 +25,6 @@ Flashlight.selected_context_menu_items = {
 		label = "intensity",
 		min = 0,
 		max = 1000,
-		auto_update_label = true,
 		callback = function(value)
 			ContextMenu.selected_entity:CallRemoteEvent("SetIntensity", value / 100)
 		end,
