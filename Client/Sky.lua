@@ -113,9 +113,9 @@ ContextMenu.AddUpdateFunction("sky", UpdateContextMenuValues)
 function UpdateTimeOfDayValue(hours, minutes)
 	-- 1 decimal place
 	local value = math.floor((hours + minutes / 60) * 10) / 10
-	Sandbox.HUD:CallEvent("SetContextMenuValue", "time_of_day", value)
+	ContextMenu.SetItemValue("time_of_day", value)
 end
 
 function UpdateWeatherValue()
-	Sandbox.HUD:CallEvent("SetContextMenuValue", "weather", Sky.GetWeather())
+	ContextMenu.SetItemValue("weather", Sky.GetWeather())
 end

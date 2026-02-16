@@ -17,7 +17,7 @@ function Trail:Constructor(hit_location, rotation, relative_location, relative_r
 	particle:SetParameterFloat("LifeTime", 2)
 	particle:SetParameterFloat("SpawnRate", 60)
 	particle:AttachTo(self, AttachmentRule.SnapToTarget, "", 0)
-	particle:SetRelativeLocation(rotation:RotateVector(direction * -15))
+	particle:SetRelativeLocation(rotation:UnrotateVector(direction * -15))
 
 	-- Attaches with the relative locations provided by the client
 	self:AttachTo(entity, AttachmentRule.SnapToTarget, "", 0)

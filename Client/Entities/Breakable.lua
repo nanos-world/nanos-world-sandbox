@@ -9,7 +9,7 @@ Events.SubscribeRemote("SpawnDebris", function(prop, debris_offset, debris_rotat
 
 	-- Spawn the Debris
 	local debris = Prop(
-		parent_location + ((debris_offset and parent_rotation:UnrotateVector(debris_offset)) or Vector()),
+		parent_location + ((debris_offset and parent_rotation:RotateVector(debris_offset)) or Vector()),
 		parent_rotation + (debris_rotation or Rotator.Random()),
 		mesh,
 		CollisionType.StaticOnly,

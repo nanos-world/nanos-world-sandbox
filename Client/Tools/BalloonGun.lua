@@ -41,9 +41,8 @@ BalloonGun.debug_trace = {
 -- Context Menu Items when picking up this Tool
 BalloonGun.picked_context_menu_items = {
 	{
-		id = "balloon_gun_asset",
-		type = "select_image",
 		label = "mesh",
+		type = "select_image",
 		options = Balloon.assets,
 		callback = function(value)
 			BalloonGun.asset = value
@@ -54,9 +53,8 @@ BalloonGun.picked_context_menu_items = {
 		end,
 	},
 	{
-		id = "balloon_gun_force",
-		type = "range",
 		label = "force",
+		type = "range",
 		min = -100,
 		max = 200,
 		callback = function(value)
@@ -67,9 +65,8 @@ BalloonGun.picked_context_menu_items = {
 		end,
 	},
 	{
-		id = "balloon_gun_max_length",
-		type = "range",
 		label = "length",
+		type = "range",
 		min = 0,
 		max = 1000,
 		callback = function(value)
@@ -80,9 +77,8 @@ BalloonGun.picked_context_menu_items = {
 		end,
 	},
 	{
-		id = "balloon_gun_length_randomness",
-		type = "range",
 		label = "length randomness",
+		type = "range",
 		min = 0,
 		max = 100,
 		callback = function(value)

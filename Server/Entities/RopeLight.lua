@@ -3,7 +3,7 @@ RopeLight = Prop.Inherit("RopeLight")
 ConfigureSpawnLimits("RopeLight", "Rope Lights", RopeLight.GetCount, "max_rope_lights")
 
 function RopeLight:Constructor(spawn_location, relative_location, relative_rotation, direction, attach_to_entity)
-	local rotation = direction:Rotation() + Rotator(90, 0, 0)
+	local rotation = direction:ToOrientationRotator() + Rotator(90, 0, 0)
 
 	self.Super:Constructor(spawn_location, rotation, "nanos-world::SM_Lamp", CollisionType.StaticOnly, true, GrabMode.Disabled)
 

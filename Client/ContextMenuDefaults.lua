@@ -12,6 +12,12 @@ function ContextMenu.AddSelectedCustomItems(entity)
 		ContextMenu.AddItems("selected_item", category_name, entity_context_menu_items, ContextMenu.selected_color)
 	end
 
+	-- If the class has custom inputs, adds them
+	if (class.input_bindings) then
+		local parsed_context_menu_items = EntityInputSystem.ParseInputBindingsForContextMenu(class)
+		ContextMenu.AddItems("selected_item", category_name, parsed_context_menu_items, ContextMenu.selected_color)
+	end
+
 	local items = {}
 
 	-- Basic Actor entries with tint/gravity

@@ -4,12 +4,12 @@ CableUtils = {}
 function CableUtils.SpawnCableAttached(targeting_first_to, targeting_first_relative_location, targeting_second_to, targeting_second_location, keep_offset, custom_config_func)
 
 	-- Calculate the world end location (from the first target)
-	local attaching_end_world_location = targeting_first_to:GetLocation() + targeting_first_to:GetRotation():UnrotateVector(targeting_first_relative_location) * targeting_first_to:GetScale()
+	local attaching_end_world_location = targeting_first_to:GetLocation() + targeting_first_to:GetRotation():RotateVector(targeting_first_relative_location) * targeting_first_to:GetScale()
 	local attaching_start_world_location = nil
 
 	-- Calculate the world start location (if second target is passed, then targeting_second_location is a relative location, otherwise it's the world location)
 	if (targeting_second_to) then
-		attaching_start_world_location = targeting_second_to:GetLocation() + targeting_second_to:GetRotation():UnrotateVector(targeting_second_location) * targeting_second_to:GetScale()
+		attaching_start_world_location = targeting_second_to:GetLocation() + targeting_second_to:GetRotation():RotateVector(targeting_second_location) * targeting_second_to:GetScale()
 	else
 		attaching_start_world_location = targeting_second_location
 	end
@@ -33,7 +33,7 @@ function CableUtils.SpawnCableAttached(targeting_first_to, targeting_first_relat
 	local constraint_offset = Vector()
 	if (keep_offset) then
 		-- Gets the relative location from the end object to the start location, this will be the physics constraint offset, to keep objects "in place"
-		constraint_offset = targeting_first_to:GetRotation():RotateVector(attaching_start_world_location - attaching_end_world_location) / targeting_first_to:GetScale()
+		constraint_offset = targeting_first_to:GetRotation():UnrotateVector(attaching_start_world_location - attaching_end_world_location) / targeting_first_to:GetScale()
 	end
 
 	-- Attaches the cable to the end object

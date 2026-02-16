@@ -12,8 +12,8 @@ function TV:Constructor(location, rotation)
 	self:SetScale(Vector(2, 2, 2))
 
 	-- Spawns the Sound Box
-	local soundbox_01 = Prop(location + rotation:UnrotateVector(Vector(200, 0, 0)), rotation, "nanos-world::SM_HalfStack_Marshall")
-	local soundbox_02 = Prop(location - rotation:UnrotateVector(Vector(200, 0, 0)), rotation, "nanos-world::SM_HalfStack_Marshall")
+	local soundbox_01 = Prop(location + rotation:RotateVector(Vector(200, 0, 0)), rotation, "nanos-world::SM_HalfStack_Marshall")
+	local soundbox_02 = Prop(location - rotation:RotateVector(Vector(200, 0, 0)), rotation, "nanos-world::SM_HalfStack_Marshall")
 
 	-- Spawns Cables to visually connect both
 	local cable_01 = Cable(location)

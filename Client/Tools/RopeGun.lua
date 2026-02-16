@@ -3,6 +3,7 @@ RopeGun = ToolGunDoubleTarget.Inherit("RopeGun")
 -- Tool Info
 RopeGun.name = "Rope Gun"
 RopeGun.image = "package://sandbox/Client/Media/Tools/RopeGun.webp"
+RopeGun.category = "constrainers"
 RopeGun.description = "Tie two objects together with a rope constraint"
 
 -- Tool Tutorials

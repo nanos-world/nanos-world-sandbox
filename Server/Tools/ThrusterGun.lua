@@ -18,7 +18,7 @@ function ThrusterGun:OnSpawnThruster(player, hit_location, relative_location, re
 		return
 	end
 
-	local rotation = direction:Rotation()
+	local rotation = direction:ToOrientationRotator()
 	local thruster = Thruster(hit_location, rotation, particle_asset, sound_asset, force, active)
 
 	-- Gets the relative location rotated to attach to the exact point the player aimed

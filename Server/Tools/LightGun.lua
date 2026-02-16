@@ -20,7 +20,7 @@ function LightGun:OnSpawnLight(player, spawn_location, relative_location, relati
 	-- Updates the client's spawn history
 	SpawnHistory.AddItemToHistory(player, rope_light)
 
-	Particle(spawn_location, direction:Rotation(), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", rope_light.light:GetColor())
+	Particle(spawn_location, direction:ToOrientationRotator(), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", rope_light.light:GetColor())
 end
 
 LightGun.SubscribeRemote("SpawnLight", LightGun.OnSpawnLight)

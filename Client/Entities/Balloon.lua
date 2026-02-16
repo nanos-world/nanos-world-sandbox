@@ -44,9 +44,8 @@ Balloon.assets = {
 -- Context Menu Items when selecting this Entity
 Balloon.selected_context_menu_items = {
 	{
-		id = "balloon_asset",
-		type = "select_image",
 		label = "mesh",
+		type = "select_image",
 		options = Balloon.assets,
 		callback = function(value)
 			ContextMenu.selected_entity:CallRemoteEvent("SetCustomMesh", value)
@@ -56,9 +55,8 @@ Balloon.selected_context_menu_items = {
 		end,
 	},
 	{
-		id = "balloon_force",
-		type = "range",
 		label = "force",
+		type = "range",
 		min = -100,
 		max = 200,
 		callback = function(value)

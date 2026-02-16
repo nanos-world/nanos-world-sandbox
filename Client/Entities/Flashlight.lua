@@ -45,6 +45,16 @@ Flashlight.selected_context_menu_items = {
 	},
 }
 
+-- Input Bindings for this Entity
+Flashlight.input_bindings = {
+	{
+		label = "toggle",
+		callback_pressed = function(entity)
+			entity:CallRemoteEvent("SetActive", not entity:GetValue("Light"):IsVisible())
+		end,
+	},
+}
+
 
 function Flashlight.Toggle()
 	Flashlight.currently_grabbed:CallRemoteEvent("ToggleLight")

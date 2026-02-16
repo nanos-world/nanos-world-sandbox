@@ -3,6 +3,7 @@ WeldGun = ToolGunDoubleTarget.Inherit("WeldGun")
 -- Tool Info
 WeldGun.name = "Weld Gun"
 WeldGun.image = "package://sandbox/Client/Media/Tools/WeldGun.webp"
+WeldGun.category = "constrainers"
 WeldGun.description = "Weld two objects together so they are connected by a rigid constraint"
 
 -- Tool Tutorials

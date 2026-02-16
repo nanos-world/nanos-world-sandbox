@@ -206,7 +206,7 @@ function TryPickUpObject()
 		PhysicsGun.grabbed_sound:AttachTo(PhysicsGun.picking_object, AttachmentRule.SnapToTarget, "", 0)
 
 		-- Calculates the offset of the hit and the center of the object
-		PhysicsGun.picking_object_relative_location = PhysicsGun.picking_object:GetRotation():RotateVector(PhysicsGun.picking_object:GetLocation() - trace_result.Location)
+		PhysicsGun.picking_object_relative_location = PhysicsGun.picking_object:GetRotation():UnrotateVector(PhysicsGun.picking_object:GetLocation() - trace_result.Location)
 
 		-- Calculates the distance of the object and the camera, adds ArmLength to normalize Camera Views
 		PhysicsGun.picking_object_distance = trace_result.Location:Distance(viewport_3D.Position) - Client.GetLocalPlayer():GetCameraArmLength()
@@ -352,7 +352,7 @@ Client.Subscribe("Tick", function(delta_time)
 				local picking_object_relative_location = beam_particle:GetValue("RelativeLocationObject")
 
 				-- Sets the BeamEnd location, with some math to rotate the relative location relative to the object rotation
-				local end_location = beam_end_object:GetLocation() + beam_end_object:GetRotation():UnrotateVector(-picking_object_relative_location)
+				local end_location = beam_end_object:GetLocation() + beam_end_object:GetRotation():RotateVector(-picking_object_relative_location)
 				beam_particle:SetParameterVector("BeamEnd", end_location)
 			else
 				-- If there is no object being gravitated, then points the BeamEnd to very far
@@ -388,7 +388,7 @@ Client.Subscribe("Tick", function(delta_time)
 				local target_particle = physics_gun.target_particle
 				if (physics_gun.target_particle_enabled and target_particle and target_particle:IsValid()) then
 					target_particle:SetLocation(end_location)
-					target_particle:SetRotation(trace_result.Normal:Rotation() - Rotator(90, 0, 0))
+					target_particle:SetRotation(trace_result.Normal:ToOrientationRotator() - Rotator(90, 0, 0))
 				end
 			end
 		end
@@ -434,7 +434,7 @@ function PhysicsGunTick()
 
 		-- Gets the new object location using some Math, first gets the overall location: start_location + camera_direction * the distance
 		-- Then adds the offset of the object when it was grabbed, rotating it with the object rotation
-		local end_location = (camera_location + camera_direction * (PhysicsGun.picking_object_distance + local_player:GetCameraArmLength())) + PhysicsGun.picking_object:GetRotation():UnrotateVector(PhysicsGun.picking_object_relative_location)
+		local end_location = (camera_location + camera_direction * (PhysicsGun.picking_object_distance + local_player:GetCameraArmLength())) + PhysicsGun.picking_object:GetRotation():RotateVector(PhysicsGun.picking_object_relative_location)
 
 		-- The new object rotation will be the initial rotation + the camera rotation
 		camera_rotation.Pitch = 0

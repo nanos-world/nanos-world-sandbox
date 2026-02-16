@@ -52,7 +52,7 @@ ContextMenu.AddItems = function(id, title, items, color)
 			local item_to_add = {}
 			for key, value in pairs(item) do
 				if (key ~= "callback") then
-					if (key == "value" and type(value) == "function") then
+					if ((key == "value" or key == "options") and type(value) == "function") then
 						-- Calls the function to get the current value
 						item_to_add[key] = value()
 					else
@@ -125,6 +125,11 @@ ContextMenu.Open = function()
 
 	Client.Subscribe("Tick", ContextMenu.OnTick)
 	Input.Subscribe("MouseUp", ContextMenu.OnMouseUp)
+end
+
+-- Overrides an existing item value
+function ContextMenu.SetItemValue(item_id, value)
+	Sandbox.HUD:CallEvent("SetContextMenuValue", item_id, value)
 end
 
 function ContextMenu.OnTick(delta_time)

@@ -3,6 +3,7 @@ SpringGun = ToolGunDoubleTarget.Inherit("SpringGun")
 -- Tool Info
 SpringGun.name = "Spring Gun"
 SpringGun.image = "package://sandbox/Client/Media/Tools/SpringGun.webp"
+SpringGun.category = "constrainers"
 SpringGun.description = "Creates a spring joint between two objects"
 
 -- Tool Tutorials

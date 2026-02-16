@@ -88,7 +88,7 @@ function UselessGun:OnUselessObject(player, entity, hit_location, direction)
 
 	Events.BroadcastRemote("MakeObjectUseless", entity, website)
 
-	Particle(hit_location, direction:Rotation(), "nanos-world::P_DirectionalBurst")
+	Particle(hit_location, direction:ToOrientationRotator(), "nanos-world::P_DirectionalBurst")
 end
 
 UselessGun.SubscribeRemote("UselessObject", UselessGun.OnUselessObject)

@@ -10,7 +10,7 @@ function LampGun:OnSpawnLamp(player, spawn_location, relative_location, relative
 		return
 	end
 
-	local rotation = direction:Rotation()
+	local rotation = direction:ToOrientationRotator()
 	local lamp = Flashlight(spawn_location, rotation)
 
 	-- If to attach to a non-player entity

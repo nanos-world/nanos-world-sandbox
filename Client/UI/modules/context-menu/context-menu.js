@@ -32,7 +32,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		</div>
 		<div id="context_menu_selector">
 			<div id="context_menu_selector_background"></div>
-			<div id="context_menu_selector_list"></div>
+			<div id="context_menu_selector_container">
+				<div id="context_menu_selector_title"></div>
+				<div id="context_menu_selector_list_container">
+					<div id="context_menu_selector_list" class="spawn_menu_items"></div>
+				</div>
+			</div>
 		</div>
 		<div id="context_menu_hovering_entity">
 			<span id="context_menu_hovering_entity_label"></span>
@@ -153,6 +158,7 @@ ContextMenu.AddContextMenuItems = function(id, title, items, color) {
 				switch_input.append(switch_slider);
 
 				const label = document.createElement("label");
+				label.classList.add("context_menu_item_label");
 				label.innerText = item.label;
 
 				context_menu_item.classList.add("context_menu_item_checkbox");
@@ -168,6 +174,7 @@ ContextMenu.AddContextMenuItems = function(id, title, items, color) {
 				let value = item.value || 0;
 
 				const label = document.createElement("label");
+				label.classList.add("context_menu_item_label");
 				label.innerText = item.label;
 
 				const input_container = document.createElement("div");
@@ -236,6 +243,7 @@ ContextMenu.AddContextMenuItems = function(id, title, items, color) {
 				img_label.innerText = selected.name;
 
 				const label = document.createElement("label");
+				label.classList.add("context_menu_item_label");
 				label.innerText = item.label;
 
 				input_container.append(img);
@@ -271,6 +279,7 @@ ContextMenu.AddContextMenuItems = function(id, title, items, color) {
 				});
 
 				const label = document.createElement("label");
+				label.classList.add("context_menu_item_label");
 				label.innerText = item.label;
 
 				input_container.append(color_input);
@@ -301,6 +310,7 @@ ContextMenu.AddContextMenuItems = function(id, title, items, color) {
 				});
 
 				const label = document.createElement("label");
+				label.classList.add("context_menu_item_label");
 				label.innerText = item.label;
 
 				context_menu_item.classList.add("context_menu_item_select");
@@ -326,6 +336,7 @@ ContextMenu.AddContextMenuItems = function(id, title, items, color) {
 				});
 
 				const label = document.createElement("label");
+				label.classList.add("context_menu_item_label");
 				label.innerText = item.label;
 
 				context_menu_item.classList.add("context_menu_item_text");
@@ -362,7 +373,7 @@ ContextMenu.SetHoverEntity = function(has_entity, label, spawned_by, spawned_by_
 // Sets a Context Menu Item Label
 ContextMenu.SetContextMenuLabel = function(id, text) {
 	const context_menu_item = document.getElementById(`item_${id}`);
-	const label = context_menu_item.getElementsByTagName("label")[0];
+	const label = context_menu_item.querySelector(".context_menu_item_label");
 	label.innerText = text;
 }
 
@@ -416,7 +427,7 @@ ContextMenu.ContextMenuSelectorItemClick = function(e) {
 	}
 
 	const img = context_menu_item.getElementsByTagName("img")[0];
-	const label = context_menu_item.getElementsByTagName("label")[0];
+	const label = context_menu_item.querySelector(".context_menu_item_label");
 	const span_label = context_menu_item.getElementsByTagName("span")[0];
 
 	img.src = option_data.image;
@@ -440,19 +451,22 @@ ContextMenu.ToggleContextMenuSelectorVisibility = function(is_visible, item) {
 		const context_menu_selector_list = document.getElementById("context_menu_selector_list");
 		context_menu_selector_list.innerHTML = "";
 
+		const context_menu_selector_title = document.getElementById("context_menu_selector_title");
+		context_menu_selector_title.innerText = "select " + item.label;
+
 		item.options.forEach(option => {
 			const context_menu_selector_item = document.createElement("span");
-			context_menu_selector_item.classList.add("context_menu_selector_item");
+			context_menu_selector_item.classList.add("spawn_item", "spawn_item_visible");
 			context_menu_selector_item.dataset.option_data = JSON.stringify(option);
 			context_menu_selector_item.addEventListener("click", ContextMenu.ContextMenuSelectorItemClick);
 			context_menu_selector_item.addEventListener("mouseenter", e => Events.Call("HoverSound", 1));
 
 			const context_menu_selector_item_image = document.createElement("span");
-			context_menu_selector_item_image.classList.add("context_menu_selector_item_image");
+			context_menu_selector_item_image.classList.add("spawn_item_image");
 			context_menu_selector_item_image.style["background-image"] = `url('${option.image}'), url('./modules/context-menu/images/nanosworld_empty.webp')`;
 
 			const context_menu_selector_item_name = document.createElement("span");
-			context_menu_selector_item_name.classList.add("context_menu_selector_item_name");
+			context_menu_selector_item_name.classList.add("spawn_item_name");
 			context_menu_selector_item_name.innerText = option.name;
 
 			context_menu_selector_item.append(context_menu_selector_item_image);

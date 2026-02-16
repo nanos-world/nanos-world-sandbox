@@ -89,7 +89,7 @@ function TraceFor(trace_max_distance, collision_channel)
 	local start_location = viewport_3D.Position + viewport_3D.Direction * 50
 	local end_location = viewport_3D.Position + viewport_3D.Direction * trace_max_distance
 
-	local trace_mode = TraceMode.TraceComplex | TraceMode.ReturnEntity | TraceMode.TraceOnlyVisibility
+	local trace_mode = TraceMode.ReturnEntity | TraceMode.TraceOnlyVisibility
 
 	local ignored_actors = { Client.GetLocalPlayer():GetControlledCharacter() }
 
@@ -149,7 +149,6 @@ function ToolGun.OnDebugTick(delta_time)
 		return
 	end
 
-	local trace_normal_rotation = trace_result.Normal:Rotation()
 	local trace_location = trace_result.Location
 
 	-- Draws a preview mesh
@@ -157,10 +156,10 @@ function ToolGun.OnDebugTick(delta_time)
 		local preview_mesh_rotation = ToolGun.draw_debug_toolgun.debug_trace.preview_mesh_rotation
 
 		if (not ToolGun.draw_debug_toolgun.debug_trace.preview_mesh_rotation_fixed) then
-			preview_mesh_rotation = preview_mesh_rotation + trace_normal_rotation
+			preview_mesh_rotation = (trace_result.Normal:ToOrientationQuat() * preview_mesh_rotation:Quaternion()):Rotator()
 		end
 
-		local preview_mesh_location = trace_location - preview_mesh_rotation:UnrotateVector(ToolGun.draw_debug_toolgun.debug_trace.preview_mesh_offset * ToolGun.draw_debug_toolgun.debug_trace.preview_mesh_scale)
+		local preview_mesh_location = trace_location - preview_mesh_rotation:RotateVector(ToolGun.draw_debug_toolgun.debug_trace.preview_mesh_offset * ToolGun.draw_debug_toolgun.debug_trace.preview_mesh_scale)
 
 		ToolGun.ToggleDrawDebugPreviewMesh(true, preview_mesh_location, preview_mesh_rotation)
 

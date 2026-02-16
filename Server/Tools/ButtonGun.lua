@@ -10,7 +10,7 @@ function ButtonGun:OnSpawnButton(player, hit_location, relative_location, relati
 		return
 	end
 
-	local rotation = direction:Rotation()
+	local rotation = direction:ToOrientationRotator()
 
 	-- TODO parameters
 	local Button = BaseButton(hit_location, rotation + Rotator(90, 0, 180), "", "", player, true)

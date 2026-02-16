@@ -9,6 +9,7 @@ RetroCamera.resolution = 256
 RetroCamera.is_aiming = false
 RetroCamera.aiming_old_viewmode = nil
 
+-- Context Menu Items when selecting this Entity
 RetroCamera.selected_context_menu_items = {
 	{
 		id = "retrocamera_takephoto",
@@ -16,6 +17,16 @@ RetroCamera.selected_context_menu_items = {
 		label = "take photo",
 		callback = function()
 			ContextMenu.selected_entity:TakePhoto()
+		end,
+	},
+}
+
+-- Input Bindings for this Entity
+RetroCamera.input_bindings = {
+	{
+		label = "activate",
+		callback_pressed = function(entity)
+			entity:TakePhoto()
 		end,
 	},
 }

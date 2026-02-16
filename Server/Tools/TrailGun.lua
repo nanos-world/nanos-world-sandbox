@@ -16,7 +16,7 @@ function TrailGun:OnSpawnTrail(player, hit_location, relative_location, relative
 	end
 
 	-- Calculates the Trail Rotation to spawn it
-	local rotation = direction:Rotation()
+	local rotation = direction:ToOrientationRotator()
 	local trail = Trail(hit_location, rotation, relative_location, relative_rotation, direction, entity)
 
 	-- Updates the client's spawn history

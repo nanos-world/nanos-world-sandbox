@@ -7,7 +7,7 @@ function CCTV:Constructor(location, rotation)
 	self.Super:Constructor(location, rotation + Rotator(0, 90, 0), "nanos-world::SM_TV")
 
 	-- Spawns the Camera Prop
-	self.camera = Prop(location + rotation:UnrotateVector(Vector(150, 0, 0)), rotation, "nanos-world::SM_Camera")
+	self.camera = Prop(location + rotation:RotateVector(Vector(150, 0, 0)), rotation, "nanos-world::SM_Camera")
 
 	-- Spawns a Cable
 	self.cable = Cable(location)

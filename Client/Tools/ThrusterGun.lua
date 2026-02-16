@@ -38,9 +38,8 @@ ThrusterGun.active = true
 -- Context Menu Items when Picking Up this Tool
 ThrusterGun.picked_context_menu_items = {
 	{
-		id = "thruster_gun_particle_asset",
-		type = "select",
 		label = "particle",
+		type = "select",
 		options = Thruster.assets_list,
 		callback = function(value)
 			ThrusterGun.particle_asset = value
@@ -50,9 +49,8 @@ ThrusterGun.picked_context_menu_items = {
 		end,
 	},
 	{
-		id = "thruster_gun_sound_asset",
-		type = "select",
 		label = "sound",
+		type = "select",
 		options = Thruster.sounds_list,
 		callback = function(value)
 			ThrusterGun.sound_asset = value
@@ -62,9 +60,8 @@ ThrusterGun.picked_context_menu_items = {
 		end,
 	},
 	{
-		id = "thruster_gun_force",
-		type = "range",
 		label = "force",
+		type = "range",
 		min = 0, max = 1000,
 		callback = function(value)
 			ThrusterGun.force = value
@@ -74,9 +71,8 @@ ThrusterGun.picked_context_menu_items = {
 		end,
 	},
 	{
-		id = "thruster_gun_active",
-		type = "checkbox",
 		label = "start activated",
+		type = "checkbox",
 		callback = function(value)
 			ThrusterGun.active = value
 		end,

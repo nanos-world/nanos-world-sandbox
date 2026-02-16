@@ -33,12 +33,30 @@ Thruster.sounds_list = {
 	{ id = "nanos-world::A_VR_WorldMove_Loop_02",			name = "World Move 02" },
 }
 
+-- Input Bindings for this Entity
+Thruster.input_bindings = {
+	{
+		label = "activate / deactivate",
+		callback_pressed = function(entity)
+			entity:CallRemoteEvent("SetActive", true)
+		end,
+		callback_released = function(entity)
+			entity:CallRemoteEvent("SetActive", false)
+		end,
+	},
+	{
+		label = "toggle",
+		callback_pressed = function(entity)
+			entity:CallRemoteEvent("SetActive", not entity:GetValue("Active"))
+		end,
+	},
+}
+
 -- Context Menu Items when selecting this Entity
 Thruster.selected_context_menu_items = {
 	{
-		id = "thruster_particle_asset",
-		type = "select",
 		label = "particle",
+		type = "select",
 		options = Thruster.assets_list,
 		callback = function(value)
 			ContextMenu.selected_entity:CallRemoteEvent("SetParticleAsset", value)
@@ -48,7 +66,6 @@ Thruster.selected_context_menu_items = {
 		end,
 	},
 	{
-		id = "thruster_sound_asset",
 		type = "select",
 		label = "sound",
 		options = Thruster.sounds_list,
@@ -60,9 +77,8 @@ Thruster.selected_context_menu_items = {
 		end,
 	},
 	{
-		id = "thruster_force",
-		type = "range",
 		label = "force",
+		type = "range",
 		min = 0,
 		max = 1000,
 		callback = function(value)
@@ -73,9 +89,8 @@ Thruster.selected_context_menu_items = {
 		end,
 	},
 	{
-		id = "thruster_active",
-		type = "checkbox",
 		label = "active",
+		type = "checkbox",
 		callback = function(value)
 			ContextMenu.selected_entity:CallRemoteEvent("SetActive", value)
 		end,
@@ -97,7 +112,7 @@ function Thruster:OnActivated()
 	end
 
 	if (self.sound) then
-		self.sound:Play()
+		self.sound:FadeIn(0.5)
 	end
 end
 
@@ -107,7 +122,7 @@ function Thruster:OnDeactivated()
 	end
 
 	if (self.sound) then
-		self.sound:Stop()
+		self.sound:FadeOut(0.5)
 	end
 end
 

@@ -16,7 +16,7 @@ function ToolGunSingleTarget:OnLocalPlayerFire(shooter)
 			end
 
 			-- Calculates the relative location and rotation relative to the entity
-			relative_location, relative_rotation = NanosMath.RelativeTo(trace_result.Location, trace_result.Normal:Rotation(), trace_result.Entity)
+			relative_location, relative_rotation = NanosMath.RelativeTo(trace_result.Location, trace_result.Normal:ToOrientationRotator(), trace_result.Entity)
 		end
 
 		-- Calls the Single Target method

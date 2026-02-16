@@ -15,5 +15,5 @@ Events.SubscribeRemote("ColorObject", function(player, entity, hit_location, dir
 	end
 
 	entity:SetMaterialColorParameter("Tint", color)
-	Particle(hit_location, direction:Rotation(), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", color)
+	Particle(hit_location, direction:ToOrientationRotator(), "nanos-world::P_DirectionalBurst"):SetParameterColor("Color", color)
 end)

@@ -3,6 +3,7 @@ ElasticGun = ToolGunDoubleTarget.Inherit("ElasticGun")
 -- Tool Info
 ElasticGun.name = "Elastic Gun"
 ElasticGun.image = "package://sandbox/Client/Media/Tools/ElasticGun.webp"
+ElasticGun.category = "constrainers"
 ElasticGun.description = "Connect two objects with an elastic joint (spring). Tune stiffness, damping, and bounciness"
 
 -- Tool Tutorials

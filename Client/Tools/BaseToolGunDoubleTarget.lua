@@ -29,7 +29,7 @@ function ToolGunDoubleTarget:OnLocalPlayerFire(shooter)
 
 			-- If we have an entity, then get the relative instead because it can change the location when data reaching the server
 			if (targeting_second_to) then
-				targeting_second_location, targeting_second_rotation = NanosMath.RelativeTo(trace_result.Location, trace_result.Normal:Rotation(), trace_result.Entity)
+				targeting_second_location, targeting_second_rotation = NanosMath.RelativeTo(trace_result.Location, trace_result.Normal:ToOrientationRotator(), trace_result.Entity)
 			else
 				targeting_second_location = trace_result.Location
 			end
@@ -49,7 +49,7 @@ function ToolGunDoubleTarget:OnLocalPlayerFire(shooter)
 			ToolGunDoubleTarget.targeting_first_to = trace_result.Entity
 
 			-- Stores the relative location and rotation relative to the entity
-			ToolGunDoubleTarget.targeting_first_relative_location, ToolGunDoubleTarget.targeting_first_relative_rotation = NanosMath.RelativeTo(trace_result.Location, trace_result.Normal:Rotation(), trace_result.Entity)
+			ToolGunDoubleTarget.targeting_first_relative_location, ToolGunDoubleTarget.targeting_first_relative_rotation = NanosMath.RelativeTo(trace_result.Location, trace_result.Normal:ToOrientationRotator(), trace_result.Entity)
 
 			-- Enable Highlighting on index 0
 			ToolGunDoubleTarget.targeting_first_to:SetHighlightEnabled(true, 0)
