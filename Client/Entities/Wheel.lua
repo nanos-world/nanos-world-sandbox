@@ -17,7 +17,7 @@ Wheel.wheels_config = {
 	["nanos-world::SM_WheelBarrel_Wheel"] = { offset = Vector(0, -7, 0), direction = Vector(0, -1, 0), },
 	["nanos-world::SM_RollerMachine_Wheel"] = { offset = Vector(0, 35, 0), direction = Vector(0, 1, 0), },
 	["nanos-world::SM_FidgetSpinner"] = { offset = Vector(0, 8, 0), direction = Vector(0, 1, 0), },
-	["nanos-world::SM_PlasticBarrel_01"] = { offset = Vector(0, 0, 0), direction = Vector(0, 0, -1), },
+	["nanos-world::SM_PlasticBarrel_01"] = { offset = Vector(0, 0, 1), direction = Vector(0, 0, -1), },
 	["nanos-world::SM_Steering_Wheel_01"] = { offset = Vector(0, -10, 0), direction = Vector(0, -1, 0), },
 }
 

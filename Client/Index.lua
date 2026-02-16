@@ -1,9 +1,6 @@
 -- Global table to store Sandbox related functions and variables, exposed to other packages
 Sandbox = {}
 
--- All notifications already sent
-PERSISTENT_DATA_NOTIFICATIONS = PERSISTENT_DATA_NOTIFICATIONS or {}
-
 -- Spawns Sandbox HUD
 Sandbox.HUD = Sandbox.HUD or WebUI("Sandbox HUD", "file:///UI/index.html")
 
@@ -52,9 +49,6 @@ Package.Subscribe("Load", function()
 		UpdateLocalCharacter(local_player:GetControlledCharacter())
 		SetupLocalPlayer(local_player)
 	end
-
-	-- Gets all notifications already sent
-	PERSISTENT_DATA_NOTIFICATIONS = Package.GetPersistentData().notifications or {}
 end)
 
 -- Function to set all needed events on local character (to update the UI when it takes damage or dies)

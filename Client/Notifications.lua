@@ -8,7 +8,10 @@ Notifications = {
 		context_menu = Input.GetMappedKeys("ContextMenu")[1] or "(not set)",
 		spawn_menu = Input.GetMappedKeys("SpawnMenu")[1] or "(not set)",
 		undo = Input.GetMappedKeys("Undo")[1] or "(not set)"
-	}
+	},
+
+	-- All notifications already sent
+	persistent_data = {}
 }
 
 -- Exposes Notifications to other packages
@@ -24,18 +27,24 @@ Sandbox.Notifications = Notifications
 function Notifications.Add(type, id, message, duration, delay, force)
 	Timer.SetTimeout(function(_id, _message, _duration, _force)
 		if (not _force) then
-			if (PERSISTENT_DATA_NOTIFICATIONS[_id]) then
+			if (Notifications.persistent_data[_id]) then
 				return
 			end
 
 			-- Sets to the settings that the Notification has been shown
-			PERSISTENT_DATA_NOTIFICATIONS[_id] = true
-			Package.SetPersistentData("notifications", PERSISTENT_DATA_NOTIFICATIONS)
+			Notifications.persistent_data[_id] = true
+			Package.SetPersistentData("notifications." .. _id, true)
 		end
 
 		Client.ShowNotification(_message, type, false, _duration)
 	end, delay * 1000, id, message, duration, force)
 end
+
+Package.Subscribe("Load", function()
+	-- Gets all notifications already sent
+	Notifications.persistent_data = Package.GetPersistentData("notifications") or {}
+end)
+
 
 Events.SubscribeRemote("AddNotification", Notifications.Add)
 Sandbox.HUD:Subscribe("AddNotification", Notifications.Add)
