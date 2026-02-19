@@ -4,8 +4,6 @@ Sandbox = {}
 -- Exposes Sandbox to other packages, this will contain all subsystems as well
 Package.Export("Sandbox", Sandbox)
 
-Package.Require("Config.lua")
-
 -- List of Spawn Locations
 SPAWN_POINTS = Server.GetMapSpawnPoints()
 

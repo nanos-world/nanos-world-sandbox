@@ -199,13 +199,6 @@ end)
 -- Exposes SpawnMenu to other packages
 Package.Export("SpawnMenu", SpawnMenu)
 
-function RequireAllLuaFilesInFolder(folder)
-	local files = Package.GetFiles(folder, ".lua")
-	for _, file in pairs(files) do
-		Package.Require(file)
-	end
-end
-
 -- Requires all the Tools
 Package.Require("Tools/BaseToolGun.lua")
 RequireAllLuaFilesInFolder("Server/Tools")

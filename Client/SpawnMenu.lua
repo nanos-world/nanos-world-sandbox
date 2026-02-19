@@ -267,13 +267,6 @@ SpawnMenu.AddCategory("tools",		"constrainers",		"Constrainer Guns",	"modules/sp
 SpawnMenu.AddCategory("npcs",		"npcs",				"NPCs",				"modules/spawn-menu/images/tabs/robot.webp")
 
 
-function RequireAllLuaFilesInFolder(folder)
-	local files = Package.GetFiles(folder, ".lua")
-	for _, file in pairs(files) do
-		Package.Require(file)
-	end
-end
-
 -- Requires all the Entities
 RequireAllLuaFilesInFolder("Client/Entities")
 

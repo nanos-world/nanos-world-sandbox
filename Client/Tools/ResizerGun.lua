@@ -7,9 +7,9 @@ ResizerGun.description = "Select an object and resize it with the mouse wheel"
 
 -- Tool Tutorials
 ResizerGun.tutorials = {
-	{ key = "LeftClick",	text = "select object" },
-	{ key = "R",			text = "reset scale" },
-	{ key = "MouseScroll",	text = "scale" },
+	{ key = "LeftClick",		text = "select object" },
+	{ key = "R",				text = "reset scale" },
+	{ key = "MouseScrollUp",	text = "scale" },
 }
 
 ResizerGun.tips = {

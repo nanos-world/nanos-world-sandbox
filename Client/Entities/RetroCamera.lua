@@ -36,17 +36,17 @@ function RetroCamera:OnSpawn()
 	local location = self:GetLocation()
 
 	self.scene_capture = SceneCapture(location, Rotator(), RetroCamera.resolution, RetroCamera.resolution, -1, 5000, 50, false)
-	self.scene_capture:AttachTo(self, AttachmentRule.SnapToTarget, "", -1)
+	self.scene_capture:AttachTo(self, AttachmentRule.SnapToTarget, "", 0)
 	self.scene_capture:SetRelativeLocation(Vector(0, 10, 10))
 	self.scene_capture:SetRelativeRotation(Rotator(0, 90, 0))
 
 	self.light = Light(location, Rotator(), Color.WHITE, LightType.Spot, 50, 1000, 50, 0, 5000, true, false, false)
-	self.light:AttachTo(self, AttachmentRule.SnapToTarget, "", -1)
+	self.light:AttachTo(self, AttachmentRule.SnapToTarget, "", 0)
 	self.light:SetRelativeLocation(Vector(0, 10, 10))
 	self.light:SetRelativeRotation(Rotator(0, 90, 0))
 
 	self.sound = Sound(self:GetLocation(), "package://sandbox/Client/Media/Entities/CameraClick.ogg", false, false, SoundType.SFX, 1, 1, 400, 3600, AttenuationFunction.Logarithmic, false, SoundLoopMode.Never, false)
-	self.sound:AttachTo(self, AttachmentRule.SnapToTarget, "", -1)
+	self.sound:AttachTo(self, AttachmentRule.SnapToTarget, "", 0)
 
 	self.last_photo_time = 0
 end
@@ -94,11 +94,12 @@ function RetroCamera:OnGrab(character)
 	Input.Bind("LeftClick", InputEvent.Pressed, RetroCamera.OnLeftClickPressed)
 
 	self.screen = StaticMesh(self:GetLocation(), Rotator(), "nanos-world::SM_Plane", CollisionType.NoCollision)
-	self.screen:AttachTo(self, AttachmentRule.SnapToTarget, "", -1)
+	self.screen:AttachTo(self, AttachmentRule.SnapToTarget, "", 0)
 	self.screen:SetRelativeLocation(Vector(7.5, -11, 12.5))
 	self.screen:SetRelativeRotation(Rotator(0, 180, 90))
 	self.screen:SetScale(Vector(0.075))
 
+	-- Enables render rate at 30 captures per second
 	self.scene_capture:SetRenderRate(0.033)
 
 	self.screen:SetMaterialFromSceneCapture(self.scene_capture, 0)
@@ -123,6 +124,7 @@ function RetroCamera:OnUnGrab(character)
 		RetroCamera:OnRightClickReleased()
 	end
 
+	-- Disables render rate
 	self.scene_capture:SetRenderRate(-1)
 	self.screen:Destroy()
 

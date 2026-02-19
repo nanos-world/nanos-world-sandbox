@@ -20,7 +20,7 @@ BalloonGun.tips = {
 }
 
 -- Balloon Configuration
-BalloonGun.asset = Balloon.assets[math.random(9)].id -- Only the 9 first balloons
+BalloonGun.asset = "nanos-world::SM_Balloon_01"
 BalloonGun.force = 100 -- (x1000)
 BalloonGun.max_length = 100
 BalloonGun.length_randomness = 0.15
@@ -43,7 +43,7 @@ BalloonGun.picked_context_menu_items = {
 	{
 		label = "mesh",
 		type = "select_image",
-		options = Balloon.assets,
+		options = BALLOON_ASSETS,
 		callback = function(value)
 			BalloonGun.asset = value
 			BalloonGun.debug_trace.preview_mesh = value

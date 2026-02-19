@@ -113,9 +113,9 @@ function OnCharacterPickup(character, object)
 	local class = object:GetClass()
 
 	-- Sets the notification tips when grabbing the object, if any defined
-	local tool_gun_tips = class.tips
-	if (tool_gun_tips) then
-		for index, tip in pairs(tool_gun_tips) do
+	local tips = class.tips
+	if (tips) then
+		for index, tip in ipairs(tips) do
 			local delay = (index - 1) * 60 + 5
 			Notifications.Add(NotificationType.Info, class.name .. "_TIP_" .. tostring(index), tip, 10, delay)
 		end

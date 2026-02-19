@@ -30,8 +30,8 @@ ThrusterGun.tips = {
 }
 
 -- ThrusterGun Configuration
-ThrusterGun.particle_asset = Thruster.assets_list[math.random(#Thruster.assets_list - 1) + 1].id
-ThrusterGun.sound_asset = Thruster.sounds_list[math.random(#Thruster.sounds_list - 1) + 1].id
+ThrusterGun.particle_asset = THRUSTER_ASSETS[math.random(#THRUSTER_ASSETS - 1) + 1].id
+ThrusterGun.sound_asset = THRUSTER_SOUNDS[math.random(#THRUSTER_SOUNDS - 1) + 1].id
 ThrusterGun.force = 100
 ThrusterGun.active = true
 
@@ -40,7 +40,7 @@ ThrusterGun.picked_context_menu_items = {
 	{
 		label = "particle",
 		type = "select",
-		options = Thruster.assets_list,
+		options = THRUSTER_ASSETS,
 		callback = function(value)
 			ThrusterGun.particle_asset = value
 		end,
@@ -51,7 +51,7 @@ ThrusterGun.picked_context_menu_items = {
 	{
 		label = "sound",
 		type = "select",
-		options = Thruster.sounds_list,
+		options = THRUSTER_SOUNDS,
 		callback = function(value)
 			ThrusterGun.sound_asset = value
 		end,
