@@ -24,7 +24,6 @@ end
 -- Helper to update an item ownership data
 function SpawnHistory.UpdateItemOwnership(player, item)
 	item:SetValue("SpawnedBy", {
-		player = player,
 		player_name = player:GetName(),
 		player_steam_id = player:GetSteamID(),
 		time = Server.GetTime()
