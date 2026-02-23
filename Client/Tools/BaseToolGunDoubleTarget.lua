@@ -29,6 +29,11 @@ function ToolGunDoubleTarget:OnLocalPlayerFire(shooter)
 
 			-- If we have an entity, then get the relative instead because it can change the location when data reaching the server
 			if (targeting_second_to) then
+				if (not targeting_second_to:HasAuthority()) then
+					SoundInvalidAction:Play()
+					return
+				end
+
 				targeting_second_location, targeting_second_rotation = NanosMath.RelativeTo(trace_result.Location, trace_result.Normal:ToOrientationRotator(), trace_result.Entity)
 			else
 				targeting_second_location = trace_result.Location
