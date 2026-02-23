@@ -20,8 +20,10 @@ SpringGun.debug_trace = {
 }
 
 -- Spring Gun Configuration
-SpringGun.linear_strength = 800
-SpringGun.angular_strength = 200
+SpringGun.configs = {
+	linear_strength = 800,
+	angular_strength = 200,
+}
 
 -- Context Menu Items when Picking Up this Tool
 SpringGun.picked_context_menu_items = {
@@ -31,10 +33,10 @@ SpringGun.picked_context_menu_items = {
 		label = "linear strength",
 		min = 0, max = 10000,
 		callback = function(value)
-			SpringGun.linear_strength = value
+			SpringGun.configs.linear_strength = value
 		end,
 		value = function()
-			return SpringGun.linear_strength
+			return SpringGun.configs.linear_strength
 		end,
 	},
 	{
@@ -43,10 +45,10 @@ SpringGun.picked_context_menu_items = {
 		label = "angular strength",
 		min = 0, max = 1000,
 		callback = function(value)
-			SpringGun.angular_strength = value
+			SpringGun.configs.angular_strength = value
 		end,
 		value = function()
-			return SpringGun.angular_strength
+			return SpringGun.configs.angular_strength
 		end,
 	},
 }
@@ -55,5 +57,5 @@ SpringGun.picked_context_menu_items = {
 -- Overrides ToolGunSingleTarget method
 function SpringGun:OnLocalPlayerTarget(targeting_first_to, targeting_first_relative_location, targeting_first_relative_rotation, targeting_second_to, targeting_second_location, targeting_second_rotation)
 	-- Calls remote to attach rope
-	self:CallRemoteEvent("SpringAttach", targeting_first_to, targeting_first_relative_location, targeting_second_to, targeting_second_location, SpringGun.linear_strength, SpringGun.angular_strength)
+	self:CallRemoteEvent("SpringAttach", targeting_first_to, targeting_first_relative_location, targeting_second_to, targeting_second_location, SpringGun.configs)
 end

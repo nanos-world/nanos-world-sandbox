@@ -187,19 +187,22 @@ function TryPickUpObject()
 	-- Do the Trace
 	local trace_result = Trace.LineSingle(start_location, end_location, collision_trace, TraceMode.ReturnEntity | TraceMode.TraceOnlyVisibility)
 
+	local trace_result_entity = trace_result.Entity
+
 	-- If hit something and hit an Entity
-	if (trace_result.Success and trace_result.Entity and not trace_result.Entity:HasAuthority()) then
-		-- Cannot grab Player's Characters, cannot grab attached entities or entities which are being grabbed
+	if (trace_result.Success and trace_result_entity and not trace_result_entity:HasAuthority()) then
+		-- Cannot grab Player's Characters, cannot grab attached entities, entities which are being grabbed or that don't have GetLocation (non actors)
 		if (
-			((trace_result.Entity:IsA(Character) or trace_result.Entity:IsA(CharacterSimple)) and trace_result.Entity:GetPlayer() ~= nil) or
-			trace_result.Entity:GetAttachedTo() or
-			trace_result.Entity:GetValue("IsBeingGrabbed")
+			((trace_result_entity:IsA(Character) or trace_result_entity:IsA(CharacterSimple)) and trace_result_entity:GetPlayer() ~= nil) or
+			(not trace_result_entity.GetAttachedTo or not trace_result_entity.GetLocation) or
+			trace_result_entity:GetAttachedTo() or
+			trace_result_entity:GetValue("IsBeingGrabbed")
 		) then
 			return end_location
 		end
 
 		-- Sets the new picked up object
-		PhysicsGun.picking_object = trace_result.Entity
+		PhysicsGun.picking_object = trace_result_entity
 
 		-- Spawns a 'gravitating' sound attached to the gravitated object
 		PhysicsGun.grabbed_sound = Sound(Vector(), "nanos-world::A_VR_Object_Grabbed_Loop", false, false, SoundType.SFX, 0.25)

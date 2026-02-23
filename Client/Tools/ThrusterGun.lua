@@ -30,10 +30,12 @@ ThrusterGun.tips = {
 }
 
 -- ThrusterGun Configuration
-ThrusterGun.particle_asset = THRUSTER_ASSETS[math.random(#THRUSTER_ASSETS - 1) + 1].id
-ThrusterGun.sound_asset = THRUSTER_SOUNDS[math.random(#THRUSTER_SOUNDS - 1) + 1].id
-ThrusterGun.force = 100
-ThrusterGun.active = true
+ThrusterGun.configs = {
+	particle_asset = THRUSTER_ASSETS[math.random(#THRUSTER_ASSETS - 1) + 1].id,
+	sound_asset = THRUSTER_SOUNDS[math.random(#THRUSTER_SOUNDS - 1) + 1].id,
+	force = 100,
+	active = true,
+}
 
 -- Context Menu Items when Picking Up this Tool
 ThrusterGun.picked_context_menu_items = {
@@ -42,10 +44,10 @@ ThrusterGun.picked_context_menu_items = {
 		type = "select",
 		options = THRUSTER_ASSETS,
 		callback = function(value)
-			ThrusterGun.particle_asset = value
+			ThrusterGun.configs.particle_asset = value
 		end,
 		value = function()
-			return ThrusterGun.particle_asset
+			return ThrusterGun.configs.particle_asset
 		end,
 	},
 	{
@@ -53,10 +55,10 @@ ThrusterGun.picked_context_menu_items = {
 		type = "select",
 		options = THRUSTER_SOUNDS,
 		callback = function(value)
-			ThrusterGun.sound_asset = value
+			ThrusterGun.configs.sound_asset = value
 		end,
 		value = function()
-			return ThrusterGun.sound_asset
+			return ThrusterGun.configs.sound_asset
 		end,
 	},
 	{
@@ -64,20 +66,20 @@ ThrusterGun.picked_context_menu_items = {
 		type = "range",
 		min = 0, max = 1000,
 		callback = function(value)
-			ThrusterGun.force = value
+			ThrusterGun.configs.force = value
 		end,
 		value = function()
-			return ThrusterGun.force
+			return ThrusterGun.configs.force
 		end,
 	},
 	{
 		label = "start activated",
 		type = "checkbox",
 		callback = function(value)
-			ThrusterGun.active = value
+			ThrusterGun.configs.active = value
 		end,
 		value = function()
-			return ThrusterGun.active
+			return ThrusterGun.configs.active
 		end,
 	},
 }
@@ -85,5 +87,5 @@ ThrusterGun.picked_context_menu_items = {
 -- Overrides ToolGunSingleTarget method
 function ThrusterGun:OnLocalPlayerTarget(location, relative_location, relative_rotation, normal, entity)
 	-- Call remote event to spawn the thruster
-	self:CallRemoteEvent("SpawnThruster", location, relative_location, relative_rotation, normal, entity, ThrusterGun.particle_asset, ThrusterGun.sound_asset, ThrusterGun.force * 1000, ThrusterGun.active)
+	self:CallRemoteEvent("SpawnThruster", location, relative_location, relative_rotation, normal, entity, ThrusterGun.configs)
 end

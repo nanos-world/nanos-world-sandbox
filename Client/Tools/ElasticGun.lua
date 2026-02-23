@@ -19,9 +19,11 @@ ElasticGun.debug_trace = {
 }
 
 -- Elastic Gun Configuration
-ElasticGun.restitution = 0.75
-ElasticGun.stiffness = 30
-ElasticGun.damping = 1
+ElasticGun.configs = {
+	restitution = 0.75,
+	stiffness = 30,
+	damping = 1,
+}
 
 -- Context Menu Items when picking up this Tool
 ElasticGun.picked_context_menu_items = {
@@ -32,10 +34,10 @@ ElasticGun.picked_context_menu_items = {
 		min = 0,
 		max = 100,
 		callback = function(value)
-			ElasticGun.restitution = value / 100
+			ElasticGun.configs.restitution = value / 100
 		end,
 		value = function()
-			return ElasticGun.restitution * 100
+			return ElasticGun.configs.restitution * 100
 		end
 	},
 	{
@@ -45,10 +47,10 @@ ElasticGun.picked_context_menu_items = {
 		min = 0,
 		max = 1000,
 		callback = function(value)
-			ElasticGun.stiffness = value
+			ElasticGun.configs.stiffness = value
 		end,
 		value = function()
-			return ElasticGun.stiffness
+			return ElasticGun.configs.stiffness
 		end
 	},
 	{
@@ -58,10 +60,10 @@ ElasticGun.picked_context_menu_items = {
 		min = 0,
 		max = 100,
 		callback = function(value)
-			ElasticGun.damping = value
+			ElasticGun.configs.damping = value
 		end,
 		value = function()
-			return ElasticGun.damping
+			return ElasticGun.configs.damping
 		end
 	},
 }
@@ -69,5 +71,5 @@ ElasticGun.picked_context_menu_items = {
 -- Overrides ToolGunSingleTarget method
 function ElasticGun:OnLocalPlayerTarget(targeting_first_to, targeting_first_relative_location, targeting_first_relative_rotation, targeting_second_to, targeting_second_location, targeting_second_rotation)
 	-- Calls remote to attach rope
-	self:CallRemoteEvent("ElasticAttach", targeting_first_to, targeting_first_relative_location, targeting_second_to, targeting_second_location, ElasticGun.restitution, ElasticGun.stiffness, ElasticGun.damping)
+	self:CallRemoteEvent("ElasticAttach", targeting_first_to, targeting_first_relative_location, targeting_second_to, targeting_second_location, ElasticGun.configs)
 end

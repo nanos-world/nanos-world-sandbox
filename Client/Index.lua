@@ -16,8 +16,8 @@ Input.Register("ContextMenu", "C", "Toggles the Context Menu")
 Input.Register("Undo", "X", "Destroy last spawned Item")
 
 -- Loads Package Files
-Package.Require("Config.lua")
 Package.Require("EntityInputSystem.lua")
+Package.Require("PersistentConfigSystem.lua")
 Package.Require("Notifications.lua")
 Package.Require("ContextMenu.lua")
 Package.Require("SpawnMenu.lua")

@@ -13,22 +13,24 @@ WheelGun.tutorials = {
 	{ key = "ContextMenu",	text = "wheel settings" },
 }
 
--- WheelGun Configuration
-WheelGun.asset = "nanos-world::SM_Offroad_Tire"
-WheelGun.force = 1000 -- (x1000)
-WheelGun.active = true
-WheelGun.scale = 1
-WheelGun.forward = true
+-- Balloon Configuration
+WheelGun.configs = {
+	asset =		PersistentConfigSystem.GetConfig("WheelGun", "asset")		or "nanos-world::SM_Offroad_Tire",
+	force =		PersistentConfigSystem.GetConfig("WheelGun", "force")		or 1000, -- (x1000)
+	active =	PersistentConfigSystem.GetConfig("WheelGun", "active")		or true,
+	scale =		1,
+	forward =	true,
+}
 
 -- Tool Trace Debug Settings
 WheelGun.debug_trace = {
 	collision_channel = CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
 	show_crosshair = false,
 	show_preview_mesh = true,
-	preview_mesh = WheelGun.asset,
+	preview_mesh = WheelGun.configs.asset,
 	preview_mesh_scale = Vector(1, 1, 1),
-	preview_mesh_offset = Wheel.wheels_config[WheelGun.asset].offset,
-	preview_mesh_rotation = Wheel.wheels_config[WheelGun.asset].direction:ToOrientationRotator(),
+	preview_mesh_offset = WHEELS_CONFIG[WheelGun.configs.asset].offset,
+	preview_mesh_rotation = WHEELS_CONFIG[WheelGun.configs.asset].direction:ToOrientationRotator(),
 }
 
 -- Context Menu Items when Picking Up this Tool
@@ -36,15 +38,15 @@ WheelGun.picked_context_menu_items = {
 	{
 		label = "mesh",
 		type = "select_image",
-		options = Wheel.wheels_assets,
+		options = WHEELS_ASSETS,
 		callback = function(value)
-			WheelGun.asset = value
+			WheelGun.configs.asset = value
 			WheelGun.debug_trace.preview_mesh = value
-			WheelGun.debug_trace.preview_mesh_offset = Wheel.wheels_config[value].offset
-			WheelGun.debug_trace.preview_mesh_rotation = Wheel.wheels_config[value].direction:ToOrientationRotator()
+			WheelGun.debug_trace.preview_mesh_offset = WHEELS_CONFIG[value].offset
+			WheelGun.debug_trace.preview_mesh_rotation = WHEELS_CONFIG[value].direction:ToOrientationRotator()
 		end,
 		value = function()
-			return WheelGun.asset
+			return WheelGun.configs.asset
 		end,
 	},
 	{
@@ -52,30 +54,32 @@ WheelGun.picked_context_menu_items = {
 		type = "range",
 		min = 0, max = 10000,
 		callback = function(value)
-			WheelGun.force = value
+			WheelGun.configs.force = value
+			PersistentConfigSystem.SaveConfig("WheelGun", "force", value)
 		end,
 		value = function()
-			return WheelGun.force
+			return WheelGun.configs.force
 		end,
 	},
 	{
 		label = "start activated",
 		type = "checkbox",
 		callback = function(value)
-			WheelGun.active = value
+			WheelGun.configs.active = value
+			PersistentConfigSystem.SaveConfig("WheelGun", "active", value)
 		end,
 		value = function()
-			return WheelGun.active
+			return WheelGun.configs.active
 		end,
 	},
 	{
 		label = "forward",
 		type = "checkbox",
 		callback = function(value)
-			WheelGun.forward = value
+			WheelGun.configs.forward = value
 		end,
 		value = function()
-			return WheelGun.forward
+			return WheelGun.configs.forward
 		end
 	},
 	{
@@ -83,11 +87,11 @@ WheelGun.picked_context_menu_items = {
 		type = "range",
 		min = 0.1, max = 3, step = 0.1,
 		callback = function(value)
-			WheelGun.scale = value
+			WheelGun.configs.scale = value
 			WheelGun.debug_trace.preview_mesh_scale = Vector(value, value, value)
 		end,
 		value = function()
-			return WheelGun.scale
+			return WheelGun.configs.scale
 		end,
 	},
 }
@@ -96,5 +100,5 @@ WheelGun.picked_context_menu_items = {
 -- Overrides ToolGunSingleTarget method
 function WheelGun:OnLocalPlayerTarget(location, relative_location, relative_rotation, normal, entity)
 	-- Call remote event to spawn the thruster
-	self:CallRemoteEvent("SpawnWheel", location, relative_location, relative_rotation, normal, entity, WheelGun.force * 1000, WheelGun.active, WheelGun.forward, WheelGun.scale, WheelGun.asset, Wheel.wheels_config[WheelGun.asset])
+	self:CallRemoteEvent("SpawnWheel", location, relative_location, relative_rotation, normal, entity, WheelGun.configs)
 end

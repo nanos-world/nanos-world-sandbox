@@ -49,8 +49,8 @@ function ToolGunDoubleTarget:OnLocalPlayerFire(shooter)
 			Sound(trace_result.Location, "nanos-world::A_VR_Confirm", false, true, SoundType.SFX, 0.15, 0.85)
 			return
 
-		-- If is not yet targeting the first, it must be an entity (and not local spawned)
-		elseif (trace_result.Entity and not trace_result.Entity:HasAuthority()) then
+		-- If is not yet targeting the first, it must be an actor (has GetLocation), and not local spawned
+		elseif (trace_result.Entity and not trace_result.Entity:HasAuthority() and trace_result.Entity.GetLocation) then
 			ToolGunDoubleTarget.targeting_first_to = trace_result.Entity
 
 			-- Stores the relative location and rotation relative to the entity

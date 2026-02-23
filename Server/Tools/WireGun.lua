@@ -5,7 +5,7 @@ function WireGun:Constructor(location, rotation)
 	ToolGunDoubleTarget.Constructor(self, location, rotation, Color.CHARTREUSE)
 end
 
-function WireGun:OnWire(player, wire_start, wire_end, show_wire, wire_color)
+function WireGun:OnWire(player, wire_start, wire_end, configs)
 	-- Only allows attaching if any of the two has a LinkEntity function AND the other has an Activate function
 	if (
 		(not wire_start.LinkEntity and not wire_end.LinkEntity) or
@@ -19,12 +19,12 @@ function WireGun:OnWire(player, wire_start, wire_end, show_wire, wire_color)
 
 	local linked_start = false
 	if (wire_start.LinkEntity) then
-		linked_start = wire_start:LinkEntity(wire_end, show_wire, wire_color)
+		linked_start = wire_start:LinkEntity(wire_end, configs.show_wire, configs.wire_color)
 	end
 
 	local linked_end = false
 	if (wire_end.LinkEntity) then
-		linked_end = wire_end:LinkEntity(wire_start, show_wire, wire_color)
+		linked_end = wire_end:LinkEntity(wire_start, configs.show_wire, configs.wire_color)
 	end
 
 	-- If both returned false, it means they are already attached, then detaches

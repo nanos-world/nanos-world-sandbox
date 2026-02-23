@@ -8,7 +8,13 @@ WireGun.description = "Connects two devices with a wire, to enable interactions 
 -- Tool Tutorials
 WireGun.tutorials = {
 	{ key = "LeftClick",	text = "wire/unwire object" },
-	-- { key = "Undo", text = "undo attach" },
+	{ key = "Undo",			text = "undo wire" },
+}
+
+-- WireGun Configurations
+WireGun.configs = {
+	wire_color =	PersistentConfigSystem.GetConfig("WireGun",	"wire_color")	or Color.BLACK,
+	show_wire =		PersistentConfigSystem.GetConfig("WireGun",	"show_wire")	or true,
 }
 
 -- Tool Trace Debug Settings
@@ -24,10 +30,11 @@ WireGun.picked_context_menu_items = {
 		type = "color",
 		label = "color",
 		callback = function(value)
-			WireGun.wire_color = Color.FromHEX(value)
+			WireGun.configs.wire_color = Color.FromHEX(value)
+			PersistentConfigSystem.SaveConfig("WireGun", "wire_color", WireGun.configs.wire_color)
 		end,
 		value = function()
-			return WireGun.wire_color:ToHex(false)
+			return WireGun.configs.wire_color:ToHex(false)
 		end
 	},
 	{
@@ -35,17 +42,14 @@ WireGun.picked_context_menu_items = {
 		type = "checkbox",
 		label = "show wire",
 		callback = function(value)
-			WireGun.show_wire = value
+			WireGun.configs.show_wire = value
+			PersistentConfigSystem.SaveConfig("WireGun", "show_wire", value)
 		end,
 		value = function()
-			return WireGun.show_wire
+			return WireGun.configs.show_wire
 		end
 	},
 }
-
--- WireGun Configurations
-WireGun.wire_color = Color.BLACK
-WireGun.show_wire = true
 
 
 -- Overrides ToolGunDoubleTarget method
@@ -53,5 +57,5 @@ function WireGun:OnLocalPlayerTarget(targeting_first_to, targeting_first_relativ
 	-- TODO test if can wire these two entities on client side?
 
 	-- Calls remote to attach wire
-	self:CallRemoteEvent("Wire", targeting_first_to, targeting_second_to, WireGun.show_wire, WireGun.wire_color)
+	self:CallRemoteEvent("Wire", targeting_first_to, targeting_second_to, WireGun.configs)
 end

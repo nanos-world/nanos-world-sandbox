@@ -5,7 +5,7 @@ function ElasticGun:Constructor(location, rotation)
 	ToolGunDoubleTarget.Constructor(self, location, rotation, Color.ORANGE)
 end
 
-function ElasticGun:OnElasticAttach(player, targeting_first_to, targeting_first_relative_location, targeting_second_to, targeting_second_location, restitution, stiffness, damping)
+function ElasticGun:OnElasticAttach(player, targeting_first_to, targeting_first_relative_location, targeting_second_to, targeting_second_location, configs)
 	-- Refuse attaching rope from/to a character, also refuse attaching to itself
 	if (
 		(targeting_first_to and targeting_first_to:IsA(Character)) or
@@ -22,7 +22,7 @@ function ElasticGun:OnElasticAttach(player, targeting_first_to, targeting_first_
 	local cable = CableUtils.SpawnCableAttached(targeting_first_to, targeting_first_relative_location, targeting_second_to, targeting_second_location, false,
 		function(cable, distance)
 			-- Configures the Cable Linear Physics Limit
-			cable:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, distance, restitution, true, stiffness, damping)
+			cable:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, distance, configs.restitution, true, configs.stiffness, configs.damping)
 
 			-- Sets cable rendering settings (width = 5, sides = 4)
 			cable:SetRenderingSettings(5, 4, 1)

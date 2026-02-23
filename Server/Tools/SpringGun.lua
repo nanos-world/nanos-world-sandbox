@@ -5,7 +5,7 @@ function SpringGun:Constructor(location, rotation)
 	ToolGunDoubleTarget.Constructor(self, location, rotation, Color.ORANGE)
 end
 
-function SpringGun:OnSpringAttach(player, targeting_first_to, targeting_first_relative_location, targeting_second_to, targeting_second_location, linear_strength, angular_strength)
+function SpringGun:OnSpringAttach(player, targeting_first_to, targeting_first_relative_location, targeting_second_to, targeting_second_location, configs)
 	-- Refuse attaching rope from/to a character, also refuse attaching to itself
 	if (
 		(targeting_first_to and targeting_first_to:IsA(Character)) or
@@ -24,8 +24,8 @@ function SpringGun:OnSpringAttach(player, targeting_first_to, targeting_first_re
 			-- Configures the Cable Physics Limits to be rigid
 			cable:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Locked, ConstraintMotion.Locked, distance / 2)
 			cable:SetAngularLimits(ConstraintMotion.Free, ConstraintMotion.Free, ConstraintMotion.Free)
-			cable:SetLinearMotorPositionSettings(true, false, false, linear_strength)
-			cable:SetAngularMotorSLERPOrientationSettings(true, angular_strength)
+			cable:SetLinearMotorPositionSettings(true, false, false, configs.linear_strength)
+			cable:SetAngularMotorSLERPOrientationSettings(true, configs.angular_strength)
 
 			cable:SetRenderingSettings(30, 6, 1)
 

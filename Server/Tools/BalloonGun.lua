@@ -5,7 +5,7 @@ function BalloonGun:Constructor(location, rotation)
 	ToolGunSingleTarget.Constructor(self, location, rotation, Color.VIOLET)
 end
 
-function BalloonGun:OnSpawnBalloon(player, spawn_location, relative_location, relative_rotation, direction, entity, force, max_length, asset)
+function BalloonGun:OnSpawnBalloon(player, spawn_location, relative_location, relative_rotation, direction, entity, configs)
 	-- Refuse to attach a balloon to a Character
 	if (entity and entity:IsA(Character) and entity:GetPlayer()) then
 		return
@@ -15,7 +15,14 @@ function BalloonGun:OnSpawnBalloon(player, spawn_location, relative_location, re
 		return
 	end
 
-	local balloon = Balloon(spawn_location, Rotator(0, math.random() * 360, 0), "", "", player, relative_location, relative_rotation, direction, entity, force, max_length, asset)
+	-- Calculate randomness
+	local force_randomness = configs.force * configs.length_randomness / 100
+	local max_length_randomness = configs.max_length * configs.length_randomness / 100
+
+	local force = (math.random() * force_randomness * 2 + (configs.force - force_randomness)) * 1000
+	local max_length = math.random() * max_length_randomness * 2 + (configs.max_length - max_length_randomness)
+
+	local balloon = Balloon(spawn_location, Rotator(0, math.random() * 360, 0), "", "", player, relative_location, relative_rotation, direction, entity, force, max_length, configs.asset)
 
 	-- Updates the client's spawn history
 	SpawnHistory.AddItemToHistory(player, balloon)

@@ -50,15 +50,15 @@ function ToolGun:ToggleToolGunAiming(enable)
 	local debug_trace = self.debug_trace
 	if (not debug_trace or not debug_trace.collision_channel) then return end
 
-	-- Set defaults
-	if (debug_trace.show_preview_mesh) then
-		if (not debug_trace.preview_mesh) then debug_trace.preview_mesh = "nanos-world::SM_Toaster" end
-		if (not debug_trace.preview_mesh_scale) then debug_trace.preview_mesh_scale = Vector(1, 1, 1) end
-		if (not debug_trace.preview_mesh_offset) then debug_trace.preview_mesh_offset = Vector(0, 0, 0) end
-		if (not debug_trace.preview_mesh_rotation) then debug_trace.preview_mesh_rotation = Rotator(0, 0, 0) end
-	end
-
 	if (enable) then
+		-- Set defaults
+		if (debug_trace.show_preview_mesh) then
+			if (not debug_trace.preview_mesh) then debug_trace.preview_mesh = "nanos-world::SM_Toaster" end
+			if (not debug_trace.preview_mesh_scale) then debug_trace.preview_mesh_scale = Vector(1, 1, 1) end
+			if (not debug_trace.preview_mesh_offset) then debug_trace.preview_mesh_offset = Vector(0, 0, 0) end
+			if (not debug_trace.preview_mesh_rotation) then debug_trace.preview_mesh_rotation = Rotator(0, 0, 0) end
+		end
+
 		ToolGun.draw_debug_toolgun = self
 		Client.Subscribe("Tick", ToolGun.OnDebugTick)
 	else
@@ -109,22 +109,21 @@ function ToolGun.ToggleDrawDebugPreviewMesh(enable, default_location, default_ro
 			ToolGun.preview_mesh_prop:SetMaterialColorParameter("Tint", Color.GREEN)
 			ToolGun.preview_mesh_prop:SetMaterialColorParameter("Emissive", Color.GREEN * 0.5)
 			ToolGun.preview_mesh_prop:SetMaterialScalarParameter("Opacity", 0.8)
-		else
-			-- If it already exists and is not visible, then updates it
-			if (not ToolGun.preview_mesh_prop:IsVisible()) then
-				ToolGun.preview_mesh_prop:SetLocation(default_location)
-				ToolGun.preview_mesh_prop:SetRotation(default_rotation)
 
-				if (ToolGun.preview_mesh_prop:GetScale() ~= ToolGun.draw_debug_toolgun.debug_trace.preview_mesh_scale) then
-					ToolGun.preview_mesh_prop:SetScale(ToolGun.draw_debug_toolgun.debug_trace.preview_mesh_scale)
-				end
+		-- If it already exists and is not visible, then updates it
+		elseif (not ToolGun.preview_mesh_prop:IsVisible()) then
+			ToolGun.preview_mesh_prop:SetLocation(default_location)
+			ToolGun.preview_mesh_prop:SetRotation(default_rotation)
 
-				if (ToolGun.preview_mesh_prop:GetMesh() ~= ToolGun.draw_debug_toolgun.debug_trace.preview_mesh) then
-					ToolGun.preview_mesh_prop:SetMesh(ToolGun.draw_debug_toolgun.debug_trace.preview_mesh)
-				end
-
-				ToolGun.preview_mesh_prop:SetVisibility(true)
+			if (ToolGun.preview_mesh_prop:GetScale() ~= ToolGun.draw_debug_toolgun.debug_trace.preview_mesh_scale) then
+				ToolGun.preview_mesh_prop:SetScale(ToolGun.draw_debug_toolgun.debug_trace.preview_mesh_scale)
 			end
+
+			if (ToolGun.preview_mesh_prop:GetMesh() ~= ToolGun.draw_debug_toolgun.debug_trace.preview_mesh) then
+				ToolGun.preview_mesh_prop:SetMesh(ToolGun.draw_debug_toolgun.debug_trace.preview_mesh)
+			end
+
+			ToolGun.preview_mesh_prop:SetVisibility(true)
 		end
 	else
 		if (ToolGun.preview_mesh_prop and ToolGun.preview_mesh_prop:IsValid()) then

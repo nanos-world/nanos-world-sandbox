@@ -5,7 +5,7 @@ function ThrusterGun:Constructor(location, rotation)
 	ToolGunSingleTarget.Constructor(self, location, rotation, Color.WHITE)
 end
 
-function ThrusterGun:OnSpawnThruster(player, hit_location, relative_location, relative_rotation, direction, entity, particle_asset, sound_asset, force, active)
+function ThrusterGun:OnSpawnThruster(player, hit_location, relative_location, relative_rotation, direction, entity, configs)
 	-- Make sure that entity is valid
 	if (not NanosUtils.IsEntityValid(entity)) then return end
 
@@ -19,7 +19,7 @@ function ThrusterGun:OnSpawnThruster(player, hit_location, relative_location, re
 	end
 
 	local rotation = direction:ToOrientationRotator()
-	local thruster = Thruster(hit_location, rotation, particle_asset, sound_asset, force, active)
+	local thruster = Thruster(hit_location, rotation, configs.particle_asset, configs.sound_asset, configs.force * 1000, configs.active)
 
 	-- Gets the relative location rotated to attach to the exact point the player aimed
 	thruster:AttachTo(entity, AttachmentRule.SnapToTarget, "", 1)

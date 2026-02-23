@@ -20,17 +20,19 @@ BalloonGun.tips = {
 }
 
 -- Balloon Configuration
-BalloonGun.asset = "nanos-world::SM_Balloon_01"
-BalloonGun.force = 100 -- (x1000)
-BalloonGun.max_length = 100
-BalloonGun.length_randomness = 0.15
+BalloonGun.configs = {
+	asset =					PersistentConfigSystem.GetConfig("BalloonGun",	"asset")				or "nanos-world::SM_Balloon_01",
+	force =					PersistentConfigSystem.GetConfig("BalloonGun",	"force")				or 100, -- (x1000)
+	max_length =			PersistentConfigSystem.GetConfig("BalloonGun",	"max_length")			or 100,
+	length_randomness =		PersistentConfigSystem.GetConfig("BalloonGun",	"length_randomness")	or 15, -- %
+}
 
 -- Tool Trace Debug Settings
 BalloonGun.debug_trace = {
 	collision_channel = CollisionChannel.WorldStatic | CollisionChannel.WorldDynamic | CollisionChannel.PhysicsBody | CollisionChannel.Vehicle,
 	show_crosshair = true,
 	show_preview_mesh = true,
-	preview_mesh = BalloonGun.asset,
+	preview_mesh = BalloonGun.configs.asset,
 	preview_mesh_scale = Vector(1, 1, 1),
 	preview_mesh_offset = Vector(0, 0, -50),
 	preview_mesh_rotation = Rotator(),
@@ -45,11 +47,12 @@ BalloonGun.picked_context_menu_items = {
 		type = "select_image",
 		options = BALLOON_ASSETS,
 		callback = function(value)
-			BalloonGun.asset = value
+			BalloonGun.configs.asset = value
 			BalloonGun.debug_trace.preview_mesh = value
+			PersistentConfigSystem.SaveConfig("BalloonGun", "asset", value)
 		end,
 		value = function()
-			return BalloonGun.asset
+			return BalloonGun.configs.asset
 		end,
 	},
 	{
@@ -58,10 +61,11 @@ BalloonGun.picked_context_menu_items = {
 		min = -100,
 		max = 200,
 		callback = function(value)
-			BalloonGun.force = value
+			BalloonGun.configs.force = value
+			PersistentConfigSystem.SaveConfig("BalloonGun", "force", value)
 		end,
 		value = function()
-			return BalloonGun.force
+			return BalloonGun.configs.force
 		end,
 	},
 	{
@@ -70,10 +74,11 @@ BalloonGun.picked_context_menu_items = {
 		min = 0,
 		max = 1000,
 		callback = function(value)
-			BalloonGun.max_length = value
+			BalloonGun.configs.max_length = value
+			PersistentConfigSystem.SaveConfig("BalloonGun", "max_length", value)
 		end,
 		value = function()
-			return BalloonGun.max_length
+			return BalloonGun.configs.max_length
 		end,
 	},
 	{
@@ -82,10 +87,11 @@ BalloonGun.picked_context_menu_items = {
 		min = 0,
 		max = 100,
 		callback = function(value)
-			BalloonGun.length_randomness = value / 100
+			BalloonGun.configs.length_randomness = value
+			PersistentConfigSystem.SaveConfig("BalloonGun", "length_randomness", value)
 		end,
 		value = function()
-			return BalloonGun.length_randomness * 100
+			return BalloonGun.configs.length_randomness
 		end,
 	},
 }
@@ -93,13 +99,6 @@ BalloonGun.picked_context_menu_items = {
 
 -- Overrides ToolGunSingleTarget method
 function BalloonGun:OnLocalPlayerTarget(location, relative_location, relative_rotation, normal, entity)
-	-- Calculate randomness
-	local force_randomness = BalloonGun.force * BalloonGun.length_randomness
-	local max_length_randomness = BalloonGun.max_length * BalloonGun.length_randomness
-
-	local force = (math.random() * force_randomness * 2 + (BalloonGun.force - force_randomness)) * 1000
-	local max_length = math.random() * max_length_randomness * 2 + (BalloonGun.max_length - max_length_randomness)
-
 	-- Calls remote to spawn the Balloon
-	self:CallRemoteEvent("SpawnBalloon", location, relative_location, relative_rotation, normal, entity, force, max_length, BalloonGun.asset)
+	self:CallRemoteEvent("SpawnBalloon", location, relative_location, relative_rotation, normal, entity, BalloonGun.configs)
 end

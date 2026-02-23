@@ -12,7 +12,9 @@ ColorGun.tutorials = {
 }
 
 -- Color Gun Configuration
-ColorGun.color = Color.RandomPalette()
+ColorGun.configs = {
+	color = Color.RandomPalette()
+}
 
 -- Tool Trace Debug Settings
 ColorGun.debug_trace = {
@@ -27,10 +29,10 @@ ColorGun.picked_context_menu_items = {
 		type = "color",
 		label = "color",
 		callback = function(value)
-			ColorGun.color = Color.FromHEX(value)
+			ColorGun.configs.color = Color.FromHEX(value)
 		end,
 		value = function()
-			return ColorGun.color:ToHex(false)
+			return ColorGun.configs.color:ToHex(false)
 		end
 	},
 }
@@ -39,5 +41,5 @@ ColorGun.picked_context_menu_items = {
 -- Overrides ToolGunSingleTarget method
 function ColorGun:OnLocalPlayerTarget(location, relative_location, relative_rotation, normal, entity)
 	-- Calls remote to spawn the Lamp
-	Events.CallRemote("ColorObject", entity, location, normal, ColorGun.color)
+	Events.CallRemote("ColorObject", entity, location, normal, ColorGun.configs.color)
 end
