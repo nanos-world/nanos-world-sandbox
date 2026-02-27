@@ -241,6 +241,7 @@ SpawnMenu.AddCategory("props",		"tools",			"Tools",			"modules/spawn-menu/images
 SpawnMenu.AddCategory("props",		"food",				"Food",				"modules/spawn-menu/images/categories/hot-dog.webp")
 SpawnMenu.AddCategory("props",		"street",			"Street",			"modules/spawn-menu/images/categories/street-lamp.webp")
 SpawnMenu.AddCategory("props",		"nature",			"Nature",			"modules/spawn-menu/images/categories/tree.webp")
+SpawnMenu.AddCategory("props",		"logic",			"Logic",			"modules/spawn-menu/images/categories/wire.webp")
 
 SpawnMenu.AddCategory("entities",	"devices",			"Devices",			"modules/spawn-menu/images/categories/tv.webp")
 SpawnMenu.AddCategory("entities",	"display",			"Display",			"modules/spawn-menu/images/categories/size.webp")
@@ -261,8 +262,8 @@ SpawnMenu.AddCategory("vehicles",	"wheeled",			"Wheeled",			"modules/spawn-menu/
 SpawnMenu.AddCategory("vehicles",	"water",			"Water",			"modules/spawn-menu/images/categories/boat.webp")
 
 SpawnMenu.AddCategory("tools",		"tool-guns",		"Tool Guns",		"modules/spawn-menu/images/tabs/paint-spray.webp")
-SpawnMenu.AddCategory("tools",		"spawners",			"Spawner Guns",		"modules/spawn-menu/images/tabs/paint-spray.webp")
-SpawnMenu.AddCategory("tools",		"constrainers",		"Constrainer Guns",	"modules/spawn-menu/images/tabs/paint-spray.webp")
+SpawnMenu.AddCategory("tools",		"spawners",			"Spawner Guns",		"modules/spawn-menu/images/tabs/cage.webp")
+SpawnMenu.AddCategory("tools",		"constrainers",		"Constrainer Guns",	"modules/spawn-menu/images/tabs/link.webp")
 
 SpawnMenu.AddCategory("npcs",		"npcs",				"NPCs",				"modules/spawn-menu/images/tabs/robot.webp")
 

@@ -29,7 +29,7 @@ function ToolGunDoubleTarget:OnLocalPlayerFire(shooter)
 
 			-- If we have an entity, then get the relative instead because it can change the location when data reaching the server
 			if (targeting_second_to) then
-				if (not targeting_second_to:HasAuthority()) then
+				if (targeting_second_to:HasAuthority()) then
 					SoundInvalidAction:Play()
 					return
 				end
