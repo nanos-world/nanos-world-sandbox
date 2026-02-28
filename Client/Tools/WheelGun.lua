@@ -15,11 +15,11 @@ WheelGun.tutorials = {
 
 -- Balloon Configuration
 WheelGun.configs = {
-	asset =		PersistentConfigSystem.GetConfig("WheelGun", "asset")		or "nanos-world::SM_Offroad_Tire",
-	force =		PersistentConfigSystem.GetConfig("WheelGun", "force")		or 1000, -- (x1000)
-	active =	PersistentConfigSystem.GetConfig("WheelGun", "active")		or true,
-	scale =		1,
-	forward =	true,
+	asset =				PersistentConfigSystem.GetConfig("WheelGun", "asset")				or "nanos-world::SM_Offroad_Tire",
+	force =				PersistentConfigSystem.GetConfig("WheelGun", "force")				or 1000, -- (x1000)
+	start_activated =	PersistentConfigSystem.GetConfig("WheelGun", "start_activated")		or true,
+	scale =				1,
+	forward =			true,
 }
 
 -- Tool Trace Debug Settings
@@ -44,6 +44,7 @@ WheelGun.picked_context_menu_items = {
 			WheelGun.debug_trace.preview_mesh = value
 			WheelGun.debug_trace.preview_mesh_offset = WHEELS_CONFIG[value].offset
 			WheelGun.debug_trace.preview_mesh_rotation = WHEELS_CONFIG[value].direction:ToOrientationRotator()
+			PersistentConfigSystem.SaveConfig("WheelGun", "asset", value)
 		end,
 		value = function()
 			return WheelGun.configs.asset
@@ -65,11 +66,11 @@ WheelGun.picked_context_menu_items = {
 		label = "start activated",
 		type = "checkbox",
 		callback = function(value)
-			WheelGun.configs.active = value
-			PersistentConfigSystem.SaveConfig("WheelGun", "active", value)
+			WheelGun.configs.start_activated = value
+			PersistentConfigSystem.SaveConfig("WheelGun", "start_activated", value)
 		end,
 		value = function()
-			return WheelGun.configs.active
+			return WheelGun.configs.start_activated
 		end,
 	},
 	{
