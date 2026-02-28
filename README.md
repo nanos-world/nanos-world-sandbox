@@ -1,77 +1,15 @@
 # nanos-world-sandbox
 
-Default Sandbox nanos world package
+Sandbox nanos world game-mode
 
-![image](https://user-images.githubusercontent.com/6226807/121760112-7d254d80-caff-11eb-968e-20f77aa3c7d3.png)
-
-
-Please refer to the [Official Sandbox Documentation Page](https://docs.nanos.world/docs/next/explore/sandbox-game-mode/spawn-menu) for more information on how to customize and make use of this package.
+![sandbox-fde8506e23407b70975aa35d4defb7c4](https://github.com/user-attachments/assets/6904cda3-3027-4777-b0ad-268ad8e82d6f)
 
 
-## Exported Functions
-
-The Sandbox game-mode exports the following functions to the global scope:
-
-
-### Notifications.Add (client side)
-
-```lua
--- Adds a Notification in the screen
----@param type NotificationType		Type of the notification to display
----@param id string         		Unique ID used to store if the notification was already displayed to the player
----@param message string    		The message to display
----@param duration number			Duration in seconds of the notification
----@param delay number      		Time in seconds to wait until display the notification
----@param force? boolean    		To force it to be displayed regardless if it was already displayed before
-function Notifications.Add(type, id, message, delay, force)
-```
-
-Example:
-
-```lua
--- Displays the message 'playing with friends is much more fun!' after 10 seconds, for 5 seconds
-Notifications.Add(NotificationType.Info, "FRIENDS", "playing with friends is much more fun!", 5, 10)
-```
-
-
-### UpdateLocalCharacter (client side)
-
-```lua
--- Function to set all needed events on local character (to update the UI when it takes damage or dies)
----@param character Character
-function UpdateLocalCharacter(character)
-```
-
-
-
-## Events
-
-Also the Sandbox game-mode have the following events:
-
-
-### SpawnSound (client side)
-
-You can call it from server side to spawn a sound
-
-```lua
-Events.BroadcastRemote("SpawnSound", location, sound_asset, is_2D, volume, pitch)
-```
-
-
-### SpawnSoundAttached (client side)
-
-You can call it from server side to spawn a sound attached
-
-```lua
-Events.BroadcastRemote("SpawnSoundAttached", actor, sound_asset, is_2D, volume, pitch)
-```
+Please refer to the [Official Sandbox Documentation Page](https://docs.nanos-world.com/docs/next/explore/sandbox-game-mode) for more information on how to customize and make use of this package.
 
 
 ## Example of packages which exports Items to Spawn Menu
 
 Those Packages can be loaded together Sandbox and the item will show up in the Spawn Menu!
 
-- https://github.com/gtnardy/nanos-world-ts-fireworks
-
-
-![image](https://user-images.githubusercontent.com/6226807/121760136-9a5a1c00-caff-11eb-8478-9694135d1378.png)
+- [TS Fireworks](https://github.com/gtnardy/nanos-world-ts-fireworks)
