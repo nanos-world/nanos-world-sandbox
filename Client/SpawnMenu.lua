@@ -23,20 +23,26 @@ SoundSelectOption = Sound(Vector(), "nanos-world::A_Button_Click_Up_Cue", true, 
 SoundInvalidAction = Sound(Vector(), "nanos-world::A_Invalid_Action", true, false, SoundType.UI, 1, 1, 400, 3600, 0, false, 0, false)
 
 
-SpawnMenu.AddInheritedClasses = function(tab, parent_class, blacklist_class)
+SpawnMenu.AddInheritedClasses = function(tab, parent_class, custom_validator)
 	-- Iterates all existing classes
 	for _, class in pairs(parent_class.GetInheritedClasses(true)) do
-		SpawnMenu.AddInheritedClass(tab, class, blacklist_class, true)
+		SpawnMenu.AddInheritedClass(tab, class, custom_validator, true)
 	end
 
 	-- Subscribes for further created classes
 	parent_class.Subscribe("ClassRegister", function(class)
-		SpawnMenu.AddInheritedClass(tab, class, blacklist_class)
+		SpawnMenu.AddInheritedClass(tab, class, custom_validator)
 	end)
 end
 
-SpawnMenu.AddInheritedClass = function(tab, class, blacklist_class, dont_add_to_spawn_menu)
-	if (class.name and (not blacklist_class or (not class.IsChildOf(blacklist_class) and class ~= blacklist_class))) then
+SpawnMenu.AddInheritedClass = function(tab, class, custom_validator, dont_add_to_spawn_menu)
+	if (class.name and (not custom_validator or custom_validator(class))) then
+
+		-- Overrides custom tab
+		if (class.tab) then
+			tab = class.tab
+		end
+
 		SpawnMenu.AddItem(tab, class.GetName(), class.name, class.image, class.category, dont_add_to_spawn_menu)
 	end
 end
@@ -61,13 +67,13 @@ Package.Subscribe("Load", function()
 		end
 	end
 
-	SpawnMenu.AddInheritedClasses("tools", ToolGun)
 	SpawnMenu.AddInheritedClasses("npcs", Character)
 	SpawnMenu.AddInheritedClasses("npcs", CharacterSimple)
 	SpawnMenu.AddInheritedClasses("weapons", Melee)
-	SpawnMenu.AddInheritedClasses("entities", Prop) -- Inherited from Prop is Entity?
+	-- All inherited from Prop we consider Entity
+	SpawnMenu.AddInheritedClasses("entities", Prop)
 	SpawnMenu.AddInheritedClasses("weapons", Grenade)
-	SpawnMenu.AddInheritedClasses("weapons", Weapon, ToolGun)
+	SpawnMenu.AddInheritedClasses("weapons", Weapon)
 	SpawnMenu.AddInheritedClasses("vehicles", VehicleWheeled)
 	SpawnMenu.AddInheritedClasses("vehicles", VehicleWater)
 
@@ -254,7 +260,7 @@ SpawnMenu.AddCategory("weapons",	"pistols",			"Pistols",			"modules/spawn-menu/i
 SpawnMenu.AddCategory("weapons",	"shotguns",			"Shotguns",			"modules/spawn-menu/images/categories/shotgun.webp")
 SpawnMenu.AddCategory("weapons",	"sniper-rifles",	"Sniper Rifles",	"modules/spawn-menu/images/categories/sniper-rifle.webp")
 SpawnMenu.AddCategory("weapons",	"special",			"Special",			"modules/spawn-menu/images/categories/laser-gun.webp")
-SpawnMenu.AddCategory("weapons",	"vintage",			"Vintage",			"modules/spawn-menu/images/categories/old-rifle.webp")
+-- SpawnMenu.AddCategory("weapons",	"vintage",			"Vintage",			"modules/spawn-menu/images/categories/old-rifle.webp")
 SpawnMenu.AddCategory("weapons",	"grenades",			"Grenades",			"modules/spawn-menu/images/categories/grenade.webp")
 SpawnMenu.AddCategory("weapons",	"melee",			"Melee",			"modules/spawn-menu/images/categories/knife.webp")
 

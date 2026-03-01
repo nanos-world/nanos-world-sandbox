@@ -19,7 +19,7 @@ WheelGun.configs = {
 	force =				PersistentConfigSystem.GetConfig("WheelGun", "force")				or 1000, -- (x1000)
 	start_activated =	PersistentConfigSystem.GetConfig("WheelGun", "start_activated")		or true,
 	scale =				1,
-	forward =			true,
+	is_reversed =		false,
 }
 
 -- Tool Trace Debug Settings
@@ -28,7 +28,7 @@ WheelGun.debug_trace = {
 	show_crosshair = false,
 	show_preview_mesh = true,
 	preview_mesh = WheelGun.configs.asset,
-	preview_mesh_scale = Vector(1, 1, 1),
+	preview_mesh_scale = (WHEELS_CONFIG[WheelGun.configs.asset].scale or 1) * Vector(1),
 	preview_mesh_offset = WHEELS_CONFIG[WheelGun.configs.asset].offset,
 	preview_mesh_rotation = WHEELS_CONFIG[WheelGun.configs.asset].direction:ToOrientationRotator(),
 }
@@ -40,10 +40,13 @@ WheelGun.picked_context_menu_items = {
 		type = "select_image",
 		options = WHEELS_ASSETS,
 		callback = function(value)
+			local wheel_config = WHEELS_CONFIG[value]
+
 			WheelGun.configs.asset = value
 			WheelGun.debug_trace.preview_mesh = value
-			WheelGun.debug_trace.preview_mesh_offset = WHEELS_CONFIG[value].offset
-			WheelGun.debug_trace.preview_mesh_rotation = WHEELS_CONFIG[value].direction:ToOrientationRotator()
+			WheelGun.debug_trace.preview_mesh_scale = (wheel_config.scale or 1) * Vector(WheelGun.configs.scale)
+			WheelGun.debug_trace.preview_mesh_offset = wheel_config.offset
+			WheelGun.debug_trace.preview_mesh_rotation = wheel_config.direction:ToOrientationRotator()
 			PersistentConfigSystem.SaveConfig("WheelGun", "asset", value)
 		end,
 		value = function()
@@ -74,22 +77,22 @@ WheelGun.picked_context_menu_items = {
 		end,
 	},
 	{
-		label = "forward",
+		label = "is reversed",
 		type = "checkbox",
 		callback = function(value)
-			WheelGun.configs.forward = value
+			WheelGun.configs.is_reversed = value
 		end,
 		value = function()
-			return WheelGun.configs.forward
+			return WheelGun.configs.is_reversed
 		end
 	},
 	{
 		label = "scale",
 		type = "range",
-		min = 0.1, max = 3, step = 0.1,
+		min = 0.3, max = 3, step = 0.1,
 		callback = function(value)
 			WheelGun.configs.scale = value
-			WheelGun.debug_trace.preview_mesh_scale = Vector(value, value, value)
+			WheelGun.debug_trace.preview_mesh_scale = (WHEELS_CONFIG[WheelGun.configs.asset].scale or 1) * Vector(value)
 		end,
 		value = function()
 			return WheelGun.configs.scale

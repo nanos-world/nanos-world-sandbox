@@ -1,6 +1,7 @@
 ToolGun = Weapon.Inherit("ToolGun")
 
 ToolGun.category = "tool-guns"
+ToolGun.tab = "tools" -- Overrides the tab (so it won't get at 'weapons' tab)
 
 -- Used on Tick to draw a Debug.Crosshair in the world to point where it's aiming
 ToolGun.draw_debug_toolgun = nil
@@ -9,11 +10,6 @@ ToolGun.preview_mesh_prop = nil
 
 -- Called when the Local Player picks up this ToolGun
 function ToolGun:__OnLocalPlayerPickUp(character)
-	local class = self:GetClass()
-
-	-- Shows the tutorials on screen
-	Tutorials.Show(class.name, class.description or "", class.tutorials or {})
-
 	-- Subscribes for LocalPlayer events
 	character:Subscribe("WeaponAimModeChange", ToolGun.OnLocalPlayerWeaponAimModeChanged)
 	self:Subscribe("Fire", ToolGun.__OnLocalPlayerFire)
@@ -24,7 +20,6 @@ end
 
 -- Called when the Local Player drops this ToolGun
 function ToolGun:__OnLocalPlayerDrop(character)
-	Tutorials.Hide()
 	self:ToggleToolGunAiming(false)
 
 	-- Unsubscribes for LocalPlayer events

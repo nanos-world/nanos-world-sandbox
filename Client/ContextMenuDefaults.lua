@@ -109,7 +109,7 @@ function ContextMenu.AddPickedCustomItems(entity)
 	end
 
 	-- Adds Weapon Pattern Customization to Context Menu
-	if (entity:IsA(Weapon) and not entity:IsA(ToolGun)) then
+	if (entity:IsA(Weapon) and not entity:IsA(ToolGun) and not class.tab) then
 		ContextMenu.AddItems("picked_item", category_name, {
 			{
 				id = "picked_weapon_pattern",

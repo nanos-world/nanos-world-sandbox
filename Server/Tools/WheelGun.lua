@@ -28,10 +28,11 @@ function WheelGun:OnSpawnWheel(player, hit_location, relative_location, relative
 
 	local wheel_rotation_quaternion = base_rotation_quaternion * wheel_config.direction:ToOrientationQuat()
 
-	-- Note: we add direction so we get at least 1 unit of offset, so physics constraint can get the right direction
-	local wheel_location = current_hit_location - wheel_rotation_quaternion:RotateVector(wheel_config.offset + wheel_config.direction) * configs.scale
+	local scale = configs.scale * (wheel_config.scale or 1)
 
-	local wheel = Wheel(wheel_location, wheel_rotation_quaternion:Rotator(), configs.asset, configs.force * 1000, configs.start_activated, configs.is_reversed, configs.scale, wheel_config)
+	local wheel_location = current_hit_location - wheel_rotation_quaternion:RotateVector(wheel_config.offset) * scale
+
+	local wheel = Wheel(wheel_location, wheel_rotation_quaternion:Rotator(), configs.asset, configs.force * 1000, configs.start_activated, configs.is_reversed, scale, wheel_config)
 
 	local cable = Cable(wheel_location, false)
 

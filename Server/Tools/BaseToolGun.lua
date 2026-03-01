@@ -1,5 +1,7 @@
 ToolGun = Weapon.Inherit("ToolGun")
 
+ToolGun.tab = "tools" -- Overrides the tab (so it won't get at 'weapons' tab)
+
 function ToolGun.GetTotalCount()
 	local count = 0
 

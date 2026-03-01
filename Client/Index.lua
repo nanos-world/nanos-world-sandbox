@@ -121,6 +121,13 @@ function OnCharacterPickup(character, object)
 		end
 	end
 
+	-- Shows the tutorials on screen
+	local tutorials = class.tutorials
+	local description = class.description
+	if (description or tutorials) then
+		Tutorials.Show(class.name, description or "", tutorials or {})
+	end
+
 	-- Adds custom items for the class, defined in ContextMenuDefaults.lua
 	ContextMenu.AddPickedCustomItems(object)
 end
@@ -145,6 +152,9 @@ function OnCharacterDrop(character, object)
 		object:Unsubscribe("AmmoClipChange", OnAmmoClipChanged)
 		object:Unsubscribe("AmmoBagChange", OnAmmoBagChanged)
 	end
+
+	-- Hides the tutorials
+	Tutorials.Hide()
 
 	-- Removes Custom Picked Item entries from Context Menu
 	ContextMenu.RemoveItems("picked_item")

@@ -105,20 +105,26 @@ SpawnMenu.DestroyItem = function(player, item)
 	item:Destroy()
 end
 
-SpawnMenu.AddInheritedClasses = function(tab, parent_class, blacklist_class)
+SpawnMenu.AddInheritedClasses = function(tab, parent_class, custom_validator)
 	-- Iterates all existing classes
 	for _, class in pairs(parent_class.GetInheritedClasses(true)) do
-		SpawnMenu.AddInheritedClass(tab, class, blacklist_class)
+		SpawnMenu.AddInheritedClass(tab, class, custom_validator)
 	end
 
 	-- Subscribes for further created classes
 	parent_class.Subscribe("ClassRegister", function(class)
-		SpawnMenu.AddInheritedClass(tab, class, blacklist_class)
+		SpawnMenu.AddInheritedClass(tab, class, custom_validator)
 	end)
 end
 
-SpawnMenu.AddInheritedClass = function(tab, class, blacklist_class)
-	if (not blacklist_class or (not class.IsChildOf(blacklist_class) and class ~= blacklist_class)) then
+SpawnMenu.AddInheritedClass = function(tab, class, custom_validator)
+	if (not custom_validator or custom_validator(class)) then
+
+		-- Overrides custom tab
+		if (class.tab) then
+			tab = class.tab
+		end
+
 		SpawnMenu.AddItem(tab, class.GetName(), class)
 	end
 end
@@ -160,14 +166,13 @@ Events.SubscribeRemote("SetGravityEnabled", function(player, item)
 end)
 
 Package.Subscribe("Load", function()
-	SpawnMenu.AddInheritedClasses("tools", ToolGun)
 	SpawnMenu.AddInheritedClasses("npcs", Character)
 	SpawnMenu.AddInheritedClasses("npcs", CharacterSimple)
-	SpawnMenu.AddInheritedClasses("npcs", CharacterGASP)
 	SpawnMenu.AddInheritedClasses("weapons", Melee)
-	SpawnMenu.AddInheritedClasses("entities", Prop) -- Inherited from Prop is Entity?
+	-- All inherited from Prop we consider Entity
+	SpawnMenu.AddInheritedClasses("entities", Prop)
 	SpawnMenu.AddInheritedClasses("weapons", Grenade)
-	SpawnMenu.AddInheritedClasses("weapons", Weapon, ToolGun)
+	SpawnMenu.AddInheritedClasses("weapons", Weapon)
 	SpawnMenu.AddInheritedClasses("vehicles", VehicleWheeled)
 	SpawnMenu.AddInheritedClasses("vehicles", VehicleWater)
 end)
