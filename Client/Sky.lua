@@ -14,7 +14,7 @@ Events.SubscribeRemote("ChangeTime", function(time_of_day)
 	local hours = math.floor(time_of_day / 100)
 	local minutes = math.floor(math.fmod(time_of_day, 100) * 60 / 100)
 
-	Sky.SetTimeOfDay(hours, minutes)
+	Sky.SetTimeOfDay(hours, minutes, 2)
 
 	-- Updates the Context Menu as it may be opened
 	UpdateTimeOfDayValue(hours, minutes)

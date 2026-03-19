@@ -329,16 +329,16 @@ Sandbox.HUD:Subscribe("CloseContextMenu", function()
 	ContextMenu.Close(true)
 end)
 
-Sandbox.HUD:Subscribe("Ready", function()
-	-- Common
-	ContextMenu.AddItems("common", "common", {
-		{ id = "respawn_button", type = "button", label = "respawn",
-			callback = function()
-				Events.CallRemote("RespawnCharacter")
-			end
-		},
-	})
-end)
+-- Adds Common entries
+ContextMenu.AddItems("common", "common", {
+	{
+		label = "respawn",
+		type = "button",
+		callback = function()
+			Events.CallRemote("RespawnCharacter")
+		end
+	},
+})
 
 
 Package.Require("ContextMenuDefaults.lua")

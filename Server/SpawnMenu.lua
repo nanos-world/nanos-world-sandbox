@@ -29,6 +29,8 @@ SpawnMenu.SpawnItem = function(player, tab, id, spawn_location, spawn_rotation)
 
 	if (tab == "vehicles") then
 		spawn_rotation.Yaw = spawn_rotation.Yaw - 90
+	elseif (tab == "npcs") then
+		spawn_rotation.Yaw = spawn_rotation.Yaw + 180
 	elseif (character and (tab == "tools" or tab == "weapons")) then
 		spawn_location = character:GetLocation()
 	end
@@ -214,11 +216,9 @@ RequireAllLuaFilesInFolder("Server/Weapons")
 -- Entities
 RequireAllLuaFilesInFolder("Server/Entities")
 
--- Extra
-Package.Require("NPC.lua")
-
 -- Configure Limits
 ConfigureSpawnLimits("props", "Props", Prop.GetCount, "max_props")
 ConfigureSpawnLimits("weapons", "Weapons", function() return Weapon.GetCount() + Melee.GetCount() + Grenade.GetCount() end, "max_weapons")
 ConfigureSpawnLimits("tools", "Tools", ToolGun.GetTotalCount, "max_tools")
 ConfigureSpawnLimits("vehicles", "Vehicles", function() return VehicleWheeled.GetCount() + VehicleWater.GetCount() end, "max_vehicles")
+ConfigureSpawnLimits("npcs", "NPCs", function() return Character.GetCount() + CharacterSimple.GetCount() - Player.GetCount() end, "max_npcs")

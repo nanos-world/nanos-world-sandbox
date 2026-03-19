@@ -55,9 +55,9 @@ function RetroCamera:OnTakePhoto()
 	self.sound:Play()
 
 	self.light:SetVisibility(true)
-	Timer.SetTimeout(function()
+	Timer.Bind(Timer.SetTimeout(function()
 		self.light:SetVisibility(false)
-	end, 100)
+	end, 100), self)
 end
 
 function RetroCamera:TakePhoto()

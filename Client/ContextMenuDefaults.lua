@@ -126,3 +126,42 @@ function ContextMenu.AddPickedCustomItems(entity)
 		}, ContextMenu.picked_color)
 	end
 end
+
+-- Adds custom context menu item for customizing the character through the Context Menu
+function ContextMenu.AddPossessedCharacterItems(entity)
+	local class = entity:GetClass()
+
+	local character_classes = {}
+
+	for k, character_class in pairs(Character.GetInheritedClasses(true)) do
+		if (character_class.name ~= nil) then
+			table.insert(character_classes, {
+				id = character_class:GetName(),
+				name = character_class.name,
+				image = character_class.image
+			})
+		end
+	end
+
+	for k, character_class in pairs(CharacterSimple.GetInheritedClasses(true)) do
+		if (character_class.name ~= nil) then
+			table.insert(character_classes, {
+				id = character_class:GetName(),
+				name = character_class.name,
+				image = character_class.image
+			})
+		end
+	end
+
+	ContextMenu.AddItems("possessed_character", "character", {
+		{
+			type = "select_image",
+			label = "character",
+			options = character_classes,
+			callback = function(value)
+				Events.CallRemote("ChangeCharacter", value)
+			end,
+			value = class:GetName(),
+		},
+	})
+end

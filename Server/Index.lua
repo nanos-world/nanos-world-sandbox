@@ -129,25 +129,9 @@ function CustomizeCharacter(character, mesh)
 	end
 end
 
-function SpawnCharacterRandomized(location, rotation, asset)
-	-- Iterate over whole table to get all keys
-	local character_meshes = {}
-	for k in pairs(CHARACTER_MESHES) do
-		table.insert(character_meshes, k)
-	end
-
-	local selected_mesh = asset or character_meshes[math.random(#character_meshes)]
-	local spawn_point = GetRandomSpawnPoint()
-	local new_char = Character(location or spawn_point.location, rotation or spawn_point.rotation, selected_mesh)
-
-	CustomizeCharacter(new_char, selected_mesh)
-
-	return new_char
-end
-
 -- Handles Characters Death, to auto respawn after a time
-function OnPlayerCharacterDeath(chara, last_damage_taken, last_bone_damaged, damage_reason, hit_from, instigator)
-	local controller = chara:GetPlayer()
+function OnPlayerCharacterDeath(character, last_damage_taken, last_bone_damaged, damage_reason, hit_from, instigator)
+	local controller = character:GetPlayer()
 
 	-- Was it supposed to happen? Maybe I was unpossessed
 	if (not controller) then return end
@@ -163,34 +147,58 @@ function OnPlayerCharacterDeath(chara, last_damage_taken, last_bone_damaged, dam
 		Chat.BroadcastMessage("<cyan>" .. controller:GetName() .. "</> died")
 	end
 
-	-- Respawns the Character after 5 seconds, we Bind the Timer to the Character, this way if the Character gets destroyed in the meanwhile, this Timer never gets destroyed
+	-- Respawn the Character after 5 seconds, we Bind the Timer to the Character, this way if the Character gets destroyed in the meanwhile, this Timer never gets destroyed
 	Timer.Bind(
-		Timer.SetTimeout(function(character)
+		Timer.SetTimeout(function()
 			-- If he is not dead anymore after 5 seconds, ignores it
 			if (not character:IsDead()) then return end
 
-			-- Respawns the Character at a random point
-			local spawn_point = GetRandomSpawnPoint()
-			character:Respawn(spawn_point.location, spawn_point.rotation)
-		end, 5000, chara),
-		chara
+			RandomRespawnCharacter(character)
+		end, 5000),
+		character
 	)
 end
 
-function SpawnPlayer(player, location, rotation)
-	local new_char = SpawnCharacterRandomized(location, rotation)
+-- Respawn the Character at a random point
+function RandomRespawnCharacter(character)
+	local spawn_point = GetRandomSpawnPoint()
+	character:Respawn(spawn_point.location, spawn_point.rotation)
+end
 
-	if (not SANDBOX_CUSTOM_SETTINGS.enable_pvp) then
-		new_char:SetTeam(1)
+-- Spawns a Character for the Player
+function SpawnPlayer(player, location, rotation)
+	-- TODO cache classes?
+	local character_classes = {}
+	for k, class in pairs(Character.GetInheritedClasses(true)) do
+		if (class ~= BaseDefaultCharacter and class ~= BaseDefaultCharacterSimple) then
+			table.insert(character_classes, class)
+		end
 	end
 
-	player:Possess(new_char)
+	local character_to_spawn = character_classes[math.random(#character_classes)]
+
+	-- Spawns the Character
+	local new_character = character_to_spawn(location, rotation, false)
+
+	-- This will possess, configure Player configs and subscribe to events
+	SetupPlayerCharacter(player, new_character)
+end
+
+-- Possess, configure Player configs and subscribe to events
+function SetupPlayerCharacter(player, character)
+	-- Disables PVP if set
+	if (not SANDBOX_CUSTOM_SETTINGS.enable_pvp) then
+		character:SetTeam(1)
+	end
+
+	-- Possess the Character
+	player:Possess(character)
 
 	-- Subscribe to Death event
-	new_char:Subscribe("Death", OnPlayerCharacterDeath)
+	character:Subscribe("Death", OnPlayerCharacterDeath)
 
 	-- Unsubscribe to Death event if unpossessed (in case we got possessed into another Character)
-	new_char:Subscribe("UnPossess", function(self)
+	character:Subscribe("UnPossess", function(self)
 		self:Unsubscribe("Death", OnPlayerCharacterDeath)
 	end)
 end
@@ -206,11 +214,6 @@ end)
 Character.Subscribe("Respawn", function(character)
 	-- Resets character's scale to default
 	character:SetScale(Vector(1, 1, 1))
-
-	-- Detaches all entities attached to the character
-	for k, v in pairs(character:GetAttachedEntities()) do
-		v:Detach()
-	end
 end)
 
 -- When Player leaves the server
@@ -245,7 +248,7 @@ end)
 
 Events.SubscribeRemote("EnterRagdoll", function(player)
 	local character = player:GetControlledCharacter()
-	if (not character) then return end
+	if (not character or not character.SetRagdollMode) then return end
 
 	if (not character:IsInputEnabled()) then return end
 	if (character:GetVehicle()) then return end
@@ -257,22 +260,30 @@ Events.SubscribeRemote("RespawnCharacter", function(player)
 	local character = player:GetControlledCharacter()
 	if (not character) then return end
 
-	character:SetHealth(0)
+	RandomRespawnCharacter(character)
 end)
 
-Events.SubscribeRemote("SelectCharacterMesh", function(player, mesh)
-	local chararacter = player:GetControlledCharacter()
+Events.SubscribeRemote("ChangeCharacter", function(player, class_name)
+	local character = player:GetControlledCharacter()
 
-	if (chararacter) then
-		chararacter:SetMesh(mesh)
+	local location, rotation = nil, nil
 
-		chararacter:RemoveAllSkeletalMeshesAttached()
-		chararacter:RemoveAllStaticMeshesAttached()
-
-		chararacter:ClearMorphTargets()
-
-		CustomizeCharacter(chararacter, mesh)
+	if (character) then
+		location = character:GetLocation()
+		rotation = character:GetRotation()
+		character:Destroy()
+	else
+		local spawn_point = GetRandomSpawnPoint()
+		location = spawn_point.location
+		rotation = spawn_point.rotation
 	end
+
+	-- TODO better way to get the class?
+	local class = _G[class_name]
+	local new_character = class(location, rotation, false)
+
+	-- This will possess, configure Player configs and subscribe to events
+	SetupPlayerCharacter(player, new_character)
 end)
 
 function GetPlayerByNameOrID(key)

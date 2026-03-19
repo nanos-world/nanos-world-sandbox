@@ -5,7 +5,7 @@
     # contributors
     author =                "nanos world™"
     # version
-    version =               "4.1.0"
+    version =               "4.2.0"
 
 # game-mode configurations
 [game_mode]
@@ -21,14 +21,15 @@
     packages_requirements = [
                             "default-weapons",
                             "default-vehicles",
+                            "default-characters",
     ]
     # asset packs requirements
     assets_requirements = [
-                            
+
     ]
     # compatible maps - maps to be highlighted when starting a new game through main menu
     compatible_maps = [
-                            
+
     ]
 
 # game-mode custom settings configurations

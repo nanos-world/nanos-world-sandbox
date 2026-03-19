@@ -78,6 +78,9 @@ function UpdateLocalCharacter(character)
 
 	-- Updates the UI with the current character's health
 	UpdateHealth(character:GetHealth())
+
+	-- Adds possessed character customization to Context Menu
+	ContextMenu.AddPossessedCharacterItems(character)
 end
 
 -- Setups the Local Player events
@@ -92,6 +95,9 @@ function SetupLocalPlayer(local_player)
 		character:Unsubscribe("HealthChange", OnCharacterHealthChange)
 		character:Unsubscribe("PickUp", OnCharacterPickup)
 		character:Unsubscribe("Drop", OnCharacterDrop)
+
+		-- Removes Possessed Characters Item entries from Context Menu
+		ContextMenu.RemoveItems("possessed_character")
 	end)
 end
 

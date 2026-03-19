@@ -234,7 +234,7 @@ SpawnMenu.AddTab("entities",	"entities",		"modules/spawn-menu/images/tabs/rocket
 SpawnMenu.AddTab("weapons",		"weapons",		"modules/spawn-menu/images/tabs/gun.webp")
 SpawnMenu.AddTab("vehicles",	"vehicles",		"modules/spawn-menu/images/tabs/car.webp")
 SpawnMenu.AddTab("tools",		"tools",		"modules/spawn-menu/images/tabs/paint-spray.webp")
-SpawnMenu.AddTab("npcs",		"npcs",			"modules/spawn-menu/images/tabs/robot.webp")
+SpawnMenu.AddTab("npcs",		"npcs",			"modules/spawn-menu/images/tabs/robot-humanoid.webp")
 
 -- Configures Categories
 SpawnMenu.AddCategory("props",		"basic",			"Basic",			"modules/spawn-menu/images/categories/shapes.webp")
@@ -266,11 +266,13 @@ SpawnMenu.AddCategory("weapons",	"melee",			"Melee",			"modules/spawn-menu/image
 SpawnMenu.AddCategory("vehicles",	"wheeled",			"Wheeled",			"modules/spawn-menu/images/categories/tire.webp")
 SpawnMenu.AddCategory("vehicles",	"water",			"Water",			"modules/spawn-menu/images/categories/boat.webp")
 
-SpawnMenu.AddCategory("tools",		"tool-guns",		"Tool Guns",		"modules/spawn-menu/images/tabs/paint-spray.webp")
-SpawnMenu.AddCategory("tools",		"spawners",			"Spawner Guns",		"modules/spawn-menu/images/tabs/cage.webp")
-SpawnMenu.AddCategory("tools",		"constrainers",		"Constrainer Guns",	"modules/spawn-menu/images/tabs/link.webp")
+SpawnMenu.AddCategory("tools",		"tool-guns",		"Tool Guns",		"modules/spawn-menu/images/categories/paint-spray.webp")
+SpawnMenu.AddCategory("tools",		"spawners",			"Spawner Guns",		"modules/spawn-menu/images/categories/cage.webp")
+SpawnMenu.AddCategory("tools",		"constrainers",		"Constrainer Guns",	"modules/spawn-menu/images/categories/link.webp")
 
-SpawnMenu.AddCategory("npcs",		"npcs",				"NPCs",				"modules/spawn-menu/images/tabs/robot.webp")
+SpawnMenu.AddCategory("npcs",		"humanoids",		"Humanoids",		"modules/spawn-menu/images/tabs/robot-humanoid.webp")
+SpawnMenu.AddCategory("npcs",		"robots",			"Robots",			"modules/spawn-menu/images/categories/robot.webp")
+SpawnMenu.AddCategory("npcs",		"animals",			"Animals",			"modules/spawn-menu/images/categories/chicken.webp")
 
 
 -- Requires all the Entities
@@ -282,6 +284,3 @@ RequireAllLuaFilesInFolder("Client/Tools")
 
 -- Weapons
 RequireAllLuaFilesInFolder("Client/Weapons")
-
--- Extra
-Package.Require("NPC.lua")

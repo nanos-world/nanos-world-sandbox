@@ -155,6 +155,11 @@ function BaseButton:Activate(player_instigator, causer, activated_entities)
 		Timer.Bind(self.cooldown_timeout, self)
 	end
 
+	-- Calls self
+	if (self.OnActivated) then
+		self:OnActivated(player_instigator, causer)
+	end
+
 	-- Calls the remote event on clients
 	self:BroadcastRemoteEvent("OnActivated")
 
