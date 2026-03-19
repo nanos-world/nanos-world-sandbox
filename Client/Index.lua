@@ -24,7 +24,6 @@ Package.Require("SpawnMenu.lua")
 Package.Require("SpawnHistory.lua")
 Package.Require("Scoreboard.lua")
 Package.Require("Sky.lua")
-Package.Require("CharacterCustomization.lua")
 Package.Require("Nametags.lua")
 Package.Require("Tutorials.lua")
 
