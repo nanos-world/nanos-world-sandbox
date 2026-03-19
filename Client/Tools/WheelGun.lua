@@ -13,7 +13,7 @@ WheelGun.tutorials = {
 	{ key = "ContextMenu",	text = "wheel settings" },
 }
 
--- Balloon Configuration
+-- Tool Configuration
 WheelGun.configs = {
 	asset =				PersistentConfigSystem.GetConfig("WheelGun", "asset")				or "nanos-world::SM_Offroad_Tire",
 	force =				PersistentConfigSystem.GetConfig("WheelGun", "force")				or 1000, -- (x1000)

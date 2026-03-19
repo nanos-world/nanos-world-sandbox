@@ -11,7 +11,7 @@ function BaseButton:Constructor(location, rotation, tab, id, player, switchable)
 	self.last_pressed_time = 0
 
 	-- Makes it switchable by default
-	self:SetSwitchable(player, switchable or true)
+	self:SetSwitchable(player, switchable ~= false)
 
 	-- Starts off by default
 	self.is_active = false

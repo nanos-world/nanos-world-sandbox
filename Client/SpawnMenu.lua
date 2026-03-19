@@ -37,7 +37,6 @@ end
 
 SpawnMenu.AddInheritedClass = function(tab, class, custom_validator, dont_add_to_spawn_menu)
 	if (class.name and (not custom_validator or custom_validator(class))) then
-
 		-- Overrides custom tab
 		if (class.tab) then
 			tab = class.tab

@@ -48,4 +48,4 @@ function HFG:OnFire(character)
 	grenade:AddImpulse(forward_vector * 3000, true)
 end
 
-HFG.SubscribeRemote("Fire", HFG.OnFire)
+HFG.Subscribe("Fire", HFG.OnFire)

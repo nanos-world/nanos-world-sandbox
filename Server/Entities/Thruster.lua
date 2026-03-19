@@ -10,8 +10,7 @@ function Thruster:Constructor(location, rotation, particle_asset, sound_asset, f
 	-- Adds a constant force to the Thruster
 	force = force or 100000
 
-	if (active == nil) then active = true end
-	self.active = active
+	self.active = active ~= false
 
 	if (self.active) then
 		self:SetForce(Vector(force, 0, 0), true)

@@ -27,11 +27,16 @@ end
 
 function SpawnHistory.OnNoItemToDestroy()
 	-- Prevents multiple notifications when holding the undo button
-	if (not SpawnHistory.is_pressing_undo) then return end
-	SpawnHistory.is_pressing_undo = false
+	if (SpawnHistory.history_undo_delay == 0) then return end
 
 	Notifications.Add(NotificationType.Warning, "NO_ITEM_TO_DELETE", "there are no items in your history to destroy!", 3, 0, true)
-	Client.Unsubscribe("Tick", SpawnHistory.HistoryUndoTick)
+
+	if (SpawnHistory.is_pressing_undo) then
+		Client.Unsubscribe("Tick", SpawnHistory.HistoryUndoTick)
+	end
+
+	SpawnHistory.history_undo_delay = 0
+	SpawnHistory.is_pressing_undo = false
 end
 
 Input.Bind("Undo", InputEvent.Pressed, function()

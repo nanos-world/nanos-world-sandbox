@@ -73,7 +73,7 @@ function SpawnHistory.DeleteItemFromHistory(player, index)
 	if (is_item_valid) then
 		-- If it's currently being picked up by the player, skips it but keep it in the history and tries the next one
 		local character = player:GetControlledCharacter()
-		if (character and character:GetPicked() == history_item) then
+		if (character and character.GetPicked and character:GetPicked() == history_item) then
 			return SpawnHistory.DeleteItemFromHistory(player, index - 1)
 		end
 	end

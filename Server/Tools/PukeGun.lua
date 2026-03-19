@@ -30,7 +30,7 @@ function PukeGun:OnFire(character)
 	local forward_vector = control_rotation:GetForwardVector()
 	local spawn_location = self:GetLocation() + Vector(0, 0, 15) + forward_vector * 50
 
-	local option = self:GetValue("Option") or "veggies"
+	local option = self:GetValue("Option") or "watermelons"
 	local force = self:GetValue("Force") or 3000
 
 	local spawner = PukeGun.options[option]
