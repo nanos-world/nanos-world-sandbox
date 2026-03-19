@@ -166,7 +166,7 @@ function RandomRespawnCharacter(character)
 end
 
 -- Spawns a Character for the Player
-function SpawnPlayer(player, location, rotation)
+function SpawnPlayer(player)
 	-- TODO cache classes?
 	local character_classes = {}
 	for k, class in pairs(Character.GetInheritedClasses(true)) do
@@ -176,6 +176,18 @@ function SpawnPlayer(player, location, rotation)
 	end
 
 	local character_to_spawn = character_classes[math.random(#character_classes)]
+
+	local location, rotation = nil, nil
+
+	local last_position = player:GetValue("last_position")
+	if (last_position) then
+		location = last_position.location
+		rotation = last_position.rotation
+	else
+		local spawn_point = GetRandomSpawnPoint()
+		location = spawn_point.location
+		rotation = spawn_point.rotation
+	end
 
 	-- Spawns the Character
 	local new_character = character_to_spawn(location, rotation, false)
@@ -347,12 +359,7 @@ end)
 
 Package.Subscribe("Load", function()
 	for k, player in pairs(Player.GetAll()) do
-		local last_position = player:GetValue("last_position")
-		if (last_position) then
-			SpawnPlayer(player, last_position.location, last_position.rotation)
-		else
-			SpawnPlayer(player)
-		end
+		SpawnPlayer(player)
 	end
 
 	Chat.BroadcastMessage("The package <cyan>Sandbox</> has been reloaded!")

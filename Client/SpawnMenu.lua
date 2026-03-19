@@ -68,6 +68,7 @@ Package.Subscribe("Load", function()
 
 	SpawnMenu.AddInheritedClasses("npcs", Character)
 	SpawnMenu.AddInheritedClasses("npcs", CharacterSimple)
+	SpawnMenu.AddInheritedClasses("npcs", CharacterGASP)
 	SpawnMenu.AddInheritedClasses("weapons", Melee)
 	-- All inherited from Prop we consider Entity
 	SpawnMenu.AddInheritedClasses("entities", Prop)
@@ -266,7 +267,7 @@ SpawnMenu.AddCategory("weapons",	"melee",			"Melee",			"modules/spawn-menu/image
 SpawnMenu.AddCategory("vehicles",	"wheeled",			"Wheeled",			"modules/spawn-menu/images/categories/tire.webp")
 SpawnMenu.AddCategory("vehicles",	"water",			"Water",			"modules/spawn-menu/images/categories/boat.webp")
 
-SpawnMenu.AddCategory("tools",		"tool-guns",		"Tool Guns",		"modules/spawn-menu/images/categories/paint-spray.webp")
+SpawnMenu.AddCategory("tools",		"tool-guns",		"Tool Guns",		"modules/spawn-menu/images/tabs/paint-spray.webp")
 SpawnMenu.AddCategory("tools",		"spawners",			"Spawner Guns",		"modules/spawn-menu/images/categories/cage.webp")
 SpawnMenu.AddCategory("tools",		"constrainers",		"Constrainer Guns",	"modules/spawn-menu/images/categories/link.webp")
 
