@@ -248,6 +248,7 @@ SpawnMenu.AddCategory("props",		"food",				"Food",				"modules/spawn-menu/images
 SpawnMenu.AddCategory("props",		"street",			"Street",			"modules/spawn-menu/images/categories/street-lamp.webp")
 SpawnMenu.AddCategory("props",		"nature",			"Nature",			"modules/spawn-menu/images/categories/tree.webp")
 SpawnMenu.AddCategory("props",		"logic",			"Logic",			"modules/spawn-menu/images/categories/wire.webp")
+SpawnMenu.AddCategory("props",		"treasure",			"Treasure",			"modules/spawn-menu/images/categories/chest.webp")
 
 SpawnMenu.AddCategory("entities",	"devices",			"Devices",			"modules/spawn-menu/images/categories/tv.webp")
 SpawnMenu.AddCategory("entities",	"display",			"Display",			"modules/spawn-menu/images/categories/size.webp")
@@ -262,7 +263,7 @@ SpawnMenu.AddCategory("weapons",	"sniper-rifles",	"Sniper Rifles",	"modules/spaw
 SpawnMenu.AddCategory("weapons",	"special",			"Special",			"modules/spawn-menu/images/categories/laser-gun.webp")
 -- SpawnMenu.AddCategory("weapons",	"vintage",			"Vintage",			"modules/spawn-menu/images/categories/old-rifle.webp")
 SpawnMenu.AddCategory("weapons",	"grenades",			"Grenades",			"modules/spawn-menu/images/categories/grenade.webp")
-SpawnMenu.AddCategory("weapons",	"melee",			"Melee",			"modules/spawn-menu/images/categories/knife.webp")
+SpawnMenu.AddCategory("weapons",	"melees",			"Melees",			"modules/spawn-menu/images/categories/knife.webp")
 
 SpawnMenu.AddCategory("vehicles",	"wheeled",			"Wheeled",			"modules/spawn-menu/images/categories/tire.webp")
 SpawnMenu.AddCategory("vehicles",	"water",			"Water",			"modules/spawn-menu/images/categories/boat.webp")

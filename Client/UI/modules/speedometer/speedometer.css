@@ -1,4 +1,4 @@
-#weapon_ammo_container {
+#speedometer_container {
 	display: none;
 	position: absolute;
 	right: 30px;
@@ -14,26 +14,28 @@
 	font-variant-numeric: tabular-nums;
 }
 
-/* Hide if speedometer is visible */
-#speedometer_container[style*="display: flex"] ~ #weapon_ammo_container {
-	display: none !important;
-}
-
-#weapon_ammo_container img {
+#speedometer_container img {
 	height: 30px;
 	margin-right: 10px;
 }
 
-#weapon_ammo_separator {
-	font-size: 16px;
-	margin-top: 12px;
-}
-
-#weapon_ammo_bag {
-	font-size: 16px;
-	margin-top: 12px;
-}
-
-#weapon_ammo_clip {
+#speedometer_speed {
 	font-size: 36px;
+}
+
+.speedometer_label {
+	font-size: 16px;
+	margin-top: 12px;
+}
+
+#speedometer_gear {
+	font-size: 24px;
+	margin-top: 8px;
+	margin-left: 5px;
+}
+
+#speedometer_rpm {
+	font-size: 24px;
+	margin-top: 8px;
+	margin-left: 5px;
 }

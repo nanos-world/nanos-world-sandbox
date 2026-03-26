@@ -23,7 +23,7 @@ function UpdateWeaponAmmo(enable, clip, bag) {
 	else
 		document.getElementById("weapon_ammo_container").style.display = "none";
 
-	// Using JQuery, overrides the HTML content of these SPANs with the new Ammo values
+	// Overrides the HTML content with the new Ammo values
 	document.getElementById("weapon_ammo_clip").textContent = clip;
 	document.getElementById("weapon_ammo_bag").textContent = bag;
 }

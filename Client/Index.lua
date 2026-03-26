@@ -60,11 +60,11 @@ function UpdateLocalCharacter(character)
 	character:Subscribe("HealthChange", OnCharacterHealthChange)
 
 	if (character:IsA(Character)) then
-		-- Sets on character an event to update his grabbing weapon (to show ammo on UI)
+		-- Subscribes to local character common events
 		character:Subscribe("PickUp", OnCharacterPickup)
-
-		-- Sets on character an event to remove the ammo ui when he drops it's weapon
 		character:Subscribe("Drop", OnCharacterDrop)
+		character:Subscribe("EnterVehicle", OnCharacterEnterVehicle)
+		character:Subscribe("LeaveVehicle", OnCharacterLeaveVehicle)
 
 		-- Try to get if the character is holding any weapon
 		local current_picked_item = character:GetPicked()
@@ -94,6 +94,8 @@ function SetupLocalPlayer(local_player)
 		character:Unsubscribe("HealthChange", OnCharacterHealthChange)
 		character:Unsubscribe("PickUp", OnCharacterPickup)
 		character:Unsubscribe("Drop", OnCharacterDrop)
+		character:Unsubscribe("EnterVehicle", OnCharacterEnterVehicle)
+		character:Unsubscribe("LeaveVehicle", OnCharacterLeaveVehicle)
 
 		-- Removes Possessed Characters Item entries from Context Menu
 		ContextMenu.RemoveItems("possessed_character")
@@ -165,6 +167,47 @@ function OnCharacterDrop(character, object)
 	ContextMenu.RemoveItems("picked_item")
 end
 
+-- Handles Character Entering a vehicle
+function OnCharacterEnterVehicle(character, vehicle, seat)
+	if (seat == 0) then
+		if (Sandbox.timer_speedometer and Timer.IsValid(Sandbox.timer_speedometer)) then
+			Timer.ClearInterval(Sandbox.timer_speedometer)
+		end
+
+		Sandbox.timer_speedometer = Timer.SetInterval(function()
+			if (vehicle and vehicle:IsValid()) then
+				UpdateSpeedometer(true, vehicle)
+			end
+		end, 100)
+
+		UpdateSpeedometer(true, vehicle)
+	end
+end
+
+-- Handles Character Leaving a vehicle
+function OnCharacterLeaveVehicle(character, vehicle)
+	if (Sandbox.timer_speedometer and Timer.IsValid(Sandbox.timer_speedometer)) then
+		Timer.ClearInterval(Sandbox.timer_speedometer)
+		Sandbox.timer_speedometer = nil
+	end
+
+	UpdateSpeedometer(false)
+end
+
+-- Function to update the Speedometer's UI
+function UpdateSpeedometer(enable_ui, vehicle)
+	local speed, gear, rpm = nil, nil, nil
+
+	if (enable_ui) then
+		-- TODO: not yet
+		-- gear = vehicle:GetGear()
+		-- rpm = math.floor(vehicle:GetRPM())
+		speed = math.floor(vehicle:GetVelocity():Size() * 0.036) -- Converts cm/s to km/h
+	end
+
+	Sandbox.HUD:CallEvent("UpdateSpeedometer", enable_ui, speed, gear, rpm)
+end
+
 -- Function to update the Ammo's UI
 function UpdateAmmo(enable_ui, ammo, ammo_bag)
 	Sandbox.HUD:CallEvent("UpdateWeaponAmmo", enable_ui, ammo, ammo_bag)
@@ -199,15 +242,11 @@ Player.Subscribe("VOIP", function(player, is_talking)
 
 	-- Apply speaking animation
 	local character = player:GetControlledCharacter()
-	if (character) then
-		local character_mesh = character:GetMesh()
-		local character_mesh_data = CHARACTER_MESHES[character_mesh]
-		if (character_mesh_data and character_mesh_data.speak_animation) then
-			if (is_talking and character:GetLocation():IsNear(Client.GetLocalPlayer():GetCameraLocation(), 1000)) then
-				character:PlayAnimation(character_mesh_data.speak_animation, AnimationSlotType.Head, true)
-			else
-				character:StopAnimation(character_mesh_data.speak_animation)
-			end
+	if (character and character.speak_animation) then
+		if (is_talking and character:GetLocation():IsNear(Client.GetLocalPlayer():GetCameraLocation(), 1000)) then
+			character:PlayAnimation(character.speak_animation, AnimationSlotType.Head, true)
+		else
+			character:StopAnimation(character.speak_animation)
 		end
 	end
 end)

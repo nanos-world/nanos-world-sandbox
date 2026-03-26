@@ -34,7 +34,7 @@ Timer.SetInterval(function()
 	local trace_entity = trace_result.Entity
 
 	-- If the trace was successful
-	if (trace_result.Success and trace_entity and trace_entity:IsA(Character)) then
+	if (trace_result.Success and trace_entity and (trace_entity:IsA(Character) or trace_entity:IsA(CharacterSimple))) then
 		local player = trace_entity:GetPlayer()
 		if (player) then
 			local player_name = player:GetName()

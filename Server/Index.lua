@@ -56,79 +56,6 @@ function GetRandomSpawnPoint()
 	return #SPAWN_POINTS > 0 and SPAWN_POINTS[math.random(#SPAWN_POINTS)] or { location = Vector(), rotation = Rotator() }
 end
 
-function SelectRandomMesh(mesh)
-	if (type(mesh) == "table") then
-		return SelectRandomMesh(mesh[math.random(#mesh)])
-	else
-		return mesh
-	end
-end
-
-function CustomizeCharacter(character, mesh)
-	local custom_config = CHARACTER_MESHES[mesh]
-	if (not custom_config) then return end
-
-	-- Death/Pain Sounds
-	local selected_death_sound = ""
-	local selected_pain_sound = ""
-
-	if (custom_config.is_male) then
-		selected_death_sound = MALE_DEATH_SOUNDS[math.random(#MALE_DEATH_SOUNDS)]
-		selected_pain_sound = MALE_PAIN_SOUNDS[math.random(#MALE_PAIN_SOUNDS)]
-	else
-		selected_death_sound = FEMALE_DEATH_SOUNDS[math.random(#FEMALE_DEATH_SOUNDS)]
-		selected_pain_sound = FEMALE_PAIN_SOUNDS[math.random(#FEMALE_PAIN_SOUNDS)]
-	end
-
-	character:SetDeathSound(selected_death_sound)
-	character:SetPainSound(selected_pain_sound)
-
-	if (custom_config.skeletal_meshes ~= nil) then
-		for id, skeletal_meshes in pairs(custom_config.skeletal_meshes) do
-			local skeletal_mesh = SelectRandomMesh(skeletal_meshes)
-			if (skeletal_mesh ~= "") then
-				character:AddSkeletalMeshAttached(id, skeletal_mesh)
-			end
-		end
-	end
-
-	if (custom_config.static_meshes ~= nil) then
-		for id, static_mesh_config in pairs(custom_config.static_meshes) do
-			local static_mesh = SelectRandomMesh(static_mesh_config.meshes)
-			if (static_mesh ~= "") then
-				character:AddStaticMeshAttached(id, static_mesh, static_mesh_config.socket)
-			end
-		end
-	end
-
-	if (custom_config.morph_targets ~= nil) then
-		for _, morph_target in pairs(custom_config.morph_targets) do
-			local value = math.random(100) / 100 - 0.5 -- Only from -0.5 ~ 0.5
-			character:SetMorphTarget(morph_target, value)
-		end
-	end
-
-	if (custom_config.morph_targets_force ~= nil) then
-		for morph_target, value in pairs(custom_config.morph_targets_force) do
-			character:SetMorphTarget(morph_target, value)
-		end
-	end
-
-	if (custom_config.materials ~= nil) then
-		for _, material_config in pairs(custom_config.materials) do
-			local selected_material = math.random(#material_config.values)
-			character:SetMaterial(material_config.values[selected_material], material_config.index, material_config.slot)
-		end
-	end
-
-	if (custom_config.materials_parameters_color ~= nil) then
-		for _, materials_parameter_color in pairs(custom_config.materials_parameters_color) do
-			local selected_material = math.random(#materials_parameter_color.values)
-			character:SetMaterialColorParameter(materials_parameter_color.parameter, materials_parameter_color.values[selected_material], -1, materials_parameter_color.slot)
-		end
-	end
-end
-
 -- Handles Characters Death, to auto respawn after a time
 function OnPlayerCharacterDeath(character, last_damage_taken, last_bone_damaged, damage_reason, hit_from, instigator)
 	local controller = character:GetPlayer()
@@ -278,11 +205,16 @@ end)
 Events.SubscribeRemote("ChangeCharacter", function(player, class_name)
 	local character = player:GetControlledCharacter()
 
-	local location, rotation = nil, nil
+	local location, rotation, picked_item = nil, nil, nil
 
 	if (character) then
+		if (character.GetPicked) then
+			picked_item = character:GetPicked()
+		end
+
 		location = character:GetLocation()
 		rotation = character:GetRotation()
+
 		character:Destroy()
 	else
 		local spawn_point = GetRandomSpawnPoint()
@@ -296,6 +228,11 @@ Events.SubscribeRemote("ChangeCharacter", function(player, class_name)
 
 	-- This will possess, configure Player configs and subscribe to events
 	SetupPlayerCharacter(player, new_character)
+
+	-- Restore picked up item
+	if (picked_item) then
+		new_character:PickUp(picked_item)
+	end
 end)
 
 function GetPlayerByNameOrID(key)

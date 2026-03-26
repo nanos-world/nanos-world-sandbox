@@ -37,11 +37,11 @@ function HFG:OnFire(character)
 	trail_particle:AttachTo(grenade)
 	grenade:SetValue("Particle", trail_particle)
 
-	grenade:Subscribe("Hit", function(self, intensity)
+	grenade:Subscribe("Hit", function(self)
 		self:Explode()
 	end)
 
-	grenade:Subscribe("Destroy", function(self, intensity)
+	grenade:Subscribe("Destroy", function(self)
 		self:GetValue("Particle"):SetLifeSpan(1)
 	end)
 
