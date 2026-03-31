@@ -93,7 +93,7 @@ function RandomRespawnCharacter(character)
 end
 
 -- Spawns a Character for the Player
-function SpawnPlayer(player)
+function SpawnPlayerCharacter(player)
 	-- TODO cache classes?
 	local character_classes = {}
 	for k, class in pairs(Character.GetInheritedClasses(true)) do
@@ -146,7 +146,7 @@ end
 Player.Subscribe("Spawn", function(player)
 	Chat.BroadcastMessage("<cyan>" .. player:GetName() .. "</> has joined the server")
 
-	SpawnPlayer(player)
+	SpawnPlayerCharacter(player)
 end)
 
 -- Called when Character respawns
@@ -196,10 +196,13 @@ Events.SubscribeRemote("EnterRagdoll", function(player)
 end)
 
 Events.SubscribeRemote("RespawnCharacter", function(player)
+	-- Respawn Character or spawn a new one
 	local character = player:GetControlledCharacter()
-	if (not character) then return end
-
-	RandomRespawnCharacter(character)
+	if (character) then
+		RandomRespawnCharacter(character)
+	else
+		SpawnPlayerCharacter(player)
+	end
 end)
 
 Events.SubscribeRemote("ChangeCharacter", function(player, class_name)
@@ -296,14 +299,11 @@ end)
 
 Package.Subscribe("Load", function()
 	for k, player in pairs(Player.GetAll()) do
-		SpawnPlayer(player)
+		SpawnPlayerCharacter(player)
 	end
 
 	Chat.BroadcastMessage("The package <cyan>Sandbox</> has been reloaded!")
 end)
-
--- Exposes this to other packages
-Package.Export("SpawnPlayer", SpawnPlayer)
 
 Package.Require("SpawnMenu.lua")
 Package.Require("SpawnHistory.lua")
