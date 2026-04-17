@@ -282,7 +282,11 @@ Events.SubscribeRemote("ClientCommand", function(player, command)
 			return
 		end
 
-		Server.ReloadPackage("sandbox")
+		-- Reload all packages
+		for k, v in pairs(Server.GetPackages(true)) do
+			Server.ReloadPackage(v.name)
+		end
+
 		return
 	end
 end)

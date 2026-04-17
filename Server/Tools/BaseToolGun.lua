@@ -55,6 +55,8 @@ function ToolGun:OnDrop(character)
 	local player = character:GetPlayer()
 	if (not player) then return end
 
+	if (player:IsBeingDestroyed()) then return end
+
 	-- Triggers the Drop on the client which dropped up it
 	self:CallRemoteEvent("LocalPlayerDrop", player, character)
 end
