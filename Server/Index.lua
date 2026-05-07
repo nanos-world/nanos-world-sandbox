@@ -208,6 +208,9 @@ end)
 Events.SubscribeRemote("ChangeCharacter", function(player, class_name)
 	local character = player:GetControlledCharacter()
 
+	local class = GetCharacterClasses()[class_name]
+	if not class then return end
+
 	local location, rotation, picked_item = nil, nil, nil
 
 	if (character) then
@@ -225,8 +228,6 @@ Events.SubscribeRemote("ChangeCharacter", function(player, class_name)
 		rotation = spawn_point.rotation
 	end
 
-	-- TODO better way to get the class?
-	local class = _G[class_name]
 	local new_character = class(location, rotation, false)
 
 	-- This will possess, configure Player configs and subscribe to events

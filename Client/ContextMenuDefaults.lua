@@ -131,33 +131,21 @@ end
 function ContextMenu.AddPossessedCharacterItems(entity)
 	local class = entity:GetClass()
 
-	local character_classes = {}
-
-	for k, character_class in pairs(Character.GetInheritedClasses(true)) do
-		if (character_class.name ~= nil) then
-			table.insert(character_classes, {
-				id = character_class:GetName(),
-				name = character_class.name,
-				image = character_class.image
-			})
-		end
-	end
-
-	for k, character_class in pairs(CharacterSimple.GetInheritedClasses(true)) do
-		if (character_class.name ~= nil) then
-			table.insert(character_classes, {
-				id = character_class:GetName(),
-				name = character_class.name,
-				image = character_class.image
-			})
-		end
+	local character_classes = GetCharacterClasses()
+	local character_classes_options = {}
+	for classname, character_class in pairs(character_classes or {}) do
+		table.insert(character_classes_options, {
+			id = classname,
+			name = character_class.name,
+			image = character_class.image
+		})
 	end
 
 	ContextMenu.AddItems("possessed_character", "character", {
 		{
 			type = "select_image",
 			label = "character",
-			options = character_classes,
+			options = character_classes_options,
 			callback = function(value)
 				Events.CallRemote("ChangeCharacter", value)
 			end,

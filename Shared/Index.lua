@@ -8,3 +8,5 @@ end
 
 -- Load all configs
 RequireAllLuaFilesInFolder("Shared/Config")
+
+Package.Require("Characters.lua")
