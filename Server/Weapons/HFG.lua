@@ -1,7 +1,7 @@
 HFG = Weapon.Inherit("HFG")
 
 function HFG:Constructor(location, rotation)
-	self.Super:Constructor(location or Vector(), rotation or Rotator(), "nanos-world::SK_DC15S")
+	self.Super:Constructor(location or Vector(), rotation or Rotator(), "nanos-world::SK_DC15S", CollisionType.Auto, true, true)
 
 	self:SetAmmoSettings(1024, 0)
 	self:SetDamage(0)

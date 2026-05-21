@@ -3,7 +3,7 @@ RetroCamera = Prop.Inherit("RetroCamera")
 ConfigureSpawnLimits("RetroCamera", "Retro Cameras", RetroCamera.GetCount, "max_retro_cameras")
 
 function RetroCamera:Constructor(location, rotation)
-	self.Super:Constructor(location or Vector(), (rotation or Rotator()) + Rotator(0, 90, 0), "nanos-world::SM_RetroCamera")
+	self.Super:Constructor(location or Vector(), (rotation or Rotator()) + Rotator(0, 90, 0), "nanos-world::SM_RetroCamera", CollisionType.Auto, true, GrabMode.Auto, CCDMode.Auto, true)
 	self:SetScale(Vector(1.25))
 end
 

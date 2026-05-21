@@ -10,13 +10,15 @@ function CCTV:Constructor(location, rotation)
 	self.camera = Prop(location + rotation:RotateVector(Vector(150, 0, 0)), rotation, "nanos-world::SM_Camera")
 
 	-- Spawns a Cable
-	self.cable = Cable(location)
+	self.cable = Cable(location, true, true)
 	self.cable:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, 10000, 0, true, 10000, 100)
-	self.cable:AttachStartTo(self.camera, Vector(-85, 0, 0))
-	self.cable:AttachEndTo(self, Vector(0, 0, 10))
 	self.cable:SetMaterial("nanos-world::M_Default_Masked_Lit")
 	self.cable:SetMaterialColorParameter("Tint", Color.BLACK)
 	self.cable:SetRenderingSettings(5, 4, 1)
+	self.cable:FinishSpawn()
+
+	self.cable:AttachStartTo(self.camera, Vector(-85, 0, 0))
+	self.cable:AttachEndTo(self, Vector(0, 0, 10))
 
 	-- Sets this so we can access through Client
 	self:SetValue("Camera", self.camera, true)

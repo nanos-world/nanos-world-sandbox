@@ -116,6 +116,7 @@ function PhysicsGun:OnToggle(player, enable)
 end
 
 function PhysicsGun:StopParticles()
+	if (self:IsBeingDestroyed()) then return end
 	self.beam_particle:Deactivate()
 	self:BroadcastRemoteEvent("ToggleTargetParticles", false)
 end

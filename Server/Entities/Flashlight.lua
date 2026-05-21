@@ -6,7 +6,7 @@ function Flashlight:Constructor(location, rotation)
 	self.Super:Constructor(location, rotation, "nanos-world::SM_Flashlight")
 
 	-- Spawns a Point Light, with the color
-	self.light = Light(Vector(), Rotator(), Color(1, 0.6, 0.4), LightType.Spot, 1, 3000, 25, 0.975, 4000, false)
+	self.light = Light(Vector(), Rotator(), Color(1, 0.6, 0.4), LightType.Spot, 1, 3000, 25, 0.975, 4000, false, true, true, 2, true)
 	self.light:SetTextureLightProfile(LightProfile.Shattered_02)
 
 	-- Sets light to sync
@@ -14,6 +14,8 @@ function Flashlight:Constructor(location, rotation)
 
 	-- Turns on by default
 	self:SetLightEnabled(true)
+
+	self.light:FinishSpawn()
 
 	-- Attaches the lamp to the prop, offsetting 35 forwards
 	self.light:AttachTo(self, AttachmentRule.SnapToTarget, "", 0)

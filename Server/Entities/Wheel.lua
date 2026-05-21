@@ -3,7 +3,7 @@ Wheel = Prop.Inherit("Wheel")
 -- ConfigureSpawnLimits("Wheel", "Wheels", Wheel.GetCount, "max_wheels")
 
 function Wheel:Constructor(location, rotation, asset, angular_force, is_active, is_reversed, scale, wheel_config)
-	self.Super:Constructor(location, rotation, asset or "nanos-world::SM_Offroad_Tire", CollisionType.IgnoreOnlyPawn, true, GrabMode.Disabled)
+	self.Super:Constructor(location, rotation, asset or "nanos-world::SM_Offroad_Tire", CollisionType.IgnoreOnlyPawn, true, GrabMode.Disabled, CCDMode.Auto, true)
 
 	-- TODO is it needed? it makes needed more force
 	self:SetMassOverride(100)

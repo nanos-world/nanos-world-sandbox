@@ -7,27 +7,29 @@ function TV:Constructor(location, rotation)
 	location = location or Vector()
 	rotation = (rotation or Rotator()) + Rotator(0, 90, 0)
 
-	self.Super:Constructor(location, rotation, "nanos-world::SM_TV", CollisionType.Auto, true, GrabMode.Enabled)
-
+	self.Super:Constructor(location, rotation, "nanos-world::SM_TV", CollisionType.Auto, true, GrabMode.Enabled, CCDMode.Auto, true)
 	self:SetScale(Vector(2, 2, 2))
+	self:FinishSpawn()
 
 	-- Spawns the Sound Box
 	local soundbox_01 = Prop(location + rotation:RotateVector(Vector(200, 0, 0)), rotation, "nanos-world::SM_HalfStack_Marshall")
 	local soundbox_02 = Prop(location - rotation:RotateVector(Vector(200, 0, 0)), rotation, "nanos-world::SM_HalfStack_Marshall")
 
 	-- Spawns Cables to visually connect both
-	local cable_01 = Cable(location)
-	local cable_02 = Cable(location)
+	local cable_01 = Cable(location, true, true)
+	local cable_02 = Cable(location, true, true)
 
 	cable_01:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, 10000, 0, true, 10000, 100)
 	cable_01:SetRenderingSettings(2, 4, 1)
 	cable_01:SetMaterial("nanos-world::M_Default_Masked_Lit")
 	cable_01:SetMaterialColorParameter("Tint", Color.BLACK)
+	cable_01:FinishSpawn()
 
 	cable_02:SetLinearLimits(ConstraintMotion.Limited, ConstraintMotion.Limited, ConstraintMotion.Limited, 10000, 0, true, 10000, 100)
 	cable_02:SetRenderingSettings(2, 4, 1)
 	cable_02:SetMaterial("nanos-world::M_Default_Masked_Lit")
 	cable_02:SetMaterialColorParameter("Tint", Color.BLACK)
+	cable_02:FinishSpawn()
 
 	cable_01:AttachStartTo(self, Vector(0, 0, 15))
 	cable_02:AttachStartTo(self, Vector(0, 0, 15))

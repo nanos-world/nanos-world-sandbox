@@ -15,7 +15,7 @@ end
 
 
 function ToolGun:Constructor(location, rotation, color)
-	self.Super:Constructor(location, rotation, "nanos-world::SK_Blaster")
+	self.Super:Constructor(location, rotation, "nanos-world::SK_Blaster", CollisionType.Auto, true, true)
 
 	self:SetAmmoSettings(10000000, 0)
 	self:SetDamage(0)
@@ -34,6 +34,9 @@ function ToolGun:Constructor(location, rotation, color)
 	self:SetUsageSettings(false, false)
 
 	self:SetMaterialColorParameter("Emissive", color * 100)
+
+	-- We need to spawn it before attaching
+	self:FinishSpawn()
 
 	-- ToolGun label
 	self.text_render = TextRender(location, Rotator(), self:GetName(), 2, color, TextRenderRenderingType.Unlit, TextRenderHorizontalAlignment.Center, TextRenderVerticalAlignment.Center, "nanos-world::Font_LondrinaSolid_DistanceField")

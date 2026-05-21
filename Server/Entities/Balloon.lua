@@ -10,7 +10,7 @@ function Balloon:Constructor(location, rotation, tab, id, player, relative_locat
 		spawn_location = location + direction * 50
 	end
 
-	self.Super:Constructor(spawn_location, rotation, asset or "nanos-world::SM_Balloon_01", CollisionType.Normal, true, GrabMode.Disabled, CCDMode.Disabled)
+	self.Super:Constructor(spawn_location, rotation, asset or "nanos-world::SM_Balloon_01", CollisionType.Normal, true, GrabMode.Disabled, CCDMode.Disabled, true)
 
 	-- Sets Rubber Physical Material
 	self:SetPhysicalMaterial("nanos-world::PM_Rubber")
@@ -29,6 +29,9 @@ function Balloon:Constructor(location, rotation, tab, id, player, relative_locat
 	self:SetMaterialColorParameter("Tint", color)
 
 	max_length = tonumber(max_length)
+
+	-- We need to spawn it before attaching
+	self:FinishSpawn()
 
 	-- If didn't pass max_length, we consider we don't want cable
 	if (max_length) then
@@ -81,7 +84,15 @@ function Balloon:OnTakeDamage(damage, bone_name, damage_type, hit_from_direction
 	self:Destroy()
 end
 
+-- Subscribes for popping when balloon is hit by something
+function Balloon:OnHit(impact_force, normal_impulse, impact_location, velocity, other_actor)
+	if (impact_force > 1000) then
+		self:Destroy()
+	end
+end
+
 Balloon.Subscribe("TakeDamage", Balloon.OnTakeDamage)
+Balloon.Subscribe("Hit", Balloon.OnHit)
 Balloon.SubscribeRemote("SetCustomForce", Balloon.SetCustomForce)
 Balloon.SubscribeRemote("SetCustomMesh", Balloon.SetCustomMesh)
 
